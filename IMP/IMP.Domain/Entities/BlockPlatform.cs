@@ -10,8 +10,12 @@ namespace IMP.Domain.Entities
     {
         [ForeignKey("InfluencerPlatform")]
         public int InfluencerPlatformId { get; set; }
+        public InfluencerPlatform InfluencerPlatform { get; set; }
+
         [ForeignKey("Block")]
         public int BlockId { get; set; }
+        public Block Block { get; set; }
+
         public int Position { get; set; }
         public bool IsActived { get; set; }
     }

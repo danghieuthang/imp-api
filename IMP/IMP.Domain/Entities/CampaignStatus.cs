@@ -6,18 +6,13 @@ using System.Text;
 
 namespace IMP.Domain.Entities
 {
-    public class BlockCampaign: BaseEntity
+    public class CampaignStatus : BaseEntity
     {
         [ForeignKey("Campaign")]
         public int CampaignId { get; set; }
-        public Campaign Campaign { get; set; }
-
-        [ForeignKey("Block")]
-        public int BlockId { get; set; }
-        public Block Block { get; set; }
-
-        public int Position { get; set; }
+        public int Status { get; set; }
+        public DateTime? FromDate { get; set; }
+        public DateTime? ToDate { get; set; }
         public bool IsActived { get; set; }
-
     }
 }

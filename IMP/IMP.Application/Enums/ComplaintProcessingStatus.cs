@@ -4,11 +4,10 @@ using System.Text;
 
 namespace IMP.Application.Enums
 {
-    public enum Roles
+    public enum ComplaintProcessingStatus
     {
-        Brand,
-        Administrator,
-        Fan,
-        Influencer
+        Approval,
+        Reject,
+        Processing,
     }
 }

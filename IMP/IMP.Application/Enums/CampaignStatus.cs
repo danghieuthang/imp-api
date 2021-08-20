@@ -4,11 +4,9 @@ using System.Text;
 
 namespace IMP.Application.Enums
 {
-    public enum Roles
+    public enum CampaignStatus
     {
-        Brand,
-        Administrator,
-        Fan,
-        Influencer
+        OPEN,
+        CLOSE
     }
 }

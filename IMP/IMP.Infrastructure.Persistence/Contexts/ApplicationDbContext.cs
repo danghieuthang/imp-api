@@ -23,21 +23,52 @@ namespace IMP.Infrastructure.Persistence.Contexts
             _dateTime = dateTime;
             _authenticatedUser = authenticatedUser;
         }
-        public DbSet<Product> Products { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<ApplicantHistory> ApplicantHistories { get; set; }
+        public DbSet<Block> Blocks { get; set; }
+        public DbSet<BlockCampaign> BlockCampaigns { get; set; }
+        public DbSet<BlockPlatform> BlockPlatforms { get; set; }
+        public DbSet<BlockType> BlockTypes { get; set; }
+        public DbSet<Campaign> Campaigns { get; set; }
+        public DbSet<CampaignType> CampaignTypes { get; set; }
+        public DbSet<CampaignStatus> CampaignStatuses { get; set; }
+        public DbSet<CampaignActivity> CampaignActivities { get; set; }
+        public DbSet<CampaignMember> CampaignMembers { get; set; }
+        public DbSet<Evidence> Evidences { get; set; }
+        public DbSet<MemberActivity> MemberActivities { get; set; }
+        public DbSet<Page> Pages { get; set; }
+        public DbSet<UserProfile> Profiles { get; set; }
+        public DbSet<Complaint> UserComplaints { get; set; }
+        public DbSet<Voucher> Voucher { get; set; }
+        public DbSet<VoucherCode> VoucherCodes { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
-            foreach (var entry in ChangeTracker.Entries<AuditableBaseEntity>())
+
+            //foreach (var entry in ChangeTracker.Entries<AuditableBaseEntity>())
+            //{
+            //    switch (entry.State)
+            //    {
+            //        case EntityState.Added:
+            //            entry.Entity.Created = _dateTime.NowUtc;
+            //            entry.Entity.CreatedBy = _authenticatedUser.UserId;
+            //            break;
+            //        case EntityState.Modified:
+            //            entry.Entity.LastModified = _dateTime.NowUtc;
+            //            entry.Entity.LastModifiedBy = _authenticatedUser.UserId;
+            //            break;
+            //    }
+            //}
+            foreach (var entry in ChangeTracker.Entries<BaseEntity>())
             {
                 switch (entry.State)
                 {
                     case EntityState.Added:
                         entry.Entity.Created = _dateTime.NowUtc;
-                        entry.Entity.CreatedBy = _authenticatedUser.UserId;
+                        entry.Entity.IsDelete = false;
                         break;
                     case EntityState.Modified:
                         entry.Entity.LastModified = _dateTime.NowUtc;
-                        entry.Entity.LastModifiedBy = _authenticatedUser.UserId;
                         break;
                 }
             }

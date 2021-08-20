@@ -13,10 +13,10 @@ namespace IMP.Infrastructure.Identity.Seeds
         public static async Task SeedAsync(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             //Seed Roles
-            await roleManager.CreateAsync(new IdentityRole(Roles.SuperAdmin.ToString()));
-            await roleManager.CreateAsync(new IdentityRole(Roles.Admin.ToString()));
-            await roleManager.CreateAsync(new IdentityRole(Roles.Moderator.ToString()));
-            await roleManager.CreateAsync(new IdentityRole(Roles.Basic.ToString()));
+            await roleManager.CreateAsync(new IdentityRole(Roles.Administrator.ToString()));
+            await roleManager.CreateAsync(new IdentityRole(Roles.Brand.ToString()));
+            await roleManager.CreateAsync(new IdentityRole(Roles.Influencer.ToString()));
+            await roleManager.CreateAsync(new IdentityRole(Roles.Fan.ToString()));
         }
     }
 }

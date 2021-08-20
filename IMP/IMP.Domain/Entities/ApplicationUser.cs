@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace IMP.Domain.Entities
@@ -10,5 +11,20 @@ namespace IMP.Domain.Entities
     {
         [MaxLength(256)]
         public string UserName { get; set; }
+
+        [ForeignKey("Wallet")]
+        public int WalletId { get; set; }
+        public Wallet Wallet { get; set; }
+
+        [ForeignKey("PaymentInfor")]
+        public int PaymentInforId { get; set; }
+        public PaymentInfor PaymentInfor { get; set; }
+
+        [ForeignKey("Ranking")]
+        public int RankLevelId { get; set; }
+        public RankLevel RankLevel { get; set; }
+
+
+        public ICollection<Page> Pages { get; set; }
     }
 }

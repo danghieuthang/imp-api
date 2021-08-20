@@ -1,5 +1,4 @@
 ﻿using IMP.Domain.Common;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,18 +7,18 @@ using System.Text;
 
 namespace IMP.Domain.Entities
 {
-    public class Page : BaseEntity
+    public class CampaignMember : BaseEntity
     {
+        [ForeignKey("Campaign")]
+        public int CampaignId { get; set; }
+        public Campaign Campaign { get; set; }
+
         [ForeignKey("ApplicationUser")]
         public int InfluencerId { get; set; }
         public ApplicationUser Influencer { get; set; }
+        public int Status { get; set; }
 
-        [MaxLength(256)]
-        public string Title { get; set; }
-        [MaxLength(256)]
-        public string BackgroundPhoto { get; set; }
-        public int PositionPage { get; set; }
-
-        public ICollection<Block> Blocks { get; set; }
+        public ICollection<ApplicantHistory> ApplicantHistories { get; set; }
+        public ICollection<MemberActivity> MemberActivities { get; set; }
     }
 }

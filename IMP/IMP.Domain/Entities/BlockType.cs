@@ -15,5 +15,7 @@ namespace IMP.Domain.Entities
         [MaxLength(256)]
         public string Description { get; set; }
         public bool IsActived { get; set; }
+
+        public ICollection<Block> Blocks { get; set; }
     }
 }

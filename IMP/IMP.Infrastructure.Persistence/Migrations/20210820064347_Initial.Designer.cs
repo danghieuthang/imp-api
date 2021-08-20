@@ -4,14 +4,16 @@ using IMP.Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace IMP.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210820064347_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -754,10 +756,6 @@ namespace IMP.Infrastructure.Persistence.Migrations
                     b.Property<int>("CampaignId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Code")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
-
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
@@ -770,21 +768,9 @@ namespace IMP.Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("VoucherId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("VoucherId");
-
                     b.ToTable("VoucherCodes");
-                });
-
-            modelBuilder.Entity("IMP.Domain.Entities.VoucherCode", b =>
-                {
-                    b.HasOne("IMP.Domain.Entities.Voucher", null)
-                        .WithMany("VoucherCodes")
-                        .HasForeignKey("VoucherId");
                 });
 #pragma warning restore 612, 618
         }
