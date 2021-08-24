@@ -11,6 +11,6 @@ namespace IMP.Domain.Entities
         [MaxLength(256)]
         public string Name { get; set; }
 
-        public ICollection<ApplicationUser> Influencers { get; set; }
+        public ICollection<Ranking> Rankings { get; set; }
     }
 }

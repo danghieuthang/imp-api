@@ -23,7 +23,10 @@ namespace IMP.Domain.Entities
         public int UserQuantity { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
+
+        [Column(TypeName = "time(7)")]
         public TimeSpan? FromTime { get; set; }
+        [Column(TypeName = "time(7)")]
         public TimeSpan? ToTime { get; set; }
         [MaxLength(256)]
         public string Description { get; set; }

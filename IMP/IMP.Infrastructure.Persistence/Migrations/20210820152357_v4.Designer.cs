@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IMP.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210820070352_test")]
-    partial class test
+    [Migration("20210820152357_v4")]
+    partial class v4
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,31 @@ namespace IMP.Infrastructure.Persistence.Migrations
                 .HasAnnotation("ProductVersion", "3.1.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("IMP.Domain.Entities.ActivityType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ActivityTypes");
+                });
 
             modelBuilder.Entity("IMP.Domain.Entities.ApplicantHistory", b =>
                 {
@@ -52,10 +77,9 @@ namespace IMP.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("CampaignMemberId");
 
                     b.ToTable("ApplicantHistories");
                 });
@@ -76,18 +100,32 @@ namespace IMP.Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("PaymentInforId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RankingId")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
-                    b.Property<int>("UserPageId")
+                    b.Property<int>("WalletId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PaymentInforId")
+                        .IsUnique();
+
+                    b.HasIndex("RankingId")
+                        .IsUnique();
+
                     b.HasIndex("UserName")
                         .IsUnique()
                         .HasFilter("[UserName] IS NOT NULL");
+
+                    b.HasIndex("WalletId");
 
                     b.ToTable("ApplicationUsers");
                 });
@@ -157,6 +195,12 @@ namespace IMP.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BlockTypeId");
+
+                    b.HasIndex("PageId");
+
+                    b.HasIndex("ParentId");
+
                     b.ToTable("Blocks");
                 });
 
@@ -190,6 +234,10 @@ namespace IMP.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BlockId");
+
+                    b.HasIndex("CampaignId");
+
                     b.ToTable("BlockCampaigns");
                 });
 
@@ -222,6 +270,10 @@ namespace IMP.Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BlockId");
+
+                    b.HasIndex("InfluencerPlatformId");
 
                     b.ToTable("BlockPlatforms");
                 });
@@ -273,8 +325,20 @@ namespace IMP.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
+                    b.Property<DateTime>("Announced")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Applying")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("BrandId")
+                        .HasColumnType("int");
+
                     b.Property<int>("CampaignTypeId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("Closing")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Condition")
                         .HasColumnType("nvarchar(2000)")
@@ -305,8 +369,14 @@ namespace IMP.Infrastructure.Persistence.Migrations
                     b.Property<int>("MaxInfluencer")
                         .HasColumnType("int");
 
-                    b.Property<int>("PlatfomrId")
+                    b.Property<DateTime>("New")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PlatformId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("Posting")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("ReferalWebsite")
                         .HasColumnType("nvarchar(256)")
@@ -315,6 +385,9 @@ namespace IMP.Infrastructure.Persistence.Migrations
                     b.Property<string>("Reward")
                         .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
+
+                    b.Property<DateTime>("Selecting")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
@@ -327,6 +400,12 @@ namespace IMP.Infrastructure.Persistence.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BrandId");
+
+                    b.HasIndex("CampaignTypeId");
+
+                    b.HasIndex("PlatformId");
 
                     b.ToTable("Campaigns");
                 });
@@ -366,6 +445,10 @@ namespace IMP.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ActivityTypeId");
+
+                    b.HasIndex("CampaignId");
+
                     b.ToTable("CampaignActivities");
                 });
 
@@ -396,43 +479,11 @@ namespace IMP.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CampaignId");
+
+                    b.HasIndex("InfluencerId");
+
                     b.ToTable("CampaignMembers");
-                });
-
-            modelBuilder.Entity("IMP.Domain.Entities.CampaignStatus", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CampaignId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("FromDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActived")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("ToDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CampaignStatuses");
                 });
 
             modelBuilder.Entity("IMP.Domain.Entities.CampaignType", b =>
@@ -471,114 +522,12 @@ namespace IMP.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ParentId");
+
                     b.ToTable("CampaignTypes");
                 });
 
-            modelBuilder.Entity("IMP.Domain.Entities.Evidence", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LinkUrl")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<int>("MemberActivityId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("VideoUrl")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Evidences");
-                });
-
-            modelBuilder.Entity("IMP.Domain.Entities.MemberActivity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CampaignActivityId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("InfluencerId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Position")
-                        .HasColumnType("int");
-
-                    b.Property<float>("Progress")
-                        .HasColumnType("real");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MemberActivities");
-                });
-
-            modelBuilder.Entity("IMP.Domain.Entities.Page", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("BackgroundPhoto")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("InfluencerId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("PositionPage")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Pages");
-                });
-
-            modelBuilder.Entity("IMP.Domain.Entities.UserComplaint", b =>
+            modelBuilder.Entity("IMP.Domain.Entities.Complaint", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -623,7 +572,264 @@ namespace IMP.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserComplaints");
+                    b.HasIndex("CampaignId");
+
+                    b.HasIndex("FeedbackUserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Complaints");
+                });
+
+            modelBuilder.Entity("IMP.Domain.Entities.Evidence", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LinkUrl")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<int>("MemberActivityId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("VideoUrl")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MemberActivityId");
+
+                    b.ToTable("Evidences");
+                });
+
+            modelBuilder.Entity("IMP.Domain.Entities.InfluencerPlatform", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("InfluencerId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PlatformId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InfluencerId");
+
+                    b.HasIndex("PlatformId");
+
+                    b.ToTable("InfluencerPlatforms");
+                });
+
+            modelBuilder.Entity("IMP.Domain.Entities.MemberActivity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CampaignActivityId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CampaignMemberId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("InfluencerId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Position")
+                        .HasColumnType("int");
+
+                    b.Property<float>("Progress")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CampaignActivityId");
+
+                    b.HasIndex("CampaignMemberId");
+
+                    b.HasIndex("InfluencerId");
+
+                    b.ToTable("MemberActivities");
+                });
+
+            modelBuilder.Entity("IMP.Domain.Entities.Page", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("BackgroundPhoto")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("InfluencerId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PositionPage")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InfluencerId");
+
+                    b.ToTable("Pages");
+                });
+
+            modelBuilder.Entity("IMP.Domain.Entities.PaymentInfor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PaymentInfors");
+                });
+
+            modelBuilder.Entity("IMP.Domain.Entities.Platform", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Platforms");
+                });
+
+            modelBuilder.Entity("IMP.Domain.Entities.RankLevel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RankLevels");
+                });
+
+            modelBuilder.Entity("IMP.Domain.Entities.Ranking", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("InfluencerId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("RankLevelId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RankLevelId");
+
+                    b.ToTable("Rankings");
                 });
 
             modelBuilder.Entity("IMP.Domain.Entities.UserProfile", b =>
@@ -634,7 +840,8 @@ namespace IMP.Infrastructure.Persistence.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
 
                     b.Property<string>("AvatarUrl")
                         .HasColumnType("nvarchar(256)")
@@ -673,6 +880,8 @@ namespace IMP.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Profile");
                 });
 
@@ -705,7 +914,7 @@ namespace IMP.Infrastructure.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<TimeSpan?>("FromTime")
-                        .HasColumnType("time");
+                        .HasColumnType("time(7)");
 
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(256)")
@@ -732,7 +941,7 @@ namespace IMP.Infrastructure.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<TimeSpan?>("ToTime")
-                        .HasColumnType("time");
+                        .HasColumnType("time(7)");
 
                     b.Property<int>("UserQuantity")
                         .HasColumnType("int");
@@ -742,6 +951,8 @@ namespace IMP.Infrastructure.Persistence.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CampaignId");
 
                     b.ToTable("Voucher");
                 });
@@ -782,11 +993,345 @@ namespace IMP.Infrastructure.Persistence.Migrations
                     b.ToTable("VoucherCodes");
                 });
 
+            modelBuilder.Entity("IMP.Domain.Entities.VoucherTransaction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("VoucherCodeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("VoucherCodeId");
+
+                    b.ToTable("VoucherTransactions");
+                });
+
+            modelBuilder.Entity("IMP.Domain.Entities.Wallet", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Wallets");
+                });
+
+            modelBuilder.Entity("IMP.Domain.Entities.WalletTransaction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("WalletId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WalletId");
+
+                    b.ToTable("WalletTransactions");
+                });
+
+            modelBuilder.Entity("IMP.Domain.Entities.ApplicantHistory", b =>
+                {
+                    b.HasOne("IMP.Domain.Entities.CampaignMember", "CampaignMember")
+                        .WithMany("ApplicantHistories")
+                        .HasForeignKey("CampaignMemberId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("IMP.Domain.Entities.ApplicationUser", b =>
+                {
+                    b.HasOne("IMP.Domain.Entities.PaymentInfor", "PaymentInfor")
+                        .WithOne("User")
+                        .HasForeignKey("IMP.Domain.Entities.ApplicationUser", "PaymentInforId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("IMP.Domain.Entities.Ranking", "Ranking")
+                        .WithOne("Influencer")
+                        .HasForeignKey("IMP.Domain.Entities.ApplicationUser", "RankingId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("IMP.Domain.Entities.Wallet", "Wallet")
+                        .WithMany("Users")
+                        .HasForeignKey("WalletId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("IMP.Domain.Entities.Block", b =>
+                {
+                    b.HasOne("IMP.Domain.Entities.BlockType", "BlockType")
+                        .WithMany("Blocks")
+                        .HasForeignKey("BlockTypeId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("IMP.Domain.Entities.Page", "Page")
+                        .WithMany("Blocks")
+                        .HasForeignKey("PageId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("IMP.Domain.Entities.Block", "Parent")
+                        .WithMany()
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("IMP.Domain.Entities.BlockCampaign", b =>
+                {
+                    b.HasOne("IMP.Domain.Entities.Block", "Block")
+                        .WithMany()
+                        .HasForeignKey("BlockId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("IMP.Domain.Entities.Campaign", "Campaign")
+                        .WithMany("BlockCampaigns")
+                        .HasForeignKey("CampaignId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("IMP.Domain.Entities.BlockPlatform", b =>
+                {
+                    b.HasOne("IMP.Domain.Entities.Block", "Block")
+                        .WithMany("BlockPlatforms")
+                        .HasForeignKey("BlockId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("IMP.Domain.Entities.InfluencerPlatform", "InfluencerPlatform")
+                        .WithMany()
+                        .HasForeignKey("InfluencerPlatformId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("IMP.Domain.Entities.Campaign", b =>
+                {
+                    b.HasOne("IMP.Domain.Entities.ApplicationUser", "Brand")
+                        .WithMany()
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("IMP.Domain.Entities.CampaignType", "CampaignType")
+                        .WithMany("Campaigns")
+                        .HasForeignKey("CampaignTypeId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("IMP.Domain.Entities.Platform", "Platform")
+                        .WithMany("Campaigns")
+                        .HasForeignKey("PlatformId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("IMP.Domain.Entities.CampaignActivity", b =>
+                {
+                    b.HasOne("IMP.Domain.Entities.ActivityType", "ActivityType")
+                        .WithMany("CampaignActivities")
+                        .HasForeignKey("ActivityTypeId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("IMP.Domain.Entities.Campaign", "Campaign")
+                        .WithMany("CampaignActivities")
+                        .HasForeignKey("CampaignId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("IMP.Domain.Entities.CampaignMember", b =>
+                {
+                    b.HasOne("IMP.Domain.Entities.Campaign", "Campaign")
+                        .WithMany("CampaignMembers")
+                        .HasForeignKey("CampaignId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("IMP.Domain.Entities.ApplicationUser", "Influencer")
+                        .WithMany()
+                        .HasForeignKey("InfluencerId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("IMP.Domain.Entities.CampaignType", b =>
+                {
+                    b.HasOne("IMP.Domain.Entities.CampaignType", "Parent")
+                        .WithMany("ChildCampaignTypes")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("IMP.Domain.Entities.Complaint", b =>
+                {
+                    b.HasOne("IMP.Domain.Entities.Campaign", "Campaign")
+                        .WithMany("Complaints")
+                        .HasForeignKey("CampaignId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("IMP.Domain.Entities.ApplicationUser", "FeedbackUser")
+                        .WithMany()
+                        .HasForeignKey("FeedbackUserId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("IMP.Domain.Entities.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("IMP.Domain.Entities.Evidence", b =>
+                {
+                    b.HasOne("IMP.Domain.Entities.MemberActivity", "MemberActivity")
+                        .WithMany("Evidences")
+                        .HasForeignKey("MemberActivityId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("IMP.Domain.Entities.InfluencerPlatform", b =>
+                {
+                    b.HasOne("IMP.Domain.Entities.ApplicationUser", "Influencer")
+                        .WithMany()
+                        .HasForeignKey("InfluencerId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("IMP.Domain.Entities.Platform", "Platform")
+                        .WithMany("InfluencerPlatforms")
+                        .HasForeignKey("PlatformId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("IMP.Domain.Entities.MemberActivity", b =>
+                {
+                    b.HasOne("IMP.Domain.Entities.CampaignActivity", "CampaignActivity")
+                        .WithMany("MemberActivities")
+                        .HasForeignKey("CampaignActivityId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("IMP.Domain.Entities.CampaignMember", "CampaignMember")
+                        .WithMany("MemberActivities")
+                        .HasForeignKey("CampaignMemberId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("IMP.Domain.Entities.ApplicationUser", "Influencer")
+                        .WithMany()
+                        .HasForeignKey("InfluencerId")
+                        .OnDelete(DeleteBehavior.ClientCascade);
+                });
+
+            modelBuilder.Entity("IMP.Domain.Entities.Page", b =>
+                {
+                    b.HasOne("IMP.Domain.Entities.ApplicationUser", "Influencer")
+                        .WithMany("Pages")
+                        .HasForeignKey("InfluencerId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("IMP.Domain.Entities.Ranking", b =>
+                {
+                    b.HasOne("IMP.Domain.Entities.RankLevel", "RankLevel")
+                        .WithMany("Rankings")
+                        .HasForeignKey("RankLevelId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("IMP.Domain.Entities.UserProfile", b =>
+                {
+                    b.HasOne("IMP.Domain.Entities.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("IMP.Domain.Entities.Voucher", b =>
+                {
+                    b.HasOne("IMP.Domain.Entities.Campaign", "Campaign")
+                        .WithMany("Vouchers")
+                        .HasForeignKey("CampaignId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("IMP.Domain.Entities.VoucherCode", b =>
                 {
                     b.HasOne("IMP.Domain.Entities.Voucher", null)
                         .WithMany("VoucherCodes")
-                        .HasForeignKey("VoucherId");
+                        .HasForeignKey("VoucherId")
+                        .OnDelete(DeleteBehavior.ClientCascade);
+                });
+
+            modelBuilder.Entity("IMP.Domain.Entities.VoucherTransaction", b =>
+                {
+                    b.HasOne("IMP.Domain.Entities.VoucherCode", "VoucherCode")
+                        .WithMany("VoucherTransactions")
+                        .HasForeignKey("VoucherCodeId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("IMP.Domain.Entities.WalletTransaction", b =>
+                {
+                    b.HasOne("IMP.Domain.Entities.Wallet", "Wallet")
+                        .WithMany("WalletTransactions")
+                        .HasForeignKey("WalletId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

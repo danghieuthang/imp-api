@@ -23,6 +23,9 @@ namespace IMP.Infrastructure.Persistence.Contexts
             _dateTime = dateTime;
             _authenticatedUser = authenticatedUser;
         }
+        #region  Dbsets
+
+        public DbSet<ActivityType> ActivityTypes { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<ApplicantHistory> ApplicantHistories { get; set; }
         public DbSet<Block> Blocks { get; set; }
@@ -30,17 +33,27 @@ namespace IMP.Infrastructure.Persistence.Contexts
         public DbSet<BlockPlatform> BlockPlatforms { get; set; }
         public DbSet<BlockType> BlockTypes { get; set; }
         public DbSet<Campaign> Campaigns { get; set; }
-        public DbSet<CampaignType> CampaignTypes { get; set; }
-        public DbSet<CampaignStatus> CampaignStatuses { get; set; }
         public DbSet<CampaignActivity> CampaignActivities { get; set; }
         public DbSet<CampaignMember> CampaignMembers { get; set; }
+        public DbSet<CampaignType> CampaignTypes { get; set; }
+        public DbSet<Complaint> Complaints { get; set; }
         public DbSet<Evidence> Evidences { get; set; }
+        public DbSet<InfluencerPlatform> InfluencerPlatforms { get; set; }
         public DbSet<MemberActivity> MemberActivities { get; set; }
         public DbSet<Page> Pages { get; set; }
-        public DbSet<UserProfile> Profiles { get; set; }
-        public DbSet<Complaint> UserComplaints { get; set; }
+        public DbSet<PaymentInfor> PaymentInfors { get; set; }
+        public DbSet<Platform> Platforms { get; set; }
+        public DbSet<Ranking> Rankings { get; set; }
+        public DbSet<RankLevel> RankLevels { get; set; }
+        public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<Voucher> Voucher { get; set; }
         public DbSet<VoucherCode> VoucherCodes { get; set; }
+        public DbSet<VoucherTransaction> VoucherTransactions { get; set; }
+        public DbSet<Wallet> Wallets { get; set; }
+        public DbSet<WalletTransaction> WalletTransactions { get; set; }
+
+        #endregion  Dbsets
+
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
@@ -76,6 +89,12 @@ namespace IMP.Infrastructure.Persistence.Contexts
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            //Configure ForeignKey
+            foreach (var relationShip in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            {
+                relationShip.DeleteBehavior = DeleteBehavior.ClientCascade;
+            }
+
             //All Decimals will have 18,6 Range
             foreach (var property in builder.Model.GetEntityTypes()
             .SelectMany(t => t.GetProperties())

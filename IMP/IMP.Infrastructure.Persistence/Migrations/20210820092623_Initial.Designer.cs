@@ -4,14 +4,16 @@ using IMP.Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace IMP.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210820092623_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -323,20 +325,11 @@ namespace IMP.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<DateTime>("Announced")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("Applying")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("BrandId")
                         .HasColumnType("int");
 
                     b.Property<int>("CampaignTypeId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("Closing")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Condition")
                         .HasColumnType("nvarchar(2000)")
@@ -367,14 +360,8 @@ namespace IMP.Infrastructure.Persistence.Migrations
                     b.Property<int>("MaxInfluencer")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("New")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("PlatformId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("Posting")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("ReferalWebsite")
                         .HasColumnType("nvarchar(256)")
@@ -383,9 +370,6 @@ namespace IMP.Infrastructure.Persistence.Migrations
                     b.Property<string>("Reward")
                         .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
-
-                    b.Property<DateTime>("Selecting")
-                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
@@ -482,6 +466,42 @@ namespace IMP.Infrastructure.Persistence.Migrations
                     b.HasIndex("InfluencerId");
 
                     b.ToTable("CampaignMembers");
+                });
+
+            modelBuilder.Entity("IMP.Domain.Entities.CampaignStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CampaignId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("FromDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActived")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ToDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CampaignStatuses");
                 });
 
             modelBuilder.Entity("IMP.Domain.Entities.CampaignType", b =>
@@ -838,8 +858,7 @@ namespace IMP.Infrastructure.Persistence.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AvatarUrl")
                         .HasColumnType("nvarchar(256)")
@@ -912,7 +931,7 @@ namespace IMP.Infrastructure.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<TimeSpan?>("FromTime")
-                        .HasColumnType("time(7)");
+                        .HasColumnType("time");
 
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(256)")
@@ -939,7 +958,7 @@ namespace IMP.Infrastructure.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<TimeSpan?>("ToTime")
-                        .HasColumnType("time(7)");
+                        .HasColumnType("time");
 
                     b.Property<int>("UserQuantity")
                         .HasColumnType("int");

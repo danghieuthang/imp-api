@@ -21,8 +21,8 @@ namespace IMP.Domain.Entities
         public PaymentInfor PaymentInfor { get; set; }
 
         [ForeignKey("Ranking")]
-        public int RankLevelId { get; set; }
-        public RankLevel RankLevel { get; set; }
+        public int RankingId { get; set; }
+        public Ranking Ranking { get; set; }
 
 
         public ICollection<Page> Pages { get; set; }
