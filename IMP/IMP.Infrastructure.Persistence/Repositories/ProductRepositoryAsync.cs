@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace IMP.Infrastructure.Persistence.Repositories
 {
-    public class ProductRepositoryAsync : GenericRepositoryAsync<Product>, IProductRepositoryAsync
+    public class ProductRepositoryAsync : GenericRepositoryAsync<int, Product>, IProductRepositoryAsync
     {
         private readonly DbSet<Product> _products;
 

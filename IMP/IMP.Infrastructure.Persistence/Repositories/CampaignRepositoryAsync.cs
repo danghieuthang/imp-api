@@ -9,7 +9,7 @@ using System.Text;
 
 namespace IMP.Infrastructure.Persistence.Repositories
 {
-    public class CampaignRepositoryAsync : GenericRepositoryAsync<Campaign>, ICampaignRepositoryAsync
+    public class CampaignRepositoryAsync : GenericRepositoryAsync<int, Campaign>, ICampaignRepositoryAsync
     {
         private readonly DbSet<Campaign> _campaigns;
         public CampaignRepositoryAsync(ApplicationDbContext dbContext) : base(dbContext)

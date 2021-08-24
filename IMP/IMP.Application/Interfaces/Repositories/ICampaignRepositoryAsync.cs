@@ -5,7 +5,7 @@ using System.Text;
 
 namespace IMP.Application.Interfaces.Repositories
 {
-    public interface ICampaignRepositoryAsync : IGenericRepositoryAsync<Campaign>
+    public interface ICampaignRepositoryAsync : IGenericRepositoryAsync<int, Campaign>
     {
     }
 }

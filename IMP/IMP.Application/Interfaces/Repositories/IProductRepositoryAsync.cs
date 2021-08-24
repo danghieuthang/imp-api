@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IMP.Application.Interfaces.Repositories
 {
-    public interface IProductRepositoryAsync : IGenericRepositoryAsync<Product>
+    public interface IProductRepositoryAsync : IGenericRepositoryAsync<int, Product>
     {
         Task<bool> IsUniqueBarcodeAsync(string barcode);
     }

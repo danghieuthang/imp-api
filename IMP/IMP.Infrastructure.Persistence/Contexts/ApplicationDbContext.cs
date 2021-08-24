@@ -58,20 +58,6 @@ namespace IMP.Infrastructure.Persistence.Contexts
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
 
-            //foreach (var entry in ChangeTracker.Entries<AuditableBaseEntity>())
-            //{
-            //    switch (entry.State)
-            //    {
-            //        case EntityState.Added:
-            //            entry.Entity.Created = _dateTime.NowUtc;
-            //            entry.Entity.CreatedBy = _authenticatedUser.UserId;
-            //            break;
-            //        case EntityState.Modified:
-            //            entry.Entity.LastModified = _dateTime.NowUtc;
-            //            entry.Entity.LastModifiedBy = _authenticatedUser.UserId;
-            //            break;
-            //    }
-            //}
             foreach (var entry in ChangeTracker.Entries<BaseEntity>())
             {
                 switch (entry.State)

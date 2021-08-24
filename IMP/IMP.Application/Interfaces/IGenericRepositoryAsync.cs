@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 
 namespace IMP.Application.Interfaces
 {
-    public interface IGenericRepositoryAsync<T> where T : class
+    public interface IGenericRepositoryAsync<TKey, TEntity> where TEntity : class
     {
-        Task<T> GetByIdAsync(int id);
-        Task<IReadOnlyList<T>> GetAllAsync();
-        Task<IReadOnlyList<T>> GetPagedReponseAsync(int pageNumber, int pageSize);
-        Task<T> AddAsync(T entity);
-        Task UpdateAsync(T entity);
-        Task DeleteAsync(T entity);
+        Task<TEntity> GetByIdAsync(TKey id);
+        Task<IReadOnlyList<TEntity>> GetAllAsync();
+        Task<IReadOnlyList<TEntity>> GetPagedReponseAsync(int pageNumber, int pageSize);
+        Task<TEntity> AddAsync(TEntity entity);
+        Task UpdateAsync(TEntity entity);
+        Task DeleteAsync(TEntity entity);
     }
 }
