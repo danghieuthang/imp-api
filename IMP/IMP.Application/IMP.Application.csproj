@@ -1,8 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <Version>1.1.0</Version>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,6 +17,12 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IMP.Domain\IMP.Domain.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DTOs\Compaign\" />
+    <Folder Include="Features\Campaigns\Commands\UpdateCampaign\" />
+    <Folder Include="Features\Campaigns\Queries\GetAllCampaigns\" />
+    <Folder Include="Features\Campaigns\Queries\GetCampaignById\" />
   </ItemGroup>
 
 </Project>
