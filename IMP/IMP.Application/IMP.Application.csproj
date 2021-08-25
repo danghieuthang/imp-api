@@ -19,7 +19,6 @@
     <ProjectReference Include="..\IMP.Domain\IMP.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DTOs\Compaign\" />
     <Folder Include="Features\Campaigns\Commands\UpdateCampaign\" />
     <Folder Include="Features\Campaigns\Queries\GetAllCampaigns\" />
     <Folder Include="Features\Campaigns\Queries\GetCampaignById\" />

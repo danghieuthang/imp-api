@@ -15,6 +15,7 @@ namespace IMP.Application.Features.Products.Commands.CreateProduct
         public string Description { get; set; }
         public decimal Rate { get; set; }
     }
+
     public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, Response<int>>
     {
         private readonly IProductRepositoryAsync _productRepository;

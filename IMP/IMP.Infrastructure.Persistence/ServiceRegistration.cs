@@ -31,6 +31,8 @@ namespace IMP.Infrastructure.Persistence
             #region Repositories
             services.AddTransient(typeof(IGenericRepositoryAsync<,>), typeof(GenericRepositoryAsync<,>));
             services.AddTransient<IProductRepositoryAsync, ProductRepositoryAsync>();
+            services.AddTransient<ICampaignRepositoryAsync, CampaignRepositoryAsync>();
+            services.AddTransient<IPlatformRepositoryAsync, PlatformRespositoryAsync>();
             #endregion
         }
     }

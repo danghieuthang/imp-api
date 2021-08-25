@@ -11,6 +11,9 @@ namespace IMP.Domain.Entities
         [MaxLength(256)]
         public string Name { get; set; }
 
+        [MaxLength(256)]
+        public string Image { get; set; }
+
         public ICollection<Campaign> Campaigns { get; set; }
         public ICollection<InfluencerPlatform> InfluencerPlatforms { get; set; }
     }

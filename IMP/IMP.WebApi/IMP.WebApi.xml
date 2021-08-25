@@ -4,5 +4,19 @@
         <name>IMP.WebApi</name>
     </assembly>
     <members>
+        <member name="M:IMP.WebApi.Controllers.v1.PlatformController.Get(IMP.Application.Features.Platforms.Queries.GetAllPlatforms.GetAllPlatformsQuery)">
+            <summary>
+            Get list platform
+            </summary>
+            <param name="query">The Get Platform Parameter</param>
+            <returns></returns>
+        </member>
+        <member name="M:IMP.WebApi.Controllers.v1.PlatformController.Create(IMP.Application.Features.Platforms.Commands.CreatePlatform.CreatePlatformCommand)">
+            <summary>
+            Create new platform
+            </summary>
+            <param name="command">The CreatePlatformCommand</param>
+            <returns></returns>
+        </member>
     </members>
 </doc>
