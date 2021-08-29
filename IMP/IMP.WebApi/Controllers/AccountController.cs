@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace IMP.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route(RouterConstants.ACCOUNT)]
     [ApiController]
     public class AccountController : ControllerBase
     {

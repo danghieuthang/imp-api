@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,6 +54,7 @@ namespace IMP.WebApi.Extensions
                     },
                 });
             });
+            services.AddSwaggerGenNewtonsoftSupport();
         }
         public static void AddApiVersioningExtension(this IServiceCollection services)
         {
@@ -64,6 +66,19 @@ namespace IMP.WebApi.Extensions
                 config.AssumeDefaultVersionWhenUnspecified = true;
                 // Advertise the API versions supported for the particular endpoint
                 config.ReportApiVersions = true;
+            });
+        }
+
+        public static void AddControllerExtension(this IServiceCollection services)
+        {
+            services.AddControllers().AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                options.SerializerSettings.ContractResolver = new DefaultContractResolver
+                {
+                    // Add Snake Case hanlde for Json
+                    NamingStrategy = new Newtonsoft.Json.Serialization.SnakeCaseNamingStrategy()
+                };
             });
         }
     }

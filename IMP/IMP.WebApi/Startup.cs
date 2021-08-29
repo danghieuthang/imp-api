@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json.Serialization;
 
 namespace IMP.WebApi
 {
@@ -27,7 +28,7 @@ namespace IMP.WebApi
             services.AddPersistenceInfrastructure(_config);
             services.AddSharedInfrastructure(_config);
             services.AddSwaggerExtension();
-            services.AddControllers();
+            services.AddControllerExtension();
             services.AddApiVersioningExtension();
             services.AddHealthChecks();
             services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();

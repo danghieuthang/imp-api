@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,35 @@ namespace IMP.Application.Extensions
                 .NotEmpty().WithMessage("{PropertyName} must be required")
                 .NotNull()
                 .MaximumLength(256).WithMessage("{PropertyName} must not exeed " + maxLength + " characters.");
+        }
+
+        /// <summary>
+        /// Validation for file size
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ruleBuilder"></param>
+        /// <param name="maxSize">Maximum file size</param>
+        /// <returns></returns>
+        public static IRuleBuilderOptions<T, long> ValidFileSize<T>(this IRuleBuilder<T, long> ruleBuilder, int maxSize)
+        {
+            return ruleBuilder
+                .NotNull().LessThanOrEqualTo(maxSize).WithMessage("{PropertyName} có dung lượng tệp phải nhỏ hơn " + maxSize + ".");
+        }
+
+        /// <summary>
+        /// Validation for file type
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ruleBuilder"></param>
+        /// <param name="fileTypes">The file types allow.</param>
+        /// <returns></returns>
+        public static IRuleBuilderOptions<T, string> ValidaFileType<T>(this IRuleBuilder<T, string> ruleBuilder, IEnumerable<string> fileTypes)
+        {
+
+            return ruleBuilder
+                .NotNull().WithMessage("{PropertyName} rỗng.")
+                .Must(x => fileTypes.Contains(x))
+                .WithMessage("{PropertyName} kiểu dữ liệu không hợp lệ.");
         }
 
 

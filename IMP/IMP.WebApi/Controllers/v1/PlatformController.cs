@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 namespace IMP.WebApi.Controllers.v1
 {
     [ApiVersion("1.0")]
+    [Route(RouterConstants.PLATFORM)]
     public class PlatformController : BaseApiController
     {
         /// <summary>
@@ -32,7 +33,7 @@ namespace IMP.WebApi.Controllers.v1
         /// <param name="command">The CreatePlatformCommand</param>
         /// <returns></returns>
         [HttpPost]
-        [Authorize(Roles = "Administrator")]
+        //[Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create([FromBody] CreatePlatformCommand command)
         {
             return Ok(await Mediator.Send(command));
