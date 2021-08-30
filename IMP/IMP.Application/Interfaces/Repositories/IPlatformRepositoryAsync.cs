@@ -9,6 +9,12 @@ namespace IMP.Application.Interfaces.Repositories
 {
     public interface IPlatformRepositoryAsync : IGenericRepositoryAsync<int, Platform>
     {
-        Task<bool> IsUniquePlatform(string platformName);
+        /// <summary>
+        /// Check unique platform when add new
+        /// </summary>
+        /// <param name="platformName"></param>
+        /// <returns></returns>
+        Task<bool> IsUniquePlatform(string platformName, int? id=null);
+
     }
 }

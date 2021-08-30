@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using IMP.Application.DTOs.ViewModels;
 using IMP.Application.Features.Platforms.Commands.CreatePlatform;
+using IMP.Application.Features.Platforms.Commands.UpdatePlatform;
 using IMP.Application.Features.Products.Commands.CreateProduct;
 using IMP.Application.Features.Products.Queries.GetAllProducts;
 using IMP.Domain.Entities;
@@ -21,6 +22,7 @@ namespace IMP.Application.Mappings
             #region platform
             CreateMap<Platform, PlatformViewModel>().ReverseMap();
             CreateMap<CreatePlatformCommand, Platform>();
+            CreateMap<UpdatePlatformCommand, Platform>();
             #endregion platform
         }
     }

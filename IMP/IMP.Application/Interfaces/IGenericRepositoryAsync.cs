@@ -8,6 +8,7 @@ namespace IMP.Application.Interfaces
     public interface IGenericRepositoryAsync<TKey, TEntity> where TEntity : class
     {
         Task<TEntity> GetByIdAsync(TKey id);
+        Task<bool> IsExistAsync(TKey id);
         Task<IReadOnlyList<TEntity>> GetAllAsync();
         Task<IReadOnlyList<TEntity>> GetPagedReponseAsync(int pageNumber, int pageSize);
         Task<TEntity> AddAsync(TEntity entity);

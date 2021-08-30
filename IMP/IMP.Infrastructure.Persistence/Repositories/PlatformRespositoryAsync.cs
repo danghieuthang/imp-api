@@ -19,9 +19,13 @@ namespace IMP.Infrastructure.Persistence.Repositories
             _platforms = context.Set<Platform>();
         }
 
-        public Task<bool> IsUniquePlatform(string platformName)
+        public Task<bool> IsUniquePlatform(string platformName, int? id = null)
         {
-            return _platforms.AllAsync(p => p.Name != platformName);
+            if (id == null)
+            {
+                return _platforms.AllAsync(p => p.Name != platformName);
+            }
+            return _platforms.AllAsync(p => (p.Id == id.Value && p.Name == platformName) || p.Name != platformName);
         }
     }
 }

@@ -14,6 +14,11 @@ namespace IMP.Application.Exceptions
             Errors = new List<ValidationError>();
         }
         public List<ValidationError> Errors { get; }
+
+        /// <summary>
+        /// Create Validation Exception with a list Validation Failure
+        /// </summary>
+        /// <param name="failures"></param>
         public ValidationException(IEnumerable<ValidationFailure> failures)
             : this()
         {
@@ -23,6 +28,18 @@ namespace IMP.Application.Exceptions
                 Errors.Add(error);
             }
         }
+
+        /// <summary>
+        /// Create Validation Exception with a Validation Error
+        /// </summary>
+        /// <param name="error">The Validation Error</param>
+        public ValidationException(ValidationError error)
+            : this()
+        {
+            Errors.Add(error);
+        }
+
+
 
     }
 }

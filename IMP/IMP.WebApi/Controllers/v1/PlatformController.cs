@@ -1,5 +1,6 @@
 ﻿using IMP.Application.Enums;
 using IMP.Application.Features.Platforms.Commands.CreatePlatform;
+using IMP.Application.Features.Platforms.Commands.UpdatePlatform;
 using IMP.Application.Features.Platforms.Queries.GetAllPlatforms;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,6 +36,12 @@ namespace IMP.WebApi.Controllers.v1
         [HttpPost]
         //[Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create([FromForm] CreatePlatformCommand command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update([FromForm] UpdatePlatformCommand command)
         {
             return Ok(await Mediator.Send(command));
         }

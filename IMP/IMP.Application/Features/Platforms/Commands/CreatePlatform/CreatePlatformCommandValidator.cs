@@ -23,7 +23,6 @@ namespace IMP.Application.Features.Platforms.Commands.CreatePlatform
                 .MustAsync(IsUniquePlatform).WithMessage($"Tên đã tồn tại.");
 
             RuleFor(x => x.ImageFile).SetValidator(new FileValidator(options));
-
         }
 
         private async Task<bool> IsUniquePlatform(string name, CancellationToken cancellationToken)

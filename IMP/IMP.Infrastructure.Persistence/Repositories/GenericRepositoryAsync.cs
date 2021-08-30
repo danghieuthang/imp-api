@@ -1,4 +1,5 @@
 ﻿using IMP.Application.Interfaces;
+using IMP.Domain.Common;
 using IMP.Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -57,6 +58,11 @@ namespace IMP.Infrastructure.Persistence.Repository
             return await _dbContext
                  .Set<TEntity>()
                  .ToListAsync();
+        }
+
+        public async Task<bool> IsExistAsync(TKey id)
+        {
+            return await GetByIdAsync(id) != null;
         }
     }
 }
