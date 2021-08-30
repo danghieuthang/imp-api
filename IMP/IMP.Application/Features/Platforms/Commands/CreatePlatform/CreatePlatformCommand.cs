@@ -40,7 +40,7 @@ namespace IMP.Application.Features.Platforms.Commands.CreatePlatform
         public async Task<Response<PlatformViewModel>> Handle(CreatePlatformCommand request, CancellationToken token)
         {
             var platform = _mapper.Map<Platform>(request);
-            string imageFileUrl = await _firebaseService.UploadFile(request.ImageFile.OpenReadStream(), "platforms", request.ImageFile.FileName);
+            string imageFileUrl = await _firebaseService.UploadFile(request.ImageFile.OpenReadStream(), request.ImageFile.FileName, "admin", "platforms");
             if (imageFileUrl != null)
             {
                 platform.Image = imageFileUrl;
