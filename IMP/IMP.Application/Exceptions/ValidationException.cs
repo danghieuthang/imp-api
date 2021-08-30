@@ -1,4 +1,5 @@
 ﻿using FluentValidation.Results;
+using IMP.Application.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,15 +11,16 @@ namespace IMP.Application.Exceptions
     {
         public ValidationException() : base("One or more validation failures have occurred.")
         {
-            Errors = new List<string>();
+            Errors = new List<ValidationError>();
         }
-        public List<string> Errors { get; }
+        public List<ValidationError> Errors { get; }
         public ValidationException(IEnumerable<ValidationFailure> failures)
             : this()
         {
             foreach (var failure in failures)
             {
-                Errors.Add(failure.ErrorMessage);
+                var error = new ValidationError(failure.PropertyName, failure.ErrorMessage);
+                Errors.Add(error);
             }
         }
 

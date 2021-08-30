@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IMP.Application.DTOs;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -22,7 +23,7 @@ namespace IMP.Application.Wrappers
         }
         public bool Succeeded { get; set; }
         public string Message { get; set; }
-        public List<string> Errors { get; set; }
+        public List<ValidationError> Errors { get; set; }
         public T Data { get; set; }
     }
 }

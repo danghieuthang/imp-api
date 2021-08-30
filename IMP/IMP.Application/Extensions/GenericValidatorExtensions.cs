@@ -25,9 +25,9 @@ namespace IMP.Application.Extensions
         public static IRuleBuilderOptions<T, string> Required<T>(this IRuleBuilder<T, string> ruleBuilder, int maxLength)
         {
             return ruleBuilder
-                .NotEmpty().WithMessage("{PropertyName} must be required")
+                .NotEmpty().WithMessage("{PropertyName} chưa có dữ liệu.")
                 .NotNull()
-                .MaximumLength(256).WithMessage("{PropertyName} must not exeed " + maxLength + " characters.");
+                .MaximumLength(256).WithMessage("{PropertyName} không thể quá " + maxLength + " ký tự.");
         }
 
         /// <summary>
@@ -52,11 +52,10 @@ namespace IMP.Application.Extensions
         /// <returns></returns>
         public static IRuleBuilderOptions<T, string> ValidaFileType<T>(this IRuleBuilder<T, string> ruleBuilder, IEnumerable<string> fileTypes)
         {
-
             return ruleBuilder
-                .NotNull().WithMessage("{PropertyName} rỗng.")
+                .NotNull().WithMessage("{PropertyName} chưa có dữ liệu.")
                 .Must(x => fileTypes.Contains(x))
-                .WithMessage("{PropertyName} kiểu dữ liệu không hợp lệ.");
+                .WithMessage("{PropertyName} có kiểu dữ liệu không hợp lệ.");
         }
 
 

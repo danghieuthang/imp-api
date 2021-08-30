@@ -20,7 +20,7 @@ namespace IMP.Application.Features.Platforms.Commands.CreatePlatform
         {
             _platformRepositoryAsync = platformRepositoryAsync;
             this.RuleFor(x => x.Name).Required(256)
-                .MustAsync(IsUniquePlatform).WithMessage("{PropertyName} đã có.");
+                .MustAsync(IsUniquePlatform).WithMessage($"Tên đã tồn tại.");
 
             RuleFor(x => x.ImageFile).SetValidator(new FileValidator(options));
 

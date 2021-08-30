@@ -25,10 +25,8 @@ namespace IMP.Infrastructure.Shared.Services
         /// <param name="stream"></param>
         /// <param name="subfoder">The name of forder in firebase storage</param>
         /// <returns>The file url</returns>
-        public async Task<string> UploadFile(Stream stream, string subfoder)
+        public async Task<string> UploadFile(Stream stream, string subfoder, string fileName="untitle.png")
         {
-            var fileStream = stream as FileStream;
-
             // Authentication
             var auth = new FirebaseAuthProvider(new FirebaseConfig(_firebaseSettings.ApiKey));
             var a = await auth.SignInWithEmailAndPasswordAsync(_firebaseSettings.Email, _firebaseSettings.Password);
@@ -41,10 +39,10 @@ namespace IMP.Infrastructure.Shared.Services
                     ThrowOnCancel = true
                 })
                 .Child(subfoder)
-                .Child(fileStream.Name)
+                .Child(fileName)
                 .PutAsync(stream);
-
-            return await task;
+            string url = await task;
+            return url;
         }
     }
 }

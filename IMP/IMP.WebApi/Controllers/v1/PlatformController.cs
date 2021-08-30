@@ -34,7 +34,7 @@ namespace IMP.WebApi.Controllers.v1
         /// <returns></returns>
         [HttpPost]
         //[Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> Create([FromBody] CreatePlatformCommand command)
+        public async Task<IActionResult> Create([FromForm] CreatePlatformCommand command)
         {
             return Ok(await Mediator.Send(command));
         }

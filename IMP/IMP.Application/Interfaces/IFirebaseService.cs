@@ -14,7 +14,8 @@ namespace IMP.Application.Interfaces
         /// </summary>
         /// <param name="stream"></param>
         /// <param name="subfoder">The name of forder in firebase storage</param>
+        /// <param name="fileName">The file name of file</param>
         /// <returns>The file url</returns>
-        Task<string> UploadFile(Stream stream, string subforder);
+        Task<string> UploadFile(Stream stream, string subforder, string fileName);
     }
 }

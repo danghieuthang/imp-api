@@ -6,6 +6,7 @@ using IMP.Application.Wrappers;
 using IMP.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,8 +18,10 @@ namespace IMP.Application.Features.Platforms.Commands.CreatePlatform
 {
     public class CreatePlatformCommand : IRequest<Response<PlatformViewModel>>
     {
+        [FromForm(Name = "name")]
         public string Name { get; set; }
-        //public string Image { get; set; }
+
+        [FromForm(Name = "image")]
         public IFormFile ImageFile { get; set; }
     }
 
@@ -37,8 +40,11 @@ namespace IMP.Application.Features.Platforms.Commands.CreatePlatform
         public async Task<Response<PlatformViewModel>> Handle(CreatePlatformCommand request, CancellationToken token)
         {
             var platform = _mapper.Map<Platform>(request);
-            string imageFileUrl = await _firebaseService.UploadFile(request.ImageFile.OpenReadStream(), "platforms");
-            platform.Image = imageFileUrl;
+            string imageFileUrl = await _firebaseService.UploadFile(request.ImageFile.OpenReadStream(), "platforms", request.ImageFile.FileName);
+            if (imageFileUrl != null)
+            {
+                platform.Image = imageFileUrl;
+            }
             platform = await _platformRepositoryAsync.AddAsync(platform);
 
             var platformView = _mapper.Map<PlatformViewModel>(platform);
