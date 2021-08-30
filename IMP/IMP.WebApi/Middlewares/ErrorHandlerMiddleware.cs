@@ -1,5 +1,6 @@
 ﻿using IMP.Application.Exceptions;
 using IMP.Application.Wrappers;
+using IMP.WebApi.Policies;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -51,7 +52,12 @@ namespace IMP.WebApi.Middlewares
                         response.StatusCode = (int)HttpStatusCode.InternalServerError;
                         break;
                 }
-                var result = JsonSerializer.Serialize(responseModel);
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = new SnakeNamingPolicy()
+                };
+                var result = JsonSerializer.Serialize(responseModel, options);
 
                 await response.WriteAsync(result);
             }

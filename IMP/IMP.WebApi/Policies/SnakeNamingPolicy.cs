@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace IMP.WebApi.Policies
 {
-    public class HyphenNamingPolicy : JsonNamingPolicy
+    public class SnakeNamingPolicy : JsonNamingPolicy
     {
         public override string ConvertName(string name)
         {
@@ -19,7 +19,7 @@ namespace IMP.WebApi.Policies
             {
                 if (char.IsUpper(name[i]))
                 {
-                    builder.Append('-');
+                    builder.Append('_');
                 }
                 builder.Append(char.ToLower(name[i]));
             }
