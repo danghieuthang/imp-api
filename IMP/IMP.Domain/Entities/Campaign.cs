@@ -40,18 +40,11 @@ namespace IMP.Domain.Entities
         public string Condition { get; set; }
         public bool IsActived { get; set; }
 
-        public DateTime New { get; set; }
-        public DateTime Applying { get; set; }
-        public DateTime Selecting { get; set; }
-        public DateTime Posting { get; set; }
-        public DateTime Announced { get; set; }
-        public DateTime Closing { get; set; }
-
-
         public ICollection<CampaignMember> CampaignMembers { get; set; }
         public ICollection<Voucher> Vouchers { get; set; }
         public ICollection<CampaignActivity> CampaignActivities { get; set; }
         public ICollection<BlockCampaign> BlockCampaigns { get; set; }
         public ICollection<Complaint> Complaints { get; set; }
+        public ICollection<CampaignMilestone> CampaignMilestones { get; set; }
     }
 }

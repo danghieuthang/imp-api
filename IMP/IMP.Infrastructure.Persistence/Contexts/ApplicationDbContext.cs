@@ -51,6 +51,8 @@ namespace IMP.Infrastructure.Persistence.Contexts
         public DbSet<VoucherTransaction> VoucherTransactions { get; set; }
         public DbSet<Wallet> Wallets { get; set; }
         public DbSet<WalletTransaction> WalletTransactions { get; set; }
+        public DbSet<Milestone> Milestones { get; set; }
+        public DbSet<CampaignMilestone> CampaignMilestones { get; set; }
 
         #endregion  Dbsets
 

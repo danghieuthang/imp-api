@@ -17,6 +17,10 @@ namespace IMP.Domain.Entities
         public int CampaignMemberId { get; set; }
         public CampaignMember CampaignMember { get; set; }
 
+        [ForeignKey("ActivityType")]
+        public int ActivityTypeId { get; set; }
+        public ActivityType ActivityType { get; set; }
+
         public ApplicationUser Influencer { get; set; }
         [Range(0, 100)]
         public float Progress { get; set; }
