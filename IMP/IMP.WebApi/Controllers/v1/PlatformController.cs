@@ -2,6 +2,7 @@
 using IMP.Application.Features.Platforms.Commands.CreatePlatform;
 using IMP.Application.Features.Platforms.Commands.DeletePlatformById;
 using IMP.Application.Features.Platforms.Commands.UpdatePlatform;
+using IMP.Application.Features.Platforms.Queries;
 using IMP.Application.Features.Platforms.Queries.GetAllPlatforms;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +30,12 @@ namespace IMP.WebApi.Controllers.v1
             return Ok(await Mediator.Send(query));
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new GetPlatformByIdQuery { Id = id }));
+        }
+
         /// <summary>
         /// Create new platform
         /// </summary>
@@ -38,7 +45,7 @@ namespace IMP.WebApi.Controllers.v1
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create([FromForm] CreatePlatformCommand command)
         {
-            return Ok(await Mediator.Send(command));
+            return StatusCode(2021, await Mediator.Send(command));
         }
 
         [HttpPut]
@@ -47,7 +54,7 @@ namespace IMP.WebApi.Controllers.v1
             return Ok(await Mediator.Send(command));
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             return Ok(await Mediator.Send(new DeletePlatformByIdCommand { Id = id }));

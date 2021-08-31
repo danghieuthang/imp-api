@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using IMP.Application.DTOs.ViewModels;
+using IMP.Application.Features.Campaigns.Commands.CreateCampaign;
+using IMP.Application.Features.CampaignTypes.Commands.CreateCampaignType;
 using IMP.Application.Features.Platforms.Commands.CreatePlatform;
 using IMP.Application.Features.Platforms.Commands.UpdatePlatform;
 using IMP.Application.Features.Products.Commands.CreateProduct;
@@ -24,6 +26,11 @@ namespace IMP.Application.Mappings
             CreateMap<CreatePlatformCommand, Platform>();
             CreateMap<UpdatePlatformCommand, Platform>();
             #endregion platform
+
+            #region campaign type
+            CreateMap<CampaignType, CampaignTypeViewModel>().ReverseMap();
+            CreateMap<CreateCampaignTypeCommand, CampaignType>();
+            #endregion campaign type
         }
     }
 }

@@ -33,6 +33,7 @@ namespace IMP.Infrastructure.Persistence
             services.AddTransient<IProductRepositoryAsync, ProductRepositoryAsync>();
             services.AddTransient<ICampaignRepositoryAsync, CampaignRepositoryAsync>();
             services.AddTransient<IPlatformRepositoryAsync, PlatformRespositoryAsync>();
+            services.AddTransient<ICampaignTypeRepositoryAsync, CampaignTypeRepositoryAsync>();
             #endregion
         }
     }

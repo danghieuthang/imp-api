@@ -10,7 +10,7 @@ namespace IMP.Domain.Entities
     public class CampaignType : BaseEntity
     {
         [ForeignKey("CampaignType")]
-        public int ParentId { get; set; }
+        public int? ParentId { get; set; }
         public CampaignType Parent { get; set; }
 
         [StringLength(256)]

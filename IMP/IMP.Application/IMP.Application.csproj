@@ -24,6 +24,9 @@
     <Folder Include="Features\Campaigns\Commands\UpdateCampaign\" />
     <Folder Include="Features\Campaigns\Queries\GetAllCampaigns\" />
     <Folder Include="Features\Campaigns\Queries\GetCampaignById\" />
+    <Folder Include="Features\CampaignTypes\Commands\DeleteCampaignTypeById\" />
+    <Folder Include="Features\CampaignTypes\Commands\UpdateCampaignType\" />
+    <Folder Include="Features\CampaignTypes\Queries\" />
   </ItemGroup>
 
 </Project>
