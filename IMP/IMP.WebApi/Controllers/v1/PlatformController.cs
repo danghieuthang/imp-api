@@ -1,5 +1,6 @@
 ﻿using IMP.Application.Enums;
 using IMP.Application.Features.Platforms.Commands.CreatePlatform;
+using IMP.Application.Features.Platforms.Commands.DeletePlatformById;
 using IMP.Application.Features.Platforms.Commands.UpdatePlatform;
 using IMP.Application.Features.Platforms.Queries.GetAllPlatforms;
 using Microsoft.AspNetCore.Authorization;
@@ -34,7 +35,7 @@ namespace IMP.WebApi.Controllers.v1
         /// <param name="command">The CreatePlatformCommand</param>
         /// <returns></returns>
         [HttpPost]
-        //[Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create([FromForm] CreatePlatformCommand command)
         {
             return Ok(await Mediator.Send(command));
@@ -44,6 +45,12 @@ namespace IMP.WebApi.Controllers.v1
         public async Task<IActionResult> Update([FromForm] UpdatePlatformCommand command)
         {
             return Ok(await Mediator.Send(command));
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new DeletePlatformByIdCommand { Id = id }));
         }
     }
 }
