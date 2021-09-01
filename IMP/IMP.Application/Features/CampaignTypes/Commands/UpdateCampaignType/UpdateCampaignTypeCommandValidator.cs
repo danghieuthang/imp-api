@@ -35,7 +35,7 @@ namespace IMP.Application.Features.CampaignTypes.Commands.UpdateCampaignType
 
         private async Task<bool> IsUniqueCampaignType(int id, string name, CancellationToken cancellationToken)
         {
-            return await _campaignTypeRepostoryAsync.IsUniqueCampaignType(name);
+            return await _campaignTypeRepostoryAsync.IsUniqueCampaignType(name, id);
         }
 
         private async Task<bool> IsExistCampaignType(int? id, CancellationToken cancellationToken)
