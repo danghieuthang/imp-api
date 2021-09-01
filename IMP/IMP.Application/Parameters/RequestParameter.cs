@@ -7,9 +7,9 @@ namespace IMP.Application.Filters
 {
     public class RequestParameter
     {
-        [FromForm(Name = "page_number")]
+        [FromQuery(Name = "page_number")]
         public int PageNumber { get; set; }
-        [FromForm(Name = "page_size")]
+        [FromQuery(Name = "page_size")]
         public int PageSize { get; set; }
         public RequestParameter()
         {

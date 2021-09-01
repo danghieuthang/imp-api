@@ -4,11 +4,14 @@
     <TargetFramework>net5.0</TargetFramework>
     <Authors>Thang Dang Hieu</Authors>
     <Company>Fpt University</Company>
+    <UserSecretsId>34d491a6-5fc2-4a41-a225-5a5c84738c1c</UserSecretsId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>IMP.WebApi.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\net5.0\publish\IMP.WebApi.xml</DocumentationFile>
     <NoWarn>1701;1702;1591</NoWarn>
+    <OutputPath>bin\Release\net5.0\publish</OutputPath>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
   </PropertyGroup>
 
   <ItemGroup>
@@ -36,6 +39,10 @@
     <ProjectReference Include="..\IMP.Infrastructure.Identity\IMP.Infrastructure.Identity.csproj" />
     <ProjectReference Include="..\IMP.Infrastructure.Persistence\IMP.Infrastructure.Persistence.csproj" />
     <ProjectReference Include="..\IMP.Infrastructure.Shared\IMP.Infrastructure.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="bin\" />
   </ItemGroup>
 
 </Project>
