@@ -36,6 +36,7 @@ namespace IMP.WebApi.Controllers.v1
             return Ok(await Mediator.Send(command));
         }
 
+        [HttpDelete]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             return Ok(await Mediator.Send(new DeleteCampaignTypeByIdCommand { Id = id }));
