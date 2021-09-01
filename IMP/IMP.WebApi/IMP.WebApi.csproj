@@ -4,11 +4,13 @@
     <TargetFramework>net5.0</TargetFramework>
     <Authors>Thang Dang Hieu</Authors>
     <Company>Fpt University</Company>
+    <UserSecretsId>34d491a6-5fc2-4a41-a225-5a5c84738c1c</UserSecretsId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>IMP.WebApi.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\net5.0\IMP.WebApi.xml</DocumentationFile>
     <NoWarn>1701;1702;1591</NoWarn>
+    <OutputPath>bin\Debug\net5.0\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
