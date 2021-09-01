@@ -1,6 +1,5 @@
-﻿using IMP.Application.Interfaces;
-using IMP.Domain.Common;
-using IMP.Infrastructure.Persistence.Contexts;
+﻿using IMP.Application.Interfaces.Repositories.Identities;
+using IMP.Infrastructure.Identity.Contexts;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,13 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IMP.Infrastructure.Persistence.Repository
+namespace IMP.Infrastructure.Identity.Reponsitories
 {
-    public class GenericRepositoryAsync<TKey, TEntity> : IGenericRepositoryAsync<TKey, TEntity>, IDisposable where TEntity : class
+    public class IdentityGenericRepository<TKey, TEntity> : IIdentityGenericRepository<TKey, TEntity> where TEntity : class
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly IdentityContext _dbContext;
         private bool _disposed = false;
-        public GenericRepositoryAsync(ApplicationDbContext dbContext)
+        public IdentityGenericRepository(IdentityContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -22,16 +21,6 @@ namespace IMP.Infrastructure.Persistence.Repository
         public virtual async Task<TEntity> GetByIdAsync(TKey id)
         {
             return await _dbContext.Set<TEntity>().FindAsync(id);
-        }
-
-        public async Task<IReadOnlyList<TEntity>> GetPagedReponseAsync(int pageNumber, int pageSize)
-        {
-            return await _dbContext
-                .Set<TEntity>()
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .AsNoTracking()
-                .ToListAsync();
         }
 
         public async Task<TEntity> AddAsync(TEntity entity)

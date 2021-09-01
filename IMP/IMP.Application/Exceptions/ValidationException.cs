@@ -39,6 +39,12 @@ namespace IMP.Application.Exceptions
             Errors.Add(error);
         }
 
+        public ValidationException(IEnumerable<ValidationError> errors)
+            : this()
+        {
+            Errors.AddRange(errors);
+        }
+
 
 
     }

@@ -1,4 +1,5 @@
-﻿using IMP.Infrastructure.Identity.Models;
+﻿using IMP.Application.DTOs.Account;
+using IMP.Infrastructure.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ namespace IMP.Infrastructure.Identity.Contexts
 {
     public class IdentityContext : IdentityDbContext<User>
     {
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
         public IdentityContext(DbContextOptions<IdentityContext> options) : base(options)
         {
         }

@@ -21,7 +21,12 @@ namespace IMP.WebApi.Controllers
         [HttpPost("authenticate")]
         public async Task<IActionResult> AuthenticateAsync(AuthenticationRequest request)
         {
-            return Ok(await _accountService.AuthenticateAsync(request, GenerateIPAddress()));
+            var response = await _accountService.AuthenticateAsync(request, GenerateIPAddress());
+            if (response.Succeeded)
+            {
+                SetRefreshToken(response.Data.RefreshToken);
+            }
+            return Ok(response);
         }
         [HttpPost("register")]
         public async Task<IActionResult> RegisterAsync(RegisterRequest request)
@@ -47,12 +52,28 @@ namespace IMP.WebApi.Controllers
 
             return Ok(await _accountService.ResetPassword(model));
         }
+
+        [HttpGet("refresh-token")]
+        public async Task<IActionResult> RefreshToken()
+        {
+            return Ok();
+        }
         private string GenerateIPAddress()
         {
             if (Request.Headers.ContainsKey("X-Forwarded-For"))
                 return Request.Headers["X-Forwarded-For"];
             else
                 return HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
+        }
+
+        private void SetRefreshToken(string refreshToken)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Expires = DateTime.UtcNow.AddDays(1)
+            };
+            Response.Cookies.Append("refresh-token", refreshToken, cookieOptions);
         }
     }
 }

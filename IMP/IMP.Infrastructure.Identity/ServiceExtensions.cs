@@ -1,10 +1,12 @@
 ﻿using IMP.Application.Exceptions;
 using IMP.Application.Interfaces;
+using IMP.Application.Interfaces.Repositories.Identities;
 using IMP.Application.Wrappers;
 using IMP.Domain.Settings;
 using IMP.Infrastructure.Identity.Contexts;
 using IMP.Infrastructure.Identity.Helpers;
 using IMP.Infrastructure.Identity.Models;
+using IMP.Infrastructure.Identity.Reponsitories;
 using IMP.Infrastructure.Identity.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
@@ -38,6 +40,10 @@ namespace IMP.Infrastructure.Identity
                     b => b.MigrationsAssembly(typeof(IdentityContext).Assembly.FullName)));
             }
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<IdentityContext>().AddDefaultTokenProviders();
+            #region Repositories
+            services.AddTransient(typeof(IIdentityGenericRepository<,>), typeof(IdentityGenericRepository<,>));
+            services.AddTransient<IRefreshTokenRepository, RefreshTokenRepository>();
+            #endregion
             #region Services
             services.AddTransient<IAccountService, AccountService>();
             #endregion

@@ -33,6 +33,7 @@ namespace IMP.Application.Mappings
             CreateMap<CreateCampaignTypeCommand, CampaignType>();
             CreateMap<UpdateCampaignTypeCommand, CampaignType>();
             #endregion campaign type
+
         }
     }
 }

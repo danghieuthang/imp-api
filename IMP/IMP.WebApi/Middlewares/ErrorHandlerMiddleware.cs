@@ -2,6 +2,7 @@
 using IMP.Application.Wrappers;
 using IMP.WebApi.Policies;
 using Microsoft.AspNetCore.Http;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,6 +50,7 @@ namespace IMP.WebApi.Middlewares
                         break;
                     default:
                         // unhandled error
+                        Log.Error(error, "Internal Server Error");
                         response.StatusCode = (int)HttpStatusCode.InternalServerError;
                         break;
                 }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace IMP.Application.DTOs.Account
 {
-    public class RefreshToken
+    public class RefreshTokenResponse
     {
         public int Id { get; set; }
         public string Token { get; set; }

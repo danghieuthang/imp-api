@@ -1,4 +1,5 @@
-﻿using IMP.Application.DTOs.Account;
+﻿using IMP.Application.DTOs;
+using IMP.Application.DTOs.Account;
 using IMP.Application.DTOs.Email;
 using IMP.Application.Enums;
 using IMP.Application.Exceptions;
@@ -7,6 +8,7 @@ using IMP.Application.Wrappers;
 using IMP.Domain.Settings;
 using IMP.Infrastructure.Identity.Helpers;
 using IMP.Infrastructure.Identity.Models;
+using IMP.Infrastructure.Identity.Reponsitories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
@@ -34,12 +36,14 @@ namespace IMP.Infrastructure.Identity.Services
         private readonly IEmailService _emailService;
         private readonly JWTSettings _jwtSettings;
         private readonly IDateTimeService _dateTimeService;
+        private readonly IRefreshTokenRepository _refreshTokenRepository;
         public AccountService(UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager,
             IOptions<JWTSettings> jwtSettings,
             IDateTimeService dateTimeService,
             SignInManager<User> signInManager,
-            IEmailService emailService)
+            IEmailService emailService,
+            IRefreshTokenRepository refreshTokenRepository)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -47,6 +51,7 @@ namespace IMP.Infrastructure.Identity.Services
             _dateTimeService = dateTimeService;
             _signInManager = signInManager;
             this._emailService = emailService;
+            this._refreshTokenRepository = refreshTokenRepository;
         }
 
         public async Task<Response<AuthenticationResponse>> AuthenticateAsync(AuthenticationRequest request, string ipAddress)
@@ -76,6 +81,17 @@ namespace IMP.Infrastructure.Identity.Services
             response.IsVerified = user.EmailConfirmed;
             var refreshToken = GenerateRefreshToken(ipAddress);
             response.RefreshToken = refreshToken.Token;
+
+            var refreshTokenDomain = new RefreshToken
+            {
+                Token = refreshToken.Token,
+                Created = refreshToken.Created,
+                Expires = refreshToken.Expires,
+                CreatedByIp = ipAddress,
+                UserId = user.Id
+            };
+            _ = _refreshTokenRepository.AddAsync(refreshTokenDomain);
+
             return new Response<AuthenticationResponse>(response, $"Authenticated {user.UserName}");
         }
 
@@ -107,7 +123,9 @@ namespace IMP.Infrastructure.Identity.Services
                 }
                 else
                 {
-                    throw new ApiException($"{result.Errors}");
+                    var errors = result.Errors.Select(x =>
+                    new ValidationError(x.Code, x.Description)).ToList();
+                    throw new ValidationException(errors);
                 }
             }
             else
@@ -189,9 +207,9 @@ namespace IMP.Infrastructure.Identity.Services
             }
         }
 
-        private RefreshToken GenerateRefreshToken(string ipAddress)
+        private RefreshTokenResponse GenerateRefreshToken(string ipAddress)
         {
-            return new RefreshToken
+            return new RefreshTokenResponse
             {
                 Token = RandomTokenString(),
                 Expires = DateTime.UtcNow.AddDays(7),
@@ -233,6 +251,11 @@ namespace IMP.Infrastructure.Identity.Services
                 throw new ApiException($"Error occured while reseting the password.");
             }
         }
+
+        //public async Task<Response<AuthenticationResponse>> RefreshToken(string refreshToken, string ipAddress)
+        //{
+
+        //}
     }
 
 }

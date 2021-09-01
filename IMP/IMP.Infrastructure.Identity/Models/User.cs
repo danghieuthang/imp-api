@@ -8,6 +8,10 @@ namespace IMP.Infrastructure.Identity.Models
 {
     public class User : IdentityUser
     {
+        public User()
+        {
+            RefreshTokens = new();
+        }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public List<RefreshToken> RefreshTokens { get; set; }
