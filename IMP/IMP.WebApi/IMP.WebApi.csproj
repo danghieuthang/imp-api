@@ -8,10 +8,17 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\net5.0\IMP.WebApi.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\net5.0\publish\IMP.WebApi.xml</DocumentationFile>
     <NoWarn>1701;1702;1591</NoWarn>
-    <OutputPath>bin\Debug\net5.0\</OutputPath>
+    <OutputPath>bin\Release\net5.0\publish</OutputPath>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="bin\IMP.WebApi.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.9">

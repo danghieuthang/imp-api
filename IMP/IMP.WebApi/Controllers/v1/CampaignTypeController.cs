@@ -13,5 +13,10 @@ namespace IMP.WebApi.Controllers.v1
         {
             return StatusCode(201, await Mediator.Send(command));
         }
+        [HttpPost("edit")]
+        public async Task<IActionResult> Edit([FromForm] CreateCampaignTypeCommand command)
+        {
+            return StatusCode(201, await Mediator.Send(command));
+        }
     }
 }
