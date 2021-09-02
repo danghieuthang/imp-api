@@ -4,11 +4,13 @@ using IMP.Application.DTOs.Email;
 using IMP.Application.Enums;
 using IMP.Application.Exceptions;
 using IMP.Application.Interfaces;
+using IMP.Application.Interfaces.Services;
 using IMP.Application.Wrappers;
 using IMP.Domain.Settings;
 using IMP.Infrastructure.Identity.Helpers;
 using IMP.Infrastructure.Identity.Models;
 using IMP.Infrastructure.Identity.Reponsitories;
+using IMP.Infrastructure.Persistence.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
@@ -37,13 +39,15 @@ namespace IMP.Infrastructure.Identity.Services
         private readonly JWTSettings _jwtSettings;
         private readonly IDateTimeService _dateTimeService;
         private readonly IRefreshTokenRepository _refreshTokenRepository;
+        private readonly IApplicationUserService _applicationUserService;
         public AccountService(UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager,
             IOptions<JWTSettings> jwtSettings,
             IDateTimeService dateTimeService,
             SignInManager<User> signInManager,
             IEmailService emailService,
-            IRefreshTokenRepository refreshTokenRepository)
+            IRefreshTokenRepository refreshTokenRepository,
+            IApplicationUserService applicationUserService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -52,6 +56,7 @@ namespace IMP.Infrastructure.Identity.Services
             _signInManager = signInManager;
             this._emailService = emailService;
             this._refreshTokenRepository = refreshTokenRepository;
+            this._applicationUserService = applicationUserService;
         }
 
         public async Task<Response<AuthenticationResponse>> AuthenticateAsync(AuthenticationRequest request, string ipAddress)
@@ -112,6 +117,14 @@ namespace IMP.Infrastructure.Identity.Services
             var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
             if (userWithSameEmail == null)
             {
+                // Create Application User
+                var applicationUser = await _applicationUserService.CreateUser(user.UserName);
+                // Add Application User ref to Identity User
+                if (applicationUser != null)
+                {
+                    user.ApplicationUserId = applicationUser.Id;
+                }
+
                 var result = await _userManager.CreateAsync(user, request.Password);
                 if (result.Succeeded)
                 {
@@ -123,6 +136,9 @@ namespace IMP.Infrastructure.Identity.Services
                 }
                 else
                 {
+                    // Delete Application User if create fail
+                    await _applicationUserService.DeleteUser(user.UserName);
+
                     var errors = result.Errors.Select(x =>
                     new ValidationError(x.Code, x.Description)).ToList();
                     throw new ValidationException(errors);

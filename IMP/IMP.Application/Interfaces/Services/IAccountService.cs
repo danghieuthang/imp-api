@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IMP.Application.Interfaces
+namespace IMP.Application.Interfaces.Services
 {
     public interface IAccountService
     {

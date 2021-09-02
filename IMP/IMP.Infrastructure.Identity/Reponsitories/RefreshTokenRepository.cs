@@ -30,7 +30,7 @@ namespace IMP.Infrastructure.Identity.Reponsitories
 
         public async Task<RefreshToken> GetRefreshToken(string token, string ipAddress)
         {
-            var refreshToken = _refreshTokens.AsNoTracking().Where(x => x.Token == token).Include(x => x.User).FirstOrDefault();
+            var refreshToken = await _refreshTokens.AsNoTracking().Where(x => x.Token == token).Include(x => x.User).FirstOrDefaultAsync();
             return refreshToken;
         }
     }

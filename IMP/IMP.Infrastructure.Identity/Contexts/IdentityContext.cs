@@ -53,6 +53,10 @@ namespace IMP.Infrastructure.Identity.Contexts
             {
                 entity.ToTable("UserTokens");
             });
+
+            #region setup constraint
+            builder.Entity<User>().HasIndex("ApplicationUserId").IsUnique();
+            #endregion
         }
     }
 }

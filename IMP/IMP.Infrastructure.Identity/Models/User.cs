@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace IMP.Infrastructure.Identity.Models
@@ -19,5 +20,6 @@ namespace IMP.Infrastructure.Identity.Models
         {
             return this.RefreshTokens?.Find(x => x.Token == token) != null;
         }
+        public int? ApplicationUserId { get; set; }
     }
 }
