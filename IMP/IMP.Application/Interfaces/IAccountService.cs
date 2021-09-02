@@ -15,5 +15,7 @@ namespace IMP.Application.Interfaces
         Task<Response<string>> ConfirmEmailAsync(string userId, string code);
         Task ForgotPassword(ForgotPasswordRequest model, string origin);
         Task<Response<string>> ResetPassword(ResetPasswordRequest model);
+        Task<Response<AuthenticationResponse>> RefreshToken(string refreshToken, string ipaAddress);
+        Task<Response<string>> RevokeToken(string refreshToken, string ipaAddress);
     }
 }

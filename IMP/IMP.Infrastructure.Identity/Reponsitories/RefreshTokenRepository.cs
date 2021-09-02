@@ -12,6 +12,13 @@ namespace IMP.Infrastructure.Identity.Reponsitories
 {
     public interface IRefreshTokenRepository : IIdentityGenericRepository<int, RefreshToken>
     {
+        /// <summary>
+        /// Get Refresh Token from token and ip address
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="ipAddress"></param>
+        /// <returns></returns>
+        Task<RefreshToken> GetRefreshToken(string token, string ipAddress);
     }
     public class RefreshTokenRepository : IdentityGenericRepository<int, RefreshToken>, IRefreshTokenRepository
     {
@@ -19,6 +26,12 @@ namespace IMP.Infrastructure.Identity.Reponsitories
         public RefreshTokenRepository(IdentityContext dbContext) : base(dbContext)
         {
             _refreshTokens = dbContext.Set<RefreshToken>();
+        }
+
+        public async Task<RefreshToken> GetRefreshToken(string token, string ipAddress)
+        {
+            var refreshToken = _refreshTokens.AsNoTracking().Where(x => x.Token == token).Include(x => x.User).FirstOrDefault();
+            return refreshToken;
         }
     }
 }

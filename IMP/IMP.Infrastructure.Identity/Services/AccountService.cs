@@ -252,10 +252,72 @@ namespace IMP.Infrastructure.Identity.Services
             }
         }
 
-        //public async Task<Response<AuthenticationResponse>> RefreshToken(string refreshToken, string ipAddress)
-        //{
+        public async Task<Response<AuthenticationResponse>> RefreshToken(string refreshToken, string ipAddress)
+        {
+            var entity = await _refreshTokenRepository.GetRefreshToken(refreshToken, ipAddress);
+            if (entity == null) throw new ApiException($"Refresh token no.");
 
-        //}
+            if (!entity.IsActive)
+            {
+                await _refreshTokenRepository.DeleteAsync(entity);
+                var error = new ValidationError("refresh_token", "Token was expired.");
+                throw new ValidationException(error);
+            }
+
+            var user = entity.User;
+
+            var newJwtToken = await GenerateJWToken(entity.User);
+            var newRefreshToken = GenerateRefreshToken(ipAddress);
+
+
+            #region update refresh token after refresh
+            entity.Revoked = DateTime.UtcNow;
+            entity.RevokedByIp = ipAddress;
+            entity.ReplacedByToken = newRefreshToken.Token;
+            await _refreshTokenRepository.UpdateAsync(entity);
+            #endregion
+
+            AuthenticationResponse response = new AuthenticationResponse();
+            response.Id = user.Id;
+            response.JWToken = new JwtSecurityTokenHandler().WriteToken(newJwtToken);
+            response.Email = user.Email;
+            response.UserName = user.UserName;
+            var rolesList = await _userManager.GetRolesAsync(user).ConfigureAwait(false);
+            response.Roles = rolesList.ToList();
+            response.IsVerified = user.EmailConfirmed;
+            response.RefreshToken = newRefreshToken.Token;
+
+            var refreshTokenDomain = new RefreshToken
+            {
+                Token = newRefreshToken.Token,
+                Created = newRefreshToken.Created,
+                Expires = newRefreshToken.Expires,
+                CreatedByIp = ipAddress,
+                UserId = user.Id
+            };
+            return new Response<AuthenticationResponse>(response);
+        }
+
+        public async Task<Response<string>> RevokeToken(string refreshToken, string ipaAddress)
+        {
+            var entity = await _refreshTokenRepository.GetRefreshToken(refreshToken, ipaAddress);
+            if (entity == null)
+            {
+                var error = new ValidationError("refresh_token", "Refresh Token not exist.");
+                throw new ValidationException(error);
+            }
+
+            if (!entity.IsActive)
+            {
+                var error = new ValidationError("refresh_token", "Refresh Token was revoked.");
+                throw new ValidationException(error);
+            }
+
+            entity.Revoked = DateTime.UtcNow;
+            entity.RevokedByIp = ipaAddress;
+            await _refreshTokenRepository.UpdateAsync(entity);
+            return new Response<string>(entity.User.Email, $"Refresh token was revoked.");
+        }
     }
 
 }

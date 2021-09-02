@@ -53,11 +53,20 @@ namespace IMP.WebApi.Controllers
             return Ok(await _accountService.ResetPassword(model));
         }
 
-        [HttpGet("refresh-token")]
+        [HttpPost("refresh-token")]
         public async Task<IActionResult> RefreshToken()
         {
-            return Ok();
+            var refreshToken = Request.Cookies["refresh-token"];
+            return Ok(await _accountService.RefreshToken(refreshToken, GenerateIPAddress()));
         }
+
+        [HttpPost("revoke-token")]
+        public async Task<IActionResult> RevokeToken()
+        {
+            var refeshToken = Request.Cookies["refresh-token"];
+            return Ok(await _accountService.RevokeToken(refeshToken, GenerateIPAddress()));
+        }
+
         private string GenerateIPAddress()
         {
             if (Request.Headers.ContainsKey("X-Forwarded-For"))
