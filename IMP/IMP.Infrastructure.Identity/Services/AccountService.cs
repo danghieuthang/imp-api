@@ -131,7 +131,7 @@ namespace IMP.Infrastructure.Identity.Services
                     await _userManager.AddToRoleAsync(user, Roles.Fan.ToString());
                     var verificationUri = await SendVerificationEmail(user, origin);
                     //TODO: Attach Email Service here and configure it via appsettings
-                    await _emailService.SendAsync(new Application.DTOs.Email.EmailRequest() { From = "mail@codewithmukesh.com", To = user.Email, Body = $"Please confirm your account by visiting this URL {verificationUri}", Subject = "Confirm Registration" });
+                    await _emailService.SendAsync(new Application.DTOs.Email.EmailRequest() { To = user.Email, Body = $"Please confirm your account by visiting this URL {verificationUri}", Subject = "Confirm Registration" });
                     return new Response<string>(user.Id, message: $"User Registered. Please confirm your account by visiting this URL {verificationUri}");
                 }
                 else
@@ -200,8 +200,8 @@ namespace IMP.Infrastructure.Identity.Services
         {
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-            var route = "api/account/confirm-email/";
-            var _enpointUri = new Uri(string.Concat($"{origin}/", route));
+            var route = "http://localhost:57712/api/accounts/confirm-email/";
+            var _enpointUri = new Uri(string.Concat(route, $"{origin}"));
             var verificationUri = QueryHelpers.AddQueryString(_enpointUri.ToString(), "userId", user.Id);
             verificationUri = QueryHelpers.AddQueryString(verificationUri, "code", code);
             //Email Service Call Here
