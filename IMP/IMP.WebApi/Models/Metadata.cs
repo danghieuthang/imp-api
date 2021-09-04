@@ -7,5 +7,7 @@ namespace IMP.WebApi.Models
 {
     public class Metadata
     {
+        public string Version { get; set; }
+        public DateTime LastUpdate { get; set; }
     }
 }
