@@ -5,6 +5,7 @@ using IMP.Application.Enums;
 using IMP.Application.Exceptions;
 using IMP.Application.Interfaces;
 using IMP.Application.Interfaces.Services;
+using IMP.Application.Models.Account;
 using IMP.Application.Wrappers;
 using IMP.Domain.Settings;
 using IMP.Infrastructure.Identity.Helpers;
@@ -40,6 +41,7 @@ namespace IMP.Infrastructure.Identity.Services
         private readonly IDateTimeService _dateTimeService;
         private readonly IRefreshTokenRepository _refreshTokenRepository;
         private readonly IApplicationUserService _applicationUserService;
+        private readonly IGoogleServices _googleServices;
         public AccountService(UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager,
             IOptions<JWTSettings> jwtSettings,
@@ -47,7 +49,8 @@ namespace IMP.Infrastructure.Identity.Services
             SignInManager<User> signInManager,
             IEmailService emailService,
             IRefreshTokenRepository refreshTokenRepository,
-            IApplicationUserService applicationUserService)
+            IApplicationUserService applicationUserService,
+            IGoogleServices googleServices)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -57,6 +60,7 @@ namespace IMP.Infrastructure.Identity.Services
             this._emailService = emailService;
             this._refreshTokenRepository = refreshTokenRepository;
             this._applicationUserService = applicationUserService;
+            this._googleServices = googleServices;
         }
 
         public async Task<Response<AuthenticationResponse>> AuthenticateAsync(AuthenticationRequest request, string ipAddress)
@@ -333,6 +337,50 @@ namespace IMP.Infrastructure.Identity.Services
             entity.RevokedByIp = ipaAddress;
             await _refreshTokenRepository.UpdateAsync(entity);
             return new Response<string>(entity.User.Email, $"Refresh token was revoked.");
+        }
+
+        public async Task<Response<AuthenticationResponse>> SocialAuthenticationAsync(SocialAuthenticationRequest request, string ipAddress)
+        {
+            if (request.Provider.Equals("Google", StringComparison.CurrentCultureIgnoreCase))
+            {
+                var userInfo = await _googleServices.ValidateIdToken(request.Token);
+                if (userInfo == null)
+                {
+                    var error = new ValidationError("token", "Token not valid.");
+                    throw new ValidationException(error);
+                }
+
+                var user = await _userManager.FindByEmailAsync(userInfo.Email);
+                if (user == null)
+                {
+                    throw new ApiException($"No Accounts Registered with {userInfo.Email}.");
+                }
+
+                JwtSecurityToken jwtSecurityToken = await GenerateJWToken(user);
+                AuthenticationResponse response = new();
+                response.Id = user.Id;
+                response.JWToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+                response.Email = user.Email;
+                response.UserName = user.UserName;
+                var rolesList = await _userManager.GetRolesAsync(user).ConfigureAwait(false);
+                response.Roles = rolesList.ToList();
+                response.IsVerified = user.EmailConfirmed;
+                var refreshToken = GenerateRefreshToken(ipAddress);
+                response.RefreshToken = refreshToken.Token;
+
+                var refreshTokenDomain = new RefreshToken
+                {
+                    Token = refreshToken.Token,
+                    Created = refreshToken.Created,
+                    Expires = refreshToken.Expires,
+                    CreatedByIp = ipAddress,
+                    UserId = user.Id
+                };
+                _ = _refreshTokenRepository.AddAsync(refreshTokenDomain);
+
+                return new Response<AuthenticationResponse>(response, $"Authenticated {user.Email}");
+            }
+            throw new ValidationException(new ValidationError("provider", "Provider not support."));
         }
     }
 

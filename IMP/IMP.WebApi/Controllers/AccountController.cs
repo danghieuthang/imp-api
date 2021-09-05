@@ -1,13 +1,17 @@
 ﻿using IMP.Application.DTOs.Account;
 using IMP.Application.Interfaces;
 using IMP.Application.Interfaces.Services;
+using IMP.Application.Models.Account;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
-
 namespace IMP.WebApi.Controllers
 {
     [Route(RouterConstants.ACCOUNT)]
@@ -29,6 +33,30 @@ namespace IMP.WebApi.Controllers
             }
             return Ok(response);
         }
+
+        [HttpPost("social-authenticate")]
+        public async Task<IActionResult> AuthenticateWithSocial(SocialAuthenticationRequest request)
+        {
+            return Ok(await _accountService.SocialAuthenticationAsync(request, GenerateIPAddress()));
+        }
+
+        //[HttpGet("google-response")]
+        //public async Task<IActionResult> GoogleResponse()
+        //{
+        //    var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+        //    var claims = result.Principal.Identities
+        //        .FirstOrDefault().Claims.Select(claim => new
+        //        {
+        //            claim.Issuer,
+        //            claim.OriginalIssuer,
+        //            claim.Type,
+        //            claim.Value
+        //        });
+
+        //    return Ok((claims));
+        //}
+
         [HttpPost("register")]
         public async Task<IActionResult> RegisterAsync(RegisterRequest request)
         {
@@ -67,6 +95,7 @@ namespace IMP.WebApi.Controllers
             var refeshToken = Request.Cookies["refresh-token"];
             return Ok(await _accountService.RevokeToken(refeshToken, GenerateIPAddress()));
         }
+
 
         private string GenerateIPAddress()
         {

@@ -23,6 +23,7 @@ namespace IMP.WebApi
         }
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCorsExtension();
             services.AddApplicationLayer();
             services.AddIdentityInfrastructure(_config);
             services.AddPersistenceInfrastructure(_config);

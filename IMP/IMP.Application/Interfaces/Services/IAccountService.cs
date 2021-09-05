@@ -1,4 +1,5 @@
 ﻿using IMP.Application.DTOs.Account;
+using IMP.Application.Models.Account;
 using IMP.Application.Wrappers;
 using Microsoft.Extensions.Primitives;
 using System;
@@ -17,5 +18,7 @@ namespace IMP.Application.Interfaces.Services
         Task<Response<string>> ResetPassword(ResetPasswordRequest model);
         Task<Response<AuthenticationResponse>> RefreshToken(string refreshToken, string ipaAddress);
         Task<Response<string>> RevokeToken(string refreshToken, string ipaAddress);
+
+        Task<Response<AuthenticationResponse>> SocialAuthenticationAsync(SocialAuthenticationRequest request, string ipAddress);
     }
 }

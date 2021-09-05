@@ -21,6 +21,7 @@ namespace IMP.Infrastructure.Shared
             services.AddTransient<IDateTimeService, DateTimeService>();
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IFirebaseService, FirebaseService>();
+            services.AddTransient<IGoogleServices, GoogleServices>();
         }
     }
 }
