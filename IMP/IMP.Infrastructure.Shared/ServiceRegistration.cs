@@ -15,13 +15,15 @@ namespace IMP.Infrastructure.Shared
             services.Configure<MailSettings>(_config.GetSection("MailSettings"));
             services.Configure<FirebaseSettings>(_config.GetSection("FirebaseSettings"));
             services.Configure<FileSettings>(_config.GetSection("FileSettings"));
+            services.Configure<FacebookAuthenticationSettings>(_config.GetSection("Authentication").GetSection("Facebook"));
 
             #endregion Registers for configutation
 
             services.AddTransient<IDateTimeService, DateTimeService>();
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IFirebaseService, FirebaseService>();
-            services.AddTransient<IGoogleServices, GoogleServices>();
+            services.AddTransient<IGoogleService, GoogleService>();
+            services.AddTransient<IFacebookService, FacebookService>();
         }
     }
 }

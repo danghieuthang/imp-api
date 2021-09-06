@@ -20,5 +20,6 @@ namespace IMP.Application.Interfaces.Services
         Task<Response<string>> RevokeToken(string refreshToken, string ipaAddress);
 
         Task<Response<AuthenticationResponse>> SocialAuthenticationAsync(SocialAuthenticationRequest request, string ipAddress);
+        Task<Response<RegisterResponse>> SocialRegisterAsync(SocialAuthenticationRequest request);
     }
 }

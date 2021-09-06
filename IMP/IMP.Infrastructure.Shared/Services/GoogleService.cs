@@ -12,11 +12,11 @@ using System.Threading.Tasks;
 namespace IMP.Infrastructure.Shared.Services
 {
 
-    public class GoogleServices : IGoogleServices
+    public class GoogleService : IGoogleService
     {
         private readonly GoogleAuthenticationSettings _settings;
 
-        public GoogleServices(IOptions<GoogleAuthenticationSettings> options)
+        public GoogleService(IOptions<GoogleAuthenticationSettings> options)
         {
             _settings = options.Value;
         }

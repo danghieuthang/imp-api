@@ -8,7 +8,13 @@ namespace IMP.Domain.Settings
 {
     public class GoogleAuthenticationSettings
     {
-        public string CliendId { get; set; }
+        public string ClientId { get; set; }
+        public string ClientSecret { get; set; }
+    }
+
+    public class FacebookAuthenticationSettings
+    {
+        public string ClientId { get; set; }
         public string ClientSecret { get; set; }
     }
 }

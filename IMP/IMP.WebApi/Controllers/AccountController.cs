@@ -23,6 +23,7 @@ namespace IMP.WebApi.Controllers
         {
             _accountService = accountService;
         }
+
         [HttpPost("authenticate")]
         public async Task<IActionResult> AuthenticateAsync(AuthenticationRequest request)
         {
@@ -61,7 +62,13 @@ namespace IMP.WebApi.Controllers
         public async Task<IActionResult> RegisterAsync(RegisterRequest request)
         {
             var origin = Request.Headers["origin"];
-            return Ok(await _accountService.RegisterAsync(request, origin));
+            return StatusCode(201, await _accountService.RegisterAsync(request, origin));
+        }
+
+        [HttpPost("social-register")]
+        public async Task<IActionResult> SocialRegisterAsync(SocialAuthenticationRequest request)
+        {
+            return StatusCode(201, await _accountService.SocialRegisterAsync(request));
         }
         [HttpGet("confirm-email")]
         public async Task<IActionResult> ConfirmEmailAsync([FromQuery] string userId, [FromQuery] string code)

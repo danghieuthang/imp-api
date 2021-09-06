@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace IMP.Application.Interfaces
 {
-    public interface IGoogleService
+    public interface IFacebookService
     {
-        Task<ProviderUserDetail> ValidateIdToken(string idToken);
+        Task<ProviderUserDetail> ValidationAccessToken(string accessToken);
     }
 }
