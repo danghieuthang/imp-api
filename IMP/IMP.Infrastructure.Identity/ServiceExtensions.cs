@@ -94,6 +94,13 @@ namespace IMP.Infrastructure.Identity
                             return context.Response.WriteAsync(result);
                         },
                     };
+                })
+                .AddGoogle(options =>
+                {
+                    var googleAuthNSection = configuration.GetSection("Authentication:Google");
+                    options.SaveTokens = true;
+                    options.ClientId = googleAuthNSection["ClientId"];
+                    options.ClientSecret = googleAuthNSection["ClientSecret"];
                 });
         }
     }

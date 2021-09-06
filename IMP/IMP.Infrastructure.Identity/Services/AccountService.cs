@@ -3,8 +3,10 @@ using IMP.Application.DTOs.Account;
 using IMP.Application.DTOs.Email;
 using IMP.Application.Enums;
 using IMP.Application.Exceptions;
+using IMP.Application.Helpers;
 using IMP.Application.Interfaces;
 using IMP.Application.Interfaces.Services;
+using IMP.Application.Models.Account;
 using IMP.Application.Wrappers;
 using IMP.Domain.Settings;
 using IMP.Infrastructure.Identity.Helpers;
@@ -40,6 +42,8 @@ namespace IMP.Infrastructure.Identity.Services
         private readonly IDateTimeService _dateTimeService;
         private readonly IRefreshTokenRepository _refreshTokenRepository;
         private readonly IApplicationUserService _applicationUserService;
+        private readonly IGoogleService _googleServices;
+        private readonly IFacebookService _facebookService;
         public AccountService(UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager,
             IOptions<JWTSettings> jwtSettings,
@@ -47,7 +51,9 @@ namespace IMP.Infrastructure.Identity.Services
             SignInManager<User> signInManager,
             IEmailService emailService,
             IRefreshTokenRepository refreshTokenRepository,
-            IApplicationUserService applicationUserService)
+            IApplicationUserService applicationUserService,
+            IGoogleService googleServices,
+            IFacebookService facebookService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -57,6 +63,8 @@ namespace IMP.Infrastructure.Identity.Services
             this._emailService = emailService;
             this._refreshTokenRepository = refreshTokenRepository;
             this._applicationUserService = applicationUserService;
+            this._googleServices = googleServices;
+            this._facebookService = facebookService;
         }
 
         public async Task<Response<AuthenticationResponse>> AuthenticateAsync(AuthenticationRequest request, string ipAddress)
@@ -100,6 +108,69 @@ namespace IMP.Infrastructure.Identity.Services
             return new Response<AuthenticationResponse>(response, $"Authenticated {user.UserName}");
         }
 
+        private async Task<string> GenerateUnDuplicateUserName(string username)
+        {
+            username = username.ConvertToUnSign().ToLower().Replace(" ", "");
+            var userWithSameUserName = await _userManager.FindByNameAsync(username);
+            int i = 1;
+            while (userWithSameUserName != null)
+            {
+                i++;
+                if (i == 2)
+                {
+                    username += i;
+                }
+                else
+                {
+                    username = username.Substring(0, username.Length - 1) + i;
+                }
+                userWithSameUserName = await _userManager.FindByNameAsync(username);
+            }
+            return username;
+        }
+        private async Task<User> RegisterSocialAsync(ProviderUserDetail providerUser)
+        {
+            string username = await GenerateUnDuplicateUserName(providerUser.Name);
+
+            var user = new User
+            {
+                Email = providerUser.Email,
+                FirstName = providerUser.FirstName,
+                LastName = providerUser.LastName,
+                UserName = username,
+                EmailConfirmed = true
+            };
+            var userWithSameEmail = await _userManager.FindByEmailAsync(providerUser.Email);
+            if (userWithSameEmail == null)
+            {
+                // Create Application User
+                var applicationUser = await _applicationUserService.CreateUser(user.UserName);
+                // Add Application User ref to Identity User
+                if (applicationUser != null)
+                {
+                    user.ApplicationUserId = applicationUser.Id;
+                }
+
+                var result = await _userManager.CreateAsync(user);
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(user, Roles.Fan.ToString());
+                    return user;
+                }
+                else
+                {
+                    // Delete Application User if create fail
+                    await _applicationUserService.DeleteUser(user.UserName);
+                    var errors = result.Errors.Select(x =>
+                    new ValidationError(x.Code, x.Description)).ToList();
+                    throw new ValidationException(errors);
+                }
+            }
+            else
+            {
+                throw new ApiException($"Email {providerUser.Email } is already registered.");
+            }
+        }
         public async Task<Response<string>> RegisterAsync(RegisterRequest request, string origin)
         {
             var userWithSameUserName = await _userManager.FindByNameAsync(request.UserName);
@@ -333,6 +404,121 @@ namespace IMP.Infrastructure.Identity.Services
             entity.RevokedByIp = ipaAddress;
             await _refreshTokenRepository.UpdateAsync(entity);
             return new Response<string>(entity.User.Email, $"Refresh token was revoked.");
+        }
+        private async Task<AuthenticationResponse> AuthenticationWithoutPassword(string ipAddress, string username = null, string email = null)
+        {
+            User user;
+            if (username != null)
+            {
+                user = await _userManager.FindByNameAsync(username);
+                if (user == null)
+                {
+                    throw new ApiException($"No Accounts Registered with {username}.");
+                }
+            }
+            else
+            {
+                user = await _userManager.FindByEmailAsync(email);
+                if (user == null)
+                {
+                    throw new ApiException($"No Accounts Registered with {email}.");
+                }
+            }
+
+            JwtSecurityToken jwtSecurityToken = await GenerateJWToken(user);
+            AuthenticationResponse response = new();
+            response.Id = user.Id;
+            response.JWToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+            response.Email = user.Email;
+            response.UserName = user.UserName;
+            var rolesList = await _userManager.GetRolesAsync(user).ConfigureAwait(false);
+            response.Roles = rolesList.ToList();
+            response.IsVerified = user.EmailConfirmed;
+            var refreshToken = GenerateRefreshToken(ipAddress);
+            response.RefreshToken = refreshToken.Token;
+
+            var refreshTokenDomain = new RefreshToken
+            {
+                Token = refreshToken.Token,
+                Created = refreshToken.Created,
+                Expires = refreshToken.Expires,
+                CreatedByIp = ipAddress,
+                UserId = user.Id
+            };
+            _ = _refreshTokenRepository.AddAsync(refreshTokenDomain);
+            return response;
+        }
+
+        public async Task<Response<AuthenticationResponse>> SocialAuthenticationAsync(SocialAuthenticationRequest request, string ipAddress)
+        {
+            if (request.Provider.Equals("Google", StringComparison.CurrentCultureIgnoreCase))
+            {
+                var userInfo = await _googleServices.ValidateIdToken(request.Token);
+                if (userInfo == null)
+                {
+                    var error = new ValidationError("token", "Token not valid.");
+                    throw new ValidationException(error);
+                }
+                var response = await AuthenticationWithoutPassword(email: userInfo.Email, ipAddress: ipAddress);
+                return new Response<AuthenticationResponse>(response, $"Authenticated Google {userInfo.Email}");
+            }
+
+            if (request.Provider.Equals("Facebook", StringComparison.CurrentCultureIgnoreCase))
+            {
+                var userInfo = await _facebookService.ValidationAccessToken(request.Token);
+                if (userInfo == null)
+                {
+                    var error = new ValidationError("token", "Token not valid.");
+                    throw new ValidationException(error);
+                }
+                var response = await AuthenticationWithoutPassword(email: userInfo.Email, ipAddress: ipAddress);
+                return new Response<AuthenticationResponse>(response, $"Authenticated Facebook {userInfo.Email}");
+            }
+
+            throw new ValidationException(new ValidationError("provider", "Provider not support."));
+        }
+
+        public async Task<Response<RegisterResponse>> SocialRegisterAsync(SocialAuthenticationRequest request)
+        {
+            if (request.Provider.Equals("Google", StringComparison.CurrentCultureIgnoreCase))
+            {
+                var userInfo = await _googleServices.ValidateIdToken(request.Token);
+                if (userInfo == null)
+                {
+                    var error = new ValidationError("token", "Token not valid.");
+                    throw new ValidationException(error);
+                }
+                var user = await RegisterSocialAsync(userInfo);
+                var response = new RegisterResponse
+                {
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    UserName = user.UserName
+                };
+                return new Response<RegisterResponse>(response, $"Authenticated Google {userInfo.Email}");
+            }
+
+            if (request.Provider.Equals("Facebook", StringComparison.CurrentCultureIgnoreCase))
+            {
+                var userInfo = await _facebookService.ValidationAccessToken(request.Token);
+                if (userInfo == null)
+                {
+                    var error = new ValidationError("token", "Token not valid.");
+                    throw new ValidationException(error);
+                }
+                var user = await RegisterSocialAsync(userInfo);
+                var response = new RegisterResponse
+                {
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    UserName = user.UserName
+                };
+                return new Response<RegisterResponse>(response, $"Authenticated Facebook {userInfo.Email}");
+            }
+
+            throw new ValidationException(new ValidationError("provider", "Provider not support."));
         }
     }
 

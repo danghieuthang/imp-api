@@ -81,5 +81,19 @@ namespace IMP.WebApi.Extensions
                 };
             });
         }
+
+        public static void AddCorsExtension(this IServiceCollection services)
+        {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "All",
+                   builder =>
+                   {
+                       builder.AllowAnyMethod()
+                       .AllowAnyOrigin()
+                       .AllowAnyHeader();
+                   });
+            });
+        }
     }
 }
