@@ -14,7 +14,7 @@ namespace IMP.WebApi.Extensions
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "CleanArchitecture.IMP.WebApi");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "IMP.WebApi");
             });
         }
         public static void UseErrorHandlingMiddleware(this IApplicationBuilder app)

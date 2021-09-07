@@ -23,9 +23,9 @@ namespace IMP.WebApi.Extensions
                     Description = "This Api will be responsible for overall data distribution and authorization.",
                     Contact = new OpenApiContact
                     {
-                        Name = "codewithmukesh",
-                        Email = "hello@codewithmukesh.com",
-                        Url = new Uri("https://codewithmukesh.com/contact"),
+                        Name = "IMP Team",
+                        Email = "dhthang1998@gmail.com",
+                        Url = new Uri("http://14.161.47.36:10201/swagger/index.html"),
                     }
                 });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
