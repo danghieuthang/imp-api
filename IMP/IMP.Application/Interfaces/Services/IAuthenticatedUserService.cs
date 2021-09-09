@@ -7,5 +7,6 @@ namespace IMP.Application.Interfaces
     public interface IAuthenticatedUserService
     {
         string UserId { get; }
+        string AppId { get; }
     }
 }

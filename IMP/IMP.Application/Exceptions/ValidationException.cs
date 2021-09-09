@@ -24,9 +24,26 @@ namespace IMP.Application.Exceptions
         {
             foreach (var failure in failures)
             {
-                var error = new ValidationError(failure.PropertyName, failure.ErrorMessage);
+                var error = new ValidationError(GetSnakeCaseName(failure.PropertyName), failure.ErrorMessage);
                 Errors.Add(error);
             }
+        }
+        private string GetSnakeCaseName(string field)
+        {
+            StringBuilder builder = new StringBuilder();
+
+            builder.Append(char.ToLower(field[0]));
+
+            for (int i = 1; i < field.Length; i++)
+            {
+                if (char.IsUpper(field[i]))
+                {
+                    builder.Append('_');
+                }
+                builder.Append(char.ToLower(field[i]));
+            }
+
+            return builder.ToString();
         }
 
         /// <summary>

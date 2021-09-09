@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace IMP.Application.Extensions
@@ -28,6 +29,11 @@ namespace IMP.Application.Extensions
                 .NotEmpty().WithMessage("{PropertyName} chưa có dữ liệu.")
                 .NotNull()
                 .MaximumLength(256).WithMessage("{PropertyName} không thể quá " + maxLength + " ký tự.");
+        }
+
+        public static IRuleBuilderOptions<T, DateTime?> IsValidDate<T>(this IRuleBuilder<T, DateTime?> ruleBuilder)
+        {
+            return ruleBuilder.GreaterThanOrEqualTo(DateTime.UtcNow).WithMessage("'{PropertyValue}' không hợp lệ.");
         }
 
         /// <summary>
@@ -58,6 +64,17 @@ namespace IMP.Application.Extensions
                 .WithMessage("{PropertyName} có kiểu dữ liệu không hợp lệ.");
         }
 
+        /// <summary>
+        /// Check validate a id
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ruleBuilder"></param>
+        /// <param name="checkValidate">The function check</param>
+        /// <returns></returns>
+        public static IRuleBuilderOptions<T, int> IsExistId<T>(this IRuleBuilder<T, int> ruleBuilder, Func<int, CancellationToken, Task<bool>> checkValidate)
+        {
+            return ruleBuilder.MustAsync(checkValidate).WithMessage("'{PropertyValue}' không tồn tại");
+        }
 
     }
 }

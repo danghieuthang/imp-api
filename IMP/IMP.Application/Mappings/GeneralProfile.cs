@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using IMP.Application.DTOs.Compaign;
 using IMP.Application.DTOs.ViewModels;
 using IMP.Application.Features.Campaigns.Commands.CreateCampaign;
 using IMP.Application.Features.CampaignTypes.Commands.CreateCampaignType;
@@ -33,6 +34,11 @@ namespace IMP.Application.Mappings
             CreateMap<CreateCampaignTypeCommand, CampaignType>();
             CreateMap<UpdateCampaignTypeCommand, CampaignType>();
             #endregion campaign type
+
+            #region campaign
+            CreateMap<Campaign, CampaignViewModel>();
+            CreateMap<CreateCampaignCommand, Campaign>();
+            #endregion
 
         }
     }

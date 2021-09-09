@@ -23,7 +23,6 @@
   <ItemGroup>
     <Folder Include="Features\Campaigns\Commands\DeleteCampaignById\" />
     <Folder Include="Features\Campaigns\Commands\UpdateCampaign\" />
-    <Folder Include="Features\Campaigns\Queries\GetAllCampaigns\" />
     <Folder Include="Features\Campaigns\Queries\GetCampaignById\" />
   </ItemGroup>
 

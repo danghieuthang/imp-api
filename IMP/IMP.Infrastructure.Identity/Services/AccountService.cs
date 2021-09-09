@@ -241,6 +241,7 @@ namespace IMP.Infrastructure.Identity.Services
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim("uid", user.Id),
+                new Claim("appid", user.ApplicationUserId.GetValueOrDefault().ToString()),
                 new Claim("ip", ipAddress)
             }
             .Union(userClaims)

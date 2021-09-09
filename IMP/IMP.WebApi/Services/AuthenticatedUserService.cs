@@ -13,8 +13,11 @@ namespace IMP.WebApi.Services
         public AuthenticatedUserService(IHttpContextAccessor httpContextAccessor)
         {
             UserId = httpContextAccessor.HttpContext?.User?.FindFirstValue("uid");
+            AppId = httpContextAccessor.HttpContext?.User?.FindFirstValue("appid");
         }
 
         public string UserId { get; }
+
+        public string AppId { get; }
     }
 }

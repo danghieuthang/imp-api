@@ -20,11 +20,5 @@ namespace IMP.Application.DTOs.Compaign
         public int Status { get; set; }
         public string Condition { get; set; }
         public bool IsActived { get; set; }
-        public DateTime New { get; set; }
-        public DateTime Applying { get; set; }
-        public DateTime Selecting { get; set; }
-        public DateTime Posting { get; set; }
-        public DateTime Announced { get; set; }
-        public DateTime Closing { get; set; }
     }
 }

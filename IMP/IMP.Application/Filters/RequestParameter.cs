@@ -11,6 +11,9 @@ namespace IMP.Application.Filters
         public int PageNumber { get; set; }
         [FromQuery(Name = "page_size")]
         public int PageSize { get; set; }
+
+        [FromQuery(Name = "includes")]
+        public List<string> Includes { get; set; }
         public RequestParameter()
         {
             this.PageNumber = 1;

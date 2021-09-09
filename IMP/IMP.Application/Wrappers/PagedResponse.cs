@@ -8,8 +8,9 @@ namespace IMP.Application.Wrappers
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
+        public int TotalCount { get; set; }
 
-        public PagedResponse(T data, int pageNumber, int pageSize)
+        public PagedResponse(T data, int pageNumber, int pageSize, int totalCount = 0)
         {
             this.PageNumber = pageNumber;
             this.PageSize = pageSize;
@@ -17,6 +18,7 @@ namespace IMP.Application.Wrappers
             this.Message = null;
             this.Succeeded = true;
             this.Errors = null;
+            this.TotalCount = totalCount;
         }
     }
 }
