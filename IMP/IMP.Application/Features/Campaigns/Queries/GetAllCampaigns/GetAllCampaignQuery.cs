@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using IMP.Application.DTOs.Compaign;
+using IMP.Application.Extensions;
 using IMP.Application.Interfaces.Repositories;
 using IMP.Application.Wrappers;
 using MediatR;
@@ -14,24 +16,33 @@ namespace IMP.Application.Features.Campaigns.Queries.GetAllCampaigns
 {
     public class GetAllCampaignQuery : GetAllCampaignParameter, IRequest<PagedResponse<IEnumerable<CampaignViewModel>>>
     {
-    }
-
-    public class GetAllCampaignQueryHandler : IRequestHandler<GetAllCampaignQuery, PagedResponse<IEnumerable<CampaignViewModel>>>
-    {
-        private readonly ICampaignRepositoryAsync _campaignRepositoryAsync;
-        private readonly IMapper _mapper;
-
-        public GetAllCampaignQueryHandler(ICampaignRepositoryAsync campaignRepositoryAsync, IMapper mapper)
+        public class Validator : AbstractValidator<GetAllCampaignQuery>
         {
-            _campaignRepositoryAsync = campaignRepositoryAsync;
-            _mapper = mapper;
+            public Validator()
+            {
+                RuleFor(x => x.OrderField).IsValidOrderField(typeof(CampaignViewModel));
+            }
         }
 
-        public async Task<PagedResponse<IEnumerable<CampaignViewModel>>> Handle(GetAllCampaignQuery request, CancellationToken cancellationToken)
+        public class GetAllCampaignQueryHandler : IRequestHandler<GetAllCampaignQuery, PagedResponse<IEnumerable<CampaignViewModel>>>
         {
-            var campaigns = await _campaignRepositoryAsync.GetPagedReponseAsync(request.PageNumber, request.PageSize, request.Includes, request.OrderField, request.OrderBy);
-            var campaignViews = _mapper.Map<IEnumerable<CampaignViewModel>>(campaigns);
-            return new PagedResponse<IEnumerable<CampaignViewModel>>(campaignViews, request.PageNumber, request.PageSize);
+            private readonly ICampaignRepositoryAsync _campaignRepositoryAsync;
+            private readonly IMapper _mapper;
+
+            public GetAllCampaignQueryHandler(ICampaignRepositoryAsync campaignRepositoryAsync, IMapper mapper)
+            {
+                _campaignRepositoryAsync = campaignRepositoryAsync;
+                _mapper = mapper;
+            }
+
+            public async Task<PagedResponse<IEnumerable<CampaignViewModel>>> Handle(GetAllCampaignQuery request, CancellationToken cancellationToken)
+            {
+                var campaigns = await _campaignRepositoryAsync.GetPagedReponseAsync(request.PageNumber, request.PageSize, request.Includes, request.OrderField, request.OrderBy);
+                var campaignViews = _mapper.Map<IEnumerable<CampaignViewModel>>(campaigns);
+                return new PagedResponse<IEnumerable<CampaignViewModel>>(campaignViews, request.PageNumber, request.PageSize);
+            }
         }
     }
+
+    
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -74,6 +75,30 @@ namespace IMP.Application.Extensions
         public static IRuleBuilderOptions<T, int> IsExistId<T>(this IRuleBuilder<T, int> ruleBuilder, Func<int, CancellationToken, Task<bool>> checkValidate)
         {
             return ruleBuilder.MustAsync(checkValidate).WithMessage("'{PropertyValue}' không tồn tại");
+        }
+
+        /// <summary>
+        /// Check validate order field
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ruleBuilder"></param>
+        /// <param name="type">The view model</param>
+        /// <returns></returns>
+        public static IRuleBuilderOptions<T, string> IsValidOrderField<T>(this IRuleBuilder<T, string> ruleBuilder, Type type)
+        {
+            return ruleBuilder.MustAsync(
+                async (x, y) =>
+                {
+                    if (string.IsNullOrEmpty(x)) return true;
+                    foreach (var prop in type.GetProperties())
+                    {
+                        if (prop.Name.Equals(x, StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            return true;
+                        }
+                    }
+                    return false;
+                }).WithMessage("'{PropertyValue}' không tồn tại");
         }
 
     }
