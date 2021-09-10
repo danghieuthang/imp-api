@@ -12,12 +12,12 @@ using System.Threading.Tasks;
 
 namespace IMP.Application.Features.Platforms.Queries.GetAllPlatforms
 {
-    public class GetAllPlatformsQuery : GetAllPlatformsParameter, IRequest<PagedResponse<IEnumerable<PlatformViewModel>>>
+    public class GetAllPlatformsQuery : IRequest<Response<IEnumerable<PlatformViewModel>>>
     {
 
     }
 
-    public class GetAllPlatformsQueryHanlder : IRequestHandler<GetAllPlatformsQuery, PagedResponse<IEnumerable<PlatformViewModel>>>
+    public class GetAllPlatformsQueryHanlder : IRequestHandler<GetAllPlatformsQuery, Response<IEnumerable<PlatformViewModel>>>
     {
         private readonly IPlatformRepositoryAsync _platformRepositoryAsync;
         private readonly IMapper _mapper;
@@ -27,11 +27,11 @@ namespace IMP.Application.Features.Platforms.Queries.GetAllPlatforms
             _mapper = mapper;
         }
 
-        public async Task<PagedResponse<IEnumerable<PlatformViewModel>>> Handle(GetAllPlatformsQuery request, CancellationToken cancellationToken)
+        public async Task<Response<IEnumerable<PlatformViewModel>>> Handle(GetAllPlatformsQuery request, CancellationToken cancellationToken)
         {
-            var platforms = await _platformRepositoryAsync.GetPagedReponseAsync(request.PageNumber, request.PageSize);
+            var platforms = await _platformRepositoryAsync.GetAllAsync();
             var platformViewModel = _mapper.Map<IEnumerable<PlatformViewModel>>(platforms);
-            return new PagedResponse<IEnumerable<PlatformViewModel>>(platformViewModel, request.PageNumber, request.PageSize);
+            return new Response<IEnumerable<PlatformViewModel>>(platformViewModel);
         }
     }
 }

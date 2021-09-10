@@ -18,6 +18,7 @@ using IMP.Infrastructure.Persistence.Helpers;
 
 namespace IMP.Infrastructure.Persistence.Repository
 {
+
     public class GenericRepositoryAsync<TKey, TEntity> : IGenericRepositoryAsync<TKey, TEntity>, IDisposable where TEntity : Entity<TKey>
     {
         private readonly ApplicationDbContext _dbContext;
@@ -45,14 +46,13 @@ namespace IMP.Infrastructure.Persistence.Repository
 
 
 
-        public async Task<IReadOnlyList<TEntity>> GetPagedReponseAsync(int pageNumber, int pageSize)
+        public async Task<Tuple<IReadOnlyList<TEntity>, int>> GetPagedReponseAsync(int pageNumber, int pageSize)
         {
-            return await _dbContext
-                .Set<TEntity>()
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .AsNoTracking()
-                .ToListAsync();
+            var query = GetAll();
+            var count = await query.CountAsync();
+            // paging
+            query = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+            return new Tuple<IReadOnlyList<TEntity>, int>(await query.AsNoTracking().ToListAsync(), count);
         }
 
         public async Task<TEntity> AddAsync(TEntity entity)
@@ -103,7 +103,7 @@ namespace IMP.Infrastructure.Persistence.Repository
             }
             _disposed = true;
         }
-        private IQueryable<TEntity> GetAll(List<string> includes, string orderField = null, OrderBy? orderBy = null)
+        private IQueryable<TEntity> GetAll(List<string> includes = null, string orderField = null, OrderBy? orderBy = null)
         {
             var query = _dbContext.Set<TEntity>().AsQueryable();
             // order
@@ -123,25 +123,24 @@ namespace IMP.Infrastructure.Persistence.Repository
             }
             return query;
         }
-        public async Task<IReadOnlyList<TEntity>> GetPagedReponseAsync(int pageNumber, int pageSize, List<string> includes, string orderField = null, OrderBy? orderBy = null)
+        public async Task<Tuple<IReadOnlyList<TEntity>, int>> GetPagedReponseAsync(int pageNumber, int pageSize, List<string> includes, string orderField = null, OrderBy? orderBy = null)
         {
             var query = GetAll(includes, orderField, orderBy);
+            var count = await query.CountAsync();
             // paging
             query = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
-
-            return await query.AsNoTracking().ToListAsync();
+            return new Tuple<IReadOnlyList<TEntity>, int>(await query.AsNoTracking().ToListAsync(), count);
         }
 
-        public async Task<IReadOnlyList<TEntity>> GetPagedReponseAsync(int pageNumber, int pageSize, Expression<Func<TEntity, bool>> predicate, List<string> includes, string orderField = null, OrderBy? orderBy = null)
+        public async Task<Tuple<IReadOnlyList<TEntity>, int>> GetPagedReponseAsync(int pageNumber, int pageSize, Expression<Func<TEntity, bool>> predicate, List<string> includes, string orderField = null, OrderBy? orderBy = null)
         {
-            var query = GetAll(includes, orderField, orderBy);
-            // condition
-            query.Where(predicate);
+            var query = GetAll(includes, orderField, orderBy).Where(predicate); ;
+            var count = await query.CountAsync();
             // paging
             query = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
-
-            return await query.AsNoTracking().ToListAsync();
+            return new Tuple<IReadOnlyList<TEntity>, int>(await query.AsNoTracking().ToListAsync(), count);
         }
+
 
         public IQueryable<TEntity> FindAll(params Expression<Func<TEntity, object>>[] includeProperties)
         {
@@ -171,6 +170,7 @@ namespace IMP.Infrastructure.Persistence.Repository
             }
             return entities;
         }
+
 
     }
 }

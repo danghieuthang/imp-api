@@ -13,9 +13,9 @@ namespace IMP.Application.Interfaces
         Task<TEntity> GetByIdAsync(TKey id, List<string> includeProperties);
         Task<bool> IsExistAsync(TKey id);
         Task<IReadOnlyList<TEntity>> GetAllAsync();
-        Task<IReadOnlyList<TEntity>> GetPagedReponseAsync(int pageNumber, int pageSize);
-        Task<IReadOnlyList<TEntity>> GetPagedReponseAsync(int pageNumber, int pageSize, List<string> includes, string orderByField = null, OrderBy? orderBy = null);
-        Task<IReadOnlyList<TEntity>> GetPagedReponseAsync(int pageNumber, int pageSize, Expression<Func<TEntity, bool>> predicate, List<string> includes, string orderByField = null, OrderBy? orderBy = null);
+        Task<Tuple<IReadOnlyList<TEntity>, int>> GetPagedReponseAsync(int pageNumber, int pageSize);
+        Task<Tuple<IReadOnlyList<TEntity>, int>> GetPagedReponseAsync(int pageNumber, int pageSize, List<string> includes, string orderByField = null, OrderBy? orderBy = null);
+        Task<Tuple<IReadOnlyList<TEntity>, int>> GetPagedReponseAsync(int pageNumber, int pageSize, Expression<Func<TEntity, bool>> predicate, List<string> includes, string orderByField = null, OrderBy? orderBy = null);
         Task<TEntity> AddAsync(TEntity entity);
         Task UpdateAsync(TEntity entity);
         Task DeleteAsync(TEntity entity);

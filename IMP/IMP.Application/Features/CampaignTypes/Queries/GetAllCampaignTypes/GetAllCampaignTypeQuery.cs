@@ -13,9 +13,9 @@ using System.Threading.Tasks;
 
 namespace IMP.Application.Features.CampaignTypes.Queries
 {
-    public class GetAllCampaignTypeQuery : GetAllCampaignTypeParameter, IRequest<PagedResponse<IEnumerable<CampaignTypeViewModel>>>
+    public class GetAllCampaignTypeQuery : IRequest<Response<IEnumerable<CampaignTypeViewModel>>>
     {
-        public class GetAllCampaignTypeQueryHandler : IRequestHandler<GetAllCampaignTypeQuery, PagedResponse<IEnumerable<CampaignTypeViewModel>>>
+        public class GetAllCampaignTypeQueryHandler : IRequestHandler<GetAllCampaignTypeQuery, Response<IEnumerable<CampaignTypeViewModel>>>
         {
             private readonly ICampaignTypeRepositoryAsync _campaignTypeRepositoryAsync;
             private readonly IMapper _mapper;
@@ -24,11 +24,11 @@ namespace IMP.Application.Features.CampaignTypes.Queries
                 _campaignTypeRepositoryAsync = campaignTypeRepositoryAsync;
                 _mapper = mapper;
             }
-            public async Task<PagedResponse<IEnumerable<CampaignTypeViewModel>>> Handle(GetAllCampaignTypeQuery request, CancellationToken cancellationToken)
+            public async Task<Response<IEnumerable<CampaignTypeViewModel>>> Handle(GetAllCampaignTypeQuery request, CancellationToken cancellationToken)
             {
-                var campaignTypes = await _campaignTypeRepositoryAsync.GetPagedReponseAsync(request.PageNumber, request.PageSize);
+                var campaignTypes = await _campaignTypeRepositoryAsync.GetAllAsync();
                 var campaignTypeViews = _mapper.Map<IEnumerable<CampaignTypeViewModel>>(campaignTypes);
-                return new PagedResponse<IEnumerable<CampaignTypeViewModel>>(campaignTypeViews, request.PageNumber, request.PageSize);
+                return new Response<IEnumerable<CampaignTypeViewModel>>(campaignTypeViews);
             }
         }
     }
