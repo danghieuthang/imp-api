@@ -44,6 +44,8 @@ namespace IMP.WebApi
                     await Infrastructure.Identity.Seeds.DefaultBasicUser.SeedAsync(userManager, roleManager);
                     Log.Information("Finished Seeding Default Data");
                     Log.Information("Application Starting");
+                    host.Run();
+
                 }
                 catch (Exception ex)
                 {
@@ -54,7 +56,6 @@ namespace IMP.WebApi
                     Log.CloseAndFlush();
                 }
             }
-            host.Run();
         }
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
