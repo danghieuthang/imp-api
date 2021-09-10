@@ -15,6 +15,7 @@ namespace IMP.WebApi.Middlewares
     public class ErrorHandlerMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly ILogger _logger = Log.ForContext<ErrorHandlerMiddleware>();
 
         public ErrorHandlerMiddleware(RequestDelegate next)
         {
@@ -50,7 +51,7 @@ namespace IMP.WebApi.Middlewares
                         break;
                     default:
                         // unhandled error
-                        Log.Error(error, "Internal Server Error");
+                        _logger.Error(error, "Internal Server Error");
                         response.StatusCode = (int)HttpStatusCode.InternalServerError;
                         break;
                 }

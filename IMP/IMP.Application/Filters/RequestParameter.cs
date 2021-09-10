@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using IMP.Application.Enums;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,6 +15,10 @@ namespace IMP.Application.Filters
 
         [FromQuery(Name = "includes")]
         public List<string> Includes { get; set; }
+        [FromQuery(Name = "order_field")]
+        public string OrderField { get; set; }
+        [FromQuery(Name = "order_by")]
+        public OrderBy OrderBy { get; set; }
         public RequestParameter()
         {
             this.PageNumber = 1;

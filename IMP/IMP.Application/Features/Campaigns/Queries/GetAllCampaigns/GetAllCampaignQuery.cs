@@ -29,7 +29,7 @@ namespace IMP.Application.Features.Campaigns.Queries.GetAllCampaigns
 
         public async Task<PagedResponse<IEnumerable<CampaignViewModel>>> Handle(GetAllCampaignQuery request, CancellationToken cancellationToken)
         {
-            var campaigns = await _campaignRepositoryAsync.GetPagedReponseAsync(request.PageNumber, request.PageSize);
+            var campaigns = await _campaignRepositoryAsync.GetPagedReponseAsync(request.PageNumber, request.PageSize, request.Includes, request.OrderField, request.OrderBy);
             var campaignViews = _mapper.Map<IEnumerable<CampaignViewModel>>(campaigns);
             return new PagedResponse<IEnumerable<CampaignViewModel>>(campaignViews, request.PageNumber, request.PageSize);
         }

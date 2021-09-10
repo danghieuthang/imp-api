@@ -43,6 +43,7 @@
 
   <ItemGroup>
     <Folder Include="bin\" />
+    <Folder Include="Logs\" />
   </ItemGroup>
 
 </Project>
