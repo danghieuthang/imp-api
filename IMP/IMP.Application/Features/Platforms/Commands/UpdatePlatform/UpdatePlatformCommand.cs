@@ -42,13 +42,17 @@ namespace IMP.Application.Features.Platforms.Commands.UpdatePlatform
 
             public async Task<Response<PlatformViewModel>> Handle(UpdatePlatformCommand request, CancellationToken cancellationToken)
             {
-                var platform = _mapper.Map<Platform>(request);
-                string imageFileUrl = await _firebaseService.UploadFile(request.ImageFile.OpenReadStream(), request.ImageFile.FileName, "admin", "platforms");
-                if (imageFileUrl != null)
+                var platform = await _platformRepositoryAsync.GetByIdAsync(request.Id);
+                if (platform != null)
                 {
-                    platform.Image = imageFileUrl;
+                    platform.Name = request.Name;
+                    string imageFileUrl = await _firebaseService.UploadFile(request.ImageFile.OpenReadStream(), request.ImageFile.FileName, "admin", "platforms");
+                    if (imageFileUrl != null)
+                    {
+                        platform.Image = imageFileUrl;
+                    }
+                    await _platformRepositoryAsync.UpdateAsync(platform);
                 }
-                await _platformRepositoryAsync.UpdateAsync(platform);
 
                 var platformView = _mapper.Map<PlatformViewModel>(platform);
                 return new Response<PlatformViewModel>(platformView);

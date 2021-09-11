@@ -171,6 +171,16 @@ namespace IMP.Infrastructure.Persistence.Repository
             return entities;
         }
 
+        public async Task<TEntity> FindSingleAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            return await FindAll(predicate).FirstOrDefaultAsync();
+        }
+
+        public async Task<bool> IsRight(Expression<Func<TEntity, bool>> predicate)
+        {
+            return await FindAll(predicate).AllAsync(predicate);
+        }
 
     }
+
 }

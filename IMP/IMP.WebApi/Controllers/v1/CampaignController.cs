@@ -1,5 +1,6 @@
 ﻿using IMP.Application.Features.Campaigns.Commands.CreateCampaign;
 using IMP.Application.Features.Campaigns.Queries.GetAllCampaigns;
+using IMP.Application.Features.Campaigns.Queries.GetCampaignById;
 using IMP.Application.Interfaces;
 using IMP.WebApi.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -27,6 +28,12 @@ namespace IMP.WebApi.Controllers.v1
         public async Task<IActionResult> GetCampaigns([FromQuery] GetAllCampaignQuery query)
         {
             return Ok(await Mediator.Send(query));
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetCampaignById([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new GetCampaignByIdQuery { Id = id }));
         }
 
         [HttpPost]

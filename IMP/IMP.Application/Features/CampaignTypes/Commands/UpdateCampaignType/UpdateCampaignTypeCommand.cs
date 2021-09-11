@@ -47,13 +47,21 @@ namespace IMP.Application.Features.CampaignTypes.Commands.UpdateCampaignType
 
             public async Task<Response<CampaignTypeViewModel>> Handle(UpdateCampaignTypeCommand request, CancellationToken cancellationToken)
             {
-                var campaignType = _mapper.Map<CampaignType>(request);
-                string imageFileUrl = await _firebaseService.UploadFile(request.ImageFile.OpenReadStream(), request.ImageFile.FileName, "admin", "campaign-types");
-                if (imageFileUrl != null)
+                var campaignType = await _campaignTypeRepositoryAsync.GetByIdAsync(request.Id);
+                if (campaignType != null)
                 {
-                    campaignType.Image = imageFileUrl;
+                    campaignType.ParentId = request.ParentId;
+                    campaignType.Name = request.Name;
+                    campaignType.Description = request.Description;
+
+                    string imageFileUrl = await _firebaseService.UploadFile(request.ImageFile.OpenReadStream(), request.ImageFile.FileName, "admin", "campaign-types");
+                    if (imageFileUrl != null)
+                    {
+                        campaignType.Image = imageFileUrl;
+                    }
+                    await _campaignTypeRepositoryAsync.UpdateAsync(campaignType);
                 }
-                await _campaignTypeRepositoryAsync.UpdateAsync(campaignType);
+
                 var campaignTypeView = _mapper.Map<CampaignTypeViewModel>(campaignType);
                 return new Response<CampaignTypeViewModel>(campaignTypeView);
             }
