@@ -10,7 +10,6 @@ using IMP.Application.Features.Platforms.Commands.CreatePlatform;
 using IMP.Application.Features.Platforms.Commands.UpdatePlatform;
 using IMP.Application.Features.Products.Commands.CreateProduct;
 using IMP.Application.Features.Products.Queries.GetAllProducts;
-using IMP.Application.Models.ViewModels;
 using IMP.Domain.Entities;
 using System;
 using System.Collections.Generic;

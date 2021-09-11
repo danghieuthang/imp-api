@@ -6,7 +6,6 @@ using IMP.Application.Exceptions;
 using IMP.Application.Helpers;
 using IMP.Application.Interfaces;
 using IMP.Application.Interfaces.Services;
-using IMP.Application.Models.Account;
 using IMP.Application.Wrappers;
 using IMP.Domain.Settings;
 using IMP.Infrastructure.Identity.Helpers;

@@ -21,7 +21,6 @@ namespace IMP.WebApi.Controllers.v1
         /// <summary>
         /// Get list platform
         /// </summary>
-        /// <param name="query">The Get Platform Parameter</param>
         /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> Get()

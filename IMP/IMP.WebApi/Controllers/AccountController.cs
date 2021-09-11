@@ -1,7 +1,6 @@
 ﻿using IMP.Application.Models.Account;
 using IMP.Application.Interfaces;
 using IMP.Application.Interfaces.Services;
-using IMP.Application.Models.Account;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
