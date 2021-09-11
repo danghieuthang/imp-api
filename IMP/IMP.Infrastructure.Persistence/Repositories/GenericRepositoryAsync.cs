@@ -162,6 +162,12 @@ namespace IMP.Infrastructure.Persistence.Repository
             return query.Where(predicate);
         }
 
+        public async Task<IReadOnlyList<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includeProperties)
+        {
+            var query = FindAll(predicate, includeProperties);
+            return await query.AsNoTracking().ToListAsync();
+        }
+
         private static IQueryable<TEntity> ApplyIncludes(IQueryable<TEntity> entities, List<string> includes)
         {
             foreach (var include in includes)
@@ -173,7 +179,7 @@ namespace IMP.Infrastructure.Persistence.Repository
 
         public async Task<TEntity> FindSingleAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return await FindAll(predicate).FirstOrDefaultAsync();
+            return await FindAll(predicate).AsNoTracking().FirstOrDefaultAsync();
         }
 
         public async Task<bool> IsRight(Expression<Func<TEntity, bool>> predicate)

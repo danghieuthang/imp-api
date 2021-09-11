@@ -1,5 +1,5 @@
 ﻿using FluentValidation.Results;
-using IMP.Application.DTOs;
+using IMP.Application.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

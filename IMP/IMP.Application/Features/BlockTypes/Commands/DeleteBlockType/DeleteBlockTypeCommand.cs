@@ -12,6 +12,7 @@ namespace IMP.Application.Features.BlockTypes.Commands.DeleteBlockType
     public class DeleteBlockTypeCommand : IDeleteCommand<BlockType>
     {
         public int Id { get; set; }
+        public int InfluencerId { get; set; }
 
         public class DeleteBockTypeCommandHandler : DeleteCommandHandler<BlockType, DeleteBlockTypeCommand>
         {

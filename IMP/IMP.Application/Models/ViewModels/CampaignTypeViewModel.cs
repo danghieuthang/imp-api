@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IMP.Application.DTOs.ViewModels
+namespace IMP.Application.Models.ViewModels
 {
     public class CampaignTypeViewModel : BaseViewModel<int>
     {

@@ -27,8 +27,7 @@ namespace IMP.Application.Extensions
         public static IRuleBuilderOptions<T, string> Required<T>(this IRuleBuilder<T, string> ruleBuilder, int maxLength)
         {
             return ruleBuilder
-                .NotEmpty().WithMessage("{PropertyName} chưa có dữ liệu.")
-                .NotNull()
+                .NotNull().NotEmpty().WithMessage("{PropertyName} chưa có dữ liệu.")
                 .MaximumLength(256).WithMessage("{PropertyName} không thể quá " + maxLength + " ký tự.");
         }
 
@@ -99,6 +98,12 @@ namespace IMP.Application.Extensions
                     }
                     return false;
                 }).WithMessage("'{PropertyValue}' không tồn tại");
+        }
+
+        public static IRuleBuilderOptions<T, string> IsValidUrl<T>(this IRuleBuilder<T, string> ruleBuilder)
+        {
+            return ruleBuilder.NotNull().NotEmpty().Matches(@"[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)")
+                .WithMessage("'{PropertyValue}' không phải một Url hợp lệ.");
         }
 
     }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace IMP.Application.DTOs.Account
+namespace IMP.Application.Models.Account
 {
     public class RegisterRequest
     {

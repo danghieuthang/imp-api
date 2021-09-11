@@ -1,4 +1,4 @@
-﻿using IMP.Application.DTOs.ViewModels;
+﻿using IMP.Application.Models.ViewModels;
 using IMP.Application.Interfaces.Repositories;
 using IMP.Application.Wrappers;
 using MediatR;

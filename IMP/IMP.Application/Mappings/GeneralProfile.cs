@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using IMP.Application.DTOs.Compaign;
-using IMP.Application.DTOs.ViewModels;
+using IMP.Application.Models.Compaign;
+using IMP.Application.Models.ViewModels;
 using IMP.Application.Features.BlockTypes.Commands.CreateBlockType;
 using IMP.Application.Features.BlockTypes.Commands.UpdateBlockType;
 using IMP.Application.Features.Campaigns.Commands.CreateCampaign;
@@ -15,6 +15,8 @@ using IMP.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using IMP.Application.Features.InfluencerPlatforms.Commands.CreateInfluencerPlatform;
+using IMP.Application.Features.InfluencerPlatforms.Commands.UpdateInlfuencerPlatform;
 
 namespace IMP.Application.Mappings
 {
@@ -47,6 +49,19 @@ namespace IMP.Application.Mappings
             CreateMap<BlockType, BlockTypeViewModel>();
             CreateMap<CreateBlockTypeCommand, BlockType>();
             CreateMap<UpdateBlockTypeCommand, BlockType>();
+            #endregion
+
+            #region influencer platform
+            CreateMap<InfluencerPlatform, InfluencerPlatformViewModel>();
+            CreateMap<CreateInfluencerPlatformCommand, InfluencerPlatform>();
+            CreateMap<UpdateInfluencerPlatformCommand, InfluencerPlatform>();
+            #endregion
+
+            #region application user
+            CreateMap<ApplicationUser, ApplicationUserViewModel>();
+            #endregion
+
+            #region 
             #endregion
 
         }

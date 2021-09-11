@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation.Results;
-using IMP.Application.DTOs;
-using IMP.Application.DTOs.ViewModels;
+using IMP.Application.Models;
+using IMP.Application.Models.ViewModels;
 using IMP.Application.Exceptions;
 using IMP.Application.Interfaces;
 using IMP.Application.Interfaces.Repositories;

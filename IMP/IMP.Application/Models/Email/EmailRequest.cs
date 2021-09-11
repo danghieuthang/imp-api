@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IMP.Application.DTOs.Email
+namespace IMP.Application.Models.Email
 {
     public class EmailRequest
     {

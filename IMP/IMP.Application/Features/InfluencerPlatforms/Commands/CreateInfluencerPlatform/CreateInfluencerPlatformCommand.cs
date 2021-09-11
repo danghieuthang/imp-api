@@ -1,0 +1,49 @@
+﻿using AutoMapper;
+using IMP.Application.Interfaces;
+using IMP.Application.Models.ViewModels;
+using IMP.Application.Wrappers;
+using IMP.Domain.Entities;
+using MediatR;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace IMP.Application.Features.InfluencerPlatforms.Commands.CreateInfluencerPlatform
+{
+    public class CreateInfluencerPlatformCommand : IRequest<Response<InfluencerPlatformViewModel>>
+    {
+        [JsonIgnore]
+        public int InfluencerId { get; set; }
+        public int PlatformId { get; set; }
+        public string Url { get; set; }
+
+        public class CreateInfluencerPlatformCommandHandler : IRequestHandler<CreateInfluencerPlatformCommand, Response<InfluencerPlatformViewModel>>
+        {
+            private readonly IGenericRepositoryAsync<int, InfluencerPlatform> _influencerPlatformRepositoryAsync;
+            private readonly IMapper _mapper;
+
+            public CreateInfluencerPlatformCommandHandler(IGenericRepositoryAsync<int, InfluencerPlatform> influencerPlatformRepositoryAsync, IMapper mapper)
+            {
+                _influencerPlatformRepositoryAsync = influencerPlatformRepositoryAsync;
+                _mapper = mapper;
+            }
+
+            public async Task<Response<InfluencerPlatformViewModel>> Handle(CreateInfluencerPlatformCommand request, CancellationToken cancellationToken)
+            {
+                var influencerPlatform = _mapper.Map<InfluencerPlatform>(request);
+
+                influencerPlatform = await _influencerPlatformRepositoryAsync.AddAsync(influencerPlatform);
+
+                var influencerPlatformView = _mapper.Map<InfluencerPlatformViewModel>(influencerPlatform);
+                //influencerPlatformView.Influencer = new ApplicationUserViewModel { Id = request.InfluencerId };
+                influencerPlatformView.Platform = new PlatformViewModel { Id = request.PlatformId };
+
+                return new Response<InfluencerPlatformViewModel>(influencerPlatformView);
+            }
+        }
+    }
+}

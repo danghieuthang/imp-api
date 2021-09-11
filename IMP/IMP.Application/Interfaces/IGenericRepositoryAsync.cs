@@ -12,6 +12,7 @@ namespace IMP.Application.Interfaces
         Task<TEntity> GetByIdAsync(TKey id);
         Task<TEntity> GetByIdAsync(TKey id, List<string> includeProperties);
         Task<TEntity> FindSingleAsync(Expression<Func<TEntity, bool>> predicate);
+        Task<IReadOnlyList<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includeProperties);
         Task<bool> IsExistAsync(TKey id);
 
         // Summary:
@@ -48,10 +49,5 @@ namespace IMP.Application.Interfaces
         Task UpdateAsync(TEntity entity);
         Task DeleteAsync(TEntity entity);
         void Dispose();
-    }
-
-    public interface IGenericRepositoryAsync<TEntity> : IGenericRepositoryAsync<int, TEntity> where TEntity : class
-    {
-
     }
 }
