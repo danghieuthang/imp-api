@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using IMP.Application.DTOs.Compaign;
 using IMP.Application.DTOs.ViewModels;
+using IMP.Application.Features.BlockTypes.Commands.CreateBlockType;
+using IMP.Application.Features.BlockTypes.Commands.UpdateBlockType;
 using IMP.Application.Features.Campaigns.Commands.CreateCampaign;
 using IMP.Application.Features.CampaignTypes.Commands.CreateCampaignType;
 using IMP.Application.Features.CampaignTypes.Commands.UpdateCampaignType;
@@ -8,6 +10,7 @@ using IMP.Application.Features.Platforms.Commands.CreatePlatform;
 using IMP.Application.Features.Platforms.Commands.UpdatePlatform;
 using IMP.Application.Features.Products.Commands.CreateProduct;
 using IMP.Application.Features.Products.Queries.GetAllProducts;
+using IMP.Application.Models.ViewModels;
 using IMP.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -38,6 +41,12 @@ namespace IMP.Application.Mappings
             #region campaign
             CreateMap<Campaign, CampaignViewModel>();
             CreateMap<CreateCampaignCommand, Campaign>();
+            #endregion
+
+            #region block type
+            CreateMap<BlockType, BlockTypeViewModel>();
+            CreateMap<CreateBlockTypeCommand, BlockType>();
+            CreateMap<UpdateBlockTypeCommand, BlockType>();
             #endregion
 
         }

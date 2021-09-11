@@ -48,9 +48,13 @@ namespace IMP.WebApi.Controllers.v1
             return StatusCode(2021, await Mediator.Send(command));
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Update([FromForm] UpdatePlatformCommand command)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update([FromRoute] int id, [FromForm] UpdatePlatformCommand command)
         {
+            if (command.Id != id)
+            {
+                return BadRequest();
+            }
             return Ok(await Mediator.Send(command));
         }
 

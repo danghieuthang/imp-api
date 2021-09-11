@@ -1,4 +1,5 @@
-﻿using IMP.Application.DTOs;
+﻿using AutoMapper;
+using IMP.Application.DTOs;
 using IMP.Application.Exceptions;
 using IMP.Application.Wrappers;
 using IMP.Domain.Common;
@@ -16,7 +17,15 @@ namespace IMP.Application.Interfaces
         int Id { get; set; }
     }
 
-    public class DeleteCommandHandler<TEntity, TCommand> : IRequestHandler<TCommand, Response<int>>
+    public interface IGetByIdQuery<TEntity, TViewModel> : IRequest<Response<TViewModel>>
+        where TEntity : BaseEntity, new()
+        where TViewModel : BaseViewModel<int>
+    {
+        int Id { get; set; }
+    }
+
+
+    public abstract class DeleteCommandHandler<TEntity, TCommand> : IRequestHandler<TCommand, Response<int>>
         where TEntity : BaseEntity, new()
         where TCommand : class, IDeleteCommand<TEntity>, new()
     {
@@ -39,5 +48,32 @@ namespace IMP.Application.Interfaces
             return new Response<int>(entity.Id);
         }
     }
-    
+
+
+    public abstract class GetByIdQueryHandle<TRequest, TEntity, TViewModel> : IRequestHandler<TRequest, Response<TViewModel>>
+        where TViewModel : BaseViewModel<int>, new()
+        where TEntity : BaseEntity, new()
+        where TRequest : IGetByIdQuery<TEntity, TViewModel>
+    {
+        private readonly IGenericRepositoryAsync<int, TEntity> _repositoryAsync;
+        private readonly IMapper _mapper;
+        public GetByIdQueryHandle(IGenericRepositoryAsync<int, TEntity> repositoryAsync, IMapper mapper)
+        {
+            _repositoryAsync = repositoryAsync;
+            _mapper = mapper;
+        }
+
+        public virtual async Task<Response<TViewModel>> Handle(TRequest request, CancellationToken cancellationToken)
+        {
+            var entity = await _repositoryAsync.GetByIdAsync(request.Id);
+            if (entity == null)
+            {
+                //var error = new ValidationError("id", $"'{request.Id}' không tồn tại");
+                throw new KeyNotFoundException();
+            }
+
+            var data = _mapper.Map<TViewModel>(entity);
+            return new Response<TViewModel>(data);
+        }
+    }
 }

@@ -30,9 +30,13 @@ namespace IMP.WebApi.Controllers.v1
             return Ok(await Mediator.Send(new GetCampaignTypeByIdQuery { Id = id }));
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Update([FromForm] UpdateCampaignTypeCommand command)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update([FromRoute]int id,[FromForm] UpdateCampaignTypeCommand command)
         {
+            if (command.Id != id)
+            {
+                return BadRequest();
+            }
             return Ok(await Mediator.Send(command));
         }
 
