@@ -73,10 +73,11 @@ namespace IMP.Infrastructure.Identity
                     {
                         OnAuthenticationFailed = c =>
                         {
-                            c.NoResult();
-                            c.Response.StatusCode = 500;
-                            c.Response.ContentType = "text/plain";
-                            return c.Response.WriteAsync(c.Exception.ToString());
+                            //c.NoResult();
+                            //c.Response.StatusCode = 500;
+                            //c.Response.ContentType = "text/plain";
+                            //return c.Response.WriteAsync(c.Exception.ToString());
+                            return Task.CompletedTask;
                         },
                         OnChallenge = context =>
                         {
