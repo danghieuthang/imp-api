@@ -1,6 +1,7 @@
 ﻿using IMP.Domain.Common;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
@@ -15,5 +16,8 @@ namespace IMP.Domain.Entities
         [ForeignKey("Platform")]
         public int PlatformId { get; set; }
         public Platform Platform { get; set; }
+
+        [StringLength(256)]
+        public string Url { get; set; }
     }
 }

@@ -24,10 +24,10 @@ namespace IMP.WebApi.Controllers.v1
         /// <param name="query">The Get Platform Parameter</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] GetAllPlatformsQuery query)
+        public async Task<IActionResult> Get()
         {
             var user = Request.HttpContext.User;
-            return Ok(await Mediator.Send(query));
+            return Ok(await Mediator.Send(new GetAllPlatformsQuery()));
         }
 
         [HttpGet("{id}")]

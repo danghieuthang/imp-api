@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using IMP.Application.DTOs.Compaign;
+using IMP.Application.Models.Compaign;
 using IMP.Application.Interfaces.Repositories;
 using IMP.Application.Wrappers;
 using IMP.Domain.Entities;

@@ -1,4 +1,4 @@
-﻿using IMP.Application.DTOs.Account;
+﻿using IMP.Application.Models.Account;
 using IMP.Application.Interfaces;
 using IMP.Application.Interfaces.Services;
 using IMP.Application.Models.Account;

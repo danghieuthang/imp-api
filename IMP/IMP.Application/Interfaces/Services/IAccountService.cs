@@ -1,4 +1,4 @@
-﻿using IMP.Application.DTOs.Account;
+﻿using IMP.Application.Models.Account;
 using IMP.Application.Models.Account;
 using IMP.Application.Wrappers;
 using Microsoft.Extensions.Primitives;

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using FluentValidation;
-using IMP.Application.DTOs.Compaign;
+using IMP.Application.Models.Compaign;
 using IMP.Application.Extensions;
 using IMP.Application.Interfaces.Repositories;
 using IMP.Application.Wrappers;

@@ -1,4 +1,4 @@
-﻿using IMP.Application.DTOs.Email;
+﻿using IMP.Application.Models.Email;
 using IMP.Application.Exceptions;
 using IMP.Application.Interfaces;
 using IMP.Domain.Settings;

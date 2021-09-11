@@ -1,6 +1,6 @@
-﻿using IMP.Application.DTOs;
-using IMP.Application.DTOs.Account;
-using IMP.Application.DTOs.Email;
+﻿using IMP.Application.Models;
+using IMP.Application.Models.Account;
+using IMP.Application.Models.Email;
 using IMP.Application.Enums;
 using IMP.Application.Exceptions;
 using IMP.Application.Helpers;
@@ -199,10 +199,10 @@ namespace IMP.Infrastructure.Identity.Services
                 var result = await _userManager.CreateAsync(user, request.Password);
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, Roles.Fan.ToString());
+                    await _userManager.AddToRoleAsync(user, Roles.Influencer.ToString());
                     var verificationUri = await SendVerificationEmail(user, origin);
                     //TODO: Attach Email Service here and configure it via appsettings
-                    await _emailService.SendAsync(new Application.DTOs.Email.EmailRequest() { To = user.Email, Body = $"Please confirm your account by visiting this URL {verificationUri}", Subject = "Confirm Registration" });
+                    await _emailService.SendAsync(new Application.Models.Email.EmailRequest() { To = user.Email, Body = $"Please confirm your account by visiting this URL {verificationUri}", Subject = "Confirm Registration" });
                     return new Response<string>(user.Id, message: $"User Registered. Please confirm your account by visiting this URL {verificationUri}");
                 }
                 else

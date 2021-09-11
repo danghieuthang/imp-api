@@ -12,6 +12,7 @@ namespace IMP.Domain.Entities
         [MaxLength(256)]
         public string UserName { get; set; }
 
+
         [ForeignKey("Wallet")]
         public int WalletId { get; set; }
         public Wallet Wallet { get; set; }

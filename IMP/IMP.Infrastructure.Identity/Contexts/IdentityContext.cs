@@ -1,4 +1,4 @@
-﻿using IMP.Application.DTOs.Account;
+﻿using IMP.Application.Models.Account;
 using IMP.Infrastructure.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

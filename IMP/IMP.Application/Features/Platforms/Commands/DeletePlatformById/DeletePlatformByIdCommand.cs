@@ -1,4 +1,4 @@
-﻿using IMP.Application.DTOs;
+﻿using IMP.Application.Models;
 using IMP.Application.Exceptions;
 using IMP.Application.Interfaces.Repositories;
 using IMP.Application.Wrappers;

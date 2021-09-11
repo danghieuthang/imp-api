@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IMP.Application.DTOs
+namespace IMP.Application.Models
 {
     public abstract class BaseViewModel<TKey>
     {

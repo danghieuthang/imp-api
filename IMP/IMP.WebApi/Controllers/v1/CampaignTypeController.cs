@@ -19,9 +19,9 @@ namespace IMP.WebApi.Controllers.v1
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] GetAllCampaignTypeQuery query)
+        public async Task<IActionResult> Get()
         {
-            return Ok(await Mediator.Send(query));
+            return Ok(await Mediator.Send(new GetAllCampaignTypeQuery()));
         }
 
         [HttpGet("{id}")]
