@@ -60,7 +60,8 @@ namespace IMP.Application.Mappings
             CreateMap<ApplicationUser, ApplicationUserViewModel>();
             #endregion
 
-            #region 
+            #region location
+            CreateMap<Location, LocationViewModel>();
             #endregion
 
         }

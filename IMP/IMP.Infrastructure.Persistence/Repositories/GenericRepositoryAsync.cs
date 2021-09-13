@@ -62,6 +62,12 @@ namespace IMP.Infrastructure.Persistence.Repository
             return entity;
         }
 
+        public async Task AddManyAsync(IEnumerable<TEntity> entities)
+        {
+            await _dbContext.Set<TEntity>().AddRangeAsync(entities);
+            await _dbContext.SaveChangesAsync();
+        }
+
         public async Task UpdateAsync(TEntity entity)
         {
             _dbContext.Entry(entity).State = EntityState.Modified;

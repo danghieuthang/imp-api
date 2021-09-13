@@ -46,6 +46,7 @@ namespace IMP.Application.Interfaces
         Task<Tuple<IReadOnlyList<TEntity>, int>> GetPagedReponseAsync(int pageNumber, int pageSize, List<string> includes, string orderByField = null, OrderBy? orderBy = null);
         Task<Tuple<IReadOnlyList<TEntity>, int>> GetPagedReponseAsync(int pageNumber, int pageSize, Expression<Func<TEntity, bool>> predicate, List<string> includes, string orderByField = null, OrderBy? orderBy = null);
         Task<TEntity> AddAsync(TEntity entity);
+        Task AddManyAsync(IEnumerable<TEntity> entities);
         Task UpdateAsync(TEntity entity);
         Task DeleteAsync(TEntity entity);
         void Dispose();
