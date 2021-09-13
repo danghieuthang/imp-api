@@ -6,15 +6,19 @@ using System.Threading.Tasks;
 
 namespace IMP.Domain.Settings
 {
-    public class GoogleAuthenticationSettings
+    public class GoogleSettings
     {
         public string ClientId { get; set; }
         public string ClientSecret { get; set; }
     }
 
-    public class FacebookAuthenticationSettings
+    public class FacebookSettings
     {
         public string ClientId { get; set; }
         public string ClientSecret { get; set; }
+    }
+
+    public class InstagramSettings : FacebookSettings
+    {
     }
 }

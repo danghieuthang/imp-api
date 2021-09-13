@@ -15,8 +15,8 @@ namespace IMP.Infrastructure.Shared.Services
 
     public class FacebookService : IFacebookService
     {
-        private readonly FacebookAuthenticationSettings _settings;
-        public FacebookService(IOptions<FacebookAuthenticationSettings> options)
+        private readonly FacebookSettings _settings;
+        public FacebookService(IOptions<FacebookSettings> options)
         {
             _settings = options.Value;
         }

@@ -14,9 +14,9 @@ namespace IMP.Infrastructure.Shared.Services
 
     public class GoogleService : IGoogleService
     {
-        private readonly GoogleAuthenticationSettings _settings;
+        private readonly GoogleSettings _settings;
 
-        public GoogleService(IOptions<GoogleAuthenticationSettings> options)
+        public GoogleService(IOptions<GoogleSettings> options)
         {
             _settings = options.Value;
         }
