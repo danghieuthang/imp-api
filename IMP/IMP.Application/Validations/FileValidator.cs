@@ -17,7 +17,7 @@ namespace IMP.Application.Validations
         public FileValidator(IOptions<FileSettings> options)
         {
             _fileSettings = options.Value;
-
+            RuleFor(x => x).RequireFile();
             RuleFor(x => x.ContentType).ValidaFileType(_fileSettings.AllowTypes);
             RuleFor(x => x.Length).ValidFileSize(_fileSettings.MaximumSize);
         }

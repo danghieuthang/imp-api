@@ -31,8 +31,9 @@ namespace IMP.Infrastructure.Persistence.Seeds
     public static class DefaultLocation
     {
         public static string LocationFile = "vietnam_cities.json";
-        public static async Task SeedAync(IGenericRepositoryAsync<int, Location> locationRepositoryAsync)
+        public static async Task SeedAync(IUnitOfWork unitOfWork)
         {
+            var locationRepositoryAsync = unitOfWork.Repository<Location>();
             var locations = await locationRepositoryAsync.GetAllAsync();
 
             if (locations.Count == 0)
@@ -50,6 +51,7 @@ namespace IMP.Infrastructure.Persistence.Seeds
                         Level = "tỉnh",
                     }).ToList();
                     await locationRepositoryAsync.AddManyAsync(locations);
+                    await unitOfWork.CommitAsync();
                 }
             }
 

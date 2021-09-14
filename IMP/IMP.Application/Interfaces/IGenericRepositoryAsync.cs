@@ -1,4 +1,5 @@
 ﻿using IMP.Application.Enums;
+using IMP.Domain.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -47,8 +48,13 @@ namespace IMP.Application.Interfaces
         Task<Tuple<IReadOnlyList<TEntity>, int>> GetPagedReponseAsync(int pageNumber, int pageSize, Expression<Func<TEntity, bool>> predicate, List<string> includes, string orderByField = null, OrderBy? orderBy = null);
         Task<TEntity> AddAsync(TEntity entity);
         Task AddManyAsync(IEnumerable<TEntity> entities);
-        Task UpdateAsync(TEntity entity);
-        Task DeleteAsync(TEntity entity);
+        void Update(TEntity entity);
+        void Delete(TEntity entity);
         void Dispose();
+    }
+
+    public interface IGenericRepositoryAsync<TEntity> : IGenericRepositoryAsync<int, TEntity> where TEntity : BaseEntity
+    {
+
     }
 }

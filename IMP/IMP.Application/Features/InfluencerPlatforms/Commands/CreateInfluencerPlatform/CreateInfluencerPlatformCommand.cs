@@ -23,12 +23,14 @@ namespace IMP.Application.Features.InfluencerPlatforms.Commands.CreateInfluencer
 
         public class CreateInfluencerPlatformCommandHandler : IRequestHandler<CreateInfluencerPlatformCommand, Response<InfluencerPlatformViewModel>>
         {
-            private readonly IGenericRepositoryAsync<int, InfluencerPlatform> _influencerPlatformRepositoryAsync;
+            private readonly IUnitOfWork _unitOfWork;
+            private readonly IGenericRepositoryAsync<InfluencerPlatform> _influencerPlatformRepositoryAsync;
             private readonly IMapper _mapper;
 
-            public CreateInfluencerPlatformCommandHandler(IGenericRepositoryAsync<int, InfluencerPlatform> influencerPlatformRepositoryAsync, IMapper mapper)
+            public CreateInfluencerPlatformCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
             {
-                _influencerPlatformRepositoryAsync = influencerPlatformRepositoryAsync;
+                _unitOfWork = unitOfWork;
+                _influencerPlatformRepositoryAsync = _unitOfWork.Repository<InfluencerPlatform>();
                 _mapper = mapper;
             }
 
@@ -37,9 +39,10 @@ namespace IMP.Application.Features.InfluencerPlatforms.Commands.CreateInfluencer
                 var influencerPlatform = _mapper.Map<InfluencerPlatform>(request);
 
                 influencerPlatform = await _influencerPlatformRepositoryAsync.AddAsync(influencerPlatform);
+                await _unitOfWork.CommitAsync();
 
                 var influencerPlatformView = _mapper.Map<InfluencerPlatformViewModel>(influencerPlatform);
-                //influencerPlatformView.Influencer = new ApplicationUserViewModel { Id = request.InfluencerId };
+                influencerPlatformView.Influencer = new ApplicationUserViewModel { Id = request.InfluencerId };
                 influencerPlatformView.Platform = new PlatformViewModel { Id = request.PlatformId };
 
                 return new Response<InfluencerPlatformViewModel>(influencerPlatformView);

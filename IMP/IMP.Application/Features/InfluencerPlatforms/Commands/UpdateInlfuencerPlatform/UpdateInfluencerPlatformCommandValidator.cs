@@ -13,11 +13,11 @@ namespace IMP.Application.Features.InfluencerPlatforms.Commands.UpdateInlfuencer
 {
     public class UpdateInfluencerPlatformCommandValidator : AbstractValidator<UpdateInfluencerPlatformCommand>
     {
-        private readonly IGenericRepositoryAsync<int, InfluencerPlatform> _influencerPlatformRepositoryAsync;
+        private readonly IGenericRepositoryAsync<InfluencerPlatform> _influencerPlatformRepositoryAsync;
 
-        public UpdateInfluencerPlatformCommandValidator(IGenericRepositoryAsync<int, InfluencerPlatform> influencerPlatformRepositoryAsync)
+        public UpdateInfluencerPlatformCommandValidator(IUnitOfWork unitOfWork)
         {
-            _influencerPlatformRepositoryAsync = influencerPlatformRepositoryAsync;
+            _influencerPlatformRepositoryAsync = unitOfWork.Repository<InfluencerPlatform>();
 
             RuleFor(x => x.Url).IsValidUrl();
             RuleFor(x => x.PlatformId).MustAsync(async (x, y, z) =>

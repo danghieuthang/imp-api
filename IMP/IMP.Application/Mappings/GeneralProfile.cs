@@ -8,8 +8,6 @@ using IMP.Application.Features.CampaignTypes.Commands.CreateCampaignType;
 using IMP.Application.Features.CampaignTypes.Commands.UpdateCampaignType;
 using IMP.Application.Features.Platforms.Commands.CreatePlatform;
 using IMP.Application.Features.Platforms.Commands.UpdatePlatform;
-using IMP.Application.Features.Products.Commands.CreateProduct;
-using IMP.Application.Features.Products.Queries.GetAllProducts;
 using IMP.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -23,10 +21,6 @@ namespace IMP.Application.Mappings
     {
         public GeneralProfile()
         {
-            CreateMap<Product, GetAllProductsViewModel>().ReverseMap();
-            CreateMap<CreateProductCommand, Product>();
-            CreateMap<GetAllProductsQuery, GetAllProductsParameter>();
-
             #region platform
             CreateMap<Platform, PlatformViewModel>().ReverseMap();
             CreateMap<CreatePlatformCommand, Platform>();

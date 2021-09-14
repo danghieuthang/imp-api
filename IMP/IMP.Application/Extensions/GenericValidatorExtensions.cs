@@ -36,6 +36,11 @@ namespace IMP.Application.Extensions
             return ruleBuilder.GreaterThanOrEqualTo(DateTime.UtcNow).WithMessage("'{PropertyValue}' không hợp lệ.");
         }
 
+        public static IRuleBuilderOptions<T, IFormFile> RequireFile<T>(this IRuleBuilder<T, IFormFile> ruleBuilder)
+        {
+            return ruleBuilder
+                .NotNull().WithMessage("File không hợp lệ.");
+        }
         /// <summary>
         /// Validation for file size
         /// </summary>

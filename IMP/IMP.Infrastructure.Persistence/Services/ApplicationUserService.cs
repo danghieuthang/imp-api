@@ -11,11 +11,13 @@ namespace IMP.Application.Interfaces.Services
 {
     public class ApplicationUserService : IApplicationUserService
     {
-        private readonly IApplicationUserRepositoryAsync _applicationUserRepositoryAsync;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IGenericRepositoryAsync<ApplicationUser> _applicationUserRepositoryAsync;
 
-        public ApplicationUserService(IApplicationUserRepositoryAsync applicationUserRepositoryAsync)
+        public ApplicationUserService(IUnitOfWork unitOfWork)
         {
-            _applicationUserRepositoryAsync = applicationUserRepositoryAsync;
+            _unitOfWork = unitOfWork;
+            _applicationUserRepositoryAsync = _unitOfWork.Repository<ApplicationUser>();
         }
 
         public async Task<ApplicationUser> CreateUser(string userName)
@@ -26,15 +28,18 @@ namespace IMP.Application.Interfaces.Services
                 PaymentInfor = new PaymentInfor(),
                 Wallet = new Wallet()
             };
-            return await _applicationUserRepositoryAsync.AddAsync(user);
+            user = await _applicationUserRepositoryAsync.AddAsync(user);
+            await _unitOfWork.CommitAsync();
+            return user;
         }
 
         public async Task DeleteUser(string userName)
         {
-            var user = await _applicationUserRepositoryAsync.GetByUserName(userName);
+            var user = await _applicationUserRepositoryAsync.FindSingleAsync(x => x.UserName.ToLower() == userName.ToLower());
             if (user != null)
             {
-                await _applicationUserRepositoryAsync.DeleteAsync(user);
+                _applicationUserRepositoryAsync.Delete(user);
+                await _unitOfWork.CommitAsync();
             }
         }
 

@@ -40,12 +40,12 @@ namespace IMP.WebApi
                 {
                     var userManager = services.GetRequiredService<UserManager<User>>();
                     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-                    var locationRepositoryAsync = services.GetRequiredService<IGenericRepositoryAsync<int, Location>>();
+                    var unitOfWork = services.GetRequiredService<IUnitOfWork>();
 
                     await Infrastructure.Identity.Seeds.DefaultRoles.SeedAsync(userManager, roleManager);
                     await Infrastructure.Identity.Seeds.DefaultSuperAdmin.SeedAsync(userManager, roleManager);
                     await Infrastructure.Identity.Seeds.DefaultBasicUser.SeedAsync(userManager, roleManager);
-                    await Infrastructure.Persistence.Seeds.DefaultLocation.SeedAync(locationRepositoryAsync);
+                    await Infrastructure.Persistence.Seeds.DefaultLocation.SeedAync(unitOfWork);
 
                     Log.Information("Finished Seeding Default Data");
                     Log.Information("Application Starting");

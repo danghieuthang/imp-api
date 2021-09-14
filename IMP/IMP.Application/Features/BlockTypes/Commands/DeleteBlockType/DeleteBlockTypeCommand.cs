@@ -16,7 +16,7 @@ namespace IMP.Application.Features.BlockTypes.Commands.DeleteBlockType
 
         public class DeleteBockTypeCommandHandler : DeleteCommandHandler<BlockType, DeleteBlockTypeCommand>
         {
-            public DeleteBockTypeCommandHandler(IGenericRepositoryAsync<int, BlockType> repositoryAsync) : base(repositoryAsync)
+            public DeleteBockTypeCommandHandler(IUnitOfWork unitOfWork) : base(unitOfWork)
             {
             }
         }

@@ -16,11 +16,11 @@ namespace IMP.Application.Features.BlockTypes.Commands.UpdateBlockType
 {
     public class UpdateBlockTypeCommandValidator : AbstractValidator<UpdateBlockTypeCommand>
     {
-        private readonly IGenericRepositoryAsync<int, BlockType> _blockTypeRepositoryAsync;
+        private readonly IGenericRepositoryAsync<BlockType> _blockTypeRepositoryAsync;
 
-        public UpdateBlockTypeCommandValidator(IGenericRepositoryAsync<int, BlockType> blockTypeRepositoryAsync, IOptions<FileSettings> options)
+        public UpdateBlockTypeCommandValidator(IUnitOfWork unitOfWork, IOptions<FileSettings> options)
         {
-            _blockTypeRepositoryAsync = blockTypeRepositoryAsync;
+            _blockTypeRepositoryAsync = unitOfWork.Repository<BlockType>();
             RuleFor(x => x.Id).IsExistId(IsExistAsync);
             RuleFor(x => x.Name).Required(256)
                 .MustAsync(async (x, y, z) =>

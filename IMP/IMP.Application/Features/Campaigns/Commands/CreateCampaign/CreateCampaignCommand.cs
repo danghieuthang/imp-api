@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using IMP.Application.Interfaces;
 
 namespace IMP.Application.Features.Campaigns.Commands.CreateCampaign
 {
@@ -32,11 +33,13 @@ namespace IMP.Application.Features.Campaigns.Commands.CreateCampaign
 
     public class CreateCampaignCommandHandler : IRequestHandler<CreateCampaignCommand, Response<CampaignViewModel>>
     {
-        private readonly ICampaignRepositoryAsync _campaignRepositoryAsync;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IGenericRepositoryAsync<Campaign> _campaignRepositoryAsync;
         private readonly IMapper _mapper;
-        public CreateCampaignCommandHandler(ICampaignRepositoryAsync campaignRepositoryAsync, IMapper mapper)
+        public CreateCampaignCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _campaignRepositoryAsync = campaignRepositoryAsync;
+            _unitOfWork = unitOfWork;
+            _campaignRepositoryAsync = _unitOfWork.Repository<Campaign>();
             _mapper = mapper;
         }
 
@@ -44,7 +47,7 @@ namespace IMP.Application.Features.Campaigns.Commands.CreateCampaign
         {
             var campaign = _mapper.Map<Campaign>(request);
             campaign = await _campaignRepositoryAsync.AddAsync(campaign);
-
+            await _unitOfWork.CommitAsync();
             var campaignView = _mapper.Map<CampaignViewModel>(campaign);
             return new Response<CampaignViewModel>(campaignView);
         }
