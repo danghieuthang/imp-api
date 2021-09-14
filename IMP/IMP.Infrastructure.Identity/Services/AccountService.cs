@@ -548,6 +548,23 @@ namespace IMP.Infrastructure.Identity.Services
             throw new ValidationException(error);
 
         }
+
+        public async Task<Response<string>> SetPassword(SetPasswordRequest request, string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                if (string.IsNullOrEmpty(user.PasswordHash))
+                {
+                    user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, request.Password);
+                    await _userManager.UpdateAsync(user);
+                    return new Response<string>(data: $"Set password for '{user.UserName}' was successfull.");
+                }
+                throw new ValidationException(new ValidationError("user", "This user can't set password. Try user reset password api."));
+            }
+            var error = new ValidationError("user", "User not valid.");
+            throw new ValidationException(error);
+        }
     }
 
 }

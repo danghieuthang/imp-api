@@ -104,6 +104,13 @@ namespace IMP.WebApi.Controllers
             return Ok(await _accountService.UpdateUsername(_authenticatedUserService.UserId, username));
         }
 
+        [HttpPost("set-password")]
+        [Authorize(Roles = "Influencer, Brand")]
+        public async Task<IActionResult> SetPassword([FromBody] SetPasswordRequest request)
+        {
+            return Ok(await _accountService.SetPassword(request, _authenticatedUserService.UserId));
+        }
+
         [HttpPost("refresh-token")]
         public async Task<IActionResult> RefreshToken()
         {

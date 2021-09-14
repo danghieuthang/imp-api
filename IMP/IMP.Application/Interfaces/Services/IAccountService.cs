@@ -21,6 +21,6 @@ namespace IMP.Application.Interfaces.Services
         Task<Response<AuthenticationResponse>> SocialAuthenticationAsync(SocialAuthenticationRequest request, string ipAddress);
         Task<Response<RegisterResponse>> SocialRegisterAsync(SocialAuthenticationRequest request);
         Task<Response<RegisterResponse>> UpdateUsername(string userId, string username);
-
+        Task<Response<string>> SetPassword(SetPasswordRequest request, string userId);
     }
 }
