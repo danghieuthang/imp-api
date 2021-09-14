@@ -10,6 +10,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using IMP.Application.Interfaces;
+using IMP.Domain.Entities;
 
 namespace IMP.Application.Features.CampaignTypes.Queries
 {
@@ -17,11 +19,11 @@ namespace IMP.Application.Features.CampaignTypes.Queries
     {
         public class GetAllCampaignTypeQueryHandler : IRequestHandler<GetAllCampaignTypeQuery, Response<IEnumerable<CampaignTypeViewModel>>>
         {
-            private readonly ICampaignTypeRepositoryAsync _campaignTypeRepositoryAsync;
+            private readonly IGenericRepositoryAsync<CampaignType> _campaignTypeRepositoryAsync;
             private readonly IMapper _mapper;
-            public GetAllCampaignTypeQueryHandler(ICampaignTypeRepositoryAsync campaignTypeRepositoryAsync, IMapper mapper)
+            public GetAllCampaignTypeQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
             {
-                _campaignTypeRepositoryAsync = campaignTypeRepositoryAsync;
+                _campaignTypeRepositoryAsync = unitOfWork.Repository<CampaignType>();
                 _mapper = mapper;
             }
             public async Task<Response<IEnumerable<CampaignTypeViewModel>>> Handle(GetAllCampaignTypeQuery request, CancellationToken cancellationToken)

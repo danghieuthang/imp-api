@@ -14,9 +14,9 @@ namespace IMP.Application.Features.BlockTypes.Queries.GetBlockTypeById
     {
         public int Id { get; set; }
 
-        public class GetBlockTypeByIdQueryHandler : GetByIdQueryHandle<GetBlockTypeByIdQuery, BlockType, BlockTypeViewModel>
+        public class GetBlockTypeByIdQueryHandler : GetByIdQueryHandler<GetBlockTypeByIdQuery, BlockType, BlockTypeViewModel>
         {
-            public GetBlockTypeByIdQueryHandler(IGenericRepositoryAsync<int, BlockType> repositoryAsync, IMapper mapper) : base(repositoryAsync, mapper)
+            public GetBlockTypeByIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
             {
             }
         }

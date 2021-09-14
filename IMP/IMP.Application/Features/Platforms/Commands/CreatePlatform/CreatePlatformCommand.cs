@@ -27,12 +27,14 @@ namespace IMP.Application.Features.Platforms.Commands.CreatePlatform
 
     public class CreatePlatformCommandHandler : IRequestHandler<CreatePlatformCommand, Response<PlatformViewModel>>
     {
-        private readonly IPlatformRepositoryAsync _platformRepositoryAsync;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IGenericRepositoryAsync<Platform> _platformRepositoryAsync;
         private readonly IMapper _mapper;
         private readonly IFirebaseService _firebaseService;
-        public CreatePlatformCommandHandler(IPlatformRepositoryAsync platformRepositoryAsync, IMapper mapper, IFirebaseService firebaseService)
+        public CreatePlatformCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IFirebaseService firebaseService)
         {
-            _platformRepositoryAsync = platformRepositoryAsync;
+            _unitOfWork = unitOfWork;
+            _platformRepositoryAsync = _unitOfWork.Repository<Platform>();
             _mapper = mapper;
             _firebaseService = firebaseService;
         }
@@ -46,6 +48,7 @@ namespace IMP.Application.Features.Platforms.Commands.CreatePlatform
                 platform.Image = imageFileUrl;
             }
             platform = await _platformRepositoryAsync.AddAsync(platform);
+            await _unitOfWork.CommitAsync();
 
             var platformView = _mapper.Map<PlatformViewModel>(platform);
             return new Response<PlatformViewModel>(platformView);

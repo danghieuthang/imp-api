@@ -18,12 +18,12 @@ namespace IMP.Application.Features.Locations.Queries.GetLocationByCode
         public string Code { get; set; }
         public class GetLocationByIdQueryHandler : IRequestHandler<GetLocationByCodeQuery, Response<LocationViewModel>>
         {
-            private readonly IGenericRepositoryAsync<int, Location> _locationRepositoryAsync;
+            private readonly IGenericRepositoryAsync<Location> _locationRepositoryAsync;
             private readonly IMapper _mapper;
 
-            public GetLocationByIdQueryHandler(IGenericRepositoryAsync<int, Location> locationRepositoryAsync, IMapper mapper)
+            public GetLocationByIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
             {
-                _locationRepositoryAsync = locationRepositoryAsync;
+                _locationRepositoryAsync = unitOfWork.Repository<Location>();
                 _mapper = mapper;
             }
 

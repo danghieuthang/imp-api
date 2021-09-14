@@ -13,6 +13,12 @@ namespace IMP.Application.Models
         public DateTime? LastModified { get; set; }
     }
 
+    public abstract class BaseViewModel : BaseViewModel<int>
+    {
+
+    }
+
+
     public abstract class BaseCreateModel
     {
 

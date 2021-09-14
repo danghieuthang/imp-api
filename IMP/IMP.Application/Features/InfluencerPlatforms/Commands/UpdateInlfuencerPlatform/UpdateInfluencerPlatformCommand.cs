@@ -22,11 +22,13 @@ namespace IMP.Application.Features.InfluencerPlatforms.Commands.UpdateInlfuencer
 
         public class UpdateInfluencerPlatformCommandHandler : IRequestHandler<UpdateInfluencerPlatformCommand, Response<InfluencerPlatformViewModel>>
         {
-            private readonly IGenericRepositoryAsync<int, InfluencerPlatform> _influencerPlatformRepositoryAsync;
+            private readonly IUnitOfWork _unitOfWork;
+            private readonly IGenericRepositoryAsync<InfluencerPlatform> _influencerPlatformRepositoryAsync;
 
-            public UpdateInfluencerPlatformCommandHandler(IGenericRepositoryAsync<int, InfluencerPlatform> influencerPlatformRepositoryAsync)
+            public UpdateInfluencerPlatformCommandHandler(IUnitOfWork unitOfWork)
             {
-                _influencerPlatformRepositoryAsync = influencerPlatformRepositoryAsync;
+                _unitOfWork = unitOfWork;
+                _influencerPlatformRepositoryAsync = _unitOfWork.Repository<InfluencerPlatform>();
             }
 
             public async Task<Response<InfluencerPlatformViewModel>> Handle(UpdateInfluencerPlatformCommand request, CancellationToken cancellationToken)
@@ -35,7 +37,9 @@ namespace IMP.Application.Features.InfluencerPlatforms.Commands.UpdateInlfuencer
 
                 influencerPlatform.Url = request.Url;
 
-                await _influencerPlatformRepositoryAsync.UpdateAsync(influencerPlatform);
+                _influencerPlatformRepositoryAsync.Update(influencerPlatform);
+                await _unitOfWork.CommitAsync();
+
                 var influencerPlatformView = new InfluencerPlatformViewModel
                 {
                     Id = influencerPlatform.Id,

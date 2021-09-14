@@ -1,6 +1,8 @@
 ﻿using FluentValidation;
 using IMP.Application.Extensions;
+using IMP.Application.Interfaces;
 using IMP.Application.Interfaces.Repositories;
+using IMP.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,16 +13,16 @@ namespace IMP.Application.Features.Campaigns.Commands.CreateCampaign
 {
     public class CreateCampaignCommandValidator : AbstractValidator<CreateCampaignCommand>
     {
-        private readonly ICampaignRepositoryAsync _campaignRepositoryAsync;
-        private readonly IPlatformRepositoryAsync _platformRepositoryAsync;
-        private readonly ICampaignTypeRepositoryAsync _campaignTypeRepositoryAsync;
-        private readonly IApplicationUserRepositoryAsync _applicationUserRepositoryAsync;
-        public CreateCampaignCommandValidator(ICampaignRepositoryAsync campaignRepositoryAsync, IPlatformRepositoryAsync platformRepositoryAsync, ICampaignTypeRepositoryAsync campaignTypeRepositoryAsync, IApplicationUserRepositoryAsync applicationUserRepositoryAsync)
+        private readonly IGenericRepositoryAsync<Campaign> _campaignRepositoryAsync;
+        private readonly IGenericRepositoryAsync<Platform> _platformRepositoryAsync;
+        private readonly IGenericRepositoryAsync<CampaignType> _campaignTypeRepositoryAsync;
+        private readonly IGenericRepositoryAsync<ApplicationUser> _applicationUserRepositoryAsync;
+        public CreateCampaignCommandValidator(IUnitOfWork unitOfWork)
         {
-            _campaignRepositoryAsync = campaignRepositoryAsync;
-            _platformRepositoryAsync = platformRepositoryAsync;
-            _campaignTypeRepositoryAsync = campaignTypeRepositoryAsync;
-            _applicationUserRepositoryAsync = applicationUserRepositoryAsync;
+            _campaignRepositoryAsync = unitOfWork.Repository<Campaign>();
+            _platformRepositoryAsync = unitOfWork.Repository<Platform>();
+            _campaignTypeRepositoryAsync = unitOfWork.Repository<CampaignType>();
+            _applicationUserRepositoryAsync = unitOfWork.Repository<ApplicationUser>();
 
             this.RuleFor(c => c.Title).Required(256);
             this.RuleFor(c => c.AditionalInfomation).Required(2000);

@@ -8,16 +8,18 @@ using IMP.Application.Validations;
 using IMP.Domain.Settings;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
+using IMP.Application.Interfaces;
+using IMP.Domain.Entities;
 
 namespace IMP.Application.Features.CampaignTypes.Commands.CreateCampaignType
 {
     public class CreateCampaignTypeCommandValidator : AbstractValidator<CreateCampaignTypeCommand>
     {
-        private readonly ICampaignTypeRepositoryAsync _campaignTypeRepostoryAsync;
+        private readonly IGenericRepositoryAsync<CampaignType> _campaignTypeRepostoryAsync;
 
-        public CreateCampaignTypeCommandValidator(ICampaignTypeRepositoryAsync campaignTypeRepositoryAsync, IOptions<FileSettings> options)
+        public CreateCampaignTypeCommandValidator(IUnitOfWork unitOfWork, IOptions<FileSettings> options)
         {
-            _campaignTypeRepostoryAsync = campaignTypeRepositoryAsync;
+            _campaignTypeRepostoryAsync = unitOfWork.Repository<CampaignType>();
             RuleFor(x => x.Name).Required(256)
                 .MustAsync(IsUniqueCampaignType).WithMessage("'{PropertyValue}' đã tồn tại.");
 
@@ -28,7 +30,8 @@ namespace IMP.Application.Features.CampaignTypes.Commands.CreateCampaignType
         }
         private async Task<bool> IsUniqueCampaignType(string name, CancellationToken cancellationToken)
         {
-            return await _campaignTypeRepostoryAsync.IsUniqueCampaignType(name);
+            var entity = await _campaignTypeRepostoryAsync.FindSingleAsync(x => x.Name.ToLower() == name.ToLower());
+            return entity == null;
         }
 
         private async Task<bool> IsExistCampaignType(int? id, CancellationToken cancellationToken)

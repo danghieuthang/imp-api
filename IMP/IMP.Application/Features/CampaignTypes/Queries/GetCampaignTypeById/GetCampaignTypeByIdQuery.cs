@@ -9,31 +9,18 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using IMP.Application.Interfaces;
+using IMP.Domain.Entities;
 
 namespace IMP.Application.Features.CampaignTypes.Queries.GetCampaignTypeById
 {
-    public class GetCampaignTypeByIdQuery : IRequest<Response<CampaignTypeViewModel>>
+    public class GetCampaignTypeByIdQuery : IGetByIdQuery<CampaignType, CampaignTypeViewModel>
     {
         public int Id { get; set; }
-        public class GetCampaignTypeByIdQueryHandler : IRequestHandler<GetCampaignTypeByIdQuery, Response<CampaignTypeViewModel>>
+        public class GetCampaignTypeByIdQueryHandler : GetByIdQueryHandler<GetCampaignTypeByIdQuery, CampaignType, CampaignTypeViewModel>
         {
-            private readonly ICampaignTypeRepositoryAsync _campaignTypeRepositoryAsync;
-            private readonly IMapper _mapper;
-            public GetCampaignTypeByIdQueryHandler(ICampaignTypeRepositoryAsync campaignTypeRepositoryAsync, IMapper mapper)
+            public GetCampaignTypeByIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
             {
-                _campaignTypeRepositoryAsync = campaignTypeRepositoryAsync;
-                _mapper = mapper;
-            }
-            public async Task<Response<CampaignTypeViewModel>> Handle(GetCampaignTypeByIdQuery request, CancellationToken cancellationToken)
-            {
-                var campaignType = await _campaignTypeRepositoryAsync.GetByIdAsync(request.Id);
-                if (campaignType == null)
-                {
-                    throw new KeyNotFoundException($"'{request.Id}' không tồn tại");
-                }
-
-                var campaignTypeView = _mapper.Map<CampaignTypeViewModel>(campaignType);
-                return new Response<CampaignTypeViewModel>(campaignTypeView);
             }
         }
     }

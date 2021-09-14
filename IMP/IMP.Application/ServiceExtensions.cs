@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using IMP.Application.Behaviours;
-using IMP.Application.Features.Products.Commands.CreateProduct;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System;

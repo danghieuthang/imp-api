@@ -27,13 +27,16 @@ namespace IMP.Application.Features.BlockTypes.Commands.UpdateBlockType
         public string Description { get; set; }
         public class UpdateBlockTypeComandHandler : IRequestHandler<UpdateBlockTypeCommand, Response<BlockTypeViewModel>>
         {
-            private readonly IGenericRepositoryAsync<int, BlockType> _blockTypeRepositoryAsync;
+
+            private readonly IUnitOfWork _unitOfWork;
+            private readonly IGenericRepositoryAsync<BlockType> _blockTypeRepositoryAsync;
             private readonly IMapper _mapper;
             private readonly IFirebaseService _firebaseService;
 
-            public UpdateBlockTypeComandHandler(IGenericRepositoryAsync<int, BlockType> blockTypeRepositoryAsync, IMapper mapper, IFirebaseService firebaseService)
+            public UpdateBlockTypeComandHandler(IUnitOfWork unitOfWork, IMapper mapper, IFirebaseService firebaseService)
             {
-                _blockTypeRepositoryAsync = blockTypeRepositoryAsync;
+                _unitOfWork = unitOfWork;
+                _blockTypeRepositoryAsync = _unitOfWork.Repository<BlockType>();
                 _mapper = mapper;
                 _firebaseService = firebaseService;
             }
@@ -45,13 +48,13 @@ namespace IMP.Application.Features.BlockTypes.Commands.UpdateBlockType
                 {
                     blockType.Name = request.Name;
                     blockType.Description = request.Description;
-
                     string imageFileUrl = await _firebaseService.UploadFile(request.ImageFile.OpenReadStream(), request.ImageFile.FileName, "admin", "campaign-types");
                     if (imageFileUrl != null)
                     {
                         blockType.Image = imageFileUrl;
                     }
-                    await _blockTypeRepositoryAsync.UpdateAsync(blockType);
+                    _blockTypeRepositoryAsync.Update(blockType);
+                    await _unitOfWork.CommitAsync();
                 }
                 var blockTypeView = _mapper.Map<BlockTypeViewModel>(blockType);
                 return new Response<BlockTypeViewModel>(blockTypeView);

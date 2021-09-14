@@ -11,6 +11,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using IMP.Domain.Entities;
+using IMP.Application.Interfaces;
 
 namespace IMP.Application.Features.Campaigns.Queries.GetAllCampaigns
 {
@@ -26,12 +28,12 @@ namespace IMP.Application.Features.Campaigns.Queries.GetAllCampaigns
 
         public class GetAllCampaignQueryHandler : IRequestHandler<GetAllCampaignQuery, PagedResponse<IEnumerable<CampaignViewModel>>>
         {
-            private readonly ICampaignRepositoryAsync _campaignRepositoryAsync;
+            private readonly IGenericRepositoryAsync<Campaign> _campaignRepositoryAsync;
             private readonly IMapper _mapper;
 
-            public GetAllCampaignQueryHandler(ICampaignRepositoryAsync campaignRepositoryAsync, IMapper mapper)
+            public GetAllCampaignQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
             {
-                _campaignRepositoryAsync = campaignRepositoryAsync;
+                _campaignRepositoryAsync = unitOfWork.Repository<Campaign>();
                 _mapper = mapper;
             }
 
@@ -44,5 +46,5 @@ namespace IMP.Application.Features.Campaigns.Queries.GetAllCampaigns
         }
     }
 
-    
+
 }

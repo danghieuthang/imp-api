@@ -20,7 +20,7 @@ namespace IMP.Application.Features.CampaignTypes.Commands.DeleteCampaignTypeById
         public int Id { get; set; }
         public class DeleteCampaignTypeByIdCommandHandler : DeleteCommandHandler<CampaignType, DeleteCampaignTypeByIdCommand>
         {
-            public DeleteCampaignTypeByIdCommandHandler(ICampaignTypeRepositoryAsync repositoryAsync) : base(repositoryAsync)
+            public DeleteCampaignTypeByIdCommandHandler(IUnitOfWork unitOfWork) : base(unitOfWork)
             {
             }
         }

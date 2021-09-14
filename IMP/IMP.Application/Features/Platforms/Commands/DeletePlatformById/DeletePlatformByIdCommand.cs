@@ -9,32 +9,19 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using IMP.Application.Interfaces;
+using IMP.Domain.Entities;
 
 namespace IMP.Application.Features.Platforms.Commands.DeletePlatformById
 {
-    public class DeletePlatformByIdCommand : IRequest<Response<int>>
+    public class DeletePlatformByIdCommand : IDeleteCommand<Platform>
     {
         public int Id { get; set; }
 
-        public class DeletePlatformByIdCommandHandler : IRequestHandler<DeletePlatformByIdCommand, Response<int>>
+        public class DeletePlatformByIdCommandHandler : DeleteCommandHandler<Platform, DeletePlatformByIdCommand>
         {
-            private readonly IPlatformRepositoryAsync _platformRepositoryAsync;
-            public DeletePlatformByIdCommandHandler(IPlatformRepositoryAsync platformRepositoryAsync)
+            public DeletePlatformByIdCommandHandler(IUnitOfWork unitOfWork) : base(unitOfWork)
             {
-                _platformRepositoryAsync = platformRepositoryAsync;
-            }
-
-
-            public async Task<Response<int>> Handle(DeletePlatformByIdCommand request, CancellationToken cancellationToken)
-            {
-                var entity = await _platformRepositoryAsync.GetByIdAsync(request.Id);
-                if (entity is null)
-                {
-                    var error = new ValidationError("id", $"'{request.Id}' không tồn tại.");
-                    throw new ValidationException(error);
-                }
-                await _platformRepositoryAsync.DeleteAsync(entity);
-                return new Response<int>(entity.Id);
             }
         }
     }

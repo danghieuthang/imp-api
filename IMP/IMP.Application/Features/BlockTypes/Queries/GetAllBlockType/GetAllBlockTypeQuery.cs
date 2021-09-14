@@ -19,9 +19,9 @@ namespace IMP.Application.Features.BlockTypes.Queries.GetAllBlockType
             private readonly IGenericRepositoryAsync<int, BlockType> _blockTypeResponsitoryAsync;
             private readonly IMapper _mapper;
 
-            public GetAllBlockTypeQueryHandler(IGenericRepositoryAsync<int, BlockType> blockTypeResponsitoryAsync, IMapper mapper)
+            public GetAllBlockTypeQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
             {
-                _blockTypeResponsitoryAsync = blockTypeResponsitoryAsync;
+                _blockTypeResponsitoryAsync = unitOfWork.Repository<BlockType>();
                 _mapper = mapper;
             }
 

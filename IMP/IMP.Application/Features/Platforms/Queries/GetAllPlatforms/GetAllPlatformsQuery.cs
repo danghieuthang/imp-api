@@ -9,6 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using IMP.Application.Interfaces;
+using IMP.Domain.Entities;
 
 namespace IMP.Application.Features.Platforms.Queries.GetAllPlatforms
 {
@@ -19,11 +21,11 @@ namespace IMP.Application.Features.Platforms.Queries.GetAllPlatforms
 
     public class GetAllPlatformsQueryHanlder : IRequestHandler<GetAllPlatformsQuery, Response<IEnumerable<PlatformViewModel>>>
     {
-        private readonly IPlatformRepositoryAsync _platformRepositoryAsync;
+        private readonly IGenericRepositoryAsync<Platform> _platformRepositoryAsync;
         private readonly IMapper _mapper;
-        public GetAllPlatformsQueryHanlder(IPlatformRepositoryAsync platformRepositoryAsync, IMapper mapper)
+        public GetAllPlatformsQueryHanlder(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _platformRepositoryAsync = platformRepositoryAsync;
+            _platformRepositoryAsync = unitOfWork.Repository<Platform>();
             _mapper = mapper;
         }
 

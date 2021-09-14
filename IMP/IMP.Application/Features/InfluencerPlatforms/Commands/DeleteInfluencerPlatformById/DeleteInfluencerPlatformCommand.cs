@@ -15,7 +15,7 @@ namespace IMP.Application.Features.InfluencerPlatforms.Commands.DeleteInfluencer
 
         public class DeleteInfluencerPlatformCommandHandler : DeleteCommandHandler<InfluencerPlatform, DeleteInfluencerPlatformCommand>
         {
-            public DeleteInfluencerPlatformCommandHandler(IGenericRepositoryAsync<int, InfluencerPlatform> repositoryAsync) : base(repositoryAsync)
+            public DeleteInfluencerPlatformCommandHandler(IUnitOfWork unitOfWork) : base(unitOfWork)
             {
             }
         }

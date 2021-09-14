@@ -58,26 +58,22 @@ namespace IMP.Infrastructure.Persistence.Repository
         public async Task<TEntity> AddAsync(TEntity entity)
         {
             await _dbContext.Set<TEntity>().AddAsync(entity);
-            await _dbContext.SaveChangesAsync();
             return entity;
         }
 
         public async Task AddManyAsync(IEnumerable<TEntity> entities)
         {
             await _dbContext.Set<TEntity>().AddRangeAsync(entities);
-            await _dbContext.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(TEntity entity)
+        public void Update(TEntity entity)
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(TEntity entity)
+        public void Delete(TEntity entity)
         {
             _dbContext.Set<TEntity>().Remove(entity);
-            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<IReadOnlyList<TEntity>> GetAllAsync()
@@ -193,6 +189,13 @@ namespace IMP.Infrastructure.Persistence.Repository
             return await FindAll(predicate).AllAsync(predicate);
         }
 
+    }
+
+    public class GenericRepositoryAsync<TEntity> : GenericRepositoryAsync<int, TEntity>, IGenericRepositoryAsync<TEntity> where TEntity : BaseEntity
+    {
+        public GenericRepositoryAsync(ApplicationDbContext dbContext) : base(dbContext)
+        {
+        }
     }
 
 }

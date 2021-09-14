@@ -13,15 +13,14 @@ namespace IMP.Application.Features.InfluencerPlatforms.Commands.CreateInfluencer
 {
     public class CreateInfluencerPlatformCommandValidator : AbstractValidator<CreateInfluencerPlatformCommand>
     {
-        private readonly IGenericRepositoryAsync<int, InfluencerPlatform> _influencerPlatformRepositoryAsync;
-        private readonly IGenericRepositoryAsync<int, ApplicationUser> _applicationUserRepositoryAsync;
-        private readonly IGenericRepositoryAsync<int, Platform> _platformRepositoryAsync;
-        public CreateInfluencerPlatformCommandValidator(IGenericRepositoryAsync<int, InfluencerPlatform> influencerPlatformRepositoryAsync, IGenericRepositoryAsync<int, ApplicationUser> applicationUserRepositoryAsync, IGenericRepositoryAsync<int, Platform> platformRepositoryAsync)
+        private readonly IGenericRepositoryAsync<InfluencerPlatform> _influencerPlatformRepositoryAsync;
+        private readonly IGenericRepositoryAsync<ApplicationUser> _applicationUserRepositoryAsync;
+        private readonly IGenericRepositoryAsync<Platform> _platformRepositoryAsync;
+        public CreateInfluencerPlatformCommandValidator(IUnitOfWork unitOfWork)
         {
-            _influencerPlatformRepositoryAsync = influencerPlatformRepositoryAsync;
-            _applicationUserRepositoryAsync = applicationUserRepositoryAsync;
-            _platformRepositoryAsync = platformRepositoryAsync;
-
+            _influencerPlatformRepositoryAsync = unitOfWork.Repository<InfluencerPlatform>();
+            _applicationUserRepositoryAsync = unitOfWork.Repository<ApplicationUser>();
+            _platformRepositoryAsync = unitOfWork.Repository<Platform>();
 
             RuleFor(x => x.Url).IsValidUrl();
             RuleFor(x => x.InfluencerId).IsExistId(IsValidInfluencerId);
