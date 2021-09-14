@@ -19,5 +19,8 @@ namespace IMP.Domain.Entities
 
         [StringLength(256)]
         public string Url { get; set; }
+        public int Follower { get; set; }
+        [StringLength(256)]
+        public string Category { get; set; }
     }
 }

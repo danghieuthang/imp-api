@@ -9,7 +9,7 @@ namespace IMP.Domain.Entities
 {
     public class ApplicationUser : BaseEntity
     {
-        #region basic infomation
+        #region personal infomation
         [MaxLength(256)]
         public string UserName { get; set; }
         [MaxLength(10)]
@@ -46,7 +46,15 @@ namespace IMP.Domain.Entities
 
         #region additional infomation
         [StringLength(256)]
+        public string Job { get; set; }
+        [StringLength(256)]
         public string Interests { get; set; }
+        public bool? ChildStatus { get; set; }
+        public bool? MaritalStatus { get; set; }
+        public string Pet { get; set; }
+
+        [StringLength(2000)]
+        public string Description { get; set; }
         #endregion
 
         [ForeignKey("Wallet")]
@@ -54,7 +62,7 @@ namespace IMP.Domain.Entities
         public Wallet Wallet { get; set; }
 
         [ForeignKey("PaymentInfor")]
-        public int PaymentInforId { get; set; }
+        public int? PaymentInforId { get; set; }
         public PaymentInfor PaymentInfor { get; set; }
 
         [ForeignKey("Ranking")]
@@ -62,5 +70,21 @@ namespace IMP.Domain.Entities
         public Ranking Ranking { get; set; }
 
         public ICollection<Page> Pages { get; set; }
+
+        [NotMapped]
+        public bool IsActivate
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(PhoneNumber)
+                    || string.IsNullOrWhiteSpace(FirstName)
+                    || BirthDate == null)
+                {
+                    return false;
+                }
+                return true;
+
+            }
+        }
     }
 }

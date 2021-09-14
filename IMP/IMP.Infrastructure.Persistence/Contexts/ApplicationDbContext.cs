@@ -26,6 +26,8 @@ namespace IMP.Infrastructure.Persistence.Contexts
         #region  Dbsets
 
         public DbSet<ActivityType> ActivityTypes { get; set; }
+        public DbSet<Location> Locations { get; set; }
+
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<ApplicantHistory> ApplicantHistories { get; set; }
         public DbSet<Block> Blocks { get; set; }
@@ -41,6 +43,8 @@ namespace IMP.Infrastructure.Persistence.Contexts
         public DbSet<InfluencerPlatform> InfluencerPlatforms { get; set; }
         public DbSet<MemberActivity> MemberActivities { get; set; }
         public DbSet<Page> Pages { get; set; }
+        public DbSet<Bank> Banks { get; set; }
+
         public DbSet<PaymentInfor> PaymentInfors { get; set; }
         public DbSet<Platform> Platforms { get; set; }
         public DbSet<Ranking> Rankings { get; set; }

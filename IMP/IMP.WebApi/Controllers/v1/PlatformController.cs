@@ -44,7 +44,7 @@ namespace IMP.WebApi.Controllers.v1
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create([FromForm] CreatePlatformCommand command)
         {
-            return StatusCode(2021, await Mediator.Send(command));
+            return StatusCode(201, await Mediator.Send(command));
         }
 
         [HttpPut("{id}")]

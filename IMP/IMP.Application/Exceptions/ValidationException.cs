@@ -50,10 +50,10 @@ namespace IMP.Application.Exceptions
         /// Create Validation Exception with a Validation Error
         /// </summary>
         /// <param name="error">The Validation Error</param>
-        public ValidationException(ValidationError error)
+        public ValidationException(params ValidationError[] errors)
             : this()
         {
-            Errors.Add(error);
+            Errors.AddRange(errors);
         }
 
         public ValidationException(IEnumerable<ValidationError> errors)
