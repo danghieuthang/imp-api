@@ -11,4 +11,10 @@ namespace IMP.Application.Enums
         Fan,
         Influencer
     }
+
+    public enum RegisterRole
+    {
+        Influencer,
+        Brand
+    }
 }

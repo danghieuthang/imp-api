@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IMP.Application.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,5 +19,6 @@ namespace IMP.Application.Models.Account
         /// Web,Mobile
         /// </summary>
         public int AppId { get; set; }
+        public RegisterRole Role { get; set; }
     }
 }

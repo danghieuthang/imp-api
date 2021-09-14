@@ -68,19 +68,19 @@ namespace IMP.Infrastructure.Identity.Services
 
         public async Task<Response<AuthenticationResponse>> AuthenticateAsync(AuthenticationRequest request, string ipAddress)
         {
-            var user = await _userManager.FindByEmailAsync(request.Email);
+            var user = await _userManager.FindByNameAsync(request.Username);
             if (user == null)
             {
-                throw new ApiException($"No Accounts Registered with {request.Email}.");
+                throw new ApiException($"No Accounts Registered with {request.Username}.");
             }
             var result = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, false, lockoutOnFailure: false);
             if (!result.Succeeded)
             {
-                throw new ApiException($"Invalid Credentials for '{request.Email}'.");
+                throw new ApiException($"Invalid Credentials for '{request.Username}'.");
             }
             if (!user.EmailConfirmed)
             {
-                throw new ApiException($"Account Not Confirmed for '{request.Email}'.");
+                throw new ApiException($"Account Not Confirmed for '{request.Username}'.");
             }
             JwtSecurityToken jwtSecurityToken = await GenerateJWToken(user);
             AuthenticationResponse response = new AuthenticationResponse();
@@ -127,7 +127,7 @@ namespace IMP.Infrastructure.Identity.Services
             }
             return username;
         }
-        private async Task<User> RegisterSocialAsync(ProviderUserDetail providerUser)
+        private async Task<User> RegisterSocialAsync(ProviderUserDetail providerUser, RegisterRole role = RegisterRole.Influencer)
         {
             string username = await GenerateUnDuplicateUserName(providerUser.Name);
 
@@ -137,7 +137,8 @@ namespace IMP.Infrastructure.Identity.Services
                 FirstName = providerUser.FirstName,
                 LastName = providerUser.LastName,
                 UserName = username,
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                IsChangeUsername = false,
             };
             var userWithSameEmail = await _userManager.FindByEmailAsync(providerUser.Email);
             if (userWithSameEmail == null)
@@ -153,7 +154,7 @@ namespace IMP.Infrastructure.Identity.Services
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, Roles.Fan.ToString());
+                    await _userManager.AddToRoleAsync(user, role.ToString());
                     return user;
                 }
                 else
@@ -172,52 +173,48 @@ namespace IMP.Infrastructure.Identity.Services
         }
         public async Task<Response<string>> RegisterAsync(RegisterRequest request, string origin)
         {
+
             var userWithSameUserName = await _userManager.FindByNameAsync(request.UserName);
             if (userWithSameUserName != null)
             {
-                throw new ApiException($"Username '{request.UserName}' is already taken.");
+                var error = new ValidationError("username", $"Username '{request.UserName}' is already taken.");
+                throw new ValidationException(error);
             }
+
             var user = new User
             {
-                Email = request.Email,
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                UserName = request.UserName
+                UserName = request.UserName,
+                IsChangeUsername = true
             };
-            var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
-            if (userWithSameEmail == null)
+
+            // Create Application User
+            var applicationUser = await _applicationUserService.CreateUser(user.UserName);
+            // Add Application User ref to Identity User
+            if (applicationUser != null)
             {
-                // Create Application User
-                var applicationUser = await _applicationUserService.CreateUser(user.UserName);
-                // Add Application User ref to Identity User
-                if (applicationUser != null)
-                {
-                    user.ApplicationUserId = applicationUser.Id;
-                }
+                user.ApplicationUserId = applicationUser.Id;
+                user.EmailConfirmed = true;
+            }
 
-                var result = await _userManager.CreateAsync(user, request.Password);
-                if (result.Succeeded)
-                {
-                    await _userManager.AddToRoleAsync(user, Roles.Influencer.ToString());
-                    var verificationUri = await SendVerificationEmail(user, origin);
-                    //TODO: Attach Email Service here and configure it via appsettings
-                    await _emailService.SendAsync(new Application.Models.Email.EmailRequest() { To = user.Email, Body = $"Please confirm your account by visiting this URL {verificationUri}", Subject = "Confirm Registration" });
-                    return new Response<string>(user.Id, message: $"User Registered. Please confirm your account by visiting this URL {verificationUri}");
-                }
-                else
-                {
-                    // Delete Application User if create fail
-                    await _applicationUserService.DeleteUser(user.UserName);
-
-                    var errors = result.Errors.Select(x =>
-                    new ValidationError(x.Code, x.Description)).ToList();
-                    throw new ValidationException(errors);
-                }
+            var result = await _userManager.CreateAsync(user, request.Password);
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(user, request.Role.ToString());
+                //var verificationUri = await SendVerificationEmail(user, origin);
+                //TODO: Attach Email Service here and configure it via appsettings
+                //await _emailService.SendAsync(new Application.Models.Email.EmailRequest() { To = user.Email, Body = $"Please confirm your account by visiting this URL {verificationUri}", Subject = "Confirm Registration" });
+                return new Response<string>(user.Id, message: $"User Registered.");
             }
             else
             {
-                throw new ApiException($"Email {request.Email } is already registered.");
+                // Delete Application User if create fail
+                await _applicationUserService.DeleteUser(user.UserName);
+
+                var errors = result.Errors.Select(x =>
+                new ValidationError(x.Code, x.Description)).ToList();
+                throw new ValidationException(errors);
             }
+
         }
 
         private async Task<JwtSecurityToken> GenerateJWToken(User user)
@@ -488,7 +485,7 @@ namespace IMP.Infrastructure.Identity.Services
                     var error = new ValidationError("token", "Token not valid.");
                     throw new ValidationException(error);
                 }
-                var user = await RegisterSocialAsync(userInfo);
+                var user = await RegisterSocialAsync(userInfo, request.Role);
                 var response = new RegisterResponse
                 {
                     Email = user.Email,
@@ -507,7 +504,7 @@ namespace IMP.Infrastructure.Identity.Services
                     var error = new ValidationError("token", "Token not valid.");
                     throw new ValidationException(error);
                 }
-                var user = await RegisterSocialAsync(userInfo);
+                var user = await RegisterSocialAsync(userInfo, request.Role);
                 var response = new RegisterResponse
                 {
                     Email = user.Email,
@@ -519,6 +516,37 @@ namespace IMP.Infrastructure.Identity.Services
             }
 
             throw new ValidationException(new ValidationError("provider", "Provider not support."));
+        }
+
+        public async Task<Response<RegisterResponse>> UpdateUsername(string userId, string username)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                if (user.IsChangeUsername)
+                {
+                    throw new ValidationException(new ValidationError("user", "User can't change username."));
+                }
+                var findUsername = await _userManager.FindByNameAsync(username);
+                if (findUsername != null)
+                {
+                    throw new ValidationException(new ValidationError("username", $"'{username}' was duplicate."));
+                }
+                string oldUsername = user.UserName;
+                user.UserName = username;
+                user.IsChangeUsername = true;
+                await _userManager.UpdateAsync(user);
+                await _applicationUserService.UpdateUsername(oldUsername, username);
+                var response = new RegisterResponse
+                {
+                    Email = user.Email,
+                    UserName = username
+                };
+                return new Response<RegisterResponse>(response, $"'{user.Email}' was update username to '{username}'");
+            }
+            var error = new ValidationError("user", "User not valid.");
+            throw new ValidationException(error);
+
         }
     }
 

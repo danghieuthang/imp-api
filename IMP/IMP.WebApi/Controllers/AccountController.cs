@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+
 namespace IMP.WebApi.Controllers
 {
     [Route(RouterConstants.ACCOUNT)]
@@ -18,9 +20,11 @@ namespace IMP.WebApi.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
-        public AccountController(IAccountService accountService)
+        private readonly IAuthenticatedUserService _authenticatedUserService;
+        public AccountController(IAccountService accountService, IAuthenticatedUserService authenticatedUserService)
         {
             _accountService = accountService;
+            _authenticatedUserService = authenticatedUserService;
         }
 
         [HttpPost("authenticate")]
@@ -84,8 +88,20 @@ namespace IMP.WebApi.Controllers
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword(ResetPasswordRequest model)
         {
-
             return Ok(await _accountService.ResetPassword(model));
+        }
+
+        /// <summary>
+        /// This api only for user register with social
+        /// Each social account has only one turn change username
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        [HttpPut("change-username")]
+        [Authorize(Roles = "Influencer, Brand")]
+        public async Task<IActionResult> ChangeUsername([FromBody] string username)
+        {
+            return Ok(await _accountService.UpdateUsername(_authenticatedUserService.UserId, username));
         }
 
         [HttpPost("refresh-token")]

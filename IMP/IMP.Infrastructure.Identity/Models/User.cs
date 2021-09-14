@@ -15,6 +15,7 @@ namespace IMP.Infrastructure.Identity.Models
         }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public bool IsChangeUsername { get; set; }
         public List<RefreshToken> RefreshTokens { get; set; }
         public bool OwnsToken(string token)
         {

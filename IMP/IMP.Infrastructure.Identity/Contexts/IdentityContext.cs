@@ -56,6 +56,7 @@ namespace IMP.Infrastructure.Identity.Contexts
 
             #region setup constraint
             builder.Entity<User>().HasIndex("ApplicationUserId").IsUnique();
+            //builder.Entity<User>().Property(x => x.IsChangeUsername).HasDefaultValue(true);
             #endregion
         }
     }

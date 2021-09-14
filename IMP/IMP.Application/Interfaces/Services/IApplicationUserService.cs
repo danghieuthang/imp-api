@@ -7,5 +7,6 @@ namespace IMP.Infrastructure.Persistence.Services
     {
         Task<ApplicationUser> CreateUser(string userName);
         Task DeleteUser(string userName);
+        Task UpdateUsername(string oldUsername, string newUsername);
     }
 }

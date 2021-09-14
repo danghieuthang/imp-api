@@ -43,6 +43,17 @@ namespace IMP.Application.Interfaces.Services
             }
         }
 
+        public async Task UpdateUsername(string oldUsername, string newUsername)
+        {
+            var user = await _applicationUserRepositoryAsync.FindSingleAsync(x => x.UserName == oldUsername);
+            if (user != null)
+            {
+                user.UserName = newUsername;
+                _applicationUserRepositoryAsync.Update(user);
+                await _unitOfWork.CommitAsync();
+            }
+        }
+
         private string GetUserNameFromEmail(string email)
         {
             return email.Split("@")[0];
