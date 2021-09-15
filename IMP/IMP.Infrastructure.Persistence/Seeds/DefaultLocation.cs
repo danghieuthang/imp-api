@@ -31,14 +31,14 @@ namespace IMP.Infrastructure.Persistence.Seeds
     public static class DefaultLocation
     {
         public static string LocationFile = "vietnam_cities.json";
-        public static async Task SeedAync(IUnitOfWork unitOfWork)
+        public static async Task SeedAsync(IUnitOfWork unitOfWork)
         {
             var locationRepositoryAsync = unitOfWork.Repository<Location>();
             var locations = await locationRepositoryAsync.GetAllAsync();
 
             if (locations.Count == 0)
             {
-                var locationFile = Path.Combine(Environment.CurrentDirectory, @"App_Datas\", LocationFile);
+                var locationFile = Path.Combine(Environment.CurrentDirectory, @"App_Datas", LocationFile);
                 using (StreamReader rd = File.OpenText(locationFile))
                 {
                     var json = rd.ReadToEnd();

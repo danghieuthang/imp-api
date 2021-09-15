@@ -179,9 +179,9 @@ namespace IMP.Infrastructure.Persistence.Repository
             return entities;
         }
 
-        public async Task<TEntity> FindSingleAsync(Expression<Func<TEntity, bool>> predicate)
+        public async Task<TEntity> FindSingleAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includeProperties)
         {
-            return await FindAll(predicate).AsNoTracking().FirstOrDefaultAsync();
+            return await FindAll(predicate, includeProperties).AsNoTracking().FirstOrDefaultAsync();
         }
 
         public async Task<bool> IsRight(Expression<Func<TEntity, bool>> predicate)

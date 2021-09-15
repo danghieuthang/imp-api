@@ -35,7 +35,6 @@ namespace IMP.Application.Models.ViewModels
     }
     public class PaymentInforViewModel : BaseViewModel<int>
     {
-        public int? BankId { get; set; }
         public BankViewModel Bank { get; set; }
         public string AccountNumber { get; set; }
         public string AccountName { get; set; }

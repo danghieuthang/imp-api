@@ -24,20 +24,20 @@ namespace IMP.Application.Features.Campaigns.Commands.CreateCampaign
             _campaignTypeRepositoryAsync = unitOfWork.Repository<CampaignType>();
             _applicationUserRepositoryAsync = unitOfWork.Repository<ApplicationUser>();
 
-            this.RuleFor(c => c.Title).Required(256);
-            this.RuleFor(c => c.AditionalInfomation).Required(2000);
-            this.RuleFor(c => c.Description).Required(2000);
-            this.RuleFor(c => c.Condition).Required(2000);
-            this.RuleFor(c => c.StartDate).IsValidDate();
-            this.RuleFor(c => c.EndDate).IsValidDate()
+            this.RuleFor(c => c.Title).MustRequired(256);
+            this.RuleFor(c => c.AditionalInfomation).MustRequired(2000);
+            this.RuleFor(c => c.Description).MustRequired(2000);
+            this.RuleFor(c => c.Condition).MustRequired(2000);
+            this.RuleFor(c => c.StartDate).MustValidDate();
+            this.RuleFor(c => c.EndDate).MustValidDate()
                 .MustAsync(async (command, date, cancelationToken) =>
                 {
                     if (!command.StartDate.HasValue || !command.EndDate.HasValue) return true;
                     return command.EndDate.Value.CompareTo(command.StartDate) > 0;
                 }).WithMessage("{PropertyValue} lớn hơn ngày bắt đầu chiến dịch.");
 
-            this.RuleFor(c => c.PlatformId).IsExistId(IsPlatformExist);
-            this.RuleFor(c => c.CampaignTypeId).IsExistId(IsCampainTypeExist);
+            this.RuleFor(c => c.PlatformId).MustExistEntityId(IsPlatformExist);
+            this.RuleFor(c => c.CampaignTypeId).MustExistEntityId(IsCampainTypeExist);
             this.RuleFor(c => c.BrandId).MustAsync(IsValidBrand).WithMessage("{PropertyValue} không phải là nhãn hàng.");
         }
 

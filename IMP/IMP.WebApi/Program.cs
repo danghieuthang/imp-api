@@ -45,7 +45,8 @@ namespace IMP.WebApi
                     await Infrastructure.Identity.Seeds.DefaultRoles.SeedAsync(userManager, roleManager);
                     await Infrastructure.Identity.Seeds.DefaultSuperAdmin.SeedAsync(userManager, roleManager);
                     await Infrastructure.Identity.Seeds.DefaultBasicUser.SeedAsync(userManager, roleManager);
-                    await Infrastructure.Persistence.Seeds.DefaultLocation.SeedAync(unitOfWork);
+                    await Infrastructure.Persistence.Seeds.DefaultLocation.SeedAsync(unitOfWork);
+                    await Infrastructure.Persistence.Seeds.DefaultBank.SeedAsync(unitOfWork);
 
                     Log.Information("Finished Seeding Default Data");
                     Log.Information("Application Starting");

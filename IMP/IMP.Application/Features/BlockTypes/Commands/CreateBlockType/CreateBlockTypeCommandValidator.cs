@@ -21,10 +21,10 @@ namespace IMP.Application.Features.BlockTypes.Commands.CreateBlockType
         public CreateBlockTypeCommandValidator(IUnitOfWork unitOfWork, IOptions<FileSettings> options)
         {
             _blockTypeRepositoryAsync = unitOfWork.Repository<BlockType>();
-            RuleFor(x => x.Name).Required(256)
+            RuleFor(x => x.Name).MustRequired(256)
                 .MustAsync(IsUniQueBlockType).WithMessage("'{PropertyValue}' đã tồn tại.");
 
-            RuleFor(x => x.Description).Required(2000);
+            RuleFor(x => x.Description).MustRequired(2000);
             RuleFor(x => x.ImageFile).SetValidator(new FileValidator(options));
         }
 

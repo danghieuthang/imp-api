@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace IMP.Application.Interfaces
 {
+    #region generic interfaces
     public interface ICommand<T> : IRequest<Response<T>>
         where T : notnull
     {
@@ -54,21 +55,16 @@ namespace IMP.Application.Interfaces
     {
         public TId Id { get; set; }
     }
+    #endregion
 
+    #region generic delete
     public interface IDeleteCommand<TEntity> : IDeleteCommand<int, int> where TEntity : BaseEntity, new()
     {
     }
 
-    public interface IGetByIdQuery<TEntity, TViewModel> : IItemQuery<int, TViewModel>
-        where TEntity : BaseEntity, new()
-        where TViewModel : BaseViewModel<int>
-    {
-    }
-
-
     public abstract class DeleteCommandHandler<TEntity, TCommand> : IRequestHandler<TCommand, Response<int>>
-        where TEntity : BaseEntity, new()
-        where TCommand : class, IDeleteCommand<TEntity>, new()
+       where TEntity : BaseEntity, new()
+       where TCommand : class, IDeleteCommand<TEntity>, new()
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IGenericRepositoryAsync<TEntity> _repositoryAsync;
@@ -92,12 +88,18 @@ namespace IMP.Application.Interfaces
             return new Response<int>(entity.Id);
         }
     }
+    #endregion
 
-
+    #region generic get by id
+    public interface IGetByIdQuery<TEntity,TViewModel> : IItemQuery<int, TViewModel>
+       where TEntity : BaseEntity, new()
+       where TViewModel : BaseViewModel<int>
+    {
+    }
     public abstract class GetByIdQueryHandler<TRequest, TEntity, TViewModel> : IRequestHandler<TRequest, Response<TViewModel>>
-        where TViewModel : BaseViewModel<int>, new()
-        where TEntity : BaseEntity, new()
-        where TRequest : IGetByIdQuery<TEntity, TViewModel>
+       where TViewModel : BaseViewModel<int>, new()
+       where TEntity : BaseEntity, new()
+       where TRequest : IGetByIdQuery<TEntity, TViewModel>
     {
         protected readonly IGenericRepositoryAsync<TEntity> _repositoryAsync;
         protected readonly IMapper _mapper;
@@ -119,5 +121,35 @@ namespace IMP.Application.Interfaces
             var data = _mapper.Map<TViewModel>(entity);
             return new Response<TViewModel>(data);
         }
+
+
     }
+    #endregion
+
+    #region generic get all
+    public interface IGetAllQuery<TViewModel> : IQuery<IEnumerable<TViewModel>>
+      where TViewModel : BaseViewModel<int>
+    {
+    }
+    public abstract class GetAllQueryHandler<TRequest, TEntity, TViewModel> : IRequestHandler<TRequest, Response<IEnumerable<TViewModel>>>
+      where TRequest : class, IGetAllQuery<TViewModel>, new()
+      where TViewModel : BaseViewModel<int>, new()
+      where TEntity : BaseEntity, new()
+    {
+        protected readonly IGenericRepositoryAsync<TEntity> _repositoryAsync;
+        protected readonly IMapper _mapper;
+        public GetAllQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        {
+            _repositoryAsync = unitOfWork.Repository<TEntity>();
+            _mapper = mapper;
+        }
+
+        public virtual async Task<Response<IEnumerable<TViewModel>>> Handle(TRequest request, CancellationToken cancellationToken)
+        {
+            var entities = await _repositoryAsync.GetAllAsync();
+            var data = _mapper.Map<IEnumerable<TViewModel>>(entities);
+            return new Response<IEnumerable<TViewModel>>(data);
+        }
+    }
+    #endregion
 }

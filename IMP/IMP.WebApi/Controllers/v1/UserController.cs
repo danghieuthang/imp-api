@@ -1,4 +1,5 @@
 ﻿using IMP.Application.Features.ApplicationUsers.Commands.UpdateUserInfomation;
+using IMP.Application.Features.ApplicationUsers.Commands.UpdateUserPaymentInfo;
 using IMP.Application.Features.ApplicationUsers.Queries.GetUserById;
 using IMP.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -23,6 +24,11 @@ namespace IMP.WebApi.Controllers.v1
             _authenticatedUserService = authenticatedUserService;
         }
 
+        /// <summary>
+        /// Update user information
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
         [HttpPut("me")]
         public async Task<IActionResult> Update([FromBody] UpdateUserInformationCommand command)
         {
@@ -32,13 +38,35 @@ namespace IMP.WebApi.Controllers.v1
 
             return Ok(await Mediator.Send(command));
         }
+        /// <summary>
+        /// Update payment info for autheticated user
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        [HttpPut("me/payment-info")]
+        public async Task<IActionResult> Update([FromBody] UpdateUserPaymentInfoCommand command)
+        {
+            int id = 0;
+            int.TryParse(_authenticatedUserService.AppId, out id);
+            command.ApplicationUserId = id;
+            return Ok(await Mediator.Send(command));
+        }
 
+        /// <summary>
+        /// Get user information by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] int id)
         {
             return Ok(await Mediator.Send(new GetUserByIdQuery { Id = id }));
         }
 
+        /// <summary>
+        /// Get user information of authenticated user
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("me")]
         public async Task<IActionResult> Get()
         {

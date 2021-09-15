@@ -22,7 +22,7 @@ namespace IMP.Application.Features.Campaigns.Queries.GetAllCampaigns
         {
             public Validator()
             {
-                RuleFor(x => x.OrderField).IsValidOrderField(typeof(CampaignViewModel));
+                RuleFor(x => x.OrderField).MustValidOrderField(typeof(CampaignViewModel));
             }
         }
 

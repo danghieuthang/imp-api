@@ -16,5 +16,6 @@ namespace IMP.WebApi
         public const string INFLUENCER_PLATFORM = COMMOM + "influencer-platforms";
         public const string LOCATION = COMMOM + "locations";
         public const string USER = COMMOM + "users";
+        public const string BANK = COMMOM + "banks";
     }
 }

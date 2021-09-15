@@ -20,10 +20,10 @@ namespace IMP.Application.Features.CampaignTypes.Commands.CreateCampaignType
         public CreateCampaignTypeCommandValidator(IUnitOfWork unitOfWork, IOptions<FileSettings> options)
         {
             _campaignTypeRepostoryAsync = unitOfWork.Repository<CampaignType>();
-            RuleFor(x => x.Name).Required(256)
+            RuleFor(x => x.Name).MustRequired(256)
                 .MustAsync(IsUniqueCampaignType).WithMessage("'{PropertyValue}' đã tồn tại.");
 
-            RuleFor(x => x.Description).Required(2000);
+            RuleFor(x => x.Description).MustRequired(2000);
             RuleFor(x => x.ImageFile).SetValidator(new FileValidator(options));
 
             RuleFor(x => x.ParentId).MustAsync(IsExistCampaignType).WithMessage("'{PropertyValue}' không tồn tại.");

@@ -21,8 +21,8 @@ namespace IMP.Application.Features.ApplicationUsers.Commands.UpdateUserInfomatio
         {
             _applicationUserRepostoryAsync = unitOfWork.Repository<ApplicationUser>();
             _locationRepostoryAsync = unitOfWork.Repository<Location>();
-            RuleFor(x => x.Id).IsExistId(IsExistUser);
-            RuleFor(x => x.BirthDate).IsValidBirthDate();
+            RuleFor(x => x.Id).MustExistEntityId(IsExistUser);
+            RuleFor(x => x.BirthDate).MustValidBirthDate();
             RuleFor(x => x.Description).MustMaxLength(2000);
             RuleFor(x => x.FirstName).MustMaxLength(256);
             RuleFor(x => x.LastName).MustMaxLength(256);

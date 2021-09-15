@@ -19,7 +19,7 @@ namespace IMP.Application.Features.InfluencerPlatforms.Commands.UpdateInlfuencer
         {
             _influencerPlatformRepositoryAsync = unitOfWork.Repository<InfluencerPlatform>();
 
-            RuleFor(x => x.Url).IsValidUrl();
+            RuleFor(x => x.Url).MustValidUrl();
             RuleFor(x => x.PlatformId).MustAsync(async (x, y, z) =>
             {
                 return await IsExistInfluencerPlatform(x.PlatformId, x.InfluencerId, z);

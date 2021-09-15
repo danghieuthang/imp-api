@@ -21,7 +21,7 @@ namespace IMP.Application.Features.Platforms.Commands.CreatePlatform
         public CreatePlatformCommandValidator(IUnitOfWork unitOfWork, IOptions<FileSettings> options)
         {
             _platformRepositoryAsync = unitOfWork.Repository<Platform>();
-            this.RuleFor(x => x.Name).Required(256)
+            this.RuleFor(x => x.Name).MustRequired(256)
                 .MustAsync(IsUniquePlatform).WithMessage($"Tên đã tồn tại.");
 
             RuleFor(x => x.ImageFile).SetValidator(new FileValidator(options));

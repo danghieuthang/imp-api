@@ -24,13 +24,13 @@ namespace IMP.Application.Features.CampaignTypes.Commands.UpdateCampaignType
             _campaignTypeRepostoryAsync = unitOfWork.Repository<CampaignType>();
 
             RuleFor(x => x.Id).MustAsync(IsExistCampaignType).WithMessage("{PropertyValue} không tồn tại.");
-            RuleFor(x => x.Name).Required(256)
+            RuleFor(x => x.Name).MustRequired(256)
                .MustAsync((campaignType, name, cancellationToken) =>
                {
                    return IsUniqueCampaignType(campaignType.Id, name, cancellationToken);
                }).WithMessage("'{PropertyValue}' đã tồn tại.");
 
-            RuleFor(x => x.Description).Required(2000);
+            RuleFor(x => x.Description).MustRequired(2000);
             RuleFor(x => x.ImageFile).SetValidator(new FileValidator(options));
             RuleFor(x => x.ParentId).MustAsync(IsExistCampaignType).WithMessage("'{PropertyValue}' không tồn tại.");
         }

@@ -54,6 +54,8 @@ namespace IMP.Application.Mappings
             #region application user
             CreateMap<ApplicationUser, ApplicationUserViewModel>();
             CreateMap<UpdateUserInformationCommand, ApplicationUser>();
+            CreateMap<PaymentInfor, PaymentInforViewModel>();
+            CreateMap<Bank, BankViewModel>();
             #endregion
 
             #region location

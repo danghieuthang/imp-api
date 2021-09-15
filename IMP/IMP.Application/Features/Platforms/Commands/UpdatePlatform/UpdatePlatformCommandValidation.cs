@@ -27,7 +27,7 @@ namespace IMP.Application.Features.Platforms.Commands.UpdatePlatform
             RuleFor(x => x.Id).NotNull().WithMessage("Chưa có.")
                 .MustAsync(IsExist).WithMessage("'{PropertyValue}' không tồn tại.");
 
-            RuleFor(x => x.Name).Required(256)
+            RuleFor(x => x.Name).MustRequired(256)
                 .MustAsync(
                 async (o, name, cancellationToken) =>
                 {

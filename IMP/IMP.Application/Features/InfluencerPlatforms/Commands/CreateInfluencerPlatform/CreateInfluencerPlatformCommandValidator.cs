@@ -22,9 +22,9 @@ namespace IMP.Application.Features.InfluencerPlatforms.Commands.CreateInfluencer
             _applicationUserRepositoryAsync = unitOfWork.Repository<ApplicationUser>();
             _platformRepositoryAsync = unitOfWork.Repository<Platform>();
 
-            RuleFor(x => x.Url).IsValidUrl();
-            RuleFor(x => x.InfluencerId).IsExistId(IsValidInfluencerId);
-            RuleFor(x => x.PlatformId).IsExistId(IsValidPlatform);
+            RuleFor(x => x.Url).MustValidUrl();
+            RuleFor(x => x.InfluencerId).MustExistEntityId(IsValidInfluencerId);
+            RuleFor(x => x.PlatformId).MustExistEntityId(IsValidPlatform);
             RuleFor(x => x.PlatformId).MustAsync(async (x, y, z) =>
               {
                   return await IsDuplicatePlatform(y, x.InfluencerId, z);

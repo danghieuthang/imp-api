@@ -13,6 +13,14 @@ namespace IMP.Application.Extensions
 {
     public static class GenericValidatorExtensions
     {
+        /// <summary>
+        /// Check list must contain fewer than {num} item
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TElement"></typeparam>
+        /// <param name="ruleBuilder"></param>
+        /// <param name="num"></param>
+        /// <returns></returns>
         public static IRuleBuilderOptions<T, IList<TElement>> ListMustContainFewerThan<T, TElement>(this IRuleBuilder<T, IList<TElement>> ruleBuilder, int num)
         {
             return ruleBuilder.Must(list => list.Count < num).WithMessage($"List không được chứa nhiều hơn {num} item.");
@@ -25,25 +33,44 @@ namespace IMP.Application.Extensions
         /// <param name="ruleBuilder"></param>
         /// <param name="maxLength">Max length of property.</param>
         /// <returns></returns>
-        public static IRuleBuilderOptions<T, string> Required<T>(this IRuleBuilder<T, string> ruleBuilder, int maxLength)
+        public static IRuleBuilderOptions<T, string> MustRequired<T>(this IRuleBuilder<T, string> ruleBuilder, int maxLength)
         {
             return ruleBuilder
                 .NotNull().NotEmpty().WithMessage("{PropertyName} chưa có dữ liệu.")
                 .MaximumLength(256).WithMessage("{PropertyName} không thể quá " + maxLength + " ký tự.");
         }
 
+        /// <summary>
+        /// Check valid maxlength of string
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ruleBuilder"></param>
+        /// <param name="maxLength"></param>
+        /// <returns></returns>
         public static IRuleBuilderOptions<T, string> MustMaxLength<T>(this IRuleBuilder<T, string> ruleBuilder, int maxLength)
         {
             return ruleBuilder
                 .MaximumLength(256).WithMessage("{PropertyName} không thể quá " + maxLength + " ký tự.");
         }
 
-        public static IRuleBuilderOptions<T, DateTime?> IsValidDate<T>(this IRuleBuilder<T, DateTime?> ruleBuilder)
+        /// <summary>
+        /// Check date is feature date
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ruleBuilder"></param>
+        /// <returns></returns>
+        public static IRuleBuilderOptions<T, DateTime?> MustValidDate<T>(this IRuleBuilder<T, DateTime?> ruleBuilder)
         {
             return ruleBuilder.GreaterThanOrEqualTo(DateTime.UtcNow).WithMessage("'{PropertyValue}' không hợp lệ.");
         }
 
-        public static IRuleBuilderOptions<T, DateTime?> IsValidBirthDate<T>(this IRuleBuilder<T, DateTime?> ruleBuilder)
+        /// <summary>
+        /// Check Date is a birth date
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ruleBuilder"></param>
+        /// <returns></returns>
+        public static IRuleBuilderOptions<T, DateTime?> MustValidBirthDate<T>(this IRuleBuilder<T, DateTime?> ruleBuilder)
         {
             return ruleBuilder.Must((x) =>
             {
@@ -55,8 +82,13 @@ namespace IMP.Application.Extensions
             }).WithMessage("'{PropertyValue}' không hợp lệ.");
         }
 
-
-        public static IRuleBuilderOptions<T, IFormFile> RequireFile<T>(this IRuleBuilder<T, IFormFile> ruleBuilder)
+        /// <summary>
+        /// Check file is null or empty
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ruleBuilder"></param>
+        /// <returns></returns>
+        public static IRuleBuilderOptions<T, IFormFile> MustRequireFile<T>(this IRuleBuilder<T, IFormFile> ruleBuilder)
         {
             return ruleBuilder
                 .NotNull().WithMessage("File không hợp lệ.");
@@ -68,7 +100,7 @@ namespace IMP.Application.Extensions
         /// <param name="ruleBuilder"></param>
         /// <param name="maxSize">Maximum file size</param>
         /// <returns></returns>
-        public static IRuleBuilderOptions<T, long> ValidFileSize<T>(this IRuleBuilder<T, long> ruleBuilder, int maxSize)
+        public static IRuleBuilderOptions<T, long> MustValidFileSize<T>(this IRuleBuilder<T, long> ruleBuilder, int maxSize)
         {
             return ruleBuilder
                 .NotNull().LessThanOrEqualTo(maxSize).WithMessage("{PropertyName} có dung lượng tệp phải nhỏ hơn " + maxSize + ".");
@@ -81,7 +113,7 @@ namespace IMP.Application.Extensions
         /// <param name="ruleBuilder"></param>
         /// <param name="fileTypes">The file types allow.</param>
         /// <returns></returns>
-        public static IRuleBuilderOptions<T, string> ValidaFileType<T>(this IRuleBuilder<T, string> ruleBuilder, IEnumerable<string> fileTypes)
+        public static IRuleBuilderOptions<T, string> MustValidaFileType<T>(this IRuleBuilder<T, string> ruleBuilder, IEnumerable<string> fileTypes)
         {
             return ruleBuilder
                 .NotNull().WithMessage("{PropertyName} chưa có dữ liệu.")
@@ -96,7 +128,7 @@ namespace IMP.Application.Extensions
         /// <param name="ruleBuilder"></param>
         /// <param name="checkValidate">The function check</param>
         /// <returns></returns>
-        public static IRuleBuilderOptions<T, int> IsExistId<T>(this IRuleBuilder<T, int> ruleBuilder, Func<int, CancellationToken, Task<bool>> checkValidate)
+        public static IRuleBuilderOptions<T, int> MustExistEntityId<T>(this IRuleBuilder<T, int> ruleBuilder, Func<int, CancellationToken, Task<bool>> checkValidate)
         {
             return ruleBuilder.MustAsync(checkValidate).WithMessage("'{PropertyValue}' không tồn tại");
         }
@@ -108,7 +140,7 @@ namespace IMP.Application.Extensions
         /// <param name="ruleBuilder"></param>
         /// <param name="type">The view model</param>
         /// <returns></returns>
-        public static IRuleBuilderOptions<T, string> IsValidOrderField<T>(this IRuleBuilder<T, string> ruleBuilder, Type type)
+        public static IRuleBuilderOptions<T, string> MustValidOrderField<T>(this IRuleBuilder<T, string> ruleBuilder, Type type)
         {
             return ruleBuilder.Must(
                  (x) =>
@@ -125,12 +157,25 @@ namespace IMP.Application.Extensions
                 }).WithMessage("'{PropertyValue}' không tồn tại");
         }
 
-        public static IRuleBuilderOptions<T, string> IsValidUrl<T>(this IRuleBuilder<T, string> ruleBuilder)
+        /// <summary>
+        /// Check valid url
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ruleBuilder"></param>
+        /// <returns></returns>
+        public static IRuleBuilderOptions<T, string> MustValidUrl<T>(this IRuleBuilder<T, string> ruleBuilder)
         {
             return ruleBuilder.NotNull().NotEmpty().Matches(@"[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)")
                 .WithMessage("'{PropertyValue}' không phải một Url hợp lệ.");
         }
 
+        /// <summary>
+        /// Check valid phone number
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ruleBuilder"></param>
+        /// <param name="allowNull"></param>
+        /// <returns></returns>
         public static IRuleBuilderOptions<T, string> MustValidPhoneNumber<T>(this IRuleBuilder<T, string> ruleBuilder, bool allowNull = true)
         {
             string pattern = @"^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]{3,15}$";
@@ -159,6 +204,53 @@ namespace IMP.Application.Extensions
                     return regex.IsMatch(x);
                 })
                 .WithMessage("Số điện thoại không hợp lệ.");
+        }
+
+        /// <summary>
+        /// Check valid bank account number
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ruleBuilder"></param>
+        /// <returns></returns>
+        public static IRuleBuilderOptions<T, string> MustValidBankAccountNumber<T>(this IRuleBuilder<T, string> ruleBuilder)
+        {
+            string pattern = @"^[0-9]{7,14}$";
+            Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
+            return ruleBuilder
+                .NotNull().WithMessage("Số tài khoản ngân hàng chưa có.")
+                .Must(x =>
+                {
+                    if (string.IsNullOrEmpty(x))
+                    {
+                        return true;
+                    }
+                    return regex.IsMatch(x);
+                })
+                .WithMessage("Số tài khoản ngân hàng không hợp lệ.");
+        }
+
+        /// <summary>
+        /// Check valid people name
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ruleBuilder"></param>
+        /// <param name="allowNull"></param>
+        /// <returns></returns>
+        public static IRuleBuilderOptions<T, string> MustValidPeopleName<T>(this IRuleBuilder<T, string> ruleBuilder)
+        {
+            string pattern = @"^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$";
+            Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
+            return ruleBuilder
+                .NotNull().WithMessage("Tên chưa có.")
+                .Must(x =>
+                {
+                    if (string.IsNullOrEmpty(x))
+                    {
+                        return true;
+                    }
+                    return regex.IsMatch(x);
+                })
+                .WithMessage("Tên không hợp lệ.");
         }
 
     }
