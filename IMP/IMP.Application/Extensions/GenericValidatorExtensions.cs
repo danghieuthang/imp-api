@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -128,6 +129,36 @@ namespace IMP.Application.Extensions
         {
             return ruleBuilder.NotNull().NotEmpty().Matches(@"[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)")
                 .WithMessage("'{PropertyValue}' không phải một Url hợp lệ.");
+        }
+
+        public static IRuleBuilderOptions<T, string> MustValidPhoneNumber<T>(this IRuleBuilder<T, string> ruleBuilder, bool allowNull = true)
+        {
+            string pattern = @"^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]{3,15}$";
+            Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
+            if (allowNull)
+            {
+                return ruleBuilder
+                .Must(x =>
+                {
+                    if (string.IsNullOrEmpty(x))
+                    {
+                        return true;
+                    }
+                    return regex.IsMatch(x);
+                })
+                .WithMessage("Số điện thoại không hợp lệ.");
+            }
+            return ruleBuilder
+                .NotNull().WithMessage("Số điện thoại chưa có.")
+                .Must(x =>
+                {
+                    if (string.IsNullOrEmpty(x))
+                    {
+                        return true;
+                    }
+                    return regex.IsMatch(x);
+                })
+                .WithMessage("Số điện thoại không hợp lệ.");
         }
 
     }

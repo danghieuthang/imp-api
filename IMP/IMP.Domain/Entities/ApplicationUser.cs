@@ -12,7 +12,7 @@ namespace IMP.Domain.Entities
         #region personal infomation
         [MaxLength(256)]
         public string UserName { get; set; }
-        [MaxLength(10)]
+        [MaxLength(15)]
         public string PhoneNumber { get; set; }
         [MaxLength(256)]
         public string FirstName { get; set; }

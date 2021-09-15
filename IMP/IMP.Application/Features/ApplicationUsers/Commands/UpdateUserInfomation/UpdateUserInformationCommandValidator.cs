@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -20,7 +21,6 @@ namespace IMP.Application.Features.ApplicationUsers.Commands.UpdateUserInfomatio
         {
             _applicationUserRepostoryAsync = unitOfWork.Repository<ApplicationUser>();
             _locationRepostoryAsync = unitOfWork.Repository<Location>();
-
             RuleFor(x => x.Id).IsExistId(IsExistUser);
             RuleFor(x => x.BirthDate).IsValidBirthDate();
             RuleFor(x => x.Description).MustMaxLength(2000);
@@ -37,6 +37,8 @@ namespace IMP.Application.Features.ApplicationUsers.Commands.UpdateUserInfomatio
                 }
                 return await IsExistLocation(x.Value, y);
             }).WithMessage("Địa chỉ không hợp lệ.");
+            RuleFor(x => x.PhoneNumber).MustValidPhoneNumber(true);
+
 
         }
 
