@@ -14,7 +14,7 @@ namespace IMP.Application.Extensions
     {
         public static IRuleBuilderOptions<T, IList<TElement>> ListMustContainFewerThan<T, TElement>(this IRuleBuilder<T, IList<TElement>> ruleBuilder, int num)
         {
-            return ruleBuilder.Must(list => list.Count < num).WithMessage("The list contains too many items");
+            return ruleBuilder.Must(list => list.Count < num).WithMessage($"List không được chứa nhiều hơn {num} item.");
         }
 
         /// <summary>
@@ -31,10 +31,29 @@ namespace IMP.Application.Extensions
                 .MaximumLength(256).WithMessage("{PropertyName} không thể quá " + maxLength + " ký tự.");
         }
 
+        public static IRuleBuilderOptions<T, string> MustMaxLength<T>(this IRuleBuilder<T, string> ruleBuilder, int maxLength)
+        {
+            return ruleBuilder
+                .MaximumLength(256).WithMessage("{PropertyName} không thể quá " + maxLength + " ký tự.");
+        }
+
         public static IRuleBuilderOptions<T, DateTime?> IsValidDate<T>(this IRuleBuilder<T, DateTime?> ruleBuilder)
         {
             return ruleBuilder.GreaterThanOrEqualTo(DateTime.UtcNow).WithMessage("'{PropertyValue}' không hợp lệ.");
         }
+
+        public static IRuleBuilderOptions<T, DateTime?> IsValidBirthDate<T>(this IRuleBuilder<T, DateTime?> ruleBuilder)
+        {
+            return ruleBuilder.Must((x) =>
+            {
+                if (x == null)
+                {
+                    return true;
+                }
+                return x.Value.CompareTo(DateTime.UtcNow) < 0;
+            }).WithMessage("'{PropertyValue}' không hợp lệ.");
+        }
+
 
         public static IRuleBuilderOptions<T, IFormFile> RequireFile<T>(this IRuleBuilder<T, IFormFile> ruleBuilder)
         {
@@ -90,8 +109,8 @@ namespace IMP.Application.Extensions
         /// <returns></returns>
         public static IRuleBuilderOptions<T, string> IsValidOrderField<T>(this IRuleBuilder<T, string> ruleBuilder, Type type)
         {
-            return ruleBuilder.MustAsync(
-                async (x, y) =>
+            return ruleBuilder.Must(
+                 (x) =>
                 {
                     if (string.IsNullOrEmpty(x)) return true;
                     foreach (var prop in type.GetProperties())

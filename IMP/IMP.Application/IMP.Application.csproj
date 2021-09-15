@@ -21,6 +21,8 @@
     <ProjectReference Include="..\IMP.Domain\IMP.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Features\ApplicationUsers\Commands\UpdateUserBanking\" />
+    <Folder Include="Features\ApplicationUsers\Queries\GetListUser\" />
     <Folder Include="Features\Campaigns\Commands\DeleteCampaignById\" />
     <Folder Include="Features\Campaigns\Commands\UpdateCampaign\" />
   </ItemGroup>

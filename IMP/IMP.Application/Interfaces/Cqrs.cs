@@ -17,6 +17,7 @@ namespace IMP.Application.Interfaces
     {
 
     }
+
     public interface IQuery<T> : IRequest<Response<T>>
         where T : notnull
     {
@@ -64,6 +65,7 @@ namespace IMP.Application.Interfaces
     {
     }
 
+
     public abstract class DeleteCommandHandler<TEntity, TCommand> : IRequestHandler<TCommand, Response<int>>
         where TEntity : BaseEntity, new()
         where TCommand : class, IDeleteCommand<TEntity>, new()
@@ -97,8 +99,8 @@ namespace IMP.Application.Interfaces
         where TEntity : BaseEntity, new()
         where TRequest : IGetByIdQuery<TEntity, TViewModel>
     {
-        private readonly IGenericRepositoryAsync<TEntity> _repositoryAsync;
-        private readonly IMapper _mapper;
+        protected readonly IGenericRepositoryAsync<TEntity> _repositoryAsync;
+        protected readonly IMapper _mapper;
         public GetByIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _repositoryAsync = unitOfWork.Repository<TEntity>();

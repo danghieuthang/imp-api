@@ -1,4 +1,5 @@
 ﻿using IMP.Application.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,14 +19,16 @@ namespace IMP.Application.Models.ViewModels
         public string Gender { get; set; }
         public int? LocationId { get; set; }
 
-        public string Job { get; set; }
-        public string Interests { get; set; }
+        [JsonProperty("jobs")]
+        public List<string> JobsR { get; set; }
+
+        [JsonProperty("interests")]
+        public List<string> InterestsR { get; set; }
         public bool? ChildStatus { get; set; }
         public bool? MaritalStatus { get; set; }
-        public string Pet { get; set; }
-
+        [JsonProperty("pets")]
+        public List<string> PetsR { get; set; }
         public string Description { get; set; }
-
         public int WalletId { get; set; }
 
         public PaymentInforViewModel PaymentInfor { get; set; }

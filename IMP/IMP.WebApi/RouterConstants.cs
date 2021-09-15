@@ -15,5 +15,6 @@ namespace IMP.WebApi
         public const string BLOCK_TYPE = COMMOM + "block-types";
         public const string INFLUENCER_PLATFORM = COMMOM + "influencer-platforms";
         public const string LOCATION = COMMOM + "locations";
+        public const string USER = COMMOM + "users";
     }
 }

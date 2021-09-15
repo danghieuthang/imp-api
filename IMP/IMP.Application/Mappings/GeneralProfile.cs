@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Text;
 using IMP.Application.Features.InfluencerPlatforms.Commands.CreateInfluencerPlatform;
 using IMP.Application.Features.InfluencerPlatforms.Commands.UpdateInlfuencerPlatform;
+using IMP.Application.Features.ApplicationUsers.Commands.UpdateUserInfomation;
 
 namespace IMP.Application.Mappings
 {
@@ -52,6 +53,7 @@ namespace IMP.Application.Mappings
 
             #region application user
             CreateMap<ApplicationUser, ApplicationUserViewModel>();
+            CreateMap<UpdateUserInformationCommand, ApplicationUser>();
             #endregion
 
             #region location
