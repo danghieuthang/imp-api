@@ -17,5 +17,7 @@ namespace IMP.WebApi
         public const string LOCATION = COMMOM + "locations";
         public const string USER = COMMOM + "users";
         public const string BANK = COMMOM + "banks";
+        public const string FILE = COMMOM + "files";
+        public const string PAGE = COMMOM + "pages";
     }
 }

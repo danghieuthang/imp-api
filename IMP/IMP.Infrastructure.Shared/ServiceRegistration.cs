@@ -25,6 +25,7 @@ namespace IMP.Infrastructure.Shared
             services.AddTransient<IFirebaseService, FirebaseService>();
             services.AddTransient<IGoogleService, GoogleService>();
             services.AddTransient<IFacebookService, FacebookService>();
+            services.AddTransient<IFileService, FileService>();
         }
     }
 }
