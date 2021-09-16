@@ -253,5 +253,32 @@ namespace IMP.Application.Extensions
                 .WithMessage("Tên không hợp lệ.");
         }
 
+        public static IRuleBuilderOptions<T, string> MustValidNickname<T>(this IRuleBuilder<T, string> ruleBuilder, bool allowNull = false)
+        {
+            string pattern = @"^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$";
+            Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
+            if (allowNull)
+            {
+                return ruleBuilder
+               .Must(x =>
+               {
+                   if (string.IsNullOrEmpty(x))
+                   {
+                       return true;
+                   }
+                   return regex.IsMatch(x);
+               }).WithMessage("Nickname không hợp lệ.");
+            }
+            return ruleBuilder
+              .NotNull().WithMessage("Nickname chưa có.")
+              .Must(x =>
+              {
+                  if (string.IsNullOrEmpty(x))
+                  {
+                      return true;
+                  }
+                  return regex.IsMatch(x);
+              }).WithMessage("Nickname không hợp lệ.");
+        }
     }
 }

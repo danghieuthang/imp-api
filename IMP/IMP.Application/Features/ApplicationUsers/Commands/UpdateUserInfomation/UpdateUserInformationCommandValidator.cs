@@ -38,6 +38,11 @@ namespace IMP.Application.Features.ApplicationUsers.Commands.UpdateUserInfomatio
                 return await IsExistLocation(x.Value, y);
             }).WithMessage("Địa chỉ không hợp lệ.");
             RuleFor(x => x.PhoneNumber).MustValidPhoneNumber(true);
+            RuleFor(x => x.Nickname).MustValidNickname(allowNull: true)
+                .MustAsync(async (x, y, z) =>
+              {
+                  return await IsValidNickname(x.Id, y, z);
+              }).WithMessage(@"Nickname đã tồn tại.");
 
 
         }
@@ -50,6 +55,12 @@ namespace IMP.Application.Features.ApplicationUsers.Commands.UpdateUserInfomatio
         public async Task<bool> IsExistLocation(int id, CancellationToken cancellationToken)
         {
             return (await _locationRepostoryAsync.GetByIdAsync(id)) != null;
+        }
+
+        public async Task<bool> IsValidNickname(int id, string nickname, CancellationToken cancellationToken)
+        {
+            return (await _applicationUserRepostoryAsync.FindSingleAsync(x => x.Nickname.ToLower() == nickname.ToLower() && x.Id != id)) == null;
+
         }
     }
 }
