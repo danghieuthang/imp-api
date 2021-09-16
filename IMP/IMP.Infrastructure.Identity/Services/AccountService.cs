@@ -39,12 +39,10 @@ namespace IMP.Infrastructure.Identity.Services
         private readonly SignInManager<User> _signInManager;
         private readonly IEmailService _emailService;
         private readonly JWTSettings _jwtSettings;
-        private readonly IDateTimeService _dateTimeService;
         private readonly IRefreshTokenRepository _refreshTokenRepository;
         private readonly IApplicationUserService _applicationUserService;
         private readonly IGoogleService _googleServices;
         private readonly IFacebookService _facebookService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         public AccountService(UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager,
             IOptions<JWTSettings> jwtSettings,
@@ -59,14 +57,12 @@ namespace IMP.Infrastructure.Identity.Services
             _userManager = userManager;
             _roleManager = roleManager;
             _jwtSettings = jwtSettings.Value;
-            _dateTimeService = dateTimeService;
             _signInManager = signInManager;
             this._emailService = emailService;
             this._refreshTokenRepository = refreshTokenRepository;
             this._applicationUserService = applicationUserService;
             this._googleServices = googleServices;
             this._facebookService = facebookService;
-            this._httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<Response<AuthenticationResponse>> AuthenticateAsync(AuthenticationRequest request, string ipAddress)
@@ -275,20 +271,17 @@ namespace IMP.Infrastructure.Identity.Services
         {
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-            string domain = _httpContextAccessor.HttpContext.Request.Host.Value;
-            if (!domain.Contains("http"))
+            string domain;
+            if (string.IsNullOrEmpty(origin))
             {
-                if (!domain.Contains("localhost"))
-                {
-                    domain = "https://" + domain;
-                }
-                else
-                {
-                    domain = "http://" + domain;
-                }
+                domain = "http://localhost";
             }
-            var route = domain + "/api/accounts/confirm-email/";
-            var _enpointUri = new Uri(string.Concat(route, $"{origin}"));
+            else
+            {
+                domain = origin;
+            }
+            var route = "/api/accounts/confirm-email/";
+            var _enpointUri = new Uri(string.Concat($"{domain}", route));
             var verificationUri = QueryHelpers.AddQueryString(_enpointUri.ToString(), "userId", user.Id);
             verificationUri = QueryHelpers.AddQueryString(verificationUri, "code", code);
             //Email Service Call Here
