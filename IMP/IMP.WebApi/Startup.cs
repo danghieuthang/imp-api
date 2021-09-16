@@ -48,6 +48,7 @@ namespace IMP.WebApi
             }
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseCors("All");
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseSwaggerExtension();
