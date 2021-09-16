@@ -151,7 +151,7 @@ namespace IMP.Infrastructure.Identity.Services
             if (userWithProviderId == null)
             {
                 // Create Application User
-                var applicationUser = await _applicationUserService.CreateUser(user.Email);
+                var applicationUser = await _applicationUserService.CreateUser();
                 // Add Application User ref to Identity User
                 if (applicationUser != null)
                 {

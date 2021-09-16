@@ -59,7 +59,7 @@ namespace IMP.Infrastructure.Persistence.Repository
         public async Task<TEntity> AddAsync(TEntity entity)
         {
             await _dbContext.Set<TEntity>().AddAsync(entity);
-            _dbContext.Entry(entity).State = EntityState.Detached;
+            //_dbContext.Entry(entity).State = EntityState.Detached;
             return entity;
         }
 
