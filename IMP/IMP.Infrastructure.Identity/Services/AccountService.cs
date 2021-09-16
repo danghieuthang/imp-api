@@ -278,7 +278,14 @@ namespace IMP.Infrastructure.Identity.Services
             string domain = _httpContextAccessor.HttpContext.Request.Host.Value;
             if (!domain.Contains("http"))
             {
-                domain = "http://" + domain;
+                if (!domain.Contains("localhost"))
+                {
+                    domain = "https://" + domain;
+                }
+                else
+                {
+                    domain = "http://" + domain;
+                }
             }
             var route = domain + "/api/accounts/confirm-email/";
             var _enpointUri = new Uri(string.Concat(route, $"{origin}"));
