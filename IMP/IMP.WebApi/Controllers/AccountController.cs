@@ -69,7 +69,7 @@ namespace IMP.WebApi.Controllers
         }
 
         [HttpPost("social-register")]
-        public async Task<IActionResult> SocialRegisterAsync(SocialAuthenticationRequest request)
+        public async Task<IActionResult> SocialRegisterAsync(SocialRegisterRequest request)
         {
             return StatusCode(201, await _accountService.SocialRegisterAsync(request));
         }

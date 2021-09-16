@@ -504,7 +504,7 @@ namespace IMP.Infrastructure.Identity.Services
             throw new ValidationException(new ValidationError("provider", "Provider not support."));
         }
 
-        public async Task<Response<RegisterResponse>> SocialRegisterAsync(SocialAuthenticationRequest request)
+        public async Task<Response<RegisterResponse>> SocialRegisterAsync(SocialRegisterRequest request)
         {
             if (request.Provider.Equals("Google", StringComparison.CurrentCultureIgnoreCase))
             {

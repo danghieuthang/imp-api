@@ -19,6 +19,10 @@ namespace IMP.Application.Models.Account
         /// Web,Mobile
         /// </summary>
         public int AppId { get; set; }
+    }
+
+    public class SocialRegisterRequest: SocialAuthenticationRequest
+    {
         public RegisterRole Role { get; set; }
     }
 }
