@@ -28,6 +28,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace IMP.Infrastructure.Identity.Services
 {
@@ -43,6 +44,7 @@ namespace IMP.Infrastructure.Identity.Services
         private readonly IApplicationUserService _applicationUserService;
         private readonly IGoogleService _googleServices;
         private readonly IFacebookService _facebookService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         public AccountService(UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager,
             IOptions<JWTSettings> jwtSettings,
@@ -52,7 +54,7 @@ namespace IMP.Infrastructure.Identity.Services
             IRefreshTokenRepository refreshTokenRepository,
             IApplicationUserService applicationUserService,
             IGoogleService googleServices,
-            IFacebookService facebookService)
+            IFacebookService facebookService, IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -64,24 +66,28 @@ namespace IMP.Infrastructure.Identity.Services
             this._applicationUserService = applicationUserService;
             this._googleServices = googleServices;
             this._facebookService = facebookService;
+            this._httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<Response<AuthenticationResponse>> AuthenticateAsync(AuthenticationRequest request, string ipAddress)
         {
-            var user = await _userManager.FindByNameAsync(request.Username);
+            var user = await _userManager.FindByEmailAsync(request.Email);
             if (user == null)
             {
-                throw new ApiException($"No Accounts Registered with {request.Username}.");
+                user = await _userManager.FindByNameAsync(request.Email);
+                if (user == null)
+                    throw new ValidationException(new ValidationError("email", $"No Accounts Registered with {request.Email}."));
             }
             var result = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, false, lockoutOnFailure: false);
             if (!result.Succeeded)
             {
-                throw new ApiException($"Invalid Credentials for '{request.Username}'.");
+                throw new ValidationException(new ValidationError("email", $"Invalid Credentials for '{request.Email}'."));
             }
             if (!user.EmailConfirmed)
             {
-                throw new ApiException($"Account Not Confirmed for '{request.Username}'.");
+                throw new ValidationException(new ValidationError("email", $"Account Not Confirmed for '{request.Email}'."));
             }
+
             JwtSecurityToken jwtSecurityToken = await GenerateJWToken(user);
             AuthenticationResponse response = new AuthenticationResponse();
             response.Id = user.Id;
@@ -129,22 +135,23 @@ namespace IMP.Infrastructure.Identity.Services
         }
         private async Task<User> RegisterSocialAsync(ProviderUserDetail providerUser, RegisterRole role = RegisterRole.Influencer)
         {
-            string username = await GenerateUnDuplicateUserName(providerUser.Name);
+            //string username = await GenerateUnDuplicateUserName(providerUser.Name);
 
             var user = new User
             {
                 Email = providerUser.Email,
+                UserName = providerUser.ProviderUserId,
                 FirstName = providerUser.FirstName,
                 LastName = providerUser.LastName,
-                UserName = username,
                 EmailConfirmed = true,
+                ProviderUserId = providerUser.ProviderUserId,
                 IsChangeUsername = false,
             };
-            var userWithSameEmail = await _userManager.FindByEmailAsync(providerUser.Email);
-            if (userWithSameEmail == null)
+            var userWithProviderId = _userManager.Users?.FirstOrDefault(x => x.ProviderUserId == user.ProviderUserId);
+            if (userWithProviderId == null)
             {
                 // Create Application User
-                var applicationUser = await _applicationUserService.CreateUser(user.UserName);
+                var applicationUser = await _applicationUserService.CreateUser(user.Email);
                 // Add Application User ref to Identity User
                 if (applicationUser != null)
                 {
@@ -160,7 +167,7 @@ namespace IMP.Infrastructure.Identity.Services
                 else
                 {
                     // Delete Application User if create fail
-                    await _applicationUserService.DeleteUser(user.UserName);
+                    await _applicationUserService.DeleteUser(applicationUser.Id);
                     var errors = result.Errors.Select(x =>
                     new ValidationError(x.Code, x.Description)).ToList();
                     throw new ValidationException(errors);
@@ -168,48 +175,48 @@ namespace IMP.Infrastructure.Identity.Services
             }
             else
             {
-                throw new ApiException($"Email {providerUser.Email } is already registered.");
+                throw new ApiException($"This account is already registered.");
             }
         }
         public async Task<Response<string>> RegisterAsync(RegisterRequest request, string origin)
         {
 
-            var userWithSameUserName = await _userManager.FindByNameAsync(request.UserName);
+            var userWithSameUserName = await _userManager.FindByEmailAsync(request.Email);
             if (userWithSameUserName != null)
             {
-                var error = new ValidationError("username", $"Username '{request.UserName}' is already taken.");
+                var error = new ValidationError("email", $"Email '{request.Email}' is already taken.");
                 throw new ValidationException(error);
             }
 
             var user = new User
             {
-                UserName = request.UserName,
+                Email = request.Email,
+                UserName = request.Email,
                 IsChangeUsername = true
             };
 
             // Create Application User
-            var applicationUser = await _applicationUserService.CreateUser(user.UserName);
+            var applicationUser = await _applicationUserService.CreateUser(user.Email);
             // Add Application User ref to Identity User
             if (applicationUser != null)
             {
                 user.ApplicationUserId = applicationUser.Id;
-                user.EmailConfirmed = true;
+                user.EmailConfirmed = false;
             }
 
             var result = await _userManager.CreateAsync(user, request.Password);
             if (result.Succeeded)
             {
                 await _userManager.AddToRoleAsync(user, request.Role.ToString());
-                //var verificationUri = await SendVerificationEmail(user, origin);
+                var verificationUri = await SendVerificationEmail(user, origin);
                 //TODO: Attach Email Service here and configure it via appsettings
-                //await _emailService.SendAsync(new Application.Models.Email.EmailRequest() { To = user.Email, Body = $"Please confirm your account by visiting this URL {verificationUri}", Subject = "Confirm Registration" });
-                return new Response<string>(user.Id, message: $"User Registered.");
+                await _emailService.SendAsync(new Application.Models.Email.EmailRequest() { To = user.Email, Body = $"Please confirm your account by click <a href='{verificationUri}'>Here</a>.", Subject = "Confirm Registration TMP Platform" });
+                return new Response<string>(user.Email, message: $"User Registered.");
             }
             else
             {
                 // Delete Application User if create fail
-                await _applicationUserService.DeleteUser(user.UserName);
-
+                await _applicationUserService.DeleteUser(applicationUser.Id);
                 var errors = result.Errors.Select(x =>
                 new ValidationError(x.Code, x.Description)).ToList();
                 throw new ValidationException(errors);
@@ -268,7 +275,12 @@ namespace IMP.Infrastructure.Identity.Services
         {
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-            var route = "http://localhost:57712/api/accounts/confirm-email/";
+            string domain = _httpContextAccessor.HttpContext.Request.Host.Value;
+            if (!domain.Contains("http"))
+            {
+                domain = "http://" + domain;
+            }
+            var route = domain + "/api/accounts/confirm-email/";
             var _enpointUri = new Uri(string.Concat(route, $"{origin}"));
             var verificationUri = QueryHelpers.AddQueryString(_enpointUri.ToString(), "userId", user.Id);
             verificationUri = QueryHelpers.AddQueryString(verificationUri, "code", code);
@@ -402,16 +414,26 @@ namespace IMP.Infrastructure.Identity.Services
             await _refreshTokenRepository.UpdateAsync(entity);
             return new Response<string>(entity.User.Email, $"Refresh token was revoked.");
         }
-        private async Task<AuthenticationResponse> AuthenticationWithoutPassword(string ipAddress, string username = null, string email = null)
+
+        private async Task<AuthenticationResponse> AuthenticationWithoutPassword(string ipAddress, string username = null, string email = null, string providerId = null)
         {
             User user;
-            if (username != null)
+            if (providerId != null)
+            {
+                user = _userManager.Users?.FirstOrDefault(x => x.ProviderUserId == providerId);
+                if (user == null)
+                {
+                    throw new ApiException($"No Accounts Registered with {providerId}.");
+                }
+            }
+            else if (username != null)
             {
                 user = await _userManager.FindByNameAsync(username);
                 if (user == null)
                 {
                     throw new ApiException($"No Accounts Registered with {username}.");
                 }
+
             }
             else
             {
@@ -456,7 +478,7 @@ namespace IMP.Infrastructure.Identity.Services
                     var error = new ValidationError("token", "Token not valid.");
                     throw new ValidationException(error);
                 }
-                var response = await AuthenticationWithoutPassword(email: userInfo.Email, ipAddress: ipAddress);
+                var response = await AuthenticationWithoutPassword(providerId: userInfo.ProviderUserId, ipAddress: ipAddress);
                 return new Response<AuthenticationResponse>(response, $"Authenticated Google {userInfo.Email}");
             }
 
@@ -468,7 +490,7 @@ namespace IMP.Infrastructure.Identity.Services
                     var error = new ValidationError("token", "Token not valid.");
                     throw new ValidationException(error);
                 }
-                var response = await AuthenticationWithoutPassword(email: userInfo.Email, ipAddress: ipAddress);
+                var response = await AuthenticationWithoutPassword(providerId: userInfo.ProviderUserId, ipAddress: ipAddress);
                 return new Response<AuthenticationResponse>(response, $"Authenticated Facebook {userInfo.Email}");
             }
 

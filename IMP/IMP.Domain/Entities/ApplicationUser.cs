@@ -11,7 +11,9 @@ namespace IMP.Domain.Entities
     {
         #region personal infomation
         [MaxLength(256)]
-        public string UserName { get; set; }
+        public string Email { get; set; }
+        [MaxLength(256)]
+        public string Nickname { get; set; }
         [MaxLength(15)]
         public string PhoneNumber { get; set; }
         [MaxLength(256)]

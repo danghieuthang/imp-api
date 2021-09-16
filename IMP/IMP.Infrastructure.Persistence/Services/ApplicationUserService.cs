@@ -20,11 +20,11 @@ namespace IMP.Application.Interfaces.Services
             _applicationUserRepositoryAsync = _unitOfWork.Repository<ApplicationUser>();
         }
 
-        public async Task<ApplicationUser> CreateUser(string userName)
+        public async Task<ApplicationUser> CreateUser(string email)
         {
             var user = new ApplicationUser
             {
-                UserName = userName,
+                Email = email,
                 PaymentInfor = new PaymentInfor(),
                 Wallet = new Wallet()
             };
@@ -35,7 +35,17 @@ namespace IMP.Application.Interfaces.Services
 
         public async Task DeleteUser(string userName)
         {
-            var user = await _applicationUserRepositoryAsync.FindSingleAsync(x => x.UserName.ToLower() == userName.ToLower());
+            var user = await _applicationUserRepositoryAsync.FindSingleAsync(x => x.Email.ToLower() == userName.ToLower());
+            if (user != null)
+            {
+                _applicationUserRepositoryAsync.Delete(user);
+                await _unitOfWork.CommitAsync();
+            }
+        }
+
+        public async Task DeleteUser(int id)
+        {
+            var user = await _applicationUserRepositoryAsync.GetByIdAsync(id);
             if (user != null)
             {
                 _applicationUserRepositoryAsync.Delete(user);
@@ -45,10 +55,10 @@ namespace IMP.Application.Interfaces.Services
 
         public async Task UpdateUsername(string oldUsername, string newUsername)
         {
-            var user = await _applicationUserRepositoryAsync.FindSingleAsync(x => x.UserName == oldUsername);
+            var user = await _applicationUserRepositoryAsync.FindSingleAsync(x => x.Email == oldUsername);
             if (user != null)
             {
-                user.UserName = newUsername;
+                user.Email = newUsername;
                 _applicationUserRepositoryAsync.Update(user);
                 await _unitOfWork.CommitAsync();
             }

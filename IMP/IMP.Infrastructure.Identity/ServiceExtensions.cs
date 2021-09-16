@@ -42,11 +42,11 @@ namespace IMP.Infrastructure.Identity
             }
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<IdentityContext>().AddDefaultTokenProviders();
             #region Repositories
-            services.AddTransient(typeof(IIdentityGenericRepository<,>), typeof(IdentityGenericRepository<,>));
-            services.AddTransient<IRefreshTokenRepository, RefreshTokenRepository>();
+            services.AddScoped(typeof(IIdentityGenericRepository<,>), typeof(IdentityGenericRepository<,>));
+            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
             #endregion
             #region Services
-            services.AddTransient<IAccountService, AccountService>();
+            services.AddScoped<IAccountService, AccountService>();
             #endregion
             services.Configure<JWTSettings>(configuration.GetSection("JWTSettings"));
             services.AddAuthentication(options =>

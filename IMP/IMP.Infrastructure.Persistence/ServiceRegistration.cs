@@ -32,7 +32,7 @@ namespace IMP.Infrastructure.Persistence
             #endregion
 
             #region services
-            services.AddTransient<IApplicationUserService, ApplicationUserService>();
+            services.AddScoped<IApplicationUserService, ApplicationUserService>();
             #endregion
         }
     }

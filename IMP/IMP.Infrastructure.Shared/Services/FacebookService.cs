@@ -48,6 +48,7 @@ namespace IMP.Infrastructure.Shared.Services
                         user.Email = userObj["email"];
                         user.FirstName = userObj["first_name"];
                         user.LastName = userObj["last_name"];
+                        user.ProviderUserId = userObj["id"];
                         return user;
                     }
                 }

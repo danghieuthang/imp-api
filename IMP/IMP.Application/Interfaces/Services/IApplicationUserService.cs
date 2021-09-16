@@ -5,8 +5,9 @@ namespace IMP.Infrastructure.Persistence.Services
 {
     public interface IApplicationUserService
     {
-        Task<ApplicationUser> CreateUser(string userName);
+        Task<ApplicationUser> CreateUser(string email);
         Task DeleteUser(string userName);
+        Task DeleteUser(int id);
         Task UpdateUsername(string oldUsername, string newUsername);
     }
 }

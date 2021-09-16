@@ -30,7 +30,8 @@ namespace IMP.Infrastructure.Persistence.Repository
 
         public virtual async Task<TEntity> GetByIdAsync(TKey id)
         {
-            return await _dbContext.Set<TEntity>().FindAsync(id);
+            var entity = await _dbContext.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync(x => x.Id.Equals(id));
+            return entity;
         }
 
         public virtual async Task<TEntity> GetByIdAsync(TKey id, List<string> includeProperties)
@@ -41,7 +42,7 @@ namespace IMP.Infrastructure.Persistence.Repository
             {
                 query = ApplyIncludes(query, includeProperties);
             }
-            return await query.SingleOrDefaultAsync(x => x.Id.Equals(id));
+            return await query.AsNoTracking().SingleOrDefaultAsync(x => x.Id.Equals(id));
         }
 
 
@@ -58,12 +59,14 @@ namespace IMP.Infrastructure.Persistence.Repository
         public async Task<TEntity> AddAsync(TEntity entity)
         {
             await _dbContext.Set<TEntity>().AddAsync(entity);
+            _dbContext.Entry(entity).State = EntityState.Detached;
             return entity;
         }
 
         public async Task AddManyAsync(IEnumerable<TEntity> entities)
         {
             await _dbContext.Set<TEntity>().AddRangeAsync(entities);
+            //_dbContext.Entry(entities).State = EntityState.Detached;
         }
 
         public void Update(TEntity entity)

@@ -96,7 +96,7 @@ namespace IMP.Infrastructure.Persistence.Contexts
             }
 
             //Application User
-            builder.Entity<ApplicationUser>().HasIndex("UserName").IsUnique();
+            //builder.Entity<ApplicationUser>().HasIndex("UserName").IsUnique();
             base.OnModelCreating(builder);
         }
     }

@@ -10,8 +10,8 @@ namespace IMP.Application.Models.Account
     public class RegisterRequest
     {
         [Required]
-        [MinLength(6)]
-        public string UserName { get; set; }
+        [EmailAddress]
+        public string Email { get; set; }
 
         [Required]
         [MinLength(6)]
