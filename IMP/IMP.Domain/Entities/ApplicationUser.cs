@@ -1,4 +1,5 @@
-﻿using IMP.Domain.Common;
+﻿using System.Collections.ObjectModel;
+using IMP.Domain.Common;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,9 +10,31 @@ namespace IMP.Domain.Entities
 {
     public class ApplicationUser : BaseEntity
     {
+        public ApplicationUser()
+        {
+            Otps = new Collection<Otp>();
+        }
         #region personal infomation
         [MaxLength(256)]
+        public string Avatar { get; set; }
+        [MaxLength(256)]
         public string Email { get; set; }
+        private bool _isEmailVerified;
+        public bool IsEmailVerified
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(Email))
+                {
+                    return false;
+                }
+                return _isEmailVerified;
+            }
+            set
+            {
+                _isEmailVerified = value;
+            }
+        }
         [MaxLength(256)]
         public string Nickname { get; set; }
         [MaxLength(15)]
@@ -72,6 +95,7 @@ namespace IMP.Domain.Entities
         public Ranking Ranking { get; set; }
 
         public ICollection<Page> Pages { get; set; }
+        public ICollection<Otp> Otps { get; set; }
 
         [NotMapped]
         public bool IsActivate

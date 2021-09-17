@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Features\ApplicationUsers\Commands\NewFolder\**" />
+    <EmbeddedResource Remove="Features\ApplicationUsers\Commands\NewFolder\**" />
+    <None Remove="Features\ApplicationUsers\Commands\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="FluentValidation" Version="10.3.3" />

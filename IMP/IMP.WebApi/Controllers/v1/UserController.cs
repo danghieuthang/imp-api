@@ -1,5 +1,7 @@
-﻿using IMP.Application.Features.ApplicationUsers.Commands.UpdateUserInfomation;
+﻿using IMP.Application.Features.ApplicationUsers.Commands.CreateEmailVerify;
+using IMP.Application.Features.ApplicationUsers.Commands.UpdateUserInfomation;
 using IMP.Application.Features.ApplicationUsers.Commands.UpdateUserPaymentInfo;
+using IMP.Application.Features.ApplicationUsers.Commands.VerifyEmail;
 using IMP.Application.Features.ApplicationUsers.Queries.GetUserById;
 using IMP.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -75,5 +77,30 @@ namespace IMP.WebApi.Controllers.v1
             return Ok(await Mediator.Send(new GetUserByIdQuery { Id = id }));
         }
 
+        /// <summary>
+        /// Create verify email request
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("me/otps")]
+        public async Task<IActionResult> CreateVerifyEmail()
+        {
+            int id = 0;
+            int.TryParse(_authenticatedUserService.AppId, out id);
+            return StatusCode(201, await Mediator.Send(new CreateEmailVerifyCommand { InfluencerId = id }));
+        }
+
+        /// <summary>
+        /// Verify email
+        /// </summary>
+        /// <param name="command">The verify email command</param>
+        /// <returns></returns>
+        [HttpPost("me/verify-email")]
+        public async Task<IActionResult> VerifyEmail([FromBody] VerifyEmailCommand command)
+        {
+            int id = 0;
+            int.TryParse(_authenticatedUserService.AppId, out id);
+            command.InfluencerId = id;
+            return StatusCode(201, await Mediator.Send(command));
+        }
     }
 }

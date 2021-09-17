@@ -22,6 +22,7 @@ namespace IMP.Application.Features.ApplicationUsers.Commands.UpdateUserInfomatio
             _applicationUserRepostoryAsync = unitOfWork.Repository<ApplicationUser>();
             _locationRepostoryAsync = unitOfWork.Repository<Location>();
             RuleFor(x => x.Id).MustExistEntityId(IsExistUser);
+            RuleFor(x=>x.Avatar).MustValidUrl(true);
             RuleFor(x => x.BirthDate).MustValidBirthDate();
             RuleFor(x => x.Description).MustMaxLength(2000);
             RuleFor(x => x.FirstName).MustMaxLength(256);
@@ -29,6 +30,18 @@ namespace IMP.Application.Features.ApplicationUsers.Commands.UpdateUserInfomatio
             RuleFor(x => x.InterestsR).ListMustContainFewerThan(10);
             RuleFor(x => x.PetR).ListMustContainFewerThan(10);
             RuleFor(x => x.JobR).ListMustContainFewerThan(10);
+            RuleFor(x => x.Email).MustAsync(async (x, y, z) =>
+            {
+                var user = await _applicationUserRepostoryAsync.GetByIdAsync(x.Id);
+                if(user.Email==y){
+                    return true;
+                }
+                if (!user.IsEmailVerified)
+                {
+                    return (await _applicationUserRepostoryAsync.FindSingleAsync(user => user.Email == y && user.Id!=x.Id)) == null;
+                }
+                return false;
+            }).WithMessage("Email đã tồn tại hoặc không thể cập nhật email.");
             RuleFor(x => x.LocationId).MustAsync(async (x, y) =>
             {
                 if (x == null)

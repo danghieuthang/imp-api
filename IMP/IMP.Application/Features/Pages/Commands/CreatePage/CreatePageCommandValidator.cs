@@ -14,9 +14,9 @@ namespace IMP.Application.Features.Pages.Commands.CreatePage
     {
         private readonly IGenericRepositoryAsync<ApplicationUser> _applicationUserRepositoryAsync;
 
-        public CreatePageCommandValidator(IGenericRepositoryAsync<ApplicationUser> applicationUserRepositoryAsync, IOptions<FileSettings> settings)
+        public CreatePageCommandValidator(IUnitOfWork  unitOfWork, IOptions<FileSettings> settings)
         {
-            _applicationUserRepositoryAsync = applicationUserRepositoryAsync;
+            _applicationUserRepositoryAsync = unitOfWork.Repository<ApplicationUser>();
 
             RuleFor(x => x.Title).MustRequired(256);
             RuleFor(x => x.BackgroundPhoto).MustValidUrl();

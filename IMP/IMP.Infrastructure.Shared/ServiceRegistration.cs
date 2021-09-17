@@ -17,6 +17,7 @@ namespace IMP.Infrastructure.Shared
             services.Configure<FileSettings>(_config.GetSection("FileSettings"));
             services.Configure<FacebookSettings>(_config.GetSection("Authentication").GetSection("Facebook"));
             services.Configure<InstagramSettings>(_config.GetSection("Authentication").GetSection("Instagram"));
+            services.Configure<OtpSettings>(_config.GetSection("OtpSettings"));
 
             #endregion Registers for configutation
 

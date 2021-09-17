@@ -10,6 +10,9 @@ namespace IMP.Application.Models.ViewModels
 {
     public class ApplicationUserViewModel : BaseViewModel<int>
     {
+        public string Email { get; set; }
+        public bool IsEmailVerified { get; set; }
+        public string Avatar { get; set; }
         public string Nickname { get; set; }
         public string PhoneNumber { get; set; }
         public string FirstName { get; set; }

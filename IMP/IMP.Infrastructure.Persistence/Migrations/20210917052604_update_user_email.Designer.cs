@@ -4,14 +4,16 @@ using IMP.Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace IMP.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210917052604_update_user_email")]
+    partial class update_user_email
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -88,10 +90,6 @@ namespace IMP.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Avatar")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
 
                     b.Property<DateTime?>("BirthDate")
                         .HasColumnType("datetime2");
@@ -879,38 +877,6 @@ namespace IMP.Infrastructure.Persistence.Migrations
                     b.ToTable("Milestones");
                 });
 
-            modelBuilder.Entity("IMP.Domain.Entities.Otp", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ApplicationUserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Code")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ExpiredTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.ToTable("Otps");
-                });
-
             modelBuilder.Entity("IMP.Domain.Entities.Page", b =>
                 {
                     b.Property<int>("Id")
@@ -1605,15 +1571,6 @@ namespace IMP.Infrastructure.Persistence.Migrations
                     b.Navigation("Influencer");
                 });
 
-            modelBuilder.Entity("IMP.Domain.Entities.Otp", b =>
-                {
-                    b.HasOne("IMP.Domain.Entities.ApplicationUser", null)
-                        .WithMany("Otps")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("IMP.Domain.Entities.Page", b =>
                 {
                     b.HasOne("IMP.Domain.Entities.ApplicationUser", "Influencer")
@@ -1705,8 +1662,6 @@ namespace IMP.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("IMP.Domain.Entities.ApplicationUser", b =>
                 {
-                    b.Navigation("Otps");
-
                     b.Navigation("Pages");
                 });
 

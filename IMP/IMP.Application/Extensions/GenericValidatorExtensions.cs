@@ -163,10 +163,34 @@ namespace IMP.Application.Extensions
         /// <typeparam name="T"></typeparam>
         /// <param name="ruleBuilder"></param>
         /// <returns></returns>
-        public static IRuleBuilderOptions<T, string> MustValidUrl<T>(this IRuleBuilder<T, string> ruleBuilder)
+        public static IRuleBuilderOptions<T, string> MustValidUrl<T>(this IRuleBuilder<T, string> ruleBuilder, bool allowNull = false)
         {
-            return ruleBuilder.NotNull().NotEmpty().Matches(@"[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)")
-                .WithMessage("'{PropertyValue}' không phải một Url hợp lệ.");
+            string pattern = @"[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)";
+            Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
+            if (allowNull)
+            {
+                return ruleBuilder
+                .Must(x =>
+                {
+                    if (string.IsNullOrEmpty(x))
+                    {
+                        return true;
+                    }
+                    return regex.IsMatch(x);
+                })
+                .WithMessage($"Url không hợp lệ.");
+            }
+            return ruleBuilder
+                .NotNull().WithMessage("Số điện thoại chưa có.")
+                .Must(x =>
+                {
+                    if (string.IsNullOrEmpty(x))
+                    {
+                        return true;
+                    }
+                    return regex.IsMatch(x);
+                })
+                .WithMessage($"Url không hợp lệ.");
         }
 
         /// <summary>
