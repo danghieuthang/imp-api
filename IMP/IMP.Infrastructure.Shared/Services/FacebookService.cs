@@ -1,6 +1,7 @@
 ﻿using IMP.Application.Interfaces;
 using IMP.Application.Models.Account;
 using IMP.Domain.Settings;
+using IMP.Domain.SocialPlatforms;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
@@ -55,6 +56,11 @@ namespace IMP.Infrastructure.Shared.Services
 
             }
             return null;
+        }
+
+        public Task<SocialPlatformUser> VerifyUser(string username, string hashtag)
+        {
+            throw new NotImplementedException();
         }
     }
 }

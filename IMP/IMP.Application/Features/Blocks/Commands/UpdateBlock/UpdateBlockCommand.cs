@@ -1,17 +1,20 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using IMP.Application.Exceptions;
 using IMP.Application.Interfaces;
+using IMP.Application.Models;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
 using IMP.Domain.Entities;
 using MediatR;
 using Newtonsoft.Json;
 
-namespace IMP.Application.Features.Blocks.Commands.CreateBlock
+namespace IMP.Application.Features.Blocks.Commands.UpdateBlock
 {
-    public class CreateBlockCommand : ICommand<BlockViewModel>
+    public class UpdateBlockCommand : ICommand<BlockViewModel>
     {
+        public int Id { get; set; }
         public int PageId { get; set; }
         public int BlockTypeId { get; set; }
         public int ParentId { get; set; }
@@ -27,25 +30,31 @@ namespace IMP.Application.Features.Blocks.Commands.CreateBlock
         [JsonIgnore]
         public int InfluencerId { get; set; }
 
-        public class CreateBlockCommandHandler : IRequestHandler<CreateBlockCommand, Response<BlockViewModel>>
+        public class UpdateBlockCommandHandler : IRequestHandler<UpdateBlockCommand, Response<BlockViewModel>>
         {
             private readonly IUnitOfWork _unitOfWork;
             private readonly IGenericRepositoryAsync<Block> _blockRepositoryAsync;
             private readonly IMapper _mapper;
-            public CreateBlockCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
+
+            public UpdateBlockCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
             {
                 _unitOfWork = unitOfWork;
                 _blockRepositoryAsync = _unitOfWork.Repository<Block>();
                 _mapper = mapper;
             }
 
-            public async Task<Response<BlockViewModel>> Handle(CreateBlockCommand request, CancellationToken cancellationToken)
+            public async Task<Response<BlockViewModel>> Handle(UpdateBlockCommand request, CancellationToken cancellationToken)
             {
-                var block = _mapper.Map<Block>(request);
-                block = await _blockRepositoryAsync.AddAsync(block);
-                await _unitOfWork.CommitAsync();
-                var view = _mapper.Map<BlockViewModel>(block);
-                return new Response<BlockViewModel>(view);
+                var block = await _blockRepositoryAsync.GetByIdAsync(request.Id);
+                if (block != null)
+                {
+                    _mapper.Map(request, block);
+                    _blockRepositoryAsync.Update(block);
+                    await _unitOfWork.CommitAsync();
+                    var view = _mapper.Map<BlockViewModel>(block);
+                    return new Response<BlockViewModel>(view);
+                }
+                throw new ValidationException(new ValidationError("id","Block không tồn tại."));
             }
         }
     }

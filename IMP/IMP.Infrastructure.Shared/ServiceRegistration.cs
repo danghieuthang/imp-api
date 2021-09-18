@@ -27,6 +27,7 @@ namespace IMP.Infrastructure.Shared
             services.AddTransient<IGoogleService, GoogleService>();
             services.AddTransient<IFacebookService, FacebookService>();
             services.AddTransient<IFileService, FileService>();
+            services.AddTransient<ITiktokService, TiktokService>();
         }
     }
 }

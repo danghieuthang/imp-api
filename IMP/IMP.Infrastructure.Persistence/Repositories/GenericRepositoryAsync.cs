@@ -14,18 +14,23 @@ using System.Threading.Tasks;
 using System.Linq.Dynamic.Core;
 
 using IMP.Infrastructure.Persistence.Helpers;
-
+using IMP.Application.Wrappers;
+using Microsoft.EntityFrameworkCore.Query;
+using System.Threading;
+using IMP.Application.Extensions;
 
 namespace IMP.Infrastructure.Persistence.Repository
 {
 
     public class GenericRepositoryAsync<TKey, TEntity> : IGenericRepositoryAsync<TKey, TEntity>, IDisposable where TEntity : Entity<TKey>
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly DbContext _dbContext;
         private bool _disposed = false;
+        private readonly DbSet<TEntity> _dbSet;
         public GenericRepositoryAsync(ApplicationDbContext dbContext)
         {
-            _dbContext = dbContext;
+            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(ApplicationDbContext));
+            _dbSet = _dbContext.Set<TEntity>();
         }
 
         public virtual async Task<TEntity> GetByIdAsync(TKey id)
@@ -88,7 +93,13 @@ namespace IMP.Infrastructure.Persistence.Repository
 
         public async Task<bool> IsExistAsync(TKey id)
         {
-            return await GetByIdAsync(id) != null;
+            var query = FindAll();
+            return await query.AnyAsync(x => x.Id.Equals(id));
+        }
+        public async Task<bool> IsExistAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            var query = FindAll();
+            return await query.AnyAsync(predicate);
         }
 
         public void Dispose()
@@ -187,10 +198,77 @@ namespace IMP.Infrastructure.Persistence.Repository
             return await FindAll(predicate, includeProperties).AsNoTracking().FirstOrDefaultAsync();
         }
 
-        public async Task<bool> IsRight(Expression<Func<TEntity, bool>> predicate)
+        public async Task<IPagedList<TEntity>> GetPagedList(Expression<Func<TEntity, bool>> predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+        bool orderByDecensing = false,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
+        int pageIndex = 0,
+        int pageSize = 20,
+        CancellationToken cancellationToken = default)
         {
-            return await FindAll(predicate).AllAsync(predicate);
+            var query = GetAll(predicate: predicate, orderBy: orderBy, orderByDecensing: orderByDecensing, include: include);
+            return await query.ToPagedListAsync(pageIndex: pageIndex, pageSize: pageSize, cancellationToken: cancellationToken);
         }
+
+        public async Task<IPagedList<TEntity>> GetPagedList(Expression<Func<TEntity, bool>> predicate = null,
+        string orderBy = null,
+        bool orderByDecensing = false,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
+        int pageIndex = 0,
+        int pageSize = 20, CancellationToken cancellationToken = default)
+        {
+            var query = GetAll(predicate: predicate, orderBy: x => x.OrderBy(x => x.GetReflectedPropertyValue(orderBy)), orderByDecensing: orderByDecensing, include: include);
+            return await query.ToPagedListAsync(pageIndex: pageIndex, pageSize: pageSize, cancellationToken: cancellationToken);
+        }
+
+        public IQueryable<TEntity> GetAll()
+        {
+            return _dbSet.AsQueryable();
+        }
+
+        public IQueryable<TEntity> GetAll(Expression<Func<TEntity, bool>> predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+        bool orderByDecensing = false,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null)
+        {
+            var query = _dbSet.AsQueryable();
+
+            if (include != null)
+            {
+                query = include(query);
+            }
+
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
+
+            if (orderBy != null)
+            {
+                return orderBy(query);
+            }
+            return query;
+        }
+
+        public IQueryable<TResult> GetAll<TResult>(Expression<Func<TEntity, TResult>> selector,
+        Expression<Func<TEntity, bool>> predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+        bool orderByDecensing = false,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null)
+        {
+            var query = GetAll(predicate: predicate, orderBy: orderBy, include: include);
+            return query.Select(selector);
+        }
+
+        public async Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate = null)
+        {
+            if (predicate == null)
+            {
+                return await GetAll().CountAsync();
+            }
+            return await GetAll().Where(predicate).CountAsync();
+        }
+
 
     }
 

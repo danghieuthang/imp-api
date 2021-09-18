@@ -5,13 +5,11 @@ using System.Threading.Tasks;
 
 namespace IMP.Application.Interfaces
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork : IRepositoryFactory
     {
         void Dispose();
         void Dispose(bool disposing);
         void Commit();
         Task CommitAsync();
-        IGenericRepositoryAsync<TEntity> Repository<TEntity>() where TEntity : BaseEntity;
-
     }
 }

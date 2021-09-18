@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Security.Cryptography;
+using AutoMapper;
 using IMP.Application.Interfaces;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
@@ -11,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using IMP.Application.Helpers;
 
 namespace IMP.Application.Features.InfluencerPlatforms.Commands.CreateInfluencerPlatform
 {
@@ -37,7 +39,7 @@ namespace IMP.Application.Features.InfluencerPlatforms.Commands.CreateInfluencer
             public async Task<Response<InfluencerPlatformViewModel>> Handle(CreateInfluencerPlatformCommand request, CancellationToken cancellationToken)
             {
                 var influencerPlatform = _mapper.Map<InfluencerPlatform>(request);
-
+                influencerPlatform.Hashtag="imp_"+StringHelper.RandomString(10);
                 influencerPlatform = await _influencerPlatformRepositoryAsync.AddAsync(influencerPlatform);
                 await _unitOfWork.CommitAsync();
 

@@ -1,31 +1,41 @@
-using System.Threading;
-using System.Threading.Tasks;
+using System.Data;
 using FluentValidation;
 using IMP.Application.Extensions;
 using IMP.Application.Interfaces;
 using IMP.Domain.Entities;
 
-namespace IMP.Application.Features.Blocks.Commands.CreateBlock
+namespace IMP.Application.Features.Blocks.Commands.UpdateBlock
 {
-    public class CreateBlockCommandValidator : AbstractValidator<CreateBlockCommand>
+    public class UpdateBlockCommandValidator : AbstractValidator<UpdateBlockCommand>
     {
         private readonly IGenericRepositoryAsync<Page> _pageRepositoryAsync;
         private readonly IGenericRepositoryAsync<BlockType> _blockTypeRepositoryAsync;
         private readonly IGenericRepositoryAsync<Block> _blockRepositoryAsync;
-        public CreateBlockCommandValidator(IUnitOfWork unitOfWork)
+        public UpdateBlockCommandValidator(IUnitOfWork unitOfWork)
         {
             _blockRepositoryAsync = unitOfWork.Repository<Block>();
             _blockTypeRepositoryAsync = unitOfWork.Repository<BlockType>();
             _pageRepositoryAsync = unitOfWork.Repository<Page>();
-            
+
             RuleFor(x => x.Title).MustMaxLength(256);
             RuleFor(x => x.Avatar).MustMaxLength(256);
             RuleFor(x => x.Bio).MustMaxLength(256);
             RuleFor(x => x.Location).MustMaxLength(256);
             RuleFor(x => x.Text).MustMaxLength(256);
             RuleFor(x => x.TextArea).MustMaxLength(2000);
-            RuleFor(x => x.ImageUrl).MustValidUrl(true);
-            RuleFor(x => x.VideoUrl).MustValidUrl(true);
+            RuleFor(x => x.ImageUrl).MustValidUrl();
+            RuleFor(x => x.VideoUrl).MustValidUrl();
+
+            RuleFor(x => x.Id).MustAsync(async (block, id, cancellationToken) =>
+            {
+                var b = await _blockRepositoryAsync.FindSingleAsync(x => x.Id == id, x => x.Page);
+                if (b == null)
+                {
+                    return false;
+                }
+                // if this block is create by influencer
+                return b.Page.InfluencerId == block.InfluencerId;
+            }).WithMessage("'{PropertyValue}' không hợp lệ");
 
             RuleFor(x => x.PageId).MustAsync(async (block, id, cancellationToken) =>
             {
@@ -47,6 +57,5 @@ namespace IMP.Application.Features.Blocks.Commands.CreateBlock
             RuleFor(x => x.ParentId).MustExistEntityId(
                 async (id, y) => await _blockRepositoryAsync.IsExistAsync(id));
         }
-
     }
 }

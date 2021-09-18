@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Reflection.Metadata;
+using AutoMapper;
 using IMP.Application.Models;
 using IMP.Application.Exceptions;
 using IMP.Application.Wrappers;
@@ -9,6 +10,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using IMP.Application.Enums;
 
 namespace IMP.Application.Interfaces
 {
@@ -24,11 +27,12 @@ namespace IMP.Application.Interfaces
     {
 
     }
+
     public interface ICreateCommand<TRequest, TResponse> : ICommand<TResponse>
        where TRequest : notnull
        where TResponse : notnull
     {
-        public TRequest Model { get; init; }
+        TRequest Model { get; init; }
     }
 
     public interface IUpdateCommand<TRequest, TResponse> : ICommand<TResponse>
@@ -44,16 +48,73 @@ namespace IMP.Application.Interfaces
         public TId Id { get; set; }
     }
 
-    public interface IListQuery<TResponse> : IQuery<TResponse>
-        where TResponse : notnull
+    /// <summary>
+    /// Provides the interface(s) for Query List
+    /// </summary>
+    /// <typeparam name="T">The View Model</typeparam>
+    public interface IListQuery<T> : IQuery<PagedList<T>>
+        where T : notnull
     {
-
+        public int PageNumber { get; set; }
+        public int PageSize { get; set; }
+        public string OrderField { get; set; }
+        public OrderBy OrderBy { get; set; }
     }
     public interface IItemQuery<TId, TResponse> : IQuery<TResponse>
       where TId : struct
       where TResponse : notnull
     {
         public TId Id { get; set; }
+    }
+
+    #endregion
+
+    #region generic abstract class
+    public abstract class CommandHandler<TCommand, TResponse> : IRequestHandler<TCommand, Response<TResponse>>
+        where TCommand : ICommand<TResponse>, new()
+    {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        public CommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        {
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+        }
+        public abstract Task<Response<TResponse>> Handle(TCommand request, CancellationToken cancellationToken);
+        public IUnitOfWork UnitOfWork => _unitOfWork;
+        public IMapper Mapper => _mapper;
+
+    }
+
+    public abstract class QueryHandler<TCommand, TResponse> : IRequestHandler<TCommand, Response<TResponse>>
+        where TCommand : IQuery<TResponse>, new()
+    {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        public QueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        {
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+        }
+        public abstract Task<Response<TResponse>> Handle(TCommand request, CancellationToken cancellationToken);
+        public IUnitOfWork UnitOfWork => _unitOfWork;
+        public IMapper Mapper => _mapper;
+
+    }
+
+    public abstract class ListQueryHandler<TCommand, TViewModel> : IRequestHandler<TCommand, Response<PagedList<TViewModel>>>
+       where TCommand : IListQuery<TViewModel>, new()
+    {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        public ListQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        {
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+        }
+        public abstract Task<Response<PagedList<TViewModel>>> Handle(TCommand request, CancellationToken cancellationToken);
+        public IUnitOfWork UnitOfWork => _unitOfWork;
+        public IMapper Mapper => _mapper;
     }
     #endregion
 
@@ -70,11 +131,11 @@ namespace IMP.Application.Interfaces
         private readonly IGenericRepositoryAsync<TEntity> _repositoryAsync;
         public DeleteCommandHandler(IUnitOfWork unitOfWork)
         {
-            _unitOfWork = unitOfWork;
+            this._unitOfWork = unitOfWork;
             _repositoryAsync = unitOfWork.Repository<TEntity>();
         }
 
-        public async Task<Response<int>> Handle(TCommand request, CancellationToken cancellationToken)
+        public virtual async Task<Response<int>> Handle(TCommand request, CancellationToken cancellationToken)
         {
             var entity = await _repositoryAsync.GetByIdAsync(request.Id);
             if (entity == null)
@@ -87,11 +148,15 @@ namespace IMP.Application.Interfaces
             await _unitOfWork.CommitAsync();
             return new Response<int>(entity.Id);
         }
+
+        public IUnitOfWork UnitOfWork => _unitOfWork;
+        public IGenericRepositoryAsync<TEntity> RepositoryAsync => _repositoryAsync;
+
     }
     #endregion
 
     #region generic get by id
-    public interface IGetByIdQuery<TEntity,TViewModel> : IItemQuery<int, TViewModel>
+    public interface IGetByIdQuery<TEntity, TViewModel> : IItemQuery<int, TViewModel>
        where TEntity : BaseEntity, new()
        where TViewModel : BaseViewModel<int>
     {

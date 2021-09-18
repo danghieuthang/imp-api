@@ -23,7 +23,6 @@ namespace IMP.Application.Features.ApplicationUsers.Commands.UpdateUserPaymentIn
             RuleFor(x => x.BankId).MustExistEntityId(IsExistBank);
             RuleFor(x => x.ApplicationUserId).MustExistEntityId(IsExistApplicationUser);
 
-
             RuleFor(x => x.AccountNumber).MustValidBankAccountNumber();
             RuleFor(x => x.AccountName).MustRequired(256);
         }

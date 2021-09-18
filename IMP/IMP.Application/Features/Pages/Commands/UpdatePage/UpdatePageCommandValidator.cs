@@ -13,14 +13,15 @@ namespace IMP.Application.Features.Pages.Commands.UpdatePage
         public UpdatePageCommandValidator(IUnitOfWork unitOfWork)
         {
             _pageRepositoryAsync = unitOfWork.Repository<Page>();
+            _applicationUserRepositoryAsync = unitOfWork.Repository<ApplicationUser>();
 
             RuleFor(x => x.Id).MustAsync(async (x, y, z) =>
             {
-                return (await _pageRepositoryAsync.FindSingleAsync(x => x.Id == y && x.InfluencerId == x.InfluencerId)) != null;
+                return await _pageRepositoryAsync.IsExistAsync(x => x.Id == y && x.InfluencerId == x.InfluencerId);
             }).WithMessage("'{PropertyValue}' không tồn tại hoặc không có quyền chỉnh sửa.");
             RuleFor(x => x.InfluencerId).MustExistEntityId(async (x, y) =>
               {
-                  return (await _applicationUserRepositoryAsync.GetByIdAsync(x)) != null;
+                  return await _applicationUserRepositoryAsync.IsExistAsync(x);
               });
             RuleFor(x => x.BackgroundPhoto).MustValidUrl();
             RuleFor(x => x.Title).MustRequired(256);

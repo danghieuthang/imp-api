@@ -10,7 +10,7 @@ namespace IMP.Application.Features.Pages.Commands.DeletePage
         {
             RuleFor(x => x.Id).MustAsync(async (x, y, z) =>
               {
-                  return (await unitOfWork.Repository<Page>().FindSingleAsync(x => x.Id == y && x.InfluencerId == x.InfluencerId)) != null;
+                  return await unitOfWork.Repository<Page>().IsExistAsync(x => x.Id == y && x.InfluencerId == x.InfluencerId);
               }).WithMessage("Không có quyền xóa.");
         }
     }

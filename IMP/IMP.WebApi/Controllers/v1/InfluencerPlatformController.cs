@@ -1,5 +1,7 @@
 ﻿using IMP.Application.Features.BlockTypes.Commands.DeleteBlockType;
 using IMP.Application.Features.InfluencerPlatforms.Commands.CreateInfluencerPlatform;
+using IMP.Application.Features.InfluencerPlatforms.Commands.DeleteInfluencerPlatformById;
+using IMP.Application.Features.InfluencerPlatforms.Commands.RequestVerifyInfluencerPlatform;
 using IMP.Application.Features.InfluencerPlatforms.Commands.UpdateInlfuencerPlatform;
 using IMP.Application.Features.InfluencerPlatforms.Queries.GetAllInfluencerPlatformByInfluencerId;
 using IMP.Application.Interfaces;
@@ -58,11 +60,23 @@ namespace IMP.WebApi.Controllers.v1
         [Authorize(Roles = "Influencer")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            DeleteBlockTypeCommand command = new DeleteBlockTypeCommand
+            DeleteInfluencerPlatformCommand command = new DeleteInfluencerPlatformCommand
             {
                 Id = id,
                 InfluencerId = influencerId
             };
+            return Ok(await Mediator.Send(command));
+        }
+
+        [HttpPost("{id}/verify")]
+        [Authorize(Roles = "Influencer")]
+        public async Task<IActionResult> RequestVerify([FromRoute] int id, [FromBody] VerifyInfluencerPlatformCommand command)
+        {
+            if (id != command.Id)
+            {
+                return BadRequest();
+            }
+            command.InfluencerId = influencerId;
             return Ok(await Mediator.Send(command));
         }
     }

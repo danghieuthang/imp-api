@@ -25,7 +25,7 @@ namespace IMP.Application.Features.Pages.Commands.CreatePage
 
         private async Task<bool> IsExistUser(int id, CancellationToken cancellationToken)
         {
-            return (await _applicationUserRepositoryAsync.GetByIdAsync(id)) != null;
+            return await _applicationUserRepositoryAsync.IsExistAsync(id);
         }
 
     }

@@ -130,7 +130,7 @@ namespace IMP.Application.Extensions
         /// <returns></returns>
         public static IRuleBuilderOptions<T, int> MustExistEntityId<T>(this IRuleBuilder<T, int> ruleBuilder, Func<int, CancellationToken, Task<bool>> checkValidate)
         {
-            return ruleBuilder.MustAsync(checkValidate).WithMessage("'{PropertyValue}' không tồn tại");
+            return ruleBuilder.MustAsync(checkValidate).WithMessage("'{PropertyValue}' không tồn tại.");
         }
 
         /// <summary>
@@ -170,15 +170,15 @@ namespace IMP.Application.Extensions
             if (allowNull)
             {
                 return ruleBuilder
-                .Must(x =>
-                {
-                    if (string.IsNullOrEmpty(x))
-                    {
-                        return true;
-                    }
-                    return regex.IsMatch(x);
-                })
-                .WithMessage($"Url không hợp lệ.");
+              .Must(x =>
+              {
+                  if (string.IsNullOrEmpty(x))
+                  {
+                      return true;
+                  }
+                  return regex.IsMatch(x);
+              })
+              .WithMessage($"Url không hợp lệ.");
             }
             return ruleBuilder
                 .NotNull().WithMessage("Số điện thoại chưa có.")

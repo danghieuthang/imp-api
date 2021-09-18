@@ -22,5 +22,10 @@ namespace IMP.Domain.Entities
         public int Follower { get; set; }
         [StringLength(256)]
         public string Category { get; set; }
+        [StringLength(256)]
+        public string Avatar { get; set; }
+        [StringLength(256)]
+        public string Hashtag { get; set; }
+        public bool IsVerified { get; set; }
     }
 }
