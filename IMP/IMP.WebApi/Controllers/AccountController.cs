@@ -44,23 +44,6 @@ namespace IMP.WebApi.Controllers
             return Ok(await _accountService.SocialAuthenticationAsync(request, GenerateIPAddress()));
         }
 
-        //[HttpGet("google-response")]
-        //public async Task<IActionResult> GoogleResponse()
-        //{
-        //    var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
-        //    var claims = result.Principal.Identities
-        //        .FirstOrDefault().Claims.Select(claim => new
-        //        {
-        //            claim.Issuer,
-        //            claim.OriginalIssuer,
-        //            claim.Type,
-        //            claim.Value
-        //        });
-
-        //    return Ok((claims));
-        //}
-
         [HttpPost("register")]
         public async Task<IActionResult> RegisterAsync(RegisterRequest request)
         {
@@ -112,9 +95,12 @@ namespace IMP.WebApi.Controllers
         }
 
         [HttpPost("refresh-token")]
-        public async Task<IActionResult> RefreshToken()
+        public async Task<IActionResult> RefreshToken([FromQuery] string refreshToken)
         {
-            var refreshToken = Request.Cookies["refresh-token"];
+            if (string.IsNullOrEmpty(refreshToken))
+            {
+                refreshToken = Request.Cookies["refresh-token"];
+            }
             return Ok(await _accountService.RefreshToken(refreshToken, GenerateIPAddress()));
         }
 
