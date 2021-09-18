@@ -200,13 +200,12 @@ namespace IMP.Infrastructure.Persistence.Repository
 
         public async Task<IPagedList<TEntity>> GetPagedList(Expression<Func<TEntity, bool>> predicate = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-        bool orderByDecensing = false,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
         int pageIndex = 0,
         int pageSize = 20,
         CancellationToken cancellationToken = default)
         {
-            var query = GetAll(predicate: predicate, orderBy: orderBy, orderByDecensing: orderByDecensing, include: include);
+            var query = GetAll(predicate: predicate, orderBy: orderBy, include: include);
             return await query.ToPagedListAsync(pageIndex: pageIndex, pageSize: pageSize, cancellationToken: cancellationToken);
         }
 
@@ -217,7 +216,16 @@ namespace IMP.Infrastructure.Persistence.Repository
         int pageIndex = 0,
         int pageSize = 20, CancellationToken cancellationToken = default)
         {
-            var query = GetAll(predicate: predicate, orderBy: x => x.OrderBy(x => x.GetReflectedPropertyValue(orderBy)), orderByDecensing: orderByDecensing, include: include);
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderByFunc = null;
+            if (orderByDecensing==false)
+            {
+                orderByFunc = x => x.OrderBy(orderBy);
+            }
+            else
+            {
+                orderByFunc = x => x.OrderBy(orderBy+" DESC");
+            }
+            var query = GetAll(predicate: predicate, orderBy: orderByFunc, include: include);
             return await query.ToPagedListAsync(pageIndex: pageIndex, pageSize: pageSize, cancellationToken: cancellationToken);
         }
 
@@ -228,10 +236,9 @@ namespace IMP.Infrastructure.Persistence.Repository
 
         public IQueryable<TEntity> GetAll(Expression<Func<TEntity, bool>> predicate = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-        bool orderByDecensing = false,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null)
         {
-            var query = _dbSet.AsQueryable();
+            var query = _dbSet.AsNoTracking();
 
             if (include != null)
             {
@@ -253,7 +260,6 @@ namespace IMP.Infrastructure.Persistence.Repository
         public IQueryable<TResult> GetAll<TResult>(Expression<Func<TEntity, TResult>> selector,
         Expression<Func<TEntity, bool>> predicate = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-        bool orderByDecensing = false,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null)
         {
             var query = GetAll(predicate: predicate, orderBy: orderBy, include: include);

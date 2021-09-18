@@ -52,10 +52,10 @@ namespace IMP.Application.Interfaces
     /// Provides the interface(s) for Query List
     /// </summary>
     /// <typeparam name="T">The View Model</typeparam>
-    public interface IListQuery<T> : IQuery<PagedList<T>>
+    public interface IListQuery<T> : IQuery<IPagedList<T>>
         where T : notnull
     {
-        public int PageNumber { get; set; }
+        public int PageIndex { get; set; }
         public int PageSize { get; set; }
         public string OrderField { get; set; }
         public OrderBy OrderBy { get; set; }
@@ -102,7 +102,7 @@ namespace IMP.Application.Interfaces
 
     }
 
-    public abstract class ListQueryHandler<TCommand, TViewModel> : IRequestHandler<TCommand, Response<PagedList<TViewModel>>>
+    public abstract class ListQueryHandler<TCommand, TViewModel> : IRequestHandler<TCommand, Response<IPagedList<TViewModel>>>
        where TCommand : IListQuery<TViewModel>, new()
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -112,7 +112,7 @@ namespace IMP.Application.Interfaces
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public abstract Task<Response<PagedList<TViewModel>>> Handle(TCommand request, CancellationToken cancellationToken);
+        public abstract Task<Response<IPagedList<TViewModel>>> Handle(TCommand request, CancellationToken cancellationToken);
         public IUnitOfWork UnitOfWork => _unitOfWork;
         public IMapper Mapper => _mapper;
     }

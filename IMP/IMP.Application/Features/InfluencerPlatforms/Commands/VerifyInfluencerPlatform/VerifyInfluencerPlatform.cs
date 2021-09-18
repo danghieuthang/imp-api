@@ -27,7 +27,7 @@ namespace IMP.Application.Features.InfluencerPlatforms.Commands.RequestVerifyInf
             private readonly ITiktokService _tiktokService;
             private readonly IFacebookService _facebookService;
 
-            public VerifyInfluencerPlatformCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, ITiktokService tiktokService, IFacebookService facebookService) : base(unitOfWork)
+            public VerifyInfluencerPlatformCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, ITiktokService tiktokService, IFacebookService facebookService) : base(unitOfWork, mapper)
             {
                 _influencerPlatformRepositoryAsync = unitOfWork.Repository<InfluencerPlatform>();
                 _mapper = mapper;

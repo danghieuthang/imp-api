@@ -19,7 +19,7 @@ namespace IMP.Application.Features.Campaigns.Queries.GetAllCampaigns
 {
     public class GetAllCampaignQuery : IListQuery<CampaignViewModel>
     {
-        public int PageNumber { get; set; }
+        public int PageIndex { get; set; }
         public int PageSize { get; set; }
         public string OrderField { get; set; }
         public OrderBy OrderBy { get; set; }
@@ -32,7 +32,7 @@ namespace IMP.Application.Features.Campaigns.Queries.GetAllCampaigns
             }
         }
 
-        public class GetAllCampaignQueryHandler : ListQueryHandler<GetAllCampaignQuery,CampaignViewModel>
+        public class GetAllCampaignQueryHandler : ListQueryHandler<GetAllCampaignQuery, CampaignViewModel>
         {
             private readonly IGenericRepositoryAsync<Campaign> _campaignRepositoryAsync;
 
@@ -40,17 +40,12 @@ namespace IMP.Application.Features.Campaigns.Queries.GetAllCampaigns
             {
                 _campaignRepositoryAsync = unitOfWork.Repository<Campaign>();
             }
-
-            public async Task<PagedList<IEnumerable<CampaignViewModel>>> Handle(GetAllCampaignQuery request, CancellationToken cancellationToken)
+            public override async Task<Response<IPagedList<CampaignViewModel>>> Handle(GetAllCampaignQuery request, CancellationToken cancellationToken)
             {
-                var campaigns = await _campaignRepositoryAsync.GetPagedReponseAsync(request.PageNumber, request.PageSize, request.Includes, request.OrderField, request.OrderBy);
-                var campaignViews = _mapper.Map<IEnumerable<CampaignViewModel>>(campaigns.Item1);
-                return new PagedResponse<IEnumerable<CampaignViewModel>>(campaignViews, request.PageNumber, request.PageSize, totalCount: campaigns.Item2);
-            }
 
-            public override async Task<Response<PagedList<CampaignViewModel>>> Handle(GetAllCampaignQuery request, CancellationToken cancellationToken)
-            {
-                throw new NotImplementedException();
+                var page = await _campaignRepositoryAsync.GetPagedList(pageIndex: request.PageIndex, pageSize: request.PageSize, orderBy: request.OrderField, orderByDecensing: request.OrderBy == OrderBy.DESC);
+                var pageViews = page.ToResponsePagedList<CampaignViewModel>(Mapper);
+                return new Response<IPagedList<CampaignViewModel>>(pageViews);
             }
         }
     }
