@@ -95,7 +95,7 @@ namespace IMP.WebApi.Controllers
         }
 
         [HttpPost("refresh-token")]
-        public async Task<IActionResult> RefreshToken([FromQuery] string refreshToken)
+        public async Task<IActionResult> RefreshToken([FromBody] string refreshToken)
         {
             if (string.IsNullOrEmpty(refreshToken))
             {
