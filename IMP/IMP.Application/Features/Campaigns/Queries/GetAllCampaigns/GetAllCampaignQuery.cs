@@ -14,14 +14,20 @@ using System.Threading.Tasks;
 using IMP.Domain.Entities;
 using IMP.Application.Interfaces;
 using IMP.Application.Enums;
+using Microsoft.AspNetCore.Mvc;
 
 namespace IMP.Application.Features.Campaigns.Queries.GetAllCampaigns
 {
     public class GetAllCampaignQuery : IListQuery<CampaignViewModel>
     {
+        [FromQuery(Name ="page_index")]
         public int PageIndex { get; set; }
+        [FromQuery(Name = "page_size")]
         public int PageSize { get; set; }
+
+        [FromQuery(Name = "order_field")]
         public string OrderField { get; set; }
+        [FromQuery(Name ="order_by")]
         public OrderBy OrderBy { get; set; }
 
         public class Validator : AbstractValidator<GetAllCampaignQuery>

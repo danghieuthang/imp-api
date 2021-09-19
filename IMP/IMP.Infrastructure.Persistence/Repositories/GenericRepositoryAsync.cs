@@ -217,14 +217,19 @@ namespace IMP.Infrastructure.Persistence.Repository
         int pageSize = 20, CancellationToken cancellationToken = default)
         {
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderByFunc = null;
-            if (orderByDecensing==false)
+
+            if (orderBy != null)
             {
-                orderByFunc = x => x.OrderBy(orderBy);
+                if (orderByDecensing == false)
+                {
+                    orderByFunc = x => x.OrderBy(orderBy);
+                }
+                else
+                {
+                    orderByFunc = x => x.OrderBy(orderBy + " DESC");
+                }
             }
-            else
-            {
-                orderByFunc = x => x.OrderBy(orderBy+" DESC");
-            }
+
             var query = GetAll(predicate: predicate, orderBy: orderByFunc, include: include);
             return await query.ToPagedListAsync(pageIndex: pageIndex, pageSize: pageSize, cancellationToken: cancellationToken);
         }
