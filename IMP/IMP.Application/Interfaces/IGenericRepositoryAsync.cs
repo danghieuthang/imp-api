@@ -12,6 +12,11 @@ using System.Threading.Tasks;
 
 namespace IMP.Application.Interfaces
 {
+    /// <summary>
+    /// Defines the interfaces for generic repository.
+    /// </summary>
+    /// <typeparam name="TKey">The type of key of the entity.</typeparam>
+    /// <typeparam name="TEntity">The type of the entity.</typeparam>
     public interface IGenericRepositoryAsync<TKey, TEntity> where TEntity : class
     {
         Task<TEntity> GetByIdAsync(TKey id);
@@ -94,6 +99,10 @@ namespace IMP.Application.Interfaces
         void Dispose();
     }
 
+    /// <summary>
+    /// Defines the interfaces for generic repository has type key is int.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the entity.</typeparam>
     public interface IGenericRepositoryAsync<TEntity> : IGenericRepositoryAsync<int, TEntity> where TEntity : BaseEntity
     {
 

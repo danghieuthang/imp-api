@@ -1,13 +1,11 @@
 ﻿using IMP.Application.Interfaces;
 using IMP.Application.Interfaces.Services;
+using IMP.Domain.Common;
 using IMP.Infrastructure.Persistence.Contexts;
 using IMP.Infrastructure.Persistence.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace IMP.Infrastructure.Persistence
 {
@@ -28,12 +26,40 @@ namespace IMP.Infrastructure.Persistence
                    b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
             }
             #region Repositories and UnitOfWork
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddUnitOfWork<ApplicationDbContext>();
             #endregion
 
             #region services
             services.AddScoped<IApplicationUserService, ApplicationUserService>();
             #endregion
+        }
+
+        /// <summary>
+        /// Add default unit of work
+        /// </summary>
+        /// <typeparam name="TContext">The database context</typeparam>
+        /// <param name="services"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddUnitOfWork<TContext>(this IServiceCollection services) where TContext : DbContext
+        {
+            services.AddScoped<IUnitOfWork, UnitOfWork<TContext>>();
+            services.AddScoped<IUnitOfWork<TContext>, UnitOfWork<TContext>>();
+            return services;
+        }
+
+        /// <summary>
+        /// Register custom repository
+        /// </summary>
+        /// <typeparam name="TEntity">The type of entity.</typeparam>
+        /// <typeparam name="IRepository">The type of custom repository.</typeparam>
+        /// <param name="services"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddCustomRepository<TEntity, IRepository>(this IServiceCollection services)
+            where TEntity : BaseEntity
+            where IRepository : class, IGenericRepositoryAsync<TEntity>
+        {
+            services.AddScoped<IGenericRepositoryAsync<TEntity>, IRepository>();
+            return services;
         }
     }
 }

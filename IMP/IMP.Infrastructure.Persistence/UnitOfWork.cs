@@ -2,6 +2,8 @@
 using IMP.Domain.Common;
 using IMP.Infrastructure.Persistence.Contexts;
 using IMP.Infrastructure.Persistence.Repository;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,18 +12,19 @@ using System.Threading.Tasks;
 
 namespace IMP.Infrastructure.Persistence
 {
-    public class UnitOfWork : IDisposable, IUnitOfWork
+    public class UnitOfWork<TContext> : IDisposable, IUnitOfWork<TContext> where TContext : DbContext
     {
-        private readonly ApplicationDbContext _context;
+        private readonly TContext _context;
         private bool _disposed;
         private Dictionary<string, object> _repositoties;
 
-        public UnitOfWork(ApplicationDbContext context)
+
+        public UnitOfWork(TContext context)
         {
             _context = context;
         }
 
-
+        public TContext DbContext => _context;
 
         public void Dispose()
         {
@@ -41,11 +44,15 @@ namespace IMP.Infrastructure.Persistence
             _disposed = true;
         }
 
-        public IGenericRepositoryAsync<TEntity> Repository<TEntity>() where TEntity : BaseEntity
+        public IGenericRepositoryAsync<TEntity> Repository<TEntity>(bool hasCustomRepository = false) where TEntity : BaseEntity
         {
             if (_repositoties == null)
             {
                 _repositoties = new Dictionary<string, object>();
+            }
+            if (hasCustomRepository)
+            {
+                var repository = _context.GetService<IGenericRepositoryAsync<TEntity>>();
             }
             var type = typeof(TEntity).Name;
             if (!_repositoties.ContainsKey(type))
@@ -65,5 +72,9 @@ namespace IMP.Infrastructure.Persistence
         {
             await _context.SaveChangesAsync();
         }
+
+        public int ExecuteSqlCommand(string sql, params object[] parameters) => _context.Database.ExecuteSqlRaw(sql, parameters);
+        public IQueryable<TEntity> FromSql<TEntity>(string sql, params object[] parameters) where TEntity : class => _context.Set<TEntity>().FromSqlRaw(sql, parameters);
+
     }
 }
