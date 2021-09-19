@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace IMP.WebApi.Controllers.v1
 {
     [ApiVersion("1.0")]
-    [Route(RouterConstants.CAMPAIGN)]
+    [Route(RouterConstants.Campaign)]
     public class CampaignController : BaseApiController
     {
         private readonly IAuthenticatedUserService _authenticatedUserService;

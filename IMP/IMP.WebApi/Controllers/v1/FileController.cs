@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace IMP.WebApi.Controllers.v1
 {
     [ApiVersion("1.0")]
-    [Route(RouterConstants.FILE)]
+    [Route(RouterConstants.File)]
     [Authorize]
     public class FileController : BaseApiController
     {

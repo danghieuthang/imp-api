@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace IMP.WebApi.Controllers.v1
 {
     [ApiVersion("1.0")]
-    [Route(RouterConstants.PLATFORM)]
+    [Route(RouterConstants.Platform)]
     public class PlatformController : BaseApiController
     {
         /// <summary>

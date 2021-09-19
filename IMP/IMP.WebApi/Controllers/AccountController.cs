@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace IMP.WebApi.Controllers
 {
-    [Route(RouterConstants.ACCOUNT)]
+    [Route(RouterConstants.Account)]
     [ApiController]
     public class AccountController : ControllerBase
     {

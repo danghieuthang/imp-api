@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace IMP.WebApi.Controllers.v1
 {
     [ApiVersion("1.0")]
-    [Route(RouterConstants.BANK)]
+    [Route(RouterConstants.Bank)]
     public class BankController : BaseApiController
     {
         [HttpGet]

@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace IMP.WebApi.Controllers
 {
     [ApiVersion("1.0")]
-    [Route(RouterConstants.BLOCK_TYPE)]
+    [Route(RouterConstants.BlockType)]
     public class BlockTypeController : BaseApiController
     {
         [HttpGet]

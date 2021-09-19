@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using IMP.Application.Features.Blocks.Queries;
 using IMP.Application.Features.Pages.Commands.CreatePage;
 using IMP.Application.Features.Pages.Commands.DeletePage;
 using IMP.Application.Features.Pages.Commands.UpdatePage;
@@ -10,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace IMP.WebApi.Controllers.v1
 {
     [ApiVersion("1.0")]
-    [Route(RouterConstants.PAGE)]
+    [Route(RouterConstants.Page)]
     [Authorize]
     public class PageController : BaseApiController
     {
@@ -27,6 +28,12 @@ namespace IMP.WebApi.Controllers.v1
             int id = 0;
             int.TryParse(_authenticatedUserService.AppId, out id);
             return Ok(await Mediator.Send(new GetAllPageOfInfluencerQuery { InfluencerId = id }));
+        }
+
+        [HttpGet("{id}/blocks")]
+        public async Task<IActionResult> GetBlockByPage([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new GetAllBlockByPageIdQuery { PageId = id }));
         }
 
 

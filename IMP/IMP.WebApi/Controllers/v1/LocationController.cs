@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace IMP.WebApi.Controllers
 {
     [ApiVersion("1.0")]
-    [Route(RouterConstants.LOCATION)]
+    [Route(RouterConstants.Location)]
     public class LocationController : BaseApiController
     {
         [HttpGet]

@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace IMP.WebApi.Controllers.v1
 {
     [ApiVersion("1.0")]
-    [Route(RouterConstants.USER)]
+    [Route(RouterConstants.User)]
     [Authorize(Roles = "Influencer, Brand, Administrator")]
     public class UserController : BaseApiController
     {

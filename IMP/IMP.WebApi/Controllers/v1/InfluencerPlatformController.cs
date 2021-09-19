@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 namespace IMP.WebApi.Controllers.v1
 {
     [ApiVersion("1.0")]
-    [Route(RouterConstants.INFLUENCER_PLATFORM)]
+    [Route(RouterConstants.InfluencerPlatform)]
     public class InfluencerPlatformController : BaseApiController
     {
         private readonly IAuthenticatedUserService _authenticatedUserService;
