@@ -15,6 +15,7 @@ using IMP.Domain.Entities;
 using IMP.Application.Interfaces;
 using IMP.Application.Enums;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace IMP.Application.Features.Campaigns.Queries.GetAllCampaigns
 {

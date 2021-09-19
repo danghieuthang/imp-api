@@ -53,6 +53,7 @@ namespace IMP.Application.Features.ApplicationUsers.Commands.UpdateUserPaymentIn
                 if (isAdd)
                 {
                     entity = await _paymentInfoRepositoryAsync.AddAsync(entity);
+                    await _unitOfWork.CommitAsync();
                 }
                 else
                 {
