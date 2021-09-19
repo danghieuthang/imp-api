@@ -166,8 +166,8 @@ namespace IMP.Application.Interfaces
        where TEntity : BaseEntity, new()
        where TRequest : IGetByIdQuery<TEntity, TViewModel>
     {
-        protected readonly IGenericRepositoryAsync<TEntity> _repositoryAsync;
-        protected readonly IMapper _mapper;
+        private readonly IGenericRepositoryAsync<TEntity> _repositoryAsync;
+        private readonly IMapper _mapper;
         public GetByIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _repositoryAsync = unitOfWork.Repository<TEntity>();
@@ -187,6 +187,9 @@ namespace IMP.Application.Interfaces
             return new Response<TViewModel>(data);
         }
 
+        public IGenericRepositoryAsync<TEntity> Repository => _repositoryAsync;
+        public IMapper Mapper => _mapper;
+
 
     }
     #endregion
@@ -201,8 +204,8 @@ namespace IMP.Application.Interfaces
       where TViewModel : BaseViewModel<int>, new()
       where TEntity : BaseEntity, new()
     {
-        protected readonly IGenericRepositoryAsync<TEntity> _repositoryAsync;
-        protected readonly IMapper _mapper;
+        private readonly IGenericRepositoryAsync<TEntity> _repositoryAsync;
+        private readonly IMapper _mapper;
         public GetAllQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _repositoryAsync = unitOfWork.Repository<TEntity>();
@@ -215,6 +218,8 @@ namespace IMP.Application.Interfaces
             var data = _mapper.Map<IEnumerable<TViewModel>>(entities);
             return new Response<IEnumerable<TViewModel>>(data);
         }
+        public IGenericRepositoryAsync<TEntity> Repository => _repositoryAsync;
+        public IMapper Mapper => _mapper;
     }
     #endregion
 }

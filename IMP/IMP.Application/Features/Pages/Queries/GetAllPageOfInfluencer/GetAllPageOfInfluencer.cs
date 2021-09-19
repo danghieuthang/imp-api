@@ -21,8 +21,8 @@ namespace IMP.Application.Features.Pages.Queries.GetAllPageOfInfluencer
 
             public override async Task<Response<IEnumerable<PageViewModel>>> Handle(GetAllPageOfInfluencerQuery request, CancellationToken cancellationToken)
             {
-                var entities = await _repositoryAsync.FindAllAsync(x => x.InfluencerId == request.InfluencerId);
-                var views = _mapper.Map<IEnumerable<PageViewModel>>(entities);
+                var entities = await Repository.FindAllAsync(x => x.InfluencerId == request.InfluencerId);
+                var views = Mapper.Map<IEnumerable<PageViewModel>>(entities);
                 return new Response<IEnumerable<PageViewModel>>(views);
             }
         }

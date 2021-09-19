@@ -23,14 +23,14 @@ namespace IMP.Application.Features.ApplicationUsers.Queries.GetUserById
 
             public override async Task<Response<ApplicationUserViewModel>> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
             {
-                var entity = await _repositoryAsync.FindSingleAsync(x => x.Id == request.Id, x => x.PaymentInfor, x => x.PaymentInfor.Bank);
+                var entity = await Repository.FindSingleAsync(x => x.Id == request.Id, x => x.PaymentInfor, x => x.PaymentInfor.Bank);
                 if (entity == null)
                 {
                     //var error = new ValidationError("id", $"'{request.Id}' không tồn tại");
                     throw new KeyNotFoundException();
                 }
 
-                var view = _mapper.Map<ApplicationUserViewModel>(entity);
+                var view = Mapper.Map<ApplicationUserViewModel>(entity);
                 view.InterestsR = entity.Interests?.Split(";").ToList();
                 view.JobsR = entity.Job?.Split(";").ToList();
                 view.PetsR = entity.Pet?.Split(";").ToList();
