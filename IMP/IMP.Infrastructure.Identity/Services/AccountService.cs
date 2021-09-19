@@ -323,6 +323,10 @@ namespace IMP.Infrastructure.Identity.Services
 
             var code = await _userManager.GeneratePasswordResetTokenAsync(account);
             var route = "api/account/reset-password/";
+            if (string.IsNullOrEmpty(origin))
+            {
+                origin = "http://localhost";
+            }
             var _enpointUri = new Uri(string.Concat($"{origin}/", route));
             var emailRequest = new EmailRequest()
             {
