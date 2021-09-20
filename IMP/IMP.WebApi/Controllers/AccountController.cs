@@ -94,6 +94,11 @@ namespace IMP.WebApi.Controllers
             return Ok(await _accountService.SetPassword(request, _authenticatedUserService.UserId));
         }
 
+        /// <summary>
+        /// Create new access token from refresh token
+        /// </summary>
+        /// <param name="request">User can set refresh token in here or cookie</param>
+        /// <returns></returns>
         [HttpPost("refresh-token")]
         public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
         {
