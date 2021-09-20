@@ -95,13 +95,13 @@ namespace IMP.WebApi.Controllers
         }
 
         [HttpPost("refresh-token")]
-        public async Task<IActionResult> RefreshToken([FromBody] string refreshToken)
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
         {
-            if (string.IsNullOrEmpty(refreshToken))
+            if (string.IsNullOrEmpty(request.RefreshToken))
             {
-                refreshToken = Request.Cookies["refresh-token"];
+               request.RefreshToken = Request.Cookies["refresh-token"];
             }
-            return Ok(await _accountService.RefreshToken(refreshToken, GenerateIPAddress()));
+            return Ok(await _accountService.RefreshToken(request.RefreshToken, GenerateIPAddress()));
         }
 
         [HttpPost("revoke-token")]

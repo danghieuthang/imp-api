@@ -4,6 +4,7 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,7 +16,7 @@ namespace IMP.WebApi.Extensions
         {
             services.AddSwaggerGen(c =>
             {
-                c.IncludeXmlComments(string.Format(@"{0}\IMP.WebApi.xml", System.AppDomain.CurrentDomain.BaseDirectory));
+                c.IncludeXmlComments(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, string.Format(@"IMP.WebApi.xml")));
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
