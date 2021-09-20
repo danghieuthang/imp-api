@@ -1,4 +1,5 @@
-﻿using System.Reflection.Metadata;
+﻿using System.Windows.Input;
+using System.Reflection.Metadata;
 using AutoMapper;
 using IMP.Application.Models;
 using IMP.Application.Exceptions;
@@ -28,18 +29,14 @@ namespace IMP.Application.Interfaces
 
     }
 
-    public interface ICreateCommand<TRequest, TResponse> : ICommand<TResponse>
-       where TRequest : notnull
+    public interface ICreateCommand<TResponse> : ICommand<TResponse>
        where TResponse : notnull
     {
-        TRequest Model { get; init; }
     }
 
-    public interface IUpdateCommand<TRequest, TResponse> : ICommand<TResponse>
-        where TRequest : notnull
+    public interface IUpdateCommand<TResponse> : ICommand<TResponse>
         where TResponse : notnull
     {
-        public TRequest Model { get; set; }
     }
     public interface IDeleteCommand<TId, TResponse> : ICommand<TResponse>
        where TId : struct

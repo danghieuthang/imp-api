@@ -20,5 +20,7 @@ namespace IMP.WebApi
         public const string File = Common + "files";
         public const string Page = Common + "pages";
         public const string Block = Common + "blocks";
+        public const string BlockPlatform = Common + "block-platforms";
+        public const string BlockCampaign = Common + "block-campaigns";
     }
 }

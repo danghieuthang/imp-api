@@ -41,6 +41,7 @@ namespace IMP.Domain.Entities
         public bool IsActived { get; set; }
 
         public ICollection<BlockPlatform> BlockPlatforms { get; set; }
+        public ICollection<BlockCampaign> BlockCampaigns { get; set; }
 
     }
 }
