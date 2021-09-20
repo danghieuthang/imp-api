@@ -109,6 +109,11 @@ namespace IMP.WebApi.Controllers
             return Ok(await _accountService.RefreshToken(request.RefreshToken, GenerateIPAddress()));
         }
 
+        /// <summary>
+        /// Revoke token
+        /// </summary>
+        /// <returns></returns>
+
         [HttpPost("revoke-token")]
         public async Task<IActionResult> RevokeToken()
         {
