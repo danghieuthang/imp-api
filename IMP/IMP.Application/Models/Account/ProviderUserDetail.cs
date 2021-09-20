@@ -13,6 +13,7 @@ namespace IMP.Application.Models.Account
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Locale { get; set; }
+        public string Avatar { get; set; }
         public string Name
         {
             get

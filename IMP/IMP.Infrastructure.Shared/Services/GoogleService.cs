@@ -38,7 +38,8 @@ namespace IMP.Infrastructure.Shared.Services
                     LastName = payload.FamilyName,
                     Locale = payload.Locale,
                     Name = payload.Name,
-                    ProviderUserId = payload.Subject
+                    ProviderUserId = payload.Subject,
+                    Avatar = payload.Picture
                 };
             }
             catch (Exception)

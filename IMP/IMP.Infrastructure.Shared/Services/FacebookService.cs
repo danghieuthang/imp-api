@@ -23,7 +23,7 @@ namespace IMP.Infrastructure.Shared.Services
         }
         public async Task<ProviderUserDetail> ValidationAccessToken(string accessToken)
         {
-            string verifyTokenEndpoint = string.Format("https://graph.facebook.com/me?access_token={0}&fields=email,name,first_name,last_name", accessToken);
+            string verifyTokenEndpoint = string.Format("https://graph.facebook.com/me?access_token={0}&fields=email,name,first_name,last_name,picture", accessToken);
             string verifyAppEndpoint = string.Format("https://graph.facebook.com/app?access_token={0}", accessToken);
 
             var uri = new Uri(verifyTokenEndpoint);
@@ -50,6 +50,7 @@ namespace IMP.Infrastructure.Shared.Services
                         user.FirstName = userObj["first_name"];
                         user.LastName = userObj["last_name"];
                         user.ProviderUserId = userObj["id"];
+                        user.Avatar = userObj["picture"]["data"]["url"];
                         return user;
                     }
                 }
@@ -58,9 +59,39 @@ namespace IMP.Infrastructure.Shared.Services
             return null;
         }
 
-        public Task<SocialPlatformUser> VerifyUser(string username, string hashtag)
+        public async Task<SocialPlatformUser> VerifyUser(string username, string accessToken)
         {
-            throw new NotImplementedException();
+            string verifyTokenEndpoint = string.Format("https://graph.facebook.com/me?access_token={0}&fields=email,name,first_name,last_name,avatar", accessToken);
+            string verifyAppEndpoint = string.Format("https://graph.facebook.com/app?access_token={0}", accessToken);
+
+            var uri = new Uri(verifyTokenEndpoint);
+
+            var client = new HttpClient();
+            var response = await client.GetAsync(uri);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                dynamic userObj = JsonConvert.DeserializeObject(content);
+
+                uri = new Uri(verifyAppEndpoint);
+                response = await client.GetAsync(uri);
+                if (response.IsSuccessStatusCode)
+                {
+                    content = await response.Content.ReadAsStringAsync();
+                    dynamic appObj = JsonConvert.DeserializeObject(content);
+
+                    if (appObj["id"] == _settings.ClientId)
+                    {
+                        SocialPlatformUser user = new();
+                        user.Name = userObj["email"];
+                        user.Avatar = userObj["picture"]["data"]["url"];
+                        return user;
+                    }
+                }
+
+            }
+            return null;
         }
     }
 }

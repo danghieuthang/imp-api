@@ -20,11 +20,12 @@ namespace IMP.Application.Interfaces.Services
             _applicationUserRepositoryAsync = _unitOfWork.Repository<ApplicationUser>();
         }
 
-        public async Task<ApplicationUser> CreateUser(string email = null)
+        public async Task<ApplicationUser> CreateUser(string email = null, string avatar = null)
         {
             var user = new ApplicationUser
             {
                 Email = email,
+                Avatar = avatar,
                 PaymentInfor = new PaymentInfor(),
                 Wallet = new Wallet()
             };
