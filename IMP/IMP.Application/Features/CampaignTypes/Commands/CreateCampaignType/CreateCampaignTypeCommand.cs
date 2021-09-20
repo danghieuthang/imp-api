@@ -30,33 +30,34 @@ namespace IMP.Application.Features.CampaignTypes.Commands.CreateCampaignType
         [FromForm(Name = "description")]
         public string Description { get; set; }
 
-        public class CreateCampaignTypeCommandHandler : IRequestHandler<CreateCampaignTypeCommand, Response<CampaignTypeViewModel>>
+        public class CreateCampaignTypeCommandHandler : CommandHandler<CreateCampaignTypeCommand, CampaignTypeViewModel>
         {
-            private readonly IUnitOfWork _unitOfWork;
             private readonly IGenericRepositoryAsync<CampaignType> _campaignTypeRepositoryAsync;
-            private readonly IMapper _mapper;
             private readonly IFirebaseService _firebaseService;
-            public CreateCampaignTypeCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IFirebaseService firebaseService)
+            public CreateCampaignTypeCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IFirebaseService firebaseService) : base(unitOfWork, mapper)
             {
-                _unitOfWork = unitOfWork;
-                _campaignTypeRepositoryAsync = _unitOfWork.Repository<CampaignType>();
-                _mapper = mapper;
+                _campaignTypeRepositoryAsync = unitOfWork.Repository<CampaignType>();
                 _firebaseService = firebaseService;
             }
 
-            public async Task<Response<CampaignTypeViewModel>> Handle(CreateCampaignTypeCommand request, CancellationToken cancellationToken)
+            public override async Task<Response<CampaignTypeViewModel>> Handle(CreateCampaignTypeCommand request, CancellationToken cancellationToken)
             {
-                var campaignType = _mapper.Map<CampaignType>(request);
-                string imageFileUrl = await _firebaseService.UploadFile(request.ImageFile.OpenReadStream(), request.ImageFile.FileName, "admin", "campaign-types");
-                if (imageFileUrl != null)
+                var campaignType = Mapper.Map<CampaignType>(request);
+                if (request.ImageFile != null)
                 {
-                    campaignType.Image = imageFileUrl;
+                    string imageFileUrl = await _firebaseService.UploadFile(request.ImageFile.OpenReadStream(), request.ImageFile.FileName, "admin", "campaign-types");
+                    if (imageFileUrl != null)
+                    {
+                        campaignType.Image = imageFileUrl;
+                    }
                 }
+
                 campaignType = await _campaignTypeRepositoryAsync.AddAsync(campaignType);
-                await _unitOfWork.CommitAsync();
-                var campaignTypeView = _mapper.Map<CampaignTypeViewModel>(campaignType);
+                await UnitOfWork.CommitAsync();
+                var campaignTypeView = Mapper.Map<CampaignTypeViewModel>(campaignType);
                 return new Response<CampaignTypeViewModel>(campaignTypeView);
             }
+
         }
     }
 }

@@ -15,22 +15,12 @@ using IMP.Domain.Entities;
 
 namespace IMP.Application.Features.CampaignTypes.Queries
 {
-    public class GetAllCampaignTypeQuery : IRequest<Response<IEnumerable<CampaignTypeViewModel>>>
+    public class GetAllCampaignTypeQuery : IGetAllQuery<CampaignTypeViewModel>
     {
-        public class GetAllCampaignTypeQueryHandler : IRequestHandler<GetAllCampaignTypeQuery, Response<IEnumerable<CampaignTypeViewModel>>>
+        public class GetAllCampaignTypeQueryHandler : GetAllQueryHandler<GetAllCampaignTypeQuery, CampaignType, CampaignTypeViewModel>
         {
-            private readonly IGenericRepositoryAsync<CampaignType> _campaignTypeRepositoryAsync;
-            private readonly IMapper _mapper;
-            public GetAllCampaignTypeQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
+            public GetAllCampaignTypeQueryHandler(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
             {
-                _campaignTypeRepositoryAsync = unitOfWork.Repository<CampaignType>();
-                _mapper = mapper;
-            }
-            public async Task<Response<IEnumerable<CampaignTypeViewModel>>> Handle(GetAllCampaignTypeQuery request, CancellationToken cancellationToken)
-            {
-                var campaignTypes = await _campaignTypeRepositoryAsync.GetAllAsync();
-                var campaignTypeViews = _mapper.Map<IEnumerable<CampaignTypeViewModel>>(campaignTypes);
-                return new Response<IEnumerable<CampaignTypeViewModel>>(campaignTypeViews);
             }
         }
     }

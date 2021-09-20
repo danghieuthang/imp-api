@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Windows.Input;
+using AutoMapper;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Interfaces;
 using IMP.Application.Interfaces.Repositories;
@@ -16,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace IMP.Application.Features.CampaignTypes.Commands.UpdateCampaignType
 {
-    public class UpdateCampaignTypeCommand : IRequest<Response<CampaignTypeViewModel>>
+    public class UpdateCampaignTypeCommand : ICommand<CampaignTypeViewModel>
     {
         [FromForm(Name = "id")]
         public int Id { get; set; }
@@ -32,22 +33,19 @@ namespace IMP.Application.Features.CampaignTypes.Commands.UpdateCampaignType
         [FromForm(Name = "description")]
         public string Description { get; set; }
 
-        public class UpdateCampaignTypeCommandHandler : IRequestHandler<UpdateCampaignTypeCommand, Response<CampaignTypeViewModel>>
+        public class UpdateCampaignTypeCommandHandler : CommandHandler<UpdateCampaignTypeCommand, CampaignTypeViewModel>
         {
-            private readonly IUnitOfWork _unitOfWork;
+
             private readonly IGenericRepositoryAsync<CampaignType> _campaignTypeRepositoryAsync;
-            private readonly IMapper _mapper;
             private readonly IFirebaseService _firebaseService;
 
-            public UpdateCampaignTypeCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IFirebaseService firebaseService)
+            public UpdateCampaignTypeCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IFirebaseService firebaseService) : base(unitOfWork, mapper)
             {
-                _unitOfWork = unitOfWork;
-                _campaignTypeRepositoryAsync = _unitOfWork.Repository<CampaignType>();
-                _mapper = mapper;
+                _campaignTypeRepositoryAsync = unitOfWork.Repository<CampaignType>();
                 _firebaseService = firebaseService;
             }
 
-            public async Task<Response<CampaignTypeViewModel>> Handle(UpdateCampaignTypeCommand request, CancellationToken cancellationToken)
+            public override async Task<Response<CampaignTypeViewModel>> Handle(UpdateCampaignTypeCommand request, CancellationToken cancellationToken)
             {
                 var campaignType = await _campaignTypeRepositoryAsync.GetByIdAsync(request.Id);
                 if (campaignType != null)
@@ -62,10 +60,10 @@ namespace IMP.Application.Features.CampaignTypes.Commands.UpdateCampaignType
                         campaignType.Image = imageFileUrl;
                     }
                     _campaignTypeRepositoryAsync.Update(campaignType);
-                    await _unitOfWork.CommitAsync();
+                    await UnitOfWork.CommitAsync();
                 }
 
-                var campaignTypeView = _mapper.Map<CampaignTypeViewModel>(campaignType);
+                var campaignTypeView = Mapper.Map<CampaignTypeViewModel>(campaignType);
                 return new Response<CampaignTypeViewModel>(campaignTypeView);
             }
         }
