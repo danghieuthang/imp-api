@@ -17,46 +17,53 @@ using IMP.Application.Enums;
 namespace IMP.Application.Interfaces
 {
     #region generic interfaces
+    /// <summary>
+    /// Provides the interface(s) for Command
+    /// </summary>
+    /// <typeparam name="T">The type of response data</typeparam>
     public interface ICommand<T> : IRequest<Response<T>>
         where T : notnull
     {
 
     }
-
+    /// <summary>
+    /// Provides the interface(s) for Query
+    /// </summary>
+    /// <typeparam name="T">The type of response</typeparam>
     public interface IQuery<T> : IRequest<Response<T>>
         where T : notnull
     {
 
     }
-
-    public interface ICreateCommand<TResponse> : ICommand<TResponse>
-       where TResponse : notnull
-    {
-    }
-
-    public interface IUpdateCommand<TResponse> : ICommand<TResponse>
-        where TResponse : notnull
-    {
-    }
+    /// <summary>
+    /// Provides the interface(s) for Delete Command
+    /// </summary>
+    /// <typeparam name="TId">The type Id of entity</typeparam>
+    /// <typeparam name="TResponse">The type of response</typeparam>
     public interface IDeleteCommand<TId, TResponse> : ICommand<TResponse>
        where TId : struct
        where TResponse : notnull
     {
-        public TId Id { get; set; }
+        TId Id { get; set; }
     }
 
     /// <summary>
     /// Provides the interface(s) for Query List
     /// </summary>
-    /// <typeparam name="T">The View Model</typeparam>
+    /// <typeparam name="T">The type of item response</typeparam>
     public interface IListQuery<T> : IQuery<IPagedList<T>>
         where T : notnull
     {
-        public int PageIndex { get; set; }
-        public int PageSize { get; set; }
-        public string OrderField { get; set; }
-        public OrderBy OrderBy { get; set; }
+        int PageIndex { get; set; }
+        int PageSize { get; set; }
+        string OrderField { get; set; }
+        OrderBy OrderBy { get; set; }
     }
+    /// <summary>
+    /// Provides interface(s) for Query Item
+    /// </summary>
+    /// <typeparam name="TId">The type id of item</typeparam>
+    /// <typeparam name="TResponse">The type of response</typeparam>
     public interface IItemQuery<TId, TResponse> : IQuery<TResponse>
       where TId : struct
       where TResponse : notnull
@@ -67,6 +74,12 @@ namespace IMP.Application.Interfaces
     #endregion
 
     #region generic abstract class
+
+    /// <summary>
+    /// Provider abstract class for Command Handler
+    /// </summary>
+    /// <typeparam name="TCommand">The type of command</typeparam>
+    /// <typeparam name="TResponse">The type of response</typeparam>
     public abstract class CommandHandler<TCommand, TResponse> : IRequestHandler<TCommand, Response<TResponse>>
         where TCommand : ICommand<TResponse>, new()
     {
@@ -83,8 +96,13 @@ namespace IMP.Application.Interfaces
 
     }
 
-    public abstract class QueryHandler<TCommand, TResponse> : IRequestHandler<TCommand, Response<TResponse>>
-        where TCommand : IQuery<TResponse>, new()
+    /// <summary>
+    /// Provides abstract class for Query Handler
+    /// </summary>
+    /// <typeparam name="TQuery">The type of query</typeparam>
+    /// <typeparam name="TResponse">The type of response</typeparam>
+    public abstract class QueryHandler<TQuery, TResponse> : IRequestHandler<TQuery, Response<TResponse>>
+        where TQuery : IQuery<TResponse>, new()
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -93,14 +111,18 @@ namespace IMP.Application.Interfaces
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public abstract Task<Response<TResponse>> Handle(TCommand request, CancellationToken cancellationToken);
+        public abstract Task<Response<TResponse>> Handle(TQuery request, CancellationToken cancellationToken);
         public IUnitOfWork UnitOfWork => _unitOfWork;
         public IMapper Mapper => _mapper;
 
     }
-
-    public abstract class ListQueryHandler<TCommand, TViewModel> : IRequestHandler<TCommand, Response<IPagedList<TViewModel>>>
-       where TCommand : IListQuery<TViewModel>, new()
+    /// <summary>
+    /// Provides abstract class for Query List Handler
+    /// </summary>
+    /// <typeparam name="TQuery">The type of list query</typeparam>
+    /// <typeparam name="TViewModel">The type of response</typeparam>
+    public abstract class ListQueryHandler<TQuery, TViewModel> : IRequestHandler<TQuery, Response<IPagedList<TViewModel>>>
+       where TQuery : IListQuery<TViewModel>, new()
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -109,17 +131,25 @@ namespace IMP.Application.Interfaces
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public abstract Task<Response<IPagedList<TViewModel>>> Handle(TCommand request, CancellationToken cancellationToken);
+        public abstract Task<Response<IPagedList<TViewModel>>> Handle(TQuery request, CancellationToken cancellationToken);
         public IUnitOfWork UnitOfWork => _unitOfWork;
         public IMapper Mapper => _mapper;
     }
     #endregion
 
     #region generic delete
+    /// <summary>
+    /// Providers interface(s) for Delete Command
+    /// </summary>
+    /// <typeparam name="TEntity">The type of entity</typeparam>
     public interface IDeleteCommand<TEntity> : IDeleteCommand<int, int> where TEntity : BaseEntity, new()
     {
     }
-
+    /// <summary>
+    /// Provides abstract class for Delete Command Handler
+    /// </summary>
+    /// <typeparam name="TEntity">The type of entity delete</typeparam>
+    /// <typeparam name="TCommand">The type of Delete Command</typeparam>
     public abstract class DeleteCommandHandler<TEntity, TCommand> : IRequestHandler<TCommand, Response<int>>
        where TEntity : BaseEntity, new()
        where TCommand : class, IDeleteCommand<TEntity>, new()
@@ -153,11 +183,22 @@ namespace IMP.Application.Interfaces
     #endregion
 
     #region generic get by id
+    /// <summary>
+    /// Provides inteface(s) for Get Item By Id Query
+    /// </summary>
+    /// <typeparam name="TEntity">The type of Entity </typeparam>
+    /// <typeparam name="TViewModel">The type View Model of Entity</typeparam>
     public interface IGetByIdQuery<TEntity, TViewModel> : IItemQuery<int, TViewModel>
        where TEntity : BaseEntity, new()
        where TViewModel : BaseViewModel<int>
     {
     }
+    /// <summary>
+    /// Provides abstract class for Get Item By Id Query Handler
+    /// </summary>
+    /// <typeparam name="TRequest">The type of Get By Id Query</typeparam>
+    /// <typeparam name="TEntity">The type of Entity</typeparam>
+    /// <typeparam name="TViewModel">The type View Model of Entity</typeparam>
     public abstract class GetByIdQueryHandler<TRequest, TEntity, TViewModel> : IRequestHandler<TRequest, Response<TViewModel>>
        where TViewModel : BaseViewModel<int>, new()
        where TEntity : BaseEntity, new()
@@ -192,10 +233,20 @@ namespace IMP.Application.Interfaces
     #endregion
 
     #region generic get all
+    /// <summary>
+    /// Provides interface(s) for Get All Query
+    /// </summary>
+    /// <typeparam name="TViewModel">The type View Model of entity</typeparam>
     public interface IGetAllQuery<TViewModel> : IQuery<IEnumerable<TViewModel>>
       where TViewModel : BaseViewModel<int>
     {
     }
+    /// <summary>
+    /// Provides abstract class for Get All Query Handler
+    /// </summary>
+    /// <typeparam name="TRequest">The type of GetAllQuery</typeparam>
+    /// <typeparam name="TEntity">The type of entity</typeparam>
+    /// <typeparam name="TViewModel">The type View Model of Entity</typeparam>
     public abstract class GetAllQueryHandler<TRequest, TEntity, TViewModel> : IRequestHandler<TRequest, Response<IEnumerable<TViewModel>>>
       where TRequest : class, IGetAllQuery<TViewModel>, new()
       where TViewModel : BaseViewModel<int>, new()
