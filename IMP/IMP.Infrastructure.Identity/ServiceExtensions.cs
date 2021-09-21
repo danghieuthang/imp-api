@@ -41,6 +41,15 @@ namespace IMP.Infrastructure.Identity
                     b => b.MigrationsAssembly(typeof(IdentityContext).Assembly.FullName)));
             }
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<IdentityContext>().AddDefaultTokenProviders();
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequiredLength = 6;
+                options.Password.RequiredUniqueChars = 1;
+            });
             #region Repositories
             services.AddScoped(typeof(IIdentityGenericRepository<,>), typeof(IdentityGenericRepository<,>));
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();

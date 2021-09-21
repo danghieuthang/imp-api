@@ -43,6 +43,7 @@ namespace IMP.Infrastructure.Identity.Services
         private readonly IApplicationUserService _applicationUserService;
         private readonly IGoogleService _googleServices;
         private readonly IFacebookService _facebookService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         public AccountService(UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager,
             IOptions<JWTSettings> jwtSettings,
@@ -63,6 +64,7 @@ namespace IMP.Infrastructure.Identity.Services
             this._applicationUserService = applicationUserService;
             this._googleServices = googleServices;
             this._facebookService = facebookService;
+            this._httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<Response<AuthenticationResponse>> AuthenticateAsync(AuthenticationRequest request, string ipAddress)
@@ -202,7 +204,13 @@ namespace IMP.Infrastructure.Identity.Services
                 await _emailService.SendAsync(new Application.Models.Email.EmailRequest() { To = user.Email, Body = $"Please confirm your account by click <a href='{verificationUri}'>Here</a>.", Subject = "Confirm Registration TMP Platform" });
                 return new Response<string>(user.Email, message: $"User Registered.");
             }
-            throw new ApiException($"Can't register. Something wrong.");
+            var errors = new List<ValidationError>();
+            foreach (var error in result.Errors)
+            {
+                errors.Add(new ValidationError("passsword", error.Description));
+            }
+
+            throw new ValidationException(errors);
 
         }
 
@@ -257,14 +265,14 @@ namespace IMP.Infrastructure.Identity.Services
         {
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-            string domain;
-            if (string.IsNullOrEmpty(origin))
+            string domain = _httpContextAccessor.HttpContext.Request.Host.Value;
+            if (string.IsNullOrEmpty(domain))
             {
                 domain = "http://localhost";
             }
             else
             {
-                domain = origin;
+                domain = "https://" + domain;
             }
             var route = "/api/accounts/confirm-email/";
             var _enpointUri = new Uri(string.Concat($"{domain}", route));
@@ -309,11 +317,18 @@ namespace IMP.Infrastructure.Identity.Services
 
             var code = await _userManager.GeneratePasswordResetTokenAsync(account);
             var route = "api/account/reset-password/";
-            if (string.IsNullOrEmpty(origin))
+
+            string domain = _httpContextAccessor.HttpContext.Request.Host.Value;
+            if (string.IsNullOrEmpty(domain))
             {
-                origin = "http://localhost";
+                domain = "http://localhost";
             }
-            var _enpointUri = new Uri(string.Concat($"{origin}/", route));
+            else
+            {
+                domain = "https://" + domain;
+            }
+
+            var _enpointUri = new Uri(string.Concat($"{domain}/", route));
             var emailRequest = new EmailRequest()
             {
                 Body = $"You reset token is - {code}",
