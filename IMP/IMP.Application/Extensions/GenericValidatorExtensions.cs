@@ -61,7 +61,31 @@ namespace IMP.Application.Extensions
         /// <returns></returns>
         public static IRuleBuilderOptions<T, DateTime?> MustValidDate<T>(this IRuleBuilder<T, DateTime?> ruleBuilder)
         {
-            return ruleBuilder.GreaterThanOrEqualTo(DateTime.UtcNow).WithMessage("'{PropertyValue}' không hợp lệ.");
+            return ruleBuilder.GreaterThanOrEqualTo(DateTime.UtcNow).WithMessage("Ngày không hợp lệ.");
+        }
+        public static IRuleBuilderOptions<T, TimeSpan?> MustValidTime<T>(this IRuleBuilder<T, TimeSpan?> ruleBuilder)
+        {
+            return ruleBuilder.Must(x =>
+            {
+                if (!x.HasValue)
+                {
+                    return true;
+                }
+                return x.Value.TotalHours <= 24;
+            }).WithMessage("Thời gian không hợp lệ.");
+        }
+
+
+        /// <summary>
+        /// Check date múst be greater than a date provide
+        /// </summary>
+        /// <param name="ruleBuilder"></param>
+        /// <param name="fromDate">From Date</param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static IRuleBuilderOptions<T, DateTime?> MustGreaterThan<T>(this IRuleBuilder<T, DateTime?> ruleBuilder, DateTime? fromDate)
+        {
+            return ruleBuilder.GreaterThanOrEqualTo(fromDate.Value).WithMessage($"Ngày phải lớn hơn {fromDate.Value}.");
         }
 
         /// <summary>

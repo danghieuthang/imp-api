@@ -104,12 +104,12 @@ namespace IMP.WebApi.Controllers
         {
             if (string.IsNullOrEmpty(request.RefreshToken))
             {
-               request.RefreshToken = Request.Cookies["refresh-token"];
+                request.RefreshToken = Request.Cookies["refresh-token"];
             }
             return Ok(await _accountService.RefreshToken(request.RefreshToken, GenerateIPAddress()));
         }
 
-     
+
 
         [HttpPost("revoke-token")]
         public async Task<IActionResult> RevokeToken()

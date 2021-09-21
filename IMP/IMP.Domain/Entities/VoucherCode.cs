@@ -9,8 +9,6 @@ namespace IMP.Domain.Entities
 {
     public class VoucherCode : BaseEntity
     {
-        [ForeignKey("CampaignId")]
-        public int CampaignId { get; set; }
         [ForeignKey("ApplicationUser")]
         public int InfluencerId { get; set; }
         [MaxLength(256)]

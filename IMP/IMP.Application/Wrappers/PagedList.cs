@@ -20,12 +20,16 @@ namespace IMP.Application.Wrappers
 
         public IPagedList<TViewModel> ToResponsePagedList<TViewModel>(IMapper mapper) where TViewModel : class
         {
+            int pageSize = this.PageSize;
+            int pageIndex = this.PageIndex;
+            int totalCount = this.TotalCount;
+            int totalPages = this.TotalPages;
             return new PagedList<TViewModel>
             {
-                PageIndex = this.PageIndex,
-                PageSize = this.PageIndex,
-                TotalCount = this.TotalCount,
-                TotalPages = this.TotalPages,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalCount = totalCount,
+                TotalPages = totalPages,
                 Items = mapper.Map<IList<TViewModel>>(this.Items)
             };
         }

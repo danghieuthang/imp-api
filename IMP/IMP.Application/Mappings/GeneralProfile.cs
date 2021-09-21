@@ -15,6 +15,15 @@ using System.Text;
 using IMP.Application.Features.InfluencerPlatforms.Commands.CreateInfluencerPlatform;
 using IMP.Application.Features.InfluencerPlatforms.Commands.UpdateInlfuencerPlatform;
 using IMP.Application.Features.ApplicationUsers.Commands.UpdateUserInfomation;
+using IMP.Application.Features.Pages.Commands.CreatePage;
+using IMP.Application.Features.Pages.Commands.UpdatePage;
+using IMP.Application.Features.Blocks.Commands.CreateBlock;
+using IMP.Application.Features.Blocks.Commands.UpdateBlock;
+using IMP.Application.Features.BlockPlatforms.Commands.CreateBlockPlatform;
+using IMP.Application.Features.BlockPlatforms.Commands.UpdateBlockPlatform;
+using IMP.Application.Features.BlockCampaigns.Commands.CreateBlockCampaign;
+using IMP.Application.Features.BlockCampaigns.Commands.UpdateBlockCampaign;
+using IMP.Application.Features.Vouchers.Commands.CreateVoucher;
 
 namespace IMP.Application.Mappings
 {
@@ -60,6 +69,30 @@ namespace IMP.Application.Mappings
 
             #region location
             CreateMap<Location, LocationViewModel>();
+            #endregion
+
+            #region bio
+            CreateMap<Page, PageViewModel>();
+            CreateMap<CreatePageCommand, Page>();
+            CreateMap<UpdatePageCommand, Page>();
+
+            CreateMap<Block, BlockViewModel>();
+            CreateMap<CreateBlockCommand, Block>();
+            CreateMap<UpdateBlockCommand, Block>();
+
+            CreateMap<BlockPlatform, BlockPlatformViewModel>();
+            CreateMap<CreateBlockPlatformCommand, BlockPlatform>();
+            CreateMap<UpdateBlockPlatformCommand, BlockPlatform>();
+
+            CreateMap<BlockCampaign, BlockCampaignViewModel>();
+            CreateMap<CreateBlockCampaignCommand, BlockCampaign>();
+            CreateMap<UpdateBlockCampaignCommand, BlockCampaign>();
+            #endregion
+
+            #region voucher
+            CreateMap<Voucher, VoucherViewModel>();
+            CreateMap<CreateVoucherCommand, Voucher>();
+
             #endregion
 
         }
