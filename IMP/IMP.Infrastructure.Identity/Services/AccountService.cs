@@ -146,33 +146,26 @@ namespace IMP.Infrastructure.Identity.Services
             var userWithProviderId = _userManager.Users?.FirstOrDefault(x => x.ProviderUserId == user.ProviderUserId);
             if (userWithProviderId == null)
             {
-                // Create Application User
-                var applicationUser = await _applicationUserService.CreateUser(avatar: providerUser.Avatar);
-                // Add Application User ref to Identity User
-                if (applicationUser != null)
-                {
-                    user.ApplicationUserId = applicationUser.Id;
-                }
+
 
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(user, role.ToString());
+                    // Create Application User
+                    var applicationUser = await _applicationUserService.CreateUser(avatar: providerUser.Avatar);
+                    // Add Application User ref to Identity User
+                    if (applicationUser != null)
+                    {
+                        user.ApplicationUserId = applicationUser.Id;
+                        await _userManager.UpdateAsync(user);
+                    }
                     return user;
                 }
-                else
-                {
-                    // Delete Application User if create fail
-                    await _applicationUserService.DeleteUser(applicationUser.Id);
-                    var errors = result.Errors.Select(x =>
-                    new ValidationError(x.Code, x.Description)).ToList();
-                    throw new ValidationException(errors);
-                }
             }
-            else
-            {
-                throw new ApiException($"This account is already registered.");
-            }
+
+            throw new ApiException($"This account is already registered.");
+
         }
         public async Task<Response<string>> RegisterAsync(RegisterRequest request, string origin)
         {
@@ -191,32 +184,25 @@ namespace IMP.Infrastructure.Identity.Services
                 IsChangeUsername = true
             };
 
-            // Create Application User
-            var applicationUser = await _applicationUserService.CreateUser(user.Email);
-            // Add Application User ref to Identity User
-            if (applicationUser != null)
-            {
-                user.ApplicationUserId = applicationUser.Id;
-                user.EmailConfirmed = false;
-            }
-
             var result = await _userManager.CreateAsync(user, request.Password);
             if (result.Succeeded)
             {
+                // Create Application User
+                var applicationUser = await _applicationUserService.CreateUser(user.Email);
+                // Add Application User ref to Identity User
+                if (applicationUser != null)
+                {
+                    user.ApplicationUserId = applicationUser.Id;
+                    user.EmailConfirmed = false;
+                    await _userManager.UpdateAsync(user);
+                }
                 await _userManager.AddToRoleAsync(user, request.Role.ToString());
                 var verificationUri = await SendVerificationEmail(user, origin);
                 //TODO: Attach Email Service here and configure it via appsettings
                 await _emailService.SendAsync(new Application.Models.Email.EmailRequest() { To = user.Email, Body = $"Please confirm your account by click <a href='{verificationUri}'>Here</a>.", Subject = "Confirm Registration TMP Platform" });
                 return new Response<string>(user.Email, message: $"User Registered.");
             }
-            else
-            {
-                // Delete Application User if create fail
-                await _applicationUserService.DeleteUser(applicationUser.Id);
-                var errors = result.Errors.Select(x =>
-                new ValidationError(x.Code, x.Description)).ToList();
-                throw new ValidationException(errors);
-            }
+            throw new ApiException($"Can't register. Something wrong.");
 
         }
 
