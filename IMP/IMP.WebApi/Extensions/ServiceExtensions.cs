@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using IMP.WebApi.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
@@ -12,6 +13,7 @@ namespace IMP.WebApi.Extensions
 {
     public static class ServiceExtensions
     {
+
         public static void AddSwaggerExtension(this IServiceCollection services)
         {
             services.AddSwaggerGen(c =>
@@ -79,6 +81,13 @@ namespace IMP.WebApi.Extensions
                 {
                     // Add Snake Case hanlde for Json
                     NamingStrategy = new Newtonsoft.Json.Serialization.SnakeCaseNamingStrategy()
+                };
+            }).ConfigureApiBehaviorOptions(options =>
+            {
+                options.InvalidModelStateResponseFactory = context =>
+                {
+                    var problems = new CustomBadRequest(context);
+                    return new BadRequestObjectResult(problems.ToResponse());
                 };
             });
         }

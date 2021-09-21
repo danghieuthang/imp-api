@@ -16,6 +16,24 @@ namespace IMP.Application.Helpers
             return regex.Replace(temp, String.Empty).Replace('\u0111', 'd').Replace('\u0110', 'D');
         }
 
+        public static string GetSnakeCaseName(this string field)
+        {
+            StringBuilder builder = new StringBuilder();
+
+            builder.Append(char.ToLower(field[0]));
+
+            for (int i = 1; i < field.Length; i++)
+            {
+                if (char.IsUpper(field[i]))
+                {
+                    builder.Append('_');
+                }
+                builder.Append(char.ToLower(field[i]));
+            }
+
+            return builder.ToString();
+        }
+
         /// <summary>
         /// Generate a random string with given size
         /// </summary>
