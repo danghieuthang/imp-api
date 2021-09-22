@@ -22,7 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\IMP.Application\IMP.Application.csproj" />
     <ProjectReference Include="..\IMP.Domain\IMP.Domain.csproj" />
-    <ProjectReference Include="..\IMP.Infrastucture.EfCore\IMP.Infrastructure.EfCore.csproj" />
+    <ProjectReference Include="..\IMP.Infrastructure.EfCore\IMP.Infrastructure.EfCore.csproj" />
   </ItemGroup>
 
 </Project>

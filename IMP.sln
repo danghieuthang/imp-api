@@ -27,7 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{AF444008
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CleanTesting.Application.IntegrationTests", "CleanTesting.Application.IntegrationTests\CleanTesting.Application.IntegrationTests.csproj", "{8D74FBC3-6ADF-43EE-B0D2-19BD92BB720D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IMP.Infrastructure.EfCore", "IMP\IMP.Infrastucture.EfCore\IMP.Infrastructure.EfCore.csproj", "{B4E941BB-AFAD-41E8-BD75-AFCF6E679336}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IMP.Infrastructure.EfCore", "IMP\IMP.Infrastructure.EfCore\IMP.Infrastructure.EfCore.csproj", "{B4E941BB-AFAD-41E8-BD75-AFCF6E679336}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
