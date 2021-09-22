@@ -29,6 +29,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using IMP.Application.Constants;
 
 namespace IMP.Infrastructure.Identity.Services
 {
@@ -74,16 +75,16 @@ namespace IMP.Infrastructure.Identity.Services
             {
                 user = await _userManager.FindByNameAsync(request.Email);
                 if (user == null)
-                    throw new ValidationException(new ValidationError("email", $"No Accounts Registered with {request.Email}."));
+                    throw new ValidationException(new ValidationError("email", $"No Accounts Registered with {request.Email}."), code: ErrorConstants.Identity.EmailNotFound);
             }
             var result = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, false, lockoutOnFailure: false);
             if (!result.Succeeded)
             {
-                throw new ValidationException(new ValidationError("email", $"Invalid Credentials for '{request.Email}'."));
+                throw new ValidationException(new ValidationError("password", $"Invalid Credentials for '{request.Email}'."), code: ErrorConstants.Identity.PasswordIncorrect);
             }
             if (!user.EmailConfirmed)
             {
-                throw new ValidationException(new ValidationError("email", $"Account Not Confirmed for '{request.Email}'."));
+                throw new ValidationException(new ValidationError("email", $"Account Not Confirmed for '{request.Email}'."), code: ErrorConstants.Identity.EmailNotConfirm);
             }
 
             JwtSecurityToken jwtSecurityToken = await GenerateJWToken(user);

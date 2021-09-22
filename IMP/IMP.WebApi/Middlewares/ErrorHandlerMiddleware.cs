@@ -44,6 +44,7 @@ namespace IMP.WebApi.Middlewares
                         // custom application error
                         response.StatusCode = (int)HttpStatusCode.BadRequest;
                         responseModel.Errors = e.Errors;
+                        responseModel.Code = e.Code;
                         break;
                     case KeyNotFoundException e:
                         // not found error

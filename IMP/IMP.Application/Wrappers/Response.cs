@@ -24,6 +24,7 @@ namespace IMP.Application.Wrappers
         public bool Succeeded { get; set; }
         public string Message { get; set; }
         public List<ValidationError> Errors { get; set; }
+        public int Code { get; set; }
         public T Data { get; set; }
     }
 }
