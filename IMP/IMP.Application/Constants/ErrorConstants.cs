@@ -15,5 +15,12 @@ namespace IMP.Application.Constants
             public const int PasswordIncorrect = 3;
             
         }
+
+        public static class RefreshToken
+        {
+            public const int RefreshTokenNotExist = 1;
+            public const int RefreshTokenWasExpired = 2;
+
+        }
     }
 }

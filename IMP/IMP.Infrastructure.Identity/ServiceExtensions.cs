@@ -1,13 +1,10 @@
-﻿using IMP.Application.Exceptions;
-using IMP.Application.Interfaces;
-using IMP.Application.Interfaces.Repositories.Identities;
-using IMP.Application.Interfaces.Services;
+﻿using IMP.Application.Interfaces.Services;
 using IMP.Application.Wrappers;
 using IMP.Domain.Settings;
+using IMP.Infrastructure.EfCore;
 using IMP.Infrastructure.Identity.Contexts;
-using IMP.Infrastructure.Identity.Helpers;
 using IMP.Infrastructure.Identity.Models;
-using IMP.Infrastructure.Identity.Reponsitories;
+using IMP.Infrastructure.Identity.Repositories;
 using IMP.Infrastructure.Identity.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
@@ -18,7 +15,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System;
-using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -50,9 +46,9 @@ namespace IMP.Infrastructure.Identity
                 options.Password.RequiredLength = 6;
                 options.Password.RequiredUniqueChars = 1;
             });
-            #region Repositories
-            services.AddScoped(typeof(IIdentityGenericRepository<,>), typeof(IdentityGenericRepository<,>));
-            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+            #region Unit Of Work
+            services.AddUnitOfWork<IdentityContext>();
+            services.AddCustomRepository<RefreshToken, RefreshTokenRepository>();
             #endregion
             #region Services
             services.AddScoped<IAccountService, AccountService>();

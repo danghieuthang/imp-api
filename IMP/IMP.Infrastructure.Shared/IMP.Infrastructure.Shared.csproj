@@ -10,9 +10,9 @@
   <ItemGroup>
     <PackageReference Include="FirebaseAuthentication.net" Version="3.7.2" />
     <PackageReference Include="FirebaseStorage.net" Version="1.0.3" />
-    <PackageReference Include="Google.Apis.Auth" Version="1.54.0" />
+    <PackageReference Include="Google.Apis.Auth" Version="1.55.0" />
     <PackageReference Include="MailKit" Version="2.15.0" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
-    <PackageReference Include="MimeKit" Version="2.15.0" />
+    <PackageReference Include="MimeKit" Version="2.15.1" />
   </ItemGroup>
 </Project>

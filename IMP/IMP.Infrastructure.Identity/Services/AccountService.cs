@@ -10,26 +10,22 @@ using IMP.Application.Wrappers;
 using IMP.Domain.Settings;
 using IMP.Infrastructure.Identity.Helpers;
 using IMP.Infrastructure.Identity.Models;
-using IMP.Infrastructure.Identity.Reponsitories;
 using IMP.Infrastructure.Persistence.Services;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
-using Org.BouncyCastle.Ocsp;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Net.Cache;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using IMP.Application.Constants;
+using IMP.Infrastructure.Identity.Contexts;
 
 namespace IMP.Infrastructure.Identity.Services
 {
@@ -40,32 +36,33 @@ namespace IMP.Infrastructure.Identity.Services
         private readonly SignInManager<User> _signInManager;
         private readonly IEmailService _emailService;
         private readonly JWTSettings _jwtSettings;
-        private readonly IRefreshTokenRepository _refreshTokenRepository;
         private readonly IApplicationUserService _applicationUserService;
         private readonly IGoogleService _googleServices;
         private readonly IFacebookService _facebookService;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUnitOfWork<IdentityContext> _unitOfWork;
         public AccountService(UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager,
             IOptions<JWTSettings> jwtSettings,
             IDateTimeService dateTimeService,
             SignInManager<User> signInManager,
             IEmailService emailService,
-            IRefreshTokenRepository refreshTokenRepository,
             IApplicationUserService applicationUserService,
             IGoogleService googleServices,
-            IFacebookService facebookService, IHttpContextAccessor httpContextAccessor)
+            IFacebookService facebookService,
+            IHttpContextAccessor httpContextAccessor,
+            IUnitOfWork<IdentityContext> unitOfWork)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _jwtSettings = jwtSettings.Value;
             _signInManager = signInManager;
-            this._emailService = emailService;
-            this._refreshTokenRepository = refreshTokenRepository;
-            this._applicationUserService = applicationUserService;
-            this._googleServices = googleServices;
-            this._facebookService = facebookService;
-            this._httpContextAccessor = httpContextAccessor;
+            _emailService = emailService;
+            _applicationUserService = applicationUserService;
+            _googleServices = googleServices;
+            _facebookService = facebookService;
+            _httpContextAccessor = httpContextAccessor;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Response<AuthenticationResponse>> AuthenticateAsync(AuthenticationRequest request, string ipAddress)
@@ -107,8 +104,8 @@ namespace IMP.Infrastructure.Identity.Services
                 CreatedByIp = ipAddress,
                 UserId = user.Id
             };
-            _ = _refreshTokenRepository.AddAsync(refreshTokenDomain);
-
+            await _unitOfWork.Repository<RefreshToken>().AddAsync(refreshTokenDomain);
+            await _unitOfWork.CommitAsync();
             return new Response<AuthenticationResponse>(response, $"Authenticated {user.UserName}");
         }
 
@@ -356,14 +353,16 @@ namespace IMP.Infrastructure.Identity.Services
 
         public async Task<Response<AuthenticationResponse>> RefreshToken(string refreshToken, string ipAddress)
         {
-            var entity = await _refreshTokenRepository.GetRefreshToken(refreshToken, ipAddress);
-            if (entity == null) throw new ApiException($"Refresh token no.");
+            var repository = _unitOfWork.Repository<RefreshToken>();
+            var entity = await repository.FindSingleAsync(x => x.Token == refreshToken, includeProperties: x => x.User);
+            if (entity == null) throw new ValidationException(new ValidationError("refresh_token", "Token not exist."), ErrorConstants.RefreshToken.RefreshTokenNotExist); ;
 
             if (!entity.IsActive)
             {
-                await _refreshTokenRepository.DeleteAsync(entity);
+                repository.Delete(entity);
+                await _unitOfWork.CommitAsync();
                 var error = new ValidationError("refresh_token", "Token was expired.");
-                throw new ValidationException(error);
+                throw new ValidationException(error, ErrorConstants.RefreshToken.RefreshTokenWasExpired);
             }
 
             var user = entity.User;
@@ -376,7 +375,8 @@ namespace IMP.Infrastructure.Identity.Services
             entity.Revoked = DateTime.UtcNow;
             entity.RevokedByIp = ipAddress;
             entity.ReplacedByToken = newRefreshToken.Token;
-            await _refreshTokenRepository.UpdateAsync(entity);
+            repository.Update(entity);
+            await _unitOfWork.CommitAsync();
             #endregion
 
             AuthenticationResponse response = new AuthenticationResponse();
@@ -399,10 +399,13 @@ namespace IMP.Infrastructure.Identity.Services
             };
             return new Response<AuthenticationResponse>(response);
         }
-
+        private async Task<RefreshToken> GetRefreshToken(string refreshToken, string ipAddress)
+        {
+            return await _unitOfWork.Repository<RefreshToken>().FindSingleAsync(x => x.Token == refreshToken, includeProperties: x => x.User);
+        }
         public async Task<Response<string>> RevokeToken(string refreshToken, string ipaAddress)
         {
-            var entity = await _refreshTokenRepository.GetRefreshToken(refreshToken, ipaAddress);
+            var entity = await GetRefreshToken(refreshToken, ipaAddress);
             if (entity == null)
             {
                 var error = new ValidationError("refresh_token", "Refresh Token not exist.");
@@ -417,7 +420,8 @@ namespace IMP.Infrastructure.Identity.Services
 
             entity.Revoked = DateTime.UtcNow;
             entity.RevokedByIp = ipaAddress;
-            await _refreshTokenRepository.UpdateAsync(entity);
+            _unitOfWork.Repository<RefreshToken>().Update(entity);
+            await _unitOfWork.CommitAsync();
             return new Response<string>(entity.User.Email, $"Refresh token was revoked.");
         }
 
@@ -470,7 +474,8 @@ namespace IMP.Infrastructure.Identity.Services
                 CreatedByIp = ipAddress,
                 UserId = user.Id
             };
-            _ = _refreshTokenRepository.AddAsync(refreshTokenDomain);
+            _ = await _unitOfWork.Repository<RefreshToken>().AddAsync(refreshTokenDomain);
+            await _unitOfWork.CommitAsync();
             return response;
         }
 

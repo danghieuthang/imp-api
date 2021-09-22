@@ -1,31 +1,21 @@
 ﻿using IMP.Application.Enums;
+using IMP.Application.Extensions;
 using IMP.Application.Interfaces;
+using IMP.Application.Wrappers;
 using IMP.Domain.Common;
-using IMP.Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Linq.Dynamic.Core;
-
-using IMP.Infrastructure.Persistence.Helpers;
-using IMP.Application.Wrappers;
-using Microsoft.EntityFrameworkCore.Query;
+using System.Linq.Expressions;
+using System.Text;
 using System.Threading;
-using IMP.Application.Extensions;
+using System.Threading.Tasks;
 
-namespace IMP.Infrastructure.Persistence.Repository
+namespace IMP.Infrastructure.EfCore.Repositories
 {
-    /// <summary>
-    /// Default generic repository implement the <see cref="IGenericRepository{TKey, TEntity}"/> interface
-    /// </summary>
-    /// <typeparam name="TKey">The type of key of entity.</typeparam>
-    /// <typeparam name="TEntity">The type of entity.</typeparam>
     public class GenericRepository<TKey, TEntity> : IGenericRepository<TKey, TEntity>, IDisposable where TEntity : Entity<TKey>
     {
         private readonly DbContext _dbContext;
@@ -33,7 +23,7 @@ namespace IMP.Infrastructure.Persistence.Repository
         private readonly DbSet<TEntity> _dbSet;
         public GenericRepository(DbContext dbContext)
         {
-            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(ApplicationDbContext));
+            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             _dbSet = _dbContext.Set<TEntity>();
         }
 
@@ -283,9 +273,8 @@ namespace IMP.Infrastructure.Persistence.Repository
             }
             return await GetAll().Where(predicate).CountAsync();
         }
-
-
     }
+
     /// <summary>
     /// Default generic repository implements the <see cref="IGenericRepository{TEntity}"/> interface.
     /// </summary>
@@ -296,5 +285,4 @@ namespace IMP.Infrastructure.Persistence.Repository
         {
         }
     }
-
 }

@@ -1,16 +1,14 @@
 ﻿using IMP.Application.Interfaces;
 using IMP.Domain.Common;
-using IMP.Infrastructure.Persistence.Contexts;
-using IMP.Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Text;  
 using System.Threading.Tasks;
 
-namespace IMP.Infrastructure.Persistence
+namespace IMP.Infrastructure.EfCore.Repositories
 {
     public class UnitOfWork<TContext> : IDisposable, IUnitOfWork<TContext> where TContext : DbContext
     {
