@@ -20,8 +20,8 @@
   <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
   </ItemGroup>
 <ItemGroup>
-  <ProjectReference Include="..\..\IMP.Infrastructure.EfCore\IMP.Infrastructure.EfCore.csproj" />
   <ProjectReference Include="..\IMP.Application\IMP.Application.csproj" />
   <ProjectReference Include="..\IMP.Domain\IMP.Domain.csproj" />
+  <ProjectReference Include="..\IMP.Infrastucture.EfCore\IMP.Infrastructure.EfCore.csproj" />
 </ItemGroup>
 </Project>
