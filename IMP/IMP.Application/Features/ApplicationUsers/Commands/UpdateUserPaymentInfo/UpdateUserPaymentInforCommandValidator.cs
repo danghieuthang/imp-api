@@ -13,12 +13,12 @@ namespace IMP.Application.Features.ApplicationUsers.Commands.UpdateUserPaymentIn
 {
     public class UpdateUserPaymentInforCommandValidator : AbstractValidator<UpdateUserPaymentInfoCommand>
     {
-        private readonly IGenericRepository<Bank> _bankRepositoryAsync;
-        private readonly IGenericRepository<ApplicationUser> _applicationUserRepositoryAsync;
+        private readonly IGenericRepository<Bank> _bankRepository;
+        private readonly IGenericRepository<ApplicationUser> _applicationUserRepository;
         public UpdateUserPaymentInforCommandValidator(IUnitOfWork unitOfWork)
         {
-            _bankRepositoryAsync = unitOfWork.Repository<Bank>();
-            _applicationUserRepositoryAsync = unitOfWork.Repository<ApplicationUser>();
+            _bankRepository = unitOfWork.Repository<Bank>();
+            _applicationUserRepository = unitOfWork.Repository<ApplicationUser>();
 
             RuleFor(x => x.BankId).MustExistEntityId(IsExistBank);
             RuleFor(x => x.ApplicationUserId).MustExistEntityId(IsExistApplicationUser);
@@ -29,11 +29,11 @@ namespace IMP.Application.Features.ApplicationUsers.Commands.UpdateUserPaymentIn
 
         private async Task<bool> IsExistApplicationUser(int id, CancellationToken cancellationToken)
         {
-            return await _applicationUserRepositoryAsync.IsExistAsync(id);
+            return await _applicationUserRepository.IsExistAsync(id);
         }
         private async Task<bool> IsExistBank(int id, CancellationToken cancellationToken)
         {
-            return await _bankRepositoryAsync.IsExistAsync(id);
+            return await _bankRepository.IsExistAsync(id);
         }
 
     }

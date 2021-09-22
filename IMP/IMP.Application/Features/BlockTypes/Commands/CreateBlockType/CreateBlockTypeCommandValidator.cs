@@ -16,11 +16,11 @@ namespace IMP.Application.Features.BlockTypes.Commands.CreateBlockType
 {
     public class CreateBlockTypeCommandValidator : AbstractValidator<CreateBlockTypeCommand>
     {
-        private readonly IGenericRepository<BlockType> _blockTypeRepositoryAsync;
+        private readonly IGenericRepository<BlockType> _blockTypeRepository;
 
         public CreateBlockTypeCommandValidator(IUnitOfWork unitOfWork, IOptions<FileSettings> options)
         {
-            _blockTypeRepositoryAsync = unitOfWork.Repository<BlockType>();
+            _blockTypeRepository = unitOfWork.Repository<BlockType>();
             RuleFor(x => x.Name).MustRequired(256)
                 .MustAsync(IsUniQueBlockType).WithMessage("'{PropertyValue}' đã tồn tại.");
 
@@ -30,7 +30,7 @@ namespace IMP.Application.Features.BlockTypes.Commands.CreateBlockType
 
         public async Task<bool> IsUniQueBlockType(string name, CancellationToken cancellationToken)
         {
-            return await _blockTypeRepositoryAsync.FindSingleAsync(x => x.Name.ToLower().Equals(name.ToLower())) == null;
+            return await _blockTypeRepository.FindSingleAsync(x => x.Name.ToLower().Equals(name.ToLower())) == null;
 
         }
     }

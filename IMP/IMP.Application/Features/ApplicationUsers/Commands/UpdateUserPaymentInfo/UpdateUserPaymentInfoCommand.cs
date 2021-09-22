@@ -25,19 +25,19 @@ namespace IMP.Application.Features.ApplicationUsers.Commands.UpdateUserPaymentIn
         public class UpdateUserPaymentInfoCommandHandler : IRequestHandler<UpdateUserPaymentInfoCommand, Response<PaymentInforViewModel>>
         {
             private readonly IUnitOfWork _unitOfWork;
-            private readonly IGenericRepository<PaymentInfor> _paymentInfoRepositoryAsync;
-            private readonly IGenericRepository<ApplicationUser> _applicationUserRepositoryAsync;
+            private readonly IGenericRepository<PaymentInfor> _paymentInfoRepository;
+            private readonly IGenericRepository<ApplicationUser> _applicationUserRepository;
             private readonly IMapper _mapper;
             public UpdateUserPaymentInfoCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
             {
                 _unitOfWork = unitOfWork;
                 _mapper = mapper;
-                _paymentInfoRepositoryAsync = _unitOfWork.Repository<PaymentInfor>();
-                _applicationUserRepositoryAsync = _unitOfWork.Repository<ApplicationUser>();
+                _paymentInfoRepository = _unitOfWork.Repository<PaymentInfor>();
+                _applicationUserRepository = _unitOfWork.Repository<ApplicationUser>();
             }
             public async Task<Response<PaymentInforViewModel>> Handle(UpdateUserPaymentInfoCommand request, CancellationToken cancellationToken)
             {
-                var entity = await _paymentInfoRepositoryAsync.FindSingleAsync(x => x.UserId == request.ApplicationUserId);
+                var entity = await _paymentInfoRepository.FindSingleAsync(x => x.UserId == request.ApplicationUserId);
                 bool isAdd = false;
                 if (entity == null)
                 {
@@ -52,21 +52,21 @@ namespace IMP.Application.Features.ApplicationUsers.Commands.UpdateUserPaymentIn
 
                 if (isAdd)
                 {
-                    entity = await _paymentInfoRepositoryAsync.AddAsync(entity);
+                    entity = await _paymentInfoRepository.AddAsync(entity);
                     await _unitOfWork.CommitAsync();
                 }
                 else
                 {
-                    _paymentInfoRepositoryAsync.Update(entity);
+                    _paymentInfoRepository.Update(entity);
                 }
 
-                var user = await _applicationUserRepositoryAsync.GetByIdAsync(request.ApplicationUserId);
+                var user = await _applicationUserRepository.GetByIdAsync(request.ApplicationUserId);
                 user.PaymentInforId = entity.Id;
-                _applicationUserRepositoryAsync.Update(user);
+                _applicationUserRepository.Update(user);
 
                 await _unitOfWork.CommitAsync();
 
-                entity = await _paymentInfoRepositoryAsync.FindSingleAsync(x => x.Id == entity.Id, x => x.Bank);
+                entity = await _paymentInfoRepository.FindSingleAsync(x => x.Id == entity.Id, x => x.Bank);
                 var view = _mapper.Map<PaymentInforViewModel>(entity);
                 return new Response<PaymentInforViewModel>(view);
             }

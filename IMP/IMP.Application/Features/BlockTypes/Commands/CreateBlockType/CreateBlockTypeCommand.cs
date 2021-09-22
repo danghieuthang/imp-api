@@ -27,7 +27,7 @@ namespace IMP.Application.Features.BlockTypes.Commands.CreateBlockType
         public class CreateBlockTypeComandHandler : IRequestHandler<CreateBlockTypeCommand, Response<BlockTypeViewModel>>
         {
             private readonly IUnitOfWork _unitOfWork;
-            private readonly IGenericRepository<BlockType> _blockTypeRepositoryAsync;
+            private readonly IGenericRepository<BlockType> _blockTypeRepository;
             private readonly IMapper _mapper;
             private readonly IFirebaseService _firebaseService;
 
@@ -35,7 +35,7 @@ namespace IMP.Application.Features.BlockTypes.Commands.CreateBlockType
             public CreateBlockTypeComandHandler(IUnitOfWork unitOfWork, IMapper mapper, IFirebaseService firebaseService)
             {
                 _unitOfWork = unitOfWork;
-                _blockTypeRepositoryAsync = unitOfWork.Repository<BlockType>();
+                _blockTypeRepository = unitOfWork.Repository<BlockType>();
                 _mapper = mapper;
                 _firebaseService = firebaseService;
             }
@@ -49,7 +49,7 @@ namespace IMP.Application.Features.BlockTypes.Commands.CreateBlockType
                     blockType.Image = imageFileUrl;
                 }
 
-                blockType = await _blockTypeRepositoryAsync.AddAsync(blockType);
+                blockType = await _blockTypeRepository.AddAsync(blockType);
                 await _unitOfWork.CommitAsync();
                 var blockTypeView = _mapper.Map<BlockTypeViewModel>(blockType);
                 return new Response<BlockTypeViewModel>(blockTypeView);

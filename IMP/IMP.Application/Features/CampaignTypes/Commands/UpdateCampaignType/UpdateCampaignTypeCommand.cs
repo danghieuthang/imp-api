@@ -36,18 +36,18 @@ namespace IMP.Application.Features.CampaignTypes.Commands.UpdateCampaignType
         public class UpdateCampaignTypeCommandHandler : CommandHandler<UpdateCampaignTypeCommand, CampaignTypeViewModel>
         {
 
-            private readonly IGenericRepository<CampaignType> _campaignTypeRepositoryAsync;
+            private readonly IGenericRepository<CampaignType> _campaignTypeRepository;
             private readonly IFirebaseService _firebaseService;
 
             public UpdateCampaignTypeCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IFirebaseService firebaseService) : base(unitOfWork, mapper)
             {
-                _campaignTypeRepositoryAsync = unitOfWork.Repository<CampaignType>();
+                _campaignTypeRepository = unitOfWork.Repository<CampaignType>();
                 _firebaseService = firebaseService;
             }
 
             public override async Task<Response<CampaignTypeViewModel>> Handle(UpdateCampaignTypeCommand request, CancellationToken cancellationToken)
             {
-                var campaignType = await _campaignTypeRepositoryAsync.GetByIdAsync(request.Id);
+                var campaignType = await _campaignTypeRepository.GetByIdAsync(request.Id);
                 if (campaignType != null)
                 {
                     campaignType.ParentId = request.ParentId;
@@ -59,7 +59,7 @@ namespace IMP.Application.Features.CampaignTypes.Commands.UpdateCampaignType
                     {
                         campaignType.Image = imageFileUrl;
                     }
-                    _campaignTypeRepositoryAsync.Update(campaignType);
+                    _campaignTypeRepository.Update(campaignType);
                     await UnitOfWork.CommitAsync();
                 }
 

@@ -7,21 +7,21 @@ namespace IMP.Application.Features.Pages.Commands.UpdatePage
 {
     public class UpdatePageCommandValidator : AbstractValidator<UpdatePageCommand>
     {
-        private readonly IGenericRepository<Page> _pageRepositoryAsync;
-        private readonly IGenericRepository<ApplicationUser> _applicationUserRepositoryAsync;
+        private readonly IGenericRepository<Page> _pageRepository;
+        private readonly IGenericRepository<ApplicationUser> _applicationUserRepository;
 
         public UpdatePageCommandValidator(IUnitOfWork unitOfWork)
         {
-            _pageRepositoryAsync = unitOfWork.Repository<Page>();
-            _applicationUserRepositoryAsync = unitOfWork.Repository<ApplicationUser>();
+            _pageRepository = unitOfWork.Repository<Page>();
+            _applicationUserRepository = unitOfWork.Repository<ApplicationUser>();
 
             RuleFor(x => x.Id).MustAsync(async (x, y, z) =>
             {
-                return await _pageRepositoryAsync.IsExistAsync(x => x.Id == y && x.InfluencerId == x.InfluencerId);
+                return await _pageRepository.IsExistAsync(x => x.Id == y && x.InfluencerId == x.InfluencerId);
             }).WithMessage("'{PropertyValue}' không tồn tại hoặc không có quyền chỉnh sửa.");
             RuleFor(x => x.InfluencerId).MustExistEntityId(async (x, y) =>
               {
-                  return await _applicationUserRepositoryAsync.IsExistAsync(x);
+                  return await _applicationUserRepository.IsExistAsync(x);
               });
             RuleFor(x => x.BackgroundPhoto).MustValidUrl();
             RuleFor(x => x.Title).MustRequired(256);

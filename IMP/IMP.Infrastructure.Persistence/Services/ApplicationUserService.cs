@@ -12,12 +12,12 @@ namespace IMP.Application.Interfaces.Services
     public class ApplicationUserService : IApplicationUserService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IGenericRepository<ApplicationUser> _applicationUserRepositoryAsync;
+        private readonly IGenericRepository<ApplicationUser> _applicationUserRepository;
 
         public ApplicationUserService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _applicationUserRepositoryAsync = _unitOfWork.Repository<ApplicationUser>();
+            _applicationUserRepository = _unitOfWork.Repository<ApplicationUser>();
         }
 
         public async Task<ApplicationUser> CreateUser(string email = null, string avatar = null)
@@ -29,38 +29,38 @@ namespace IMP.Application.Interfaces.Services
                 PaymentInfor = new PaymentInfor(),
                 Wallet = new Wallet()
             };
-            user = await _applicationUserRepositoryAsync.AddAsync(user);
+            user = await _applicationUserRepository.AddAsync(user);
             await _unitOfWork.CommitAsync();
             return user;
         }
 
         public async Task DeleteUser(string userName)
         {
-            var user = await _applicationUserRepositoryAsync.FindSingleAsync(x => x.Email.ToLower() == userName.ToLower());
+            var user = await _applicationUserRepository.FindSingleAsync(x => x.Email.ToLower() == userName.ToLower());
             if (user != null)
             {
-                _applicationUserRepositoryAsync.Delete(user);
+                _applicationUserRepository.Delete(user);
                 await _unitOfWork.CommitAsync();
             }
         }
 
         public async Task DeleteUser(int id)
         {
-            var user = await _applicationUserRepositoryAsync.GetByIdAsync(id);
+            var user = await _applicationUserRepository.GetByIdAsync(id);
             if (user != null)
             {
-                _applicationUserRepositoryAsync.Delete(user);
+                _applicationUserRepository.Delete(user);
                 await _unitOfWork.CommitAsync();
             }
         }
 
         public async Task UpdateUsername(string oldUsername, string newUsername)
         {
-            var user = await _applicationUserRepositoryAsync.FindSingleAsync(x => x.Email == oldUsername);
+            var user = await _applicationUserRepository.FindSingleAsync(x => x.Email == oldUsername);
             if (user != null)
             {
                 user.Email = newUsername;
-                _applicationUserRepositoryAsync.Update(user);
+                _applicationUserRepository.Update(user);
                 await _unitOfWork.CommitAsync();
             }
         }

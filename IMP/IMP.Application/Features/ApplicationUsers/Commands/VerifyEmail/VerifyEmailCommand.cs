@@ -20,17 +20,17 @@ namespace IMP.Application.Features.ApplicationUsers.Commands.VerifyEmail
         public class VerifyEmailCommandHandler : IRequestHandler<VerifyEmailCommand, Response<string>>
         {
             private readonly IUnitOfWork _unitOfWork;
-            private readonly IGenericRepository<ApplicationUser> _repositoryAsync;
+            private readonly IGenericRepository<ApplicationUser> _repository;
 
             public VerifyEmailCommandHandler(IUnitOfWork unitOfWork)
             {
                 _unitOfWork = unitOfWork;
-                _repositoryAsync = _unitOfWork.Repository<ApplicationUser>();
+                _repository = _unitOfWork.Repository<ApplicationUser>();
             }
 
             public async Task<Response<string>> Handle(VerifyEmailCommand request, CancellationToken cancellationToken)
             {
-                var user = await _repositoryAsync.FindSingleAsync(x => x.Id == request.InfluencerId, x => x.Otps);
+                var user = await _repository.FindSingleAsync(x => x.Id == request.InfluencerId, x => x.Otps);
                 if (user?.Otps.Count > 0)
                 {
                     var otp = user.Otps.FirstOrDefault(x => x.Code == request.Code);
@@ -42,7 +42,7 @@ namespace IMP.Application.Features.ApplicationUsers.Commands.VerifyEmail
                         }
                         user.IsEmailVerified = true;
                         _unitOfWork.Repository<Otp>().Delete(otp);
-                        _repositoryAsync.Update(user);
+                        _repository.Update(user);
                         await _unitOfWork.CommitAsync();
                         return new Response<string>(data: $"'{user.Email}' đã được xắc thực thành công.");
                     }

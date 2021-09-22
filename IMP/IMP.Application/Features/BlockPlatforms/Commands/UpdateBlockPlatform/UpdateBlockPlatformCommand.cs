@@ -22,20 +22,20 @@ namespace IMP.Application.Features.BlockPlatforms.Commands.UpdateBlockPlatform
 
         public class UpdateBlockPlatformCommandHandler : CommandHandler<UpdateBlockPlatformCommand, BlockPlatformViewModel>
         {
-            private readonly IGenericRepository<BlockPlatform> _blockPlatformRepositoryAsync;
+            private readonly IGenericRepository<BlockPlatform> _blockPlatformRepository;
             public UpdateBlockPlatformCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
             {
-                _blockPlatformRepositoryAsync = unitOfWork.Repository<BlockPlatform>();
+                _blockPlatformRepository = unitOfWork.Repository<BlockPlatform>();
             }
 
             public override async Task<Response<BlockPlatformViewModel>> Handle(UpdateBlockPlatformCommand request, CancellationToken cancellationToken)
             {
-                var blockPlatform = await _blockPlatformRepositoryAsync.FindSingleAsync(x => x.Id == request.Id, includeProperties: x => x.InfluencerPlatform);
+                var blockPlatform = await _blockPlatformRepository.FindSingleAsync(x => x.Id == request.Id, includeProperties: x => x.InfluencerPlatform);
                 if (blockPlatform != null)
                 {
                     blockPlatform.Position = request.Position;
                     blockPlatform.IsActived = request.IsActived;
-                    _blockPlatformRepositoryAsync.Update(blockPlatform);
+                    _blockPlatformRepository.Update(blockPlatform);
                     await UnitOfWork.CommitAsync();
                     var blockPlatformView = Mapper.Map<BlockPlatformViewModel>(blockPlatform);
                     return new Response<BlockPlatformViewModel>(data: blockPlatformView);

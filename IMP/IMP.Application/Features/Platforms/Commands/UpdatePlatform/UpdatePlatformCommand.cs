@@ -30,21 +30,21 @@ namespace IMP.Application.Features.Platforms.Commands.UpdatePlatform
         public class UpdatePlatformCommandHandler : IRequestHandler<UpdatePlatformCommand, Response<PlatformViewModel>>
         {
             private readonly IUnitOfWork _unitOfWork;
-            private readonly IGenericRepository<Platform> _platformRepositoryAsync;
+            private readonly IGenericRepository<Platform> _platformRepository;
             private readonly IMapper _mapper;
             private readonly IFirebaseService _firebaseService;
 
             public UpdatePlatformCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IFirebaseService firebaseService)
             {
                 _unitOfWork = unitOfWork;
-                _platformRepositoryAsync = _unitOfWork.Repository<Platform>();
+                _platformRepository = _unitOfWork.Repository<Platform>();
                 _mapper = mapper;
                 _firebaseService = firebaseService;
             }
 
             public async Task<Response<PlatformViewModel>> Handle(UpdatePlatformCommand request, CancellationToken cancellationToken)
             {
-                var platform = await _platformRepositoryAsync.GetByIdAsync(request.Id);
+                var platform = await _platformRepository.GetByIdAsync(request.Id);
                 if (platform != null)
                 {
                     platform.Name = request.Name;
@@ -53,7 +53,7 @@ namespace IMP.Application.Features.Platforms.Commands.UpdatePlatform
                     {
                         platform.Image = imageFileUrl;
                     }
-                    _platformRepositoryAsync.Update(platform);
+                    _platformRepository.Update(platform);
                     await _unitOfWork.CommitAsync();
                 }
 

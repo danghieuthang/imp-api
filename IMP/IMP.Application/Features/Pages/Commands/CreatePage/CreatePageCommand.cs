@@ -23,13 +23,13 @@ namespace IMP.Application.Features.Pages.Commands.CreatePage
         public class CreatePageCommandHandler : IRequestHandler<CreatePageCommand, Response<PageViewModel>>
         {
             private readonly IUnitOfWork _unitOfWork;
-            private readonly IGenericRepository<Page> _pageRepositoryAsync;
+            private readonly IGenericRepository<Page> _pageRepository;
             private readonly IMapper _mapper;
 
             public CreatePageCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
             {
                 _unitOfWork = unitOfWork;
-                _pageRepositoryAsync = _unitOfWork.Repository<Page>();
+                _pageRepository = _unitOfWork.Repository<Page>();
                 _mapper = mapper;
             }
 
@@ -37,7 +37,7 @@ namespace IMP.Application.Features.Pages.Commands.CreatePage
             {
 
                 var entity = _mapper.Map<Page>(request);
-                entity = await _pageRepositoryAsync.AddAsync(entity);
+                entity = await _pageRepository.AddAsync(entity);
                 await _unitOfWork.CommitAsync();
                 var view = _mapper.Map<PageViewModel>(entity);
                 return new Response<PageViewModel>(view);

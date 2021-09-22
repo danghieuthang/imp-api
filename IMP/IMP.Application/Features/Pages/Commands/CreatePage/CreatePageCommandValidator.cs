@@ -12,11 +12,11 @@ namespace IMP.Application.Features.Pages.Commands.CreatePage
 {
     public class CreatePageCommandValidator : AbstractValidator<CreatePageCommand>
     {
-        private readonly IGenericRepository<ApplicationUser> _applicationUserRepositoryAsync;
+        private readonly IGenericRepository<ApplicationUser> _applicationUserRepository;
 
         public CreatePageCommandValidator(IUnitOfWork  unitOfWork, IOptions<FileSettings> settings)
         {
-            _applicationUserRepositoryAsync = unitOfWork.Repository<ApplicationUser>();
+            _applicationUserRepository = unitOfWork.Repository<ApplicationUser>();
 
             RuleFor(x => x.Title).MustRequired(256);
             RuleFor(x => x.BackgroundPhoto).MustValidUrl();
@@ -25,7 +25,7 @@ namespace IMP.Application.Features.Pages.Commands.CreatePage
 
         private async Task<bool> IsExistUser(int id, CancellationToken cancellationToken)
         {
-            return await _applicationUserRepositoryAsync.IsExistAsync(id);
+            return await _applicationUserRepository.IsExistAsync(id);
         }
 
     }

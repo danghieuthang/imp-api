@@ -18,18 +18,18 @@ namespace IMP.Application.Features.Locations.Queries.GetLocationByCode
         public string Code { get; set; }
         public class GetLocationByIdQueryHandler : IRequestHandler<GetLocationByCodeQuery, Response<LocationViewModel>>
         {
-            private readonly IGenericRepository<Location> _locationRepositoryAsync;
+            private readonly IGenericRepository<Location> _locationRepository;
             private readonly IMapper _mapper;
 
             public GetLocationByIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
             {
-                _locationRepositoryAsync = unitOfWork.Repository<Location>();
+                _locationRepository = unitOfWork.Repository<Location>();
                 _mapper = mapper;
             }
 
             public async Task<Response<LocationViewModel>> Handle(GetLocationByCodeQuery request, CancellationToken cancellationToken)
             {
-                var location = await _locationRepositoryAsync.FindSingleAsync(x => x.Code == request.Code);
+                var location = await _locationRepository.FindSingleAsync(x => x.Code == request.Code);
                 if (location == null)
                 {
                     throw new KeyNotFoundException($"{request.Code} không tồn tại.");

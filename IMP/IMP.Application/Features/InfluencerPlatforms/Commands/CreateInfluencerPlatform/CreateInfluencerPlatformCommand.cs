@@ -26,13 +26,13 @@ namespace IMP.Application.Features.InfluencerPlatforms.Commands.CreateInfluencer
         public class CreateInfluencerPlatformCommandHandler : IRequestHandler<CreateInfluencerPlatformCommand, Response<InfluencerPlatformViewModel>>
         {
             private readonly IUnitOfWork _unitOfWork;
-            private readonly IGenericRepository<InfluencerPlatform> _influencerPlatformRepositoryAsync;
+            private readonly IGenericRepository<InfluencerPlatform> _influencerPlatformRepository;
             private readonly IMapper _mapper;
 
             public CreateInfluencerPlatformCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
             {
                 _unitOfWork = unitOfWork;
-                _influencerPlatformRepositoryAsync = _unitOfWork.Repository<InfluencerPlatform>();
+                _influencerPlatformRepository = _unitOfWork.Repository<InfluencerPlatform>();
                 _mapper = mapper;
             }
 
@@ -40,7 +40,7 @@ namespace IMP.Application.Features.InfluencerPlatforms.Commands.CreateInfluencer
             {
                 var influencerPlatform = _mapper.Map<InfluencerPlatform>(request);
                 influencerPlatform.Hashtag="imp_"+StringHelper.RandomString(10);
-                influencerPlatform = await _influencerPlatformRepositoryAsync.AddAsync(influencerPlatform);
+                influencerPlatform = await _influencerPlatformRepository.AddAsync(influencerPlatform);
                 await _unitOfWork.CommitAsync();
 
                 var influencerPlatformView = _mapper.Map<InfluencerPlatformViewModel>(influencerPlatform);

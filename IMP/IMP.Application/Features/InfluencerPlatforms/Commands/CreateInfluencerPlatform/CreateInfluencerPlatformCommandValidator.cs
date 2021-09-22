@@ -13,14 +13,14 @@ namespace IMP.Application.Features.InfluencerPlatforms.Commands.CreateInfluencer
 {
     public class CreateInfluencerPlatformCommandValidator : AbstractValidator<CreateInfluencerPlatformCommand>
     {
-        private readonly IGenericRepository<InfluencerPlatform> _influencerPlatformRepositoryAsync;
-        private readonly IGenericRepository<ApplicationUser> _applicationUserRepositoryAsync;
-        private readonly IGenericRepository<Platform> _platformRepositoryAsync;
+        private readonly IGenericRepository<InfluencerPlatform> _influencerPlatformRepository;
+        private readonly IGenericRepository<ApplicationUser> _applicationUserRepository;
+        private readonly IGenericRepository<Platform> _platformRepository;
         public CreateInfluencerPlatformCommandValidator(IUnitOfWork unitOfWork)
         {
-            _influencerPlatformRepositoryAsync = unitOfWork.Repository<InfluencerPlatform>();
-            _applicationUserRepositoryAsync = unitOfWork.Repository<ApplicationUser>();
-            _platformRepositoryAsync = unitOfWork.Repository<Platform>();
+            _influencerPlatformRepository = unitOfWork.Repository<InfluencerPlatform>();
+            _applicationUserRepository = unitOfWork.Repository<ApplicationUser>();
+            _platformRepository = unitOfWork.Repository<Platform>();
 
             RuleFor(x => x.Url).MustValidUrl();
             RuleFor(x => x.InfluencerId).MustExistEntityId(IsValidInfluencerId);
@@ -33,17 +33,17 @@ namespace IMP.Application.Features.InfluencerPlatforms.Commands.CreateInfluencer
 
         public async Task<bool> IsValidInfluencerId(int id, CancellationToken cancellationToken)
         {
-            return await _applicationUserRepositoryAsync.GetByIdAsync(id) != null;
+            return await _applicationUserRepository.GetByIdAsync(id) != null;
         }
 
         public async Task<bool> IsValidPlatform(int id, CancellationToken cancellationToken)
         {
-            return await _platformRepositoryAsync.GetByIdAsync(id) != null;
+            return await _platformRepository.GetByIdAsync(id) != null;
         }
 
         public async Task<bool> IsDuplicatePlatform(int platformId, int influencerId, CancellationToken cancellationToken)
         {
-            return await _influencerPlatformRepositoryAsync.FindSingleAsync(x => x.PlatformId == platformId && x.InfluencerId == influencerId) == null;
+            return await _influencerPlatformRepository.FindSingleAsync(x => x.PlatformId == platformId && x.InfluencerId == influencerId) == null;
         }
     }
 }

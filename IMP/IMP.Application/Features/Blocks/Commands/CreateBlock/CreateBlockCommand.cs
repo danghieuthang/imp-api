@@ -30,19 +30,19 @@ namespace IMP.Application.Features.Blocks.Commands.CreateBlock
         public class CreateBlockCommandHandler : IRequestHandler<CreateBlockCommand, Response<BlockViewModel>>
         {
             private readonly IUnitOfWork _unitOfWork;
-            private readonly IGenericRepository<Block> _blockRepositoryAsync;
+            private readonly IGenericRepository<Block> _blockRepository;
             private readonly IMapper _mapper;
             public CreateBlockCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
             {
                 _unitOfWork = unitOfWork;
-                _blockRepositoryAsync = _unitOfWork.Repository<Block>();
+                _blockRepository = _unitOfWork.Repository<Block>();
                 _mapper = mapper;
             }
 
             public async Task<Response<BlockViewModel>> Handle(CreateBlockCommand request, CancellationToken cancellationToken)
             {
                 var block = _mapper.Map<Block>(request);
-                block = await _blockRepositoryAsync.AddAsync(block);
+                block = await _blockRepository.AddAsync(block);
                 await _unitOfWork.CommitAsync();
                 var view = _mapper.Map<BlockViewModel>(block);
                 return new Response<BlockViewModel>(view);

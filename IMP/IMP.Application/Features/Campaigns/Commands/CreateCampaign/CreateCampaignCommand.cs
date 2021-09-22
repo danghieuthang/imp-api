@@ -34,19 +34,19 @@ namespace IMP.Application.Features.Campaigns.Commands.CreateCampaign
     public class CreateCampaignCommandHandler : IRequestHandler<CreateCampaignCommand, Response<CampaignViewModel>>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IGenericRepository<Campaign> _campaignRepositoryAsync;
+        private readonly IGenericRepository<Campaign> _campaignRepository;
         private readonly IMapper _mapper;
         public CreateCampaignCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
-            _campaignRepositoryAsync = _unitOfWork.Repository<Campaign>();
+            _campaignRepository = _unitOfWork.Repository<Campaign>();
             _mapper = mapper;
         }
 
         public async Task<Response<CampaignViewModel>> Handle(CreateCampaignCommand request, CancellationToken cancellationToken)
         {
             var campaign = _mapper.Map<Campaign>(request);
-            campaign = await _campaignRepositoryAsync.AddAsync(campaign);
+            campaign = await _campaignRepository.AddAsync(campaign);
             await _unitOfWork.CommitAsync();
             var campaignView = _mapper.Map<CampaignViewModel>(campaign);
             return new Response<CampaignViewModel>(campaignView);

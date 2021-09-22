@@ -13,16 +13,16 @@ namespace IMP.Application.Features.Campaigns.Commands.CreateCampaign
 {
     public class CreateCampaignCommandValidator : AbstractValidator<CreateCampaignCommand>
     {
-        private readonly IGenericRepository<Campaign> _campaignRepositoryAsync;
-        private readonly IGenericRepository<Platform> _platformRepositoryAsync;
-        private readonly IGenericRepository<CampaignType> _campaignTypeRepositoryAsync;
-        private readonly IGenericRepository<ApplicationUser> _applicationUserRepositoryAsync;
+        private readonly IGenericRepository<Campaign> _campaignRepository;
+        private readonly IGenericRepository<Platform> _platformRepository;
+        private readonly IGenericRepository<CampaignType> _campaignTypeRepository;
+        private readonly IGenericRepository<ApplicationUser> _applicationUserRepository;
         public CreateCampaignCommandValidator(IUnitOfWork unitOfWork)
         {
-            _campaignRepositoryAsync = unitOfWork.Repository<Campaign>();
-            _platformRepositoryAsync = unitOfWork.Repository<Platform>();
-            _campaignTypeRepositoryAsync = unitOfWork.Repository<CampaignType>();
-            _applicationUserRepositoryAsync = unitOfWork.Repository<ApplicationUser>();
+            _campaignRepository = unitOfWork.Repository<Campaign>();
+            _platformRepository = unitOfWork.Repository<Platform>();
+            _campaignTypeRepository = unitOfWork.Repository<CampaignType>();
+            _applicationUserRepository = unitOfWork.Repository<ApplicationUser>();
 
             this.RuleFor(c => c.Title).MustRequired(256);
             this.RuleFor(c => c.AditionalInfomation).MustRequired(2000);
@@ -43,17 +43,17 @@ namespace IMP.Application.Features.Campaigns.Commands.CreateCampaign
 
         public async Task<bool> IsPlatformExist(int id, CancellationToken cancellationToken)
         {
-            return await _platformRepositoryAsync.IsExistAsync(id);
+            return await _platformRepository.IsExistAsync(id);
         }
 
         public async Task<bool> IsCampainTypeExist(int id, CancellationToken cancellationToken)
         {
-            return await _campaignTypeRepositoryAsync.IsExistAsync(id);
+            return await _campaignTypeRepository.IsExistAsync(id);
         }
 
         public async Task<bool> IsValidBrand(int id, CancellationToken cancellationToken)
         {
-            var user = await _applicationUserRepositoryAsync.GetByIdAsync(id);
+            var user = await _applicationUserRepository.GetByIdAsync(id);
             return user != null;
         }
     }

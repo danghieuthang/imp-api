@@ -23,21 +23,21 @@ namespace IMP.Application.Features.InfluencerPlatforms.Commands.UpdateInlfuencer
         public class UpdateInfluencerPlatformCommandHandler : IRequestHandler<UpdateInfluencerPlatformCommand, Response<InfluencerPlatformViewModel>>
         {
             private readonly IUnitOfWork _unitOfWork;
-            private readonly IGenericRepository<InfluencerPlatform> _influencerPlatformRepositoryAsync;
+            private readonly IGenericRepository<InfluencerPlatform> _influencerPlatformRepository;
 
             public UpdateInfluencerPlatformCommandHandler(IUnitOfWork unitOfWork)
             {
                 _unitOfWork = unitOfWork;
-                _influencerPlatformRepositoryAsync = _unitOfWork.Repository<InfluencerPlatform>();
+                _influencerPlatformRepository = _unitOfWork.Repository<InfluencerPlatform>();
             }
 
             public async Task<Response<InfluencerPlatformViewModel>> Handle(UpdateInfluencerPlatformCommand request, CancellationToken cancellationToken)
             {
-                var influencerPlatform = await _influencerPlatformRepositoryAsync.FindSingleAsync(x => x.InfluencerId == request.InfluencerId && x.PlatformId == request.PlatformId);
+                var influencerPlatform = await _influencerPlatformRepository.FindSingleAsync(x => x.InfluencerId == request.InfluencerId && x.PlatformId == request.PlatformId);
 
                 influencerPlatform.Url = request.Url;
 
-                _influencerPlatformRepositoryAsync.Update(influencerPlatform);
+                _influencerPlatformRepository.Update(influencerPlatform);
                 await _unitOfWork.CommitAsync();
 
                 var influencerPlatformView = new InfluencerPlatformViewModel

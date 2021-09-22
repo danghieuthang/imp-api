@@ -20,20 +20,20 @@ namespace IMP.Application.Features.BlockPlatforms.Commands.CreateBlockPlatform
 
         public class CreateBlockPlatformCommandHander : CommandHandler<CreateBlockPlatformCommand, BlockPlatformViewModel>
         {
-            private readonly IGenericRepository<BlockPlatform> _blockPlatformRepositoryAsync;
+            private readonly IGenericRepository<BlockPlatform> _blockPlatformRepository;
             public CreateBlockPlatformCommandHander(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
             {
-                _blockPlatformRepositoryAsync = unitOfWork.Repository<BlockPlatform>();
+                _blockPlatformRepository = unitOfWork.Repository<BlockPlatform>();
             }
 
             public override async Task<Response<BlockPlatformViewModel>> Handle(CreateBlockPlatformCommand request, CancellationToken cancellationToken)
             {
                 var blockPlatform = Mapper.Map<BlockPlatform>(request);
 
-                await _blockPlatformRepositoryAsync.AddAsync(blockPlatform);
+                await _blockPlatformRepository.AddAsync(blockPlatform);
                 await UnitOfWork.CommitAsync();
 
-                blockPlatform = await _blockPlatformRepositoryAsync.FindSingleAsync(x => x.Id == blockPlatform.Id, includeProperties: x => x.InfluencerPlatform);
+                blockPlatform = await _blockPlatformRepository.FindSingleAsync(x => x.Id == blockPlatform.Id, includeProperties: x => x.InfluencerPlatform);
                 var blockPlatformView = Mapper.Map<BlockCampaignViewModel>(blockPlatform);
                 return new Response<BlockPlatformViewModel>();
             }

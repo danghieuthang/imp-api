@@ -33,23 +33,23 @@ namespace IMP.Application.Features.Blocks.Commands.UpdateBlock
         public class UpdateBlockCommandHandler : IRequestHandler<UpdateBlockCommand, Response<BlockViewModel>>
         {
             private readonly IUnitOfWork _unitOfWork;
-            private readonly IGenericRepository<Block> _blockRepositoryAsync;
+            private readonly IGenericRepository<Block> _blockRepository;
             private readonly IMapper _mapper;
 
             public UpdateBlockCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
             {
                 _unitOfWork = unitOfWork;
-                _blockRepositoryAsync = _unitOfWork.Repository<Block>();
+                _blockRepository = _unitOfWork.Repository<Block>();
                 _mapper = mapper;
             }
 
             public async Task<Response<BlockViewModel>> Handle(UpdateBlockCommand request, CancellationToken cancellationToken)
             {
-                var block = await _blockRepositoryAsync.GetByIdAsync(request.Id);
+                var block = await _blockRepository.GetByIdAsync(request.Id);
                 if (block != null)
                 {
                     _mapper.Map(request, block);
-                    _blockRepositoryAsync.Update(block);
+                    _blockRepository.Update(block);
                     await _unitOfWork.CommitAsync();
                     var view = _mapper.Map<BlockViewModel>(block);
                     return new Response<BlockViewModel>(view);

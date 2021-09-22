@@ -41,16 +41,16 @@ namespace IMP.Application.Features.Campaigns.Queries.GetAllCampaigns
 
         public class GetAllCampaignQueryHandler : ListQueryHandler<GetAllCampaignQuery, CampaignViewModel>
         {
-            private readonly IGenericRepository<Campaign> _campaignRepositoryAsync;
+            private readonly IGenericRepository<Campaign> _campaignRepository;
 
             public GetAllCampaignQueryHandler(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
             {
-                _campaignRepositoryAsync = unitOfWork.Repository<Campaign>();
+                _campaignRepository = unitOfWork.Repository<Campaign>();
             }
             public override async Task<Response<IPagedList<CampaignViewModel>>> Handle(GetAllCampaignQuery request, CancellationToken cancellationToken)
             {
 
-                var page = await _campaignRepositoryAsync.GetPagedList(pageIndex: request.PageIndex, pageSize: request.PageSize, orderBy: request.OrderField, orderByDecensing: request.OrderBy == OrderBy.DESC);
+                var page = await _campaignRepository.GetPagedList(pageIndex: request.PageIndex, pageSize: request.PageSize, orderBy: request.OrderField, orderByDecensing: request.OrderBy == OrderBy.DESC);
                 var pageViews = page.ToResponsePagedList<CampaignViewModel>(Mapper);
                 return new Response<IPagedList<CampaignViewModel>>(pageViews);
             }

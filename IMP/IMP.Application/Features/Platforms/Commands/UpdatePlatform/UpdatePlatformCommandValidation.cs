@@ -18,11 +18,11 @@ namespace IMP.Application.Features.Platforms.Commands.UpdatePlatform
 {
     public class UpdatePlatformCommandValidation : AbstractValidator<UpdatePlatformCommand>
     {
-        private readonly IGenericRepository<Platform> _platformRepositoryAsync;
+        private readonly IGenericRepository<Platform> _platformRepository;
 
         public UpdatePlatformCommandValidation(IUnitOfWork unitOfWork, IOptions<FileSettings> options)
         {
-            _platformRepositoryAsync = unitOfWork.Repository<Platform>();
+            _platformRepository = unitOfWork.Repository<Platform>();
 
             RuleFor(x => x.Id).NotNull().WithMessage("Chưa có.")
                 .MustAsync(IsExist).WithMessage("'{PropertyValue}' không tồn tại.");
@@ -39,12 +39,12 @@ namespace IMP.Application.Features.Platforms.Commands.UpdatePlatform
 
         private async Task<bool> IsUniquePlatformUpdate(string name, int id, CancellationToken cancellationToken)
         {
-            var entity = await _platformRepositoryAsync.FindSingleAsync(x => x.Id != id && x.Name.ToLower() == name.ToLower());
+            var entity = await _platformRepository.FindSingleAsync(x => x.Id != id && x.Name.ToLower() == name.ToLower());
             return entity == null;
         }
         private async Task<bool> IsExist(int id, CancellationToken cancellationToken)
         {
-            return await _platformRepositoryAsync.IsExistAsync(id);
+            return await _platformRepository.IsExistAsync(id);
         }
     }
 

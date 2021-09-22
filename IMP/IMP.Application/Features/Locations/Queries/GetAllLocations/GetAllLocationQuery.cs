@@ -17,18 +17,18 @@ namespace IMP.Application.Features.Locations.Queries.GetAllLocations
     {
         public class GetAllLocationQueryHandler : IRequestHandler<GetAllLocationQuery, Response<IEnumerable<LocationViewModel>>>
         {
-            private readonly IGenericRepository<Location> _locationRepositoryAsync;
+            private readonly IGenericRepository<Location> _locationRepository;
             private readonly IMapper _mapper;
 
             public GetAllLocationQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
             {
-                _locationRepositoryAsync = unitOfWork.Repository<Location>();
+                _locationRepository = unitOfWork.Repository<Location>();
                 _mapper = mapper;
             }
 
             public async Task<Response<IEnumerable<LocationViewModel>>> Handle(GetAllLocationQuery request, CancellationToken cancellationToken)
             {
-                var locations = await _locationRepositoryAsync.GetAllAsync();
+                var locations = await _locationRepository.GetAllAsync();
                 var locationViews = _mapper.Map<IEnumerable<LocationViewModel>>(locations);
                 return new Response<IEnumerable<LocationViewModel>>(locationViews);
             }

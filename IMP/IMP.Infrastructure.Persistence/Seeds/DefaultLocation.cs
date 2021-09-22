@@ -33,8 +33,8 @@ namespace IMP.Infrastructure.Persistence.Seeds
         public static string LocationFile = "vietnam_cities.json";
         public static async Task SeedAsync(IUnitOfWork unitOfWork)
         {
-            var locationRepositoryAsync = unitOfWork.Repository<Location>();
-            var locations = await locationRepositoryAsync.GetAllAsync();
+            var locationRepository = unitOfWork.Repository<Location>();
+            var locations = await locationRepository.GetAllAsync();
 
             if (locations.Count == 0)
             {
@@ -50,7 +50,7 @@ namespace IMP.Infrastructure.Persistence.Seeds
                         Slug = x.Value.Slug,
                         Level = "tỉnh",
                     }).ToList();
-                    await locationRepositoryAsync.AddManyAsync(locations);
+                    await locationRepository.AddManyAsync(locations);
                     await unitOfWork.CommitAsync();
                 }
             }

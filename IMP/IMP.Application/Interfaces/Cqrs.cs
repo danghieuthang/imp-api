@@ -155,29 +155,29 @@ namespace IMP.Application.Interfaces
        where TCommand : class, IDeleteCommand<TEntity>, new()
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IGenericRepository<TEntity> _repositoryAsync;
+        private readonly IGenericRepository<TEntity> _repository;
         public DeleteCommandHandler(IUnitOfWork unitOfWork)
         {
             this._unitOfWork = unitOfWork;
-            _repositoryAsync = unitOfWork.Repository<TEntity>();
+            _repository = unitOfWork.Repository<TEntity>();
         }
 
         public virtual async Task<Response<int>> Handle(TCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _repositoryAsync.GetByIdAsync(request.Id);
+            var entity = await _repository.GetByIdAsync(request.Id);
             if (entity == null)
             {
                 var error = new ValidationError("id", $"'{request.Id}' không tồn tại");
                 throw new ValidationException(error);
             }
 
-            _repositoryAsync.Delete(entity);
+            _repository.Delete(entity);
             await _unitOfWork.CommitAsync();
             return new Response<int>(entity.Id);
         }
 
         public IUnitOfWork UnitOfWork => _unitOfWork;
-        public IGenericRepository<TEntity> RepositoryAsync => _repositoryAsync;
+        public IGenericRepository<TEntity> Repository => _repository;
 
     }
     #endregion
@@ -204,17 +204,17 @@ namespace IMP.Application.Interfaces
        where TEntity : BaseEntity, new()
        where TRequest : IGetByIdQuery<TEntity, TViewModel>
     {
-        private readonly IGenericRepository<TEntity> _repositoryAsync;
+        private readonly IGenericRepository<TEntity> _repository;
         private readonly IMapper _mapper;
         public GetByIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _repositoryAsync = unitOfWork.Repository<TEntity>();
+            _repository = unitOfWork.Repository<TEntity>();
             _mapper = mapper;
         }
 
         public virtual async Task<Response<TViewModel>> Handle(TRequest request, CancellationToken cancellationToken)
         {
-            var entity = await _repositoryAsync.GetByIdAsync(request.Id);
+            var entity = await _repository.GetByIdAsync(request.Id);
             if (entity == null)
             {
                 //var error = new ValidationError("id", $"'{request.Id}' không tồn tại");
@@ -225,7 +225,7 @@ namespace IMP.Application.Interfaces
             return new Response<TViewModel>(data);
         }
 
-        public IGenericRepository<TEntity> Repository => _repositoryAsync;
+        public IGenericRepository<TEntity> Repository => _repository;
         public IMapper Mapper => _mapper;
 
 
@@ -252,21 +252,21 @@ namespace IMP.Application.Interfaces
       where TViewModel : BaseViewModel<int>, new()
       where TEntity : BaseEntity, new()
     {
-        private readonly IGenericRepository<TEntity> _repositoryAsync;
+        private readonly IGenericRepository<TEntity> _repository;
         private readonly IMapper _mapper;
         public GetAllQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _repositoryAsync = unitOfWork.Repository<TEntity>();
+            _repository = unitOfWork.Repository<TEntity>();
             _mapper = mapper;
         }
 
         public virtual async Task<Response<IEnumerable<TViewModel>>> Handle(TRequest request, CancellationToken cancellationToken)
         {
-            var entities = await _repositoryAsync.GetAllAsync();
+            var entities = await _repository.GetAllAsync();
             var data = _mapper.Map<IEnumerable<TViewModel>>(entities);
             return new Response<IEnumerable<TViewModel>>(data);
         }
-        public IGenericRepository<TEntity> Repository => _repositoryAsync;
+        public IGenericRepository<TEntity> Repository => _repository;
         public IMapper Mapper => _mapper;
     }
     #endregion

@@ -15,8 +15,8 @@ namespace IMP.Infrastructure.Persistence.Seeds
     {
         public static async Task SeedAsync(IUnitOfWork unitOfWork)
         {
-            var bankRepositoryAsync = unitOfWork.Repository<Bank>();
-            var banks = await bankRepositoryAsync.GetAllAsync();
+            var bankRepository = unitOfWork.Repository<Bank>();
+            var banks = await bankRepository.GetAllAsync();
             if (banks.Count == 0)
             {
                 var locationFile = Path.Combine(Environment.CurrentDirectory, @"App_Datas", "banks.json");
@@ -30,7 +30,7 @@ namespace IMP.Infrastructure.Persistence.Seeds
                         Code = x.Key,
                         Name = x.Value,
                     }).ToList();
-                    await bankRepositoryAsync.AddManyAsync(banks);
+                    await bankRepository.AddManyAsync(banks);
                     await unitOfWork.CommitAsync();
                 }
             }

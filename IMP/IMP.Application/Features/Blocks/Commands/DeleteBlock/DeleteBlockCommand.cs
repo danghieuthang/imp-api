@@ -21,7 +21,7 @@ namespace IMP.Application.Features.Blocks.Commands.DeleteBlock
             public override async Task<Response<int>> Handle(DeleteBlockCommand request, CancellationToken cancellationToken)
             {
 
-                var entity = await RepositoryAsync.FindSingleAsync(x => x.Id == request.Id, x => x.Page);
+                var entity = await Repository.FindSingleAsync(x => x.Id == request.Id, x => x.Page);
                 if (entity == null)
                 {
                     var error = new ValidationError("id", $"'{request.Id}' không tồn tại");
@@ -32,7 +32,7 @@ namespace IMP.Application.Features.Blocks.Commands.DeleteBlock
                     var error = new ValidationError("id", $"Không thể xóa block của người khác nhé cưng.");
                     throw new ValidationException(error);
                 }
-                RepositoryAsync.Delete(entity);
+                Repository.Delete(entity);
                 await UnitOfWork.CommitAsync();
                 return new Response<int>(entity.Id);
             }

@@ -21,24 +21,24 @@ namespace IMP.Application.Features.Pages.Commands.UpdatePage
         public class UpdatePageCommandHandler : IRequestHandler<UpdatePageCommand, Response<PageViewModel>>
         {
             private readonly IUnitOfWork _unitOfWork;
-            private readonly IGenericRepository<Page> _pageRepositoryAsync;
+            private readonly IGenericRepository<Page> _pageRepository;
             private readonly IMapper _mapper;
 
             public UpdatePageCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
             {
                 _unitOfWork = unitOfWork;
-                _pageRepositoryAsync = _unitOfWork.Repository<Page>();
+                _pageRepository = _unitOfWork.Repository<Page>();
                 _mapper = mapper;
             }
 
             public async Task<Response<PageViewModel>> Handle(UpdatePageCommand request, CancellationToken cancellationToken)
             {
 
-                var entity = await _pageRepositoryAsync.GetByIdAsync(request.Id);
+                var entity = await _pageRepository.GetByIdAsync(request.Id);
                 if (entity != null)
                 {
                     _mapper.Map(request, entity);
-                    _pageRepositoryAsync.Update(entity);
+                    _pageRepository.Update(entity);
                     await _unitOfWork.CommitAsync();
                 }
 

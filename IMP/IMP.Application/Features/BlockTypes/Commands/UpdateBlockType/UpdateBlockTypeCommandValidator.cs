@@ -16,11 +16,11 @@ namespace IMP.Application.Features.BlockTypes.Commands.UpdateBlockType
 {
     public class UpdateBlockTypeCommandValidator : AbstractValidator<UpdateBlockTypeCommand>
     {
-        private readonly IGenericRepository<BlockType> _blockTypeRepositoryAsync;
+        private readonly IGenericRepository<BlockType> _blockTypeRepository;
 
         public UpdateBlockTypeCommandValidator(IUnitOfWork unitOfWork, IOptions<FileSettings> options)
         {
-            _blockTypeRepositoryAsync = unitOfWork.Repository<BlockType>();
+            _blockTypeRepository = unitOfWork.Repository<BlockType>();
             RuleFor(x => x.Id).MustExistEntityId(IsExistAsync);
             RuleFor(x => x.Name).MustRequired(256)
                 .MustAsync(async (x, y, z) =>
@@ -34,12 +34,12 @@ namespace IMP.Application.Features.BlockTypes.Commands.UpdateBlockType
 
         public async Task<bool> IsExistAsync(int id, CancellationToken cancellationToken)
         {
-            return await _blockTypeRepositoryAsync.IsExistAsync(id);
+            return await _blockTypeRepository.IsExistAsync(id);
         }
 
         public async Task<bool> IsUniQueBlockType(int id, string name, CancellationToken cancellationToken)
         {
-            var entity = await _blockTypeRepositoryAsync.FindSingleAsync(x => x.Id != id && name.ToLower() == x.Name.ToLower());
+            var entity = await _blockTypeRepository.FindSingleAsync(x => x.Id != id && name.ToLower() == x.Name.ToLower());
             return entity == null;
         }
     }

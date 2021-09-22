@@ -29,21 +29,21 @@ namespace IMP.Application.Features.BlockTypes.Commands.UpdateBlockType
         {
 
             private readonly IUnitOfWork _unitOfWork;
-            private readonly IGenericRepository<BlockType> _blockTypeRepositoryAsync;
+            private readonly IGenericRepository<BlockType> _blockTypeRepository;
             private readonly IMapper _mapper;
             private readonly IFirebaseService _firebaseService;
 
             public UpdateBlockTypeComandHandler(IUnitOfWork unitOfWork, IMapper mapper, IFirebaseService firebaseService)
             {
                 _unitOfWork = unitOfWork;
-                _blockTypeRepositoryAsync = _unitOfWork.Repository<BlockType>();
+                _blockTypeRepository = _unitOfWork.Repository<BlockType>();
                 _mapper = mapper;
                 _firebaseService = firebaseService;
             }
 
             public async Task<Response<BlockTypeViewModel>> Handle(UpdateBlockTypeCommand request, CancellationToken cancellationToken)
             {
-                var blockType = await _blockTypeRepositoryAsync.GetByIdAsync(request.Id);
+                var blockType = await _blockTypeRepository.GetByIdAsync(request.Id);
                 if (blockType != null)
                 {
                     blockType.Name = request.Name;
@@ -53,7 +53,7 @@ namespace IMP.Application.Features.BlockTypes.Commands.UpdateBlockType
                     {
                         blockType.Image = imageFileUrl;
                     }
-                    _blockTypeRepositoryAsync.Update(blockType);
+                    _blockTypeRepository.Update(blockType);
                     await _unitOfWork.CommitAsync();
                 }
                 var blockTypeView = _mapper.Map<BlockTypeViewModel>(blockType);

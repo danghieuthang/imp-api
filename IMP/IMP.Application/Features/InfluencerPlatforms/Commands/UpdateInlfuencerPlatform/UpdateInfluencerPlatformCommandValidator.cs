@@ -13,11 +13,11 @@ namespace IMP.Application.Features.InfluencerPlatforms.Commands.UpdateInlfuencer
 {
     public class UpdateInfluencerPlatformCommandValidator : AbstractValidator<UpdateInfluencerPlatformCommand>
     {
-        private readonly IGenericRepository<InfluencerPlatform> _influencerPlatformRepositoryAsync;
+        private readonly IGenericRepository<InfluencerPlatform> _influencerPlatformRepository;
 
         public UpdateInfluencerPlatformCommandValidator(IUnitOfWork unitOfWork)
         {
-            _influencerPlatformRepositoryAsync = unitOfWork.Repository<InfluencerPlatform>();
+            _influencerPlatformRepository = unitOfWork.Repository<InfluencerPlatform>();
 
             RuleFor(x => x.Url).MustValidUrl();
             RuleFor(x => x.PlatformId).MustAsync(async (x, y, z) =>
@@ -29,7 +29,7 @@ namespace IMP.Application.Features.InfluencerPlatforms.Commands.UpdateInlfuencer
 
         public async Task<bool> IsExistInfluencerPlatform(int platformId, int influencerId, CancellationToken cancellationToken)
         {
-            return await _influencerPlatformRepositoryAsync.FindSingleAsync(x => x.InfluencerId == influencerId && x.PlatformId == platformId) != null;
+            return await _influencerPlatformRepository.FindSingleAsync(x => x.InfluencerId == influencerId && x.PlatformId == platformId) != null;
         }
 
 

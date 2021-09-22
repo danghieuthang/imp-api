@@ -22,14 +22,14 @@ namespace IMP.Application.Features.InfluencerPlatforms.Commands.RequestVerifyInf
         public string AccessToken { get; set; }
         public class VerifyInfluencerPlatformCommandHandler : CommandHandler<VerifyInfluencerPlatformCommand, InfluencerPlatformViewModel>
         {
-            private readonly IGenericRepository<InfluencerPlatform> _influencerPlatformRepositoryAsync;
+            private readonly IGenericRepository<InfluencerPlatform> _influencerPlatformRepository;
             private readonly IMapper _mapper;
             private readonly ITiktokService _tiktokService;
             private readonly IFacebookService _facebookService;
 
             public VerifyInfluencerPlatformCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, ITiktokService tiktokService, IFacebookService facebookService) : base(unitOfWork, mapper)
             {
-                _influencerPlatformRepositoryAsync = unitOfWork.Repository<InfluencerPlatform>();
+                _influencerPlatformRepository = unitOfWork.Repository<InfluencerPlatform>();
                 _mapper = mapper;
                 _tiktokService = tiktokService;
                 _facebookService = facebookService;
@@ -37,7 +37,7 @@ namespace IMP.Application.Features.InfluencerPlatforms.Commands.RequestVerifyInf
 
             public override async Task<Response<InfluencerPlatformViewModel>> Handle(VerifyInfluencerPlatformCommand request, CancellationToken cancellationToken)
             {
-                var influencerPlatform = await _influencerPlatformRepositoryAsync.FindSingleAsync(x => x.Id == request.Id, x => x.Platform);
+                var influencerPlatform = await _influencerPlatformRepository.FindSingleAsync(x => x.Id == request.Id, x => x.Platform);
                 if (influencerPlatform == null)
                 {
                     throw new ValidationException(new ValidationError("id", $"Không tồn tại."));
@@ -72,7 +72,7 @@ namespace IMP.Application.Features.InfluencerPlatforms.Commands.RequestVerifyInf
                 influencerPlatform.Follower = socialPlatformUser.Follower;
                 influencerPlatform.IsVerified = true;
 
-                _influencerPlatformRepositoryAsync.Update(influencerPlatform);
+                _influencerPlatformRepository.Update(influencerPlatform);
                 await UnitOfWork.CommitAsync();
 
                 var influencerPlatformView = _mapper.Map<InfluencerPlatformViewModel>(influencerPlatform);

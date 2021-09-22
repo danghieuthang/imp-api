@@ -17,10 +17,10 @@ namespace IMP.Application.Features.Platforms.Commands.CreatePlatform
 {
     public class CreatePlatformCommandValidator : AbstractValidator<CreatePlatformCommand>
     {
-        private readonly IGenericRepository<Platform> _platformRepositoryAsync;
+        private readonly IGenericRepository<Platform> _platformRepository;
         public CreatePlatformCommandValidator(IUnitOfWork unitOfWork, IOptions<FileSettings> options)
         {
-            _platformRepositoryAsync = unitOfWork.Repository<Platform>();
+            _platformRepository = unitOfWork.Repository<Platform>();
             this.RuleFor(x => x.Name).MustRequired(256)
                 .MustAsync(IsUniquePlatform).WithMessage($"Tên đã tồn tại.");
 
@@ -29,7 +29,7 @@ namespace IMP.Application.Features.Platforms.Commands.CreatePlatform
 
         private async Task<bool> IsUniquePlatform(string name, CancellationToken cancellationToken)
         {
-            var entity = await _platformRepositoryAsync.FindSingleAsync(x => x.Name.ToLower() == name.ToLower());
+            var entity = await _platformRepository.FindSingleAsync(x => x.Name.ToLower() == name.ToLower());
             return entity == null;
         }
 

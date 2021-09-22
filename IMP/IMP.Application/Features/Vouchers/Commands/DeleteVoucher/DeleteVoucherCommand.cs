@@ -21,12 +21,12 @@ namespace IMP.Application.Features.Vouchers.Commands.DeleteVoucher
 
             public override async Task<Response<int>> Handle(DeleteVoucherCommand request, CancellationToken cancellationToken)
             {
-                var voucher = await RepositoryAsync.FindSingleAsync(x => x.Id == request.Id, includeProperties: x => x.Campaign);
+                var voucher = await Repository.FindSingleAsync(x => x.Id == request.Id, includeProperties: x => x.Campaign);
                 if (voucher != null)
                 {
                     if (voucher.Campaign.BrandId == request.BrandId)
                     {
-                        RepositoryAsync.Delete(voucher);
+                        Repository.Delete(voucher);
                         await UnitOfWork.CommitAsync();
                     }
                     else

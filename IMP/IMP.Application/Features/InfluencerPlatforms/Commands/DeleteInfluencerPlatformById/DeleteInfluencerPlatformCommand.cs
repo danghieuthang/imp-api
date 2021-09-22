@@ -27,7 +27,7 @@ namespace IMP.Application.Features.InfluencerPlatforms.Commands.DeleteInfluencer
 
             public override async Task<Response<int>> Handle(DeleteInfluencerPlatformCommand request, CancellationToken cancellationToken)
             {
-                var influencerPlatform = await RepositoryAsync.GetByIdAsync(request.Id);
+                var influencerPlatform = await Repository.GetByIdAsync(request.Id);
                 if (influencerPlatform == null)
                 {
                     var error = new ValidationError("id", $"'{request.Id}' không tồn tại");
@@ -40,7 +40,7 @@ namespace IMP.Application.Features.InfluencerPlatforms.Commands.DeleteInfluencer
                     throw new ValidationException(error);
                 }
 
-                RepositoryAsync.Delete(influencerPlatform);
+                Repository.Delete(influencerPlatform);
                 await UnitOfWork.CommitAsync();
                 return new Response<int>(influencerPlatform.Id);
             }

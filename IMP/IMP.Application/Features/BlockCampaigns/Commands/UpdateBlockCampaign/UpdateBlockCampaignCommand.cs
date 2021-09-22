@@ -21,21 +21,21 @@ namespace IMP.Application.Features.BlockCampaigns.Commands.UpdateBlockCampaign
         public bool IsActived { get; set; }
         public class UpdateBlockCampaignCommandHandler : CommandHandler<UpdateBlockCampaignCommand, BlockCampaignViewModel>
         {
-            private readonly IGenericRepository<BlockCampaign> _blockCampaignRepositoryAsync;
+            private readonly IGenericRepository<BlockCampaign> _blockCampaignRepository;
             public UpdateBlockCampaignCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
             {
-                _blockCampaignRepositoryAsync = unitOfWork.Repository<BlockCampaign>();
+                _blockCampaignRepository = unitOfWork.Repository<BlockCampaign>();
             }
 
             public override async Task<Response<BlockCampaignViewModel>> Handle(UpdateBlockCampaignCommand request, CancellationToken cancellationToken)
             {
-                var blockCampaign = await _blockCampaignRepositoryAsync.FindSingleAsync(x => x.Id == request.Id, includeProperties: x => x.Campaign);
+                var blockCampaign = await _blockCampaignRepository.FindSingleAsync(x => x.Id == request.Id, includeProperties: x => x.Campaign);
                 if (blockCampaign != null)
                 {
                     blockCampaign.Position = request.Position;
                     blockCampaign.IsActived = request.IsActived;
 
-                    _blockCampaignRepositoryAsync.Update(blockCampaign);
+                    _blockCampaignRepository.Update(blockCampaign);
                     await UnitOfWork.CommitAsync();
 
                     var blockCampaignView = Mapper.Map<BlockCampaignViewModel>(blockCampaign);
