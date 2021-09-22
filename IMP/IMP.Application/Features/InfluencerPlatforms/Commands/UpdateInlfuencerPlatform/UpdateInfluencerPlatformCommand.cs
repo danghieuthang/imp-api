@@ -23,7 +23,7 @@ namespace IMP.Application.Features.InfluencerPlatforms.Commands.UpdateInlfuencer
         public class UpdateInfluencerPlatformCommandHandler : IRequestHandler<UpdateInfluencerPlatformCommand, Response<InfluencerPlatformViewModel>>
         {
             private readonly IUnitOfWork _unitOfWork;
-            private readonly IGenericRepositoryAsync<InfluencerPlatform> _influencerPlatformRepositoryAsync;
+            private readonly IGenericRepository<InfluencerPlatform> _influencerPlatformRepositoryAsync;
 
             public UpdateInfluencerPlatformCommandHandler(IUnitOfWork unitOfWork)
             {

@@ -32,7 +32,7 @@ namespace IMP.Application.Features.CampaignTypes.Commands.CreateCampaignType
 
         public class CreateCampaignTypeCommandHandler : CommandHandler<CreateCampaignTypeCommand, CampaignTypeViewModel>
         {
-            private readonly IGenericRepositoryAsync<CampaignType> _campaignTypeRepositoryAsync;
+            private readonly IGenericRepository<CampaignType> _campaignTypeRepositoryAsync;
             private readonly IFirebaseService _firebaseService;
             public CreateCampaignTypeCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IFirebaseService firebaseService) : base(unitOfWork, mapper)
             {

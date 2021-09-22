@@ -36,7 +36,7 @@ namespace IMP.Application.Features.CampaignTypes.Commands.UpdateCampaignType
         public class UpdateCampaignTypeCommandHandler : CommandHandler<UpdateCampaignTypeCommand, CampaignTypeViewModel>
         {
 
-            private readonly IGenericRepositoryAsync<CampaignType> _campaignTypeRepositoryAsync;
+            private readonly IGenericRepository<CampaignType> _campaignTypeRepositoryAsync;
             private readonly IFirebaseService _firebaseService;
 
             public UpdateCampaignTypeCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IFirebaseService firebaseService) : base(unitOfWork, mapper)

@@ -16,7 +16,7 @@ namespace IMP.Application.Features.BlockTypes.Queries.GetAllBlockType
     {
         public class GetAllBlockTypeQueryHandler : IRequestHandler<GetAllBlockTypeQuery, Response<IEnumerable<BlockType>>>
         {
-            private readonly IGenericRepositoryAsync<int, BlockType> _blockTypeResponsitoryAsync;
+            private readonly IGenericRepository<int, BlockType> _blockTypeResponsitoryAsync;
             private readonly IMapper _mapper;
 
             public GetAllBlockTypeQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)

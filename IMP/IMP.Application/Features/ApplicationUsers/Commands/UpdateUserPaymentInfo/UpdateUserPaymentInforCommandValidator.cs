@@ -13,8 +13,8 @@ namespace IMP.Application.Features.ApplicationUsers.Commands.UpdateUserPaymentIn
 {
     public class UpdateUserPaymentInforCommandValidator : AbstractValidator<UpdateUserPaymentInfoCommand>
     {
-        private readonly IGenericRepositoryAsync<Bank> _bankRepositoryAsync;
-        private readonly IGenericRepositoryAsync<ApplicationUser> _applicationUserRepositoryAsync;
+        private readonly IGenericRepository<Bank> _bankRepositoryAsync;
+        private readonly IGenericRepository<ApplicationUser> _applicationUserRepositoryAsync;
         public UpdateUserPaymentInforCommandValidator(IUnitOfWork unitOfWork)
         {
             _bankRepositoryAsync = unitOfWork.Repository<Bank>();

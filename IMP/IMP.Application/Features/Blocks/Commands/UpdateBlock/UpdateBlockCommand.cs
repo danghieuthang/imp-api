@@ -33,7 +33,7 @@ namespace IMP.Application.Features.Blocks.Commands.UpdateBlock
         public class UpdateBlockCommandHandler : IRequestHandler<UpdateBlockCommand, Response<BlockViewModel>>
         {
             private readonly IUnitOfWork _unitOfWork;
-            private readonly IGenericRepositoryAsync<Block> _blockRepositoryAsync;
+            private readonly IGenericRepository<Block> _blockRepositoryAsync;
             private readonly IMapper _mapper;
 
             public UpdateBlockCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)

@@ -14,8 +14,8 @@ namespace IMP.Application.Features.ApplicationUsers.Commands.UpdateUserInfomatio
 {
     public class UpdateUserInformationCommandValidator : AbstractValidator<UpdateUserInformationCommand>
     {
-        private readonly IGenericRepositoryAsync<ApplicationUser> _applicationUserRepostoryAsync;
-        private readonly IGenericRepositoryAsync<Location> _locationRepostoryAsync;
+        private readonly IGenericRepository<ApplicationUser> _applicationUserRepostoryAsync;
+        private readonly IGenericRepository<Location> _locationRepostoryAsync;
 
         public UpdateUserInformationCommandValidator(IUnitOfWork unitOfWork)
         {

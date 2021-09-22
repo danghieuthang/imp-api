@@ -18,7 +18,7 @@ namespace IMP.Application.Features.Platforms.Commands.UpdatePlatform
 {
     public class UpdatePlatformCommandValidation : AbstractValidator<UpdatePlatformCommand>
     {
-        private readonly IGenericRepositoryAsync<Platform> _platformRepositoryAsync;
+        private readonly IGenericRepository<Platform> _platformRepositoryAsync;
 
         public UpdatePlatformCommandValidation(IUnitOfWork unitOfWork, IOptions<FileSettings> options)
         {

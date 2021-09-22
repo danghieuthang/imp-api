@@ -34,7 +34,7 @@ namespace IMP.Application.Features.Campaigns.Commands.CreateCampaign
     public class CreateCampaignCommandHandler : IRequestHandler<CreateCampaignCommand, Response<CampaignViewModel>>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IGenericRepositoryAsync<Campaign> _campaignRepositoryAsync;
+        private readonly IGenericRepository<Campaign> _campaignRepositoryAsync;
         private readonly IMapper _mapper;
         public CreateCampaignCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {

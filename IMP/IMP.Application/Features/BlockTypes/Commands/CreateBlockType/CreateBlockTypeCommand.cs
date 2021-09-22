@@ -27,7 +27,7 @@ namespace IMP.Application.Features.BlockTypes.Commands.CreateBlockType
         public class CreateBlockTypeComandHandler : IRequestHandler<CreateBlockTypeCommand, Response<BlockTypeViewModel>>
         {
             private readonly IUnitOfWork _unitOfWork;
-            private readonly IGenericRepositoryAsync<BlockType> _blockTypeRepositoryAsync;
+            private readonly IGenericRepository<BlockType> _blockTypeRepositoryAsync;
             private readonly IMapper _mapper;
             private readonly IFirebaseService _firebaseService;
 

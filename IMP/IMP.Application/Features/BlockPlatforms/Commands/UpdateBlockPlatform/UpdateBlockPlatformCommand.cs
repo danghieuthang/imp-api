@@ -22,7 +22,7 @@ namespace IMP.Application.Features.BlockPlatforms.Commands.UpdateBlockPlatform
 
         public class UpdateBlockPlatformCommandHandler : CommandHandler<UpdateBlockPlatformCommand, BlockPlatformViewModel>
         {
-            private readonly IGenericRepositoryAsync<BlockPlatform> _blockPlatformRepositoryAsync;
+            private readonly IGenericRepository<BlockPlatform> _blockPlatformRepositoryAsync;
             public UpdateBlockPlatformCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
             {
                 _blockPlatformRepositoryAsync = unitOfWork.Repository<BlockPlatform>();

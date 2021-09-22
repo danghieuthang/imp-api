@@ -17,7 +17,7 @@ namespace IMP.Application.Features.Locations.Queries.GetAllLocations
     {
         public class GetAllLocationQueryHandler : IRequestHandler<GetAllLocationQuery, Response<IEnumerable<LocationViewModel>>>
         {
-            private readonly IGenericRepositoryAsync<Location> _locationRepositoryAsync;
+            private readonly IGenericRepository<Location> _locationRepositoryAsync;
             private readonly IMapper _mapper;
 
             public GetAllLocationQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)

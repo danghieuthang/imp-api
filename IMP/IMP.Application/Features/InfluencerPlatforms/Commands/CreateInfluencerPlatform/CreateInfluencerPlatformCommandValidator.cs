@@ -13,9 +13,9 @@ namespace IMP.Application.Features.InfluencerPlatforms.Commands.CreateInfluencer
 {
     public class CreateInfluencerPlatformCommandValidator : AbstractValidator<CreateInfluencerPlatformCommand>
     {
-        private readonly IGenericRepositoryAsync<InfluencerPlatform> _influencerPlatformRepositoryAsync;
-        private readonly IGenericRepositoryAsync<ApplicationUser> _applicationUserRepositoryAsync;
-        private readonly IGenericRepositoryAsync<Platform> _platformRepositoryAsync;
+        private readonly IGenericRepository<InfluencerPlatform> _influencerPlatformRepositoryAsync;
+        private readonly IGenericRepository<ApplicationUser> _applicationUserRepositoryAsync;
+        private readonly IGenericRepository<Platform> _platformRepositoryAsync;
         public CreateInfluencerPlatformCommandValidator(IUnitOfWork unitOfWork)
         {
             _influencerPlatformRepositoryAsync = unitOfWork.Repository<InfluencerPlatform>();

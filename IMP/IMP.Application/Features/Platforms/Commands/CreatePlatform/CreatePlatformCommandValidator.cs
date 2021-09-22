@@ -17,7 +17,7 @@ namespace IMP.Application.Features.Platforms.Commands.CreatePlatform
 {
     public class CreatePlatformCommandValidator : AbstractValidator<CreatePlatformCommand>
     {
-        private readonly IGenericRepositoryAsync<Platform> _platformRepositoryAsync;
+        private readonly IGenericRepository<Platform> _platformRepositoryAsync;
         public CreatePlatformCommandValidator(IUnitOfWork unitOfWork, IOptions<FileSettings> options)
         {
             _platformRepositoryAsync = unitOfWork.Repository<Platform>();

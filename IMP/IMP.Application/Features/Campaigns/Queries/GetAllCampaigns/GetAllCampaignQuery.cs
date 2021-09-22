@@ -41,7 +41,7 @@ namespace IMP.Application.Features.Campaigns.Queries.GetAllCampaigns
 
         public class GetAllCampaignQueryHandler : ListQueryHandler<GetAllCampaignQuery, CampaignViewModel>
         {
-            private readonly IGenericRepositoryAsync<Campaign> _campaignRepositoryAsync;
+            private readonly IGenericRepository<Campaign> _campaignRepositoryAsync;
 
             public GetAllCampaignQueryHandler(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
             {

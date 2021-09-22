@@ -16,7 +16,7 @@ namespace IMP.Application.Features.BlockTypes.Commands.CreateBlockType
 {
     public class CreateBlockTypeCommandValidator : AbstractValidator<CreateBlockTypeCommand>
     {
-        private readonly IGenericRepositoryAsync<BlockType> _blockTypeRepositoryAsync;
+        private readonly IGenericRepository<BlockType> _blockTypeRepositoryAsync;
 
         public CreateBlockTypeCommandValidator(IUnitOfWork unitOfWork, IOptions<FileSettings> options)
         {

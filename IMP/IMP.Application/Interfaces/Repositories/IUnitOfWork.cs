@@ -21,8 +21,8 @@ namespace IMP.Application.Interfaces
         /// </summary>
         /// <param name="hasCustomRepository"><c>True</c> if providing custom repositry</param>
         /// <typeparam name="TEntity">The type of the entity.</typeparam>
-        /// <returns>An instance of type inherited from <see cref="IGenericRepositoryAsync{TEntity}}"/> interface.</returns>
-        IGenericRepositoryAsync<TEntity> Repository<TEntity>(bool hasCustomRepository = false) where TEntity : BaseEntity;
+        /// <returns>An instance of type inherited from <see cref="IGenericRepository{TEntity}}"/> interface.</returns>
+        IGenericRepository<TEntity> Repository<TEntity>(bool hasCustomRepository = false) where TEntity : BaseEntity;
         int ExecuteSqlCommand(string sql, params object[] parameters);
         IQueryable<TEntity> FromSql<TEntity>(string sql, params object[] parameters) where TEntity : class;
     }

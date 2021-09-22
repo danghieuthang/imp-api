@@ -9,9 +9,9 @@ namespace IMP.Application.Features.Blocks.Commands.CreateBlock
 {
     public class CreateBlockCommandValidator : AbstractValidator<CreateBlockCommand>
     {
-        private readonly IGenericRepositoryAsync<Page> _pageRepositoryAsync;
-        private readonly IGenericRepositoryAsync<BlockType> _blockTypeRepositoryAsync;
-        private readonly IGenericRepositoryAsync<Block> _blockRepositoryAsync;
+        private readonly IGenericRepository<Page> _pageRepositoryAsync;
+        private readonly IGenericRepository<BlockType> _blockTypeRepositoryAsync;
+        private readonly IGenericRepository<Block> _blockRepositoryAsync;
         public CreateBlockCommandValidator(IUnitOfWork unitOfWork)
         {
             _blockRepositoryAsync = unitOfWork.Repository<Block>();

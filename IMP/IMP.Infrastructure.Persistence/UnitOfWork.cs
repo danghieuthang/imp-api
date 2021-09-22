@@ -44,7 +44,7 @@ namespace IMP.Infrastructure.Persistence
             _disposed = true;
         }
 
-        public IGenericRepositoryAsync<TEntity> Repository<TEntity>(bool hasCustomRepository = false) where TEntity : BaseEntity
+        public IGenericRepository<TEntity> Repository<TEntity>(bool hasCustomRepository = false) where TEntity : BaseEntity
         {
             if (_repositoties == null)
             {
@@ -52,15 +52,15 @@ namespace IMP.Infrastructure.Persistence
             }
             if (hasCustomRepository)
             {
-                var repository = _context.GetService<IGenericRepositoryAsync<TEntity>>();
+                var repository = _context.GetService<IGenericRepository<TEntity>>();
             }
             var type = typeof(TEntity).Name;
             if (!_repositoties.ContainsKey(type))
             {
-                var respositoryInstance = new GenericRepositoryAsync<TEntity>(_context);
+                var respositoryInstance = new GenericRepository<TEntity>(_context);
                 _repositoties.Add(type, respositoryInstance);
             }
-            return (IGenericRepositoryAsync<TEntity>)_repositoties[type];
+            return (IGenericRepository<TEntity>)_repositoties[type];
         }
 
         public void Commit()

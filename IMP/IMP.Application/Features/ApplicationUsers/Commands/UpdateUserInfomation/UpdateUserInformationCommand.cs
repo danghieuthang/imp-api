@@ -41,7 +41,7 @@ namespace IMP.Application.Features.ApplicationUsers.Commands.UpdateUserInfomatio
     public class UpdateUserInformationCommandHandler : IRequestHandler<UpdateUserInformationCommand, Response<ApplicationUserViewModel>>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IGenericRepositoryAsync<ApplicationUser> _applicationUserRepostoryAsync;
+        private readonly IGenericRepository<ApplicationUser> _applicationUserRepostoryAsync;
         private readonly IMapper _mapper;
 
         public UpdateUserInformationCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)

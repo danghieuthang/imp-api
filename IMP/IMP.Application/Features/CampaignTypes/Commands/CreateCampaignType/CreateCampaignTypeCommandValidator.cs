@@ -15,7 +15,7 @@ namespace IMP.Application.Features.CampaignTypes.Commands.CreateCampaignType
 {
     public class CreateCampaignTypeCommandValidator : AbstractValidator<CreateCampaignTypeCommand>
     {
-        private readonly IGenericRepositoryAsync<CampaignType> _campaignTypeRepostoryAsync;
+        private readonly IGenericRepository<CampaignType> _campaignTypeRepostoryAsync;
 
         public CreateCampaignTypeCommandValidator(IUnitOfWork unitOfWork, IOptions<FileSettings> options)
         {

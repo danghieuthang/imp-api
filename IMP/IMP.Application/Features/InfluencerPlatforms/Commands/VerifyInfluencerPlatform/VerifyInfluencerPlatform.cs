@@ -22,7 +22,7 @@ namespace IMP.Application.Features.InfluencerPlatforms.Commands.RequestVerifyInf
         public string AccessToken { get; set; }
         public class VerifyInfluencerPlatformCommandHandler : CommandHandler<VerifyInfluencerPlatformCommand, InfluencerPlatformViewModel>
         {
-            private readonly IGenericRepositoryAsync<InfluencerPlatform> _influencerPlatformRepositoryAsync;
+            private readonly IGenericRepository<InfluencerPlatform> _influencerPlatformRepositoryAsync;
             private readonly IMapper _mapper;
             private readonly ITiktokService _tiktokService;
             private readonly IFacebookService _facebookService;

@@ -12,7 +12,7 @@ namespace IMP.Application.Features.Pages.Commands.CreatePage
 {
     public class CreatePageCommandValidator : AbstractValidator<CreatePageCommand>
     {
-        private readonly IGenericRepositoryAsync<ApplicationUser> _applicationUserRepositoryAsync;
+        private readonly IGenericRepository<ApplicationUser> _applicationUserRepositoryAsync;
 
         public CreatePageCommandValidator(IUnitOfWork  unitOfWork, IOptions<FileSettings> settings)
         {

@@ -22,16 +22,16 @@ using IMP.Application.Extensions;
 namespace IMP.Infrastructure.Persistence.Repository
 {
     /// <summary>
-    /// Default generic repository implement the <see cref="IGenericRepositoryAsync{TKey, TEntity}"/> interface
+    /// Default generic repository implement the <see cref="IGenericRepository{TKey, TEntity}"/> interface
     /// </summary>
     /// <typeparam name="TKey">The type of key of entity.</typeparam>
     /// <typeparam name="TEntity">The type of entity.</typeparam>
-    public class GenericRepositoryAsync<TKey, TEntity> : IGenericRepositoryAsync<TKey, TEntity>, IDisposable where TEntity : Entity<TKey>
+    public class GenericRepository<TKey, TEntity> : IGenericRepository<TKey, TEntity>, IDisposable where TEntity : Entity<TKey>
     {
         private readonly DbContext _dbContext;
         private bool _disposed = false;
         private readonly DbSet<TEntity> _dbSet;
-        public GenericRepositoryAsync(DbContext dbContext)
+        public GenericRepository(DbContext dbContext)
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(ApplicationDbContext));
             _dbSet = _dbContext.Set<TEntity>();
@@ -287,12 +287,12 @@ namespace IMP.Infrastructure.Persistence.Repository
 
     }
     /// <summary>
-    /// Default generic repository implements the <see cref="IGenericRepositoryAsync{TEntity}"/> interface.
+    /// Default generic repository implements the <see cref="IGenericRepository{TEntity}"/> interface.
     /// </summary>
     /// <typeparam name="TEntity">The type of entity.</typeparam>
-    public class GenericRepositoryAsync<TEntity> : GenericRepositoryAsync<int, TEntity>, IGenericRepositoryAsync<TEntity> where TEntity : BaseEntity
+    public class GenericRepository<TEntity> : GenericRepository<int, TEntity>, IGenericRepository<TEntity> where TEntity : BaseEntity
     {
-        public GenericRepositoryAsync(DbContext dbContext) : base(dbContext)
+        public GenericRepository(DbContext dbContext) : base(dbContext)
         {
         }
     }

@@ -21,7 +21,7 @@ namespace IMP.Application.Features.Platforms.Queries.GetAllPlatforms
 
     public class GetAllPlatformsQueryHanlder : IRequestHandler<GetAllPlatformsQuery, Response<IEnumerable<PlatformViewModel>>>
     {
-        private readonly IGenericRepositoryAsync<Platform> _platformRepositoryAsync;
+        private readonly IGenericRepository<Platform> _platformRepositoryAsync;
         private readonly IMapper _mapper;
         public GetAllPlatformsQueryHanlder(IUnitOfWork unitOfWork, IMapper mapper)
         {

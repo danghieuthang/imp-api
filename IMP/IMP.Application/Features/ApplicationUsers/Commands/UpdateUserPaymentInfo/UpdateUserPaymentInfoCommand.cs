@@ -25,8 +25,8 @@ namespace IMP.Application.Features.ApplicationUsers.Commands.UpdateUserPaymentIn
         public class UpdateUserPaymentInfoCommandHandler : IRequestHandler<UpdateUserPaymentInfoCommand, Response<PaymentInforViewModel>>
         {
             private readonly IUnitOfWork _unitOfWork;
-            private readonly IGenericRepositoryAsync<PaymentInfor> _paymentInfoRepositoryAsync;
-            private readonly IGenericRepositoryAsync<ApplicationUser> _applicationUserRepositoryAsync;
+            private readonly IGenericRepository<PaymentInfor> _paymentInfoRepositoryAsync;
+            private readonly IGenericRepository<ApplicationUser> _applicationUserRepositoryAsync;
             private readonly IMapper _mapper;
             public UpdateUserPaymentInfoCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
             {

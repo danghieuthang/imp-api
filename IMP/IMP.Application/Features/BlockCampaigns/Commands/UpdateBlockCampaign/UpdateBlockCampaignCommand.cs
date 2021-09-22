@@ -21,7 +21,7 @@ namespace IMP.Application.Features.BlockCampaigns.Commands.UpdateBlockCampaign
         public bool IsActived { get; set; }
         public class UpdateBlockCampaignCommandHandler : CommandHandler<UpdateBlockCampaignCommand, BlockCampaignViewModel>
         {
-            private readonly IGenericRepositoryAsync<BlockCampaign> _blockCampaignRepositoryAsync;
+            private readonly IGenericRepository<BlockCampaign> _blockCampaignRepositoryAsync;
             public UpdateBlockCampaignCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
             {
                 _blockCampaignRepositoryAsync = unitOfWork.Repository<BlockCampaign>();

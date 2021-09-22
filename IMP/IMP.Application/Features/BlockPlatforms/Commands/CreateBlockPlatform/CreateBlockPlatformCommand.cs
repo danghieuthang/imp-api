@@ -20,7 +20,7 @@ namespace IMP.Application.Features.BlockPlatforms.Commands.CreateBlockPlatform
 
         public class CreateBlockPlatformCommandHander : CommandHandler<CreateBlockPlatformCommand, BlockPlatformViewModel>
         {
-            private readonly IGenericRepositoryAsync<BlockPlatform> _blockPlatformRepositoryAsync;
+            private readonly IGenericRepository<BlockPlatform> _blockPlatformRepositoryAsync;
             public CreateBlockPlatformCommandHander(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
             {
                 _blockPlatformRepositoryAsync = unitOfWork.Repository<BlockPlatform>();

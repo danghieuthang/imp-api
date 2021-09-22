@@ -20,7 +20,7 @@ namespace IMP.Application.Features.ApplicationUsers.Commands.VerifyEmail
         public class VerifyEmailCommandHandler : IRequestHandler<VerifyEmailCommand, Response<string>>
         {
             private readonly IUnitOfWork _unitOfWork;
-            private readonly IGenericRepositoryAsync<ApplicationUser> _repositoryAsync;
+            private readonly IGenericRepository<ApplicationUser> _repositoryAsync;
 
             public VerifyEmailCommandHandler(IUnitOfWork unitOfWork)
             {

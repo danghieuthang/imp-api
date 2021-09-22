@@ -13,10 +13,10 @@ namespace IMP.Application.Features.Campaigns.Commands.CreateCampaign
 {
     public class CreateCampaignCommandValidator : AbstractValidator<CreateCampaignCommand>
     {
-        private readonly IGenericRepositoryAsync<Campaign> _campaignRepositoryAsync;
-        private readonly IGenericRepositoryAsync<Platform> _platformRepositoryAsync;
-        private readonly IGenericRepositoryAsync<CampaignType> _campaignTypeRepositoryAsync;
-        private readonly IGenericRepositoryAsync<ApplicationUser> _applicationUserRepositoryAsync;
+        private readonly IGenericRepository<Campaign> _campaignRepositoryAsync;
+        private readonly IGenericRepository<Platform> _platformRepositoryAsync;
+        private readonly IGenericRepository<CampaignType> _campaignTypeRepositoryAsync;
+        private readonly IGenericRepository<ApplicationUser> _applicationUserRepositoryAsync;
         public CreateCampaignCommandValidator(IUnitOfWork unitOfWork)
         {
             _campaignRepositoryAsync = unitOfWork.Repository<Campaign>();

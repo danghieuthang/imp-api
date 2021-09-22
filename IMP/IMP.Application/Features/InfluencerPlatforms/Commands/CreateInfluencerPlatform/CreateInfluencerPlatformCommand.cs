@@ -26,7 +26,7 @@ namespace IMP.Application.Features.InfluencerPlatforms.Commands.CreateInfluencer
         public class CreateInfluencerPlatformCommandHandler : IRequestHandler<CreateInfluencerPlatformCommand, Response<InfluencerPlatformViewModel>>
         {
             private readonly IUnitOfWork _unitOfWork;
-            private readonly IGenericRepositoryAsync<InfluencerPlatform> _influencerPlatformRepositoryAsync;
+            private readonly IGenericRepository<InfluencerPlatform> _influencerPlatformRepositoryAsync;
             private readonly IMapper _mapper;
 
             public CreateInfluencerPlatformCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)

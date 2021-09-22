@@ -19,7 +19,7 @@ namespace IMP.Application.Features.InfluencerPlatforms.Queries.GetAllInfluencerP
 
         public class GetAllInfluencerPlatformQueryHandler : IRequestHandler<GetAllInfluencerPlatformQuery, Response<IEnumerable<InfluencerPlatformViewModel>>>
         {
-            private readonly IGenericRepositoryAsync<InfluencerPlatform> _influencerPlatformRepositoryAsync;
+            private readonly IGenericRepository<InfluencerPlatform> _influencerPlatformRepositoryAsync;
             private readonly IMapper _mapper;
 
             public GetAllInfluencerPlatformQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)

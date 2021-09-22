@@ -12,7 +12,7 @@ namespace IMP.Application.Interfaces.Services
     public class ApplicationUserService : IApplicationUserService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IGenericRepositoryAsync<ApplicationUser> _applicationUserRepositoryAsync;
+        private readonly IGenericRepository<ApplicationUser> _applicationUserRepositoryAsync;
 
         public ApplicationUserService(IUnitOfWork unitOfWork)
         {

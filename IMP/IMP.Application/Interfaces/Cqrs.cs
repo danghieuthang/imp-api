@@ -155,7 +155,7 @@ namespace IMP.Application.Interfaces
        where TCommand : class, IDeleteCommand<TEntity>, new()
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IGenericRepositoryAsync<TEntity> _repositoryAsync;
+        private readonly IGenericRepository<TEntity> _repositoryAsync;
         public DeleteCommandHandler(IUnitOfWork unitOfWork)
         {
             this._unitOfWork = unitOfWork;
@@ -177,7 +177,7 @@ namespace IMP.Application.Interfaces
         }
 
         public IUnitOfWork UnitOfWork => _unitOfWork;
-        public IGenericRepositoryAsync<TEntity> RepositoryAsync => _repositoryAsync;
+        public IGenericRepository<TEntity> RepositoryAsync => _repositoryAsync;
 
     }
     #endregion
@@ -204,7 +204,7 @@ namespace IMP.Application.Interfaces
        where TEntity : BaseEntity, new()
        where TRequest : IGetByIdQuery<TEntity, TViewModel>
     {
-        private readonly IGenericRepositoryAsync<TEntity> _repositoryAsync;
+        private readonly IGenericRepository<TEntity> _repositoryAsync;
         private readonly IMapper _mapper;
         public GetByIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
@@ -225,7 +225,7 @@ namespace IMP.Application.Interfaces
             return new Response<TViewModel>(data);
         }
 
-        public IGenericRepositoryAsync<TEntity> Repository => _repositoryAsync;
+        public IGenericRepository<TEntity> Repository => _repositoryAsync;
         public IMapper Mapper => _mapper;
 
 
@@ -252,7 +252,7 @@ namespace IMP.Application.Interfaces
       where TViewModel : BaseViewModel<int>, new()
       where TEntity : BaseEntity, new()
     {
-        private readonly IGenericRepositoryAsync<TEntity> _repositoryAsync;
+        private readonly IGenericRepository<TEntity> _repositoryAsync;
         private readonly IMapper _mapper;
         public GetAllQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
@@ -266,7 +266,7 @@ namespace IMP.Application.Interfaces
             var data = _mapper.Map<IEnumerable<TViewModel>>(entities);
             return new Response<IEnumerable<TViewModel>>(data);
         }
-        public IGenericRepositoryAsync<TEntity> Repository => _repositoryAsync;
+        public IGenericRepository<TEntity> Repository => _repositoryAsync;
         public IMapper Mapper => _mapper;
     }
     #endregion

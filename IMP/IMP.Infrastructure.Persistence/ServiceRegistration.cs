@@ -56,9 +56,9 @@ namespace IMP.Infrastructure.Persistence
         /// <returns></returns>
         public static IServiceCollection AddCustomRepository<TEntity, IRepository>(this IServiceCollection services)
             where TEntity : BaseEntity
-            where IRepository : class, IGenericRepositoryAsync<TEntity>
+            where IRepository : class, IGenericRepository<TEntity>
         {
-            services.AddScoped<IGenericRepositoryAsync<TEntity>, IRepository>();
+            services.AddScoped<IGenericRepository<TEntity>, IRepository>();
             return services;
         }
     }

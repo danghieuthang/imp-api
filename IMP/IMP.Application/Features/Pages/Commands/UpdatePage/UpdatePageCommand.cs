@@ -21,7 +21,7 @@ namespace IMP.Application.Features.Pages.Commands.UpdatePage
         public class UpdatePageCommandHandler : IRequestHandler<UpdatePageCommand, Response<PageViewModel>>
         {
             private readonly IUnitOfWork _unitOfWork;
-            private readonly IGenericRepositoryAsync<Page> _pageRepositoryAsync;
+            private readonly IGenericRepository<Page> _pageRepositoryAsync;
             private readonly IMapper _mapper;
 
             public UpdatePageCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)

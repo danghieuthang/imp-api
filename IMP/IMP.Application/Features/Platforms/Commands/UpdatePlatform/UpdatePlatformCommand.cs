@@ -30,7 +30,7 @@ namespace IMP.Application.Features.Platforms.Commands.UpdatePlatform
         public class UpdatePlatformCommandHandler : IRequestHandler<UpdatePlatformCommand, Response<PlatformViewModel>>
         {
             private readonly IUnitOfWork _unitOfWork;
-            private readonly IGenericRepositoryAsync<Platform> _platformRepositoryAsync;
+            private readonly IGenericRepository<Platform> _platformRepositoryAsync;
             private readonly IMapper _mapper;
             private readonly IFirebaseService _firebaseService;
 

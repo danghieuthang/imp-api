@@ -17,7 +17,7 @@ namespace IMP.Application.Features.CampaignTypes.Commands.UpdateCampaignType
 {
     public class UpdateCampaignTypeCommandValidator : AbstractValidator<UpdateCampaignTypeCommand>
     {
-        private readonly IGenericRepositoryAsync<CampaignType> _campaignTypeRepostoryAsync;
+        private readonly IGenericRepository<CampaignType> _campaignTypeRepostoryAsync;
 
         public UpdateCampaignTypeCommandValidator(IUnitOfWork unitOfWork, IOptions<FileSettings> options)
         {

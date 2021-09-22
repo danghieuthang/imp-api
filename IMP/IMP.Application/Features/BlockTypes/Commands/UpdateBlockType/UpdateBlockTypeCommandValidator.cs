@@ -16,7 +16,7 @@ namespace IMP.Application.Features.BlockTypes.Commands.UpdateBlockType
 {
     public class UpdateBlockTypeCommandValidator : AbstractValidator<UpdateBlockTypeCommand>
     {
-        private readonly IGenericRepositoryAsync<BlockType> _blockTypeRepositoryAsync;
+        private readonly IGenericRepository<BlockType> _blockTypeRepositoryAsync;
 
         public UpdateBlockTypeCommandValidator(IUnitOfWork unitOfWork, IOptions<FileSettings> options)
         {

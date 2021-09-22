@@ -7,8 +7,8 @@ namespace IMP.Application.Features.Pages.Commands.UpdatePage
 {
     public class UpdatePageCommandValidator : AbstractValidator<UpdatePageCommand>
     {
-        private readonly IGenericRepositoryAsync<Page> _pageRepositoryAsync;
-        private readonly IGenericRepositoryAsync<ApplicationUser> _applicationUserRepositoryAsync;
+        private readonly IGenericRepository<Page> _pageRepositoryAsync;
+        private readonly IGenericRepository<ApplicationUser> _applicationUserRepositoryAsync;
 
         public UpdatePageCommandValidator(IUnitOfWork unitOfWork)
         {
