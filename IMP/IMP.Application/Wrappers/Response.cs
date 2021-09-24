@@ -21,6 +21,12 @@ namespace IMP.Application.Wrappers
             Succeeded = false;
             Message = message;
         }
+        public Response(ValidationError error, string message = null)
+        {
+            Succeeded = false;
+            Message = message;
+            Errors = new List<ValidationError> { error };
+        }
         public bool Succeeded { get; set; }
         public string Message { get; set; }
         public List<ValidationError> Errors { get; set; }

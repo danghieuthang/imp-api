@@ -283,6 +283,10 @@ namespace IMP.Infrastructure.Identity.Services
         public async Task<Response<string>> ConfirmEmailAsync(string userId, string code)
         {
             var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return new Response<string>(new ValidationError("userId", "Account not exists."));
+            }
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
             var result = await _userManager.ConfirmEmailAsync(user, code);
             if (result.Succeeded)
@@ -291,7 +295,16 @@ namespace IMP.Infrastructure.Identity.Services
             }
             else
             {
-                throw new ApiException($"An error occured while confirming {user.Email}.");
+                var roles = await _userManager.GetRolesAsync(user);
+                if (roles.Count > 0)
+                {
+                    result = await _userManager.RemoveFromRolesAsync(user, roles);
+                }
+                if (result.Succeeded)
+                {
+                    await _userManager.DeleteAsync(user);
+                }
+                return new Response<string>(new ValidationError("code", "Invalid code."));
             }
         }
 
