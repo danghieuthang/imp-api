@@ -18,6 +18,7 @@ namespace IMP.Infrastructure.Shared
             services.Configure<FacebookSettings>(_config.GetSection("Authentication").GetSection("Facebook"));
             services.Configure<InstagramSettings>(_config.GetSection("Authentication").GetSection("Instagram"));
             services.Configure<OtpSettings>(_config.GetSection("OtpSettings"));
+            services.Configure<VnPaySettings>(_config.GetSection("VnpaySettings"));
 
             #endregion Registers for configutation
 
@@ -28,6 +29,7 @@ namespace IMP.Infrastructure.Shared
             services.AddTransient<IFacebookService, FacebookService>();
             services.AddTransient<IFileService, FileService>();
             services.AddTransient<ITiktokService, TiktokService>();
+            services.AddScoped<IVnPayService, VnPayService>();
         }
     }
 }

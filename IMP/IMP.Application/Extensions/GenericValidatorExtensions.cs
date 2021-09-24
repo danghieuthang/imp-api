@@ -25,7 +25,10 @@ namespace IMP.Application.Extensions
         {
             return ruleBuilder.Must(list => list.Count < num).WithMessage($"List không được chứa nhiều hơn {num} item.");
         }
-
+        public static IRuleBuilderOptions<T, int> MustPositiveInteger<T>(this IRuleBuilder<T, int> ruleBuilder)
+        {
+            return ruleBuilder.GreaterThan(0).WithMessage("Giá trị phải lớn hơn 0.");
+        }
         /// <summary>
         /// Custom validation for string
         /// </summary>

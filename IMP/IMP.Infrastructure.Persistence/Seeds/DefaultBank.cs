@@ -34,6 +34,30 @@ namespace IMP.Infrastructure.Persistence.Seeds
                     await unitOfWork.CommitAsync();
                 }
             }
+
+            // Seed transaction type
+            //var transactionTypeRepository = unitOfWork.Repository<TransactionType>();
+            //var transactionTypes = await transactionTypeRepository.GetAllAsync();
+            //if (transactionTypes.Count == 0)
+            //{
+            //    List<TransactionType> transactionTypeDomain = new List<TransactionType>
+            //    {
+            //        new TransactionType
+            //        {
+            //             Id=1,
+            //             Name="Recharge",
+            //             Description = "Nạp tiền"
+            //        },
+            //        new TransactionType
+            //        {
+            //             Id=2,
+            //             Name="Withdrawal",
+            //             Description = "Rút tiền"
+            //        }
+            //    };
+            //    await transactionTypeRepository.AddManyAsync(transactionTypeDomain);
+            //    await unitOfWork.CommitAsync();
+            //}
         }
     }
 }

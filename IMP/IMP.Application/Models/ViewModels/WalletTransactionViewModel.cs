@@ -1,18 +1,13 @@
-﻿using IMP.Domain.Common;
+﻿using IMP.Application.Enums;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
-namespace IMP.Domain.Entities
+namespace IMP.Application.Models.ViewModels
 {
-    public class WalletTransaction : BaseEntity
+    public class WalletTransactionViewModel : BaseViewModel<int>
     {
         public decimal Amount { get; set; }
         public string TransactionInfo { get; set; }
-        [ForeignKey("Bank")]
-        public int BankId { get; set; }
-        public Bank Bank { get; set; }
+        public BankViewModel Bank { get; set; }
         /// <summary>
         /// Number transaction at banking
         /// </summary>
@@ -25,10 +20,8 @@ namespace IMP.Domain.Entities
         /// Payment time, recorded at VNPAY in GMT+7
         /// </summary>
         public DateTime PayDate { get; set; }
-        public int TransactionStatus { get; set; }
-        [ForeignKey("Wallet")]
+        public TransactionStatus TransactionStatus { get; set; }
         public int WalletId { get; set; }
-        public Wallet Wallet{ get; set; }
-        public int TransactionType { get; set; }
+        public TransactionType TransactionType { get; set; }
     }
 }

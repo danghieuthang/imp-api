@@ -31,6 +31,11 @@ namespace IMP.Application.Interfaces.Services
             };
             user = await _applicationUserRepository.AddAsync(user);
             await _unitOfWork.CommitAsync();
+
+            user.Wallet.ApplicationUserId = user.Id;
+            _unitOfWork.Repository<Wallet>().Update(user.Wallet);
+            await _unitOfWork.CommitAsync();
+
             return user;
         }
 

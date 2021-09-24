@@ -95,6 +95,10 @@ namespace IMP.Application.Mappings
 
             #endregion
 
+            #region wallet
+            CreateMap<Wallet, WalletViewModel>();
+            CreateMap<WalletTransaction, WalletTransactionViewModel>();
+            #endregion
         }
     }
 }

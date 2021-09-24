@@ -31,6 +31,7 @@
     <Folder Include="Features\Banks\Commands\" />
     <Folder Include="Features\Campaigns\Commands\DeleteCampaignById\" />
     <Folder Include="Features\Campaigns\Commands\UpdateCampaign\" />
+    <Folder Include="Features\Wallets\Commands\RequestWithdraw\" />
   </ItemGroup>
 
 </Project>
