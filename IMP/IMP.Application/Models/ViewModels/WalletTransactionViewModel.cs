@@ -11,11 +11,11 @@ namespace IMP.Application.Models.ViewModels
         /// <summary>
         /// Number transaction at banking
         /// </summary>
-        public int BankTranNo { get; set; }
+        public string BankTranNo { get; set; }
         /// <summary>
         /// Number transaction at vnpay
         /// </summary>
-        public int TransactionNo { get; set; }
+        public string TransactionNo { get; set; }
         /// <summary>
         /// Payment time, recorded at VNPAY in GMT+7
         /// </summary>
