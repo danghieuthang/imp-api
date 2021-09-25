@@ -23,6 +23,8 @@ namespace IMP.Application.Features.WalletTransactions.Commands
         public string Vnp_TxnRef { get; set; }
         [FromQuery(Name = "vnp_Amount")]
         public decimal Vnp_Amount { get; set; }
+        [FromQuery(Name = "vnp_CardType")]
+        public string Vnp_CardType { get; set; }
         [FromQuery(Name = "vnp_OrderInfo")]
         public string Vnp_OrderInfo { get; set; }
         [FromQuery(Name = "vnp_ResponseCode")]
@@ -58,6 +60,7 @@ namespace IMP.Application.Features.WalletTransactions.Commands
                 data.Add("vnp_TmnCode", request.VnP_TmnCode);
                 data.Add("vnp_TxnRef", request.Vnp_TxnRef);
                 data.Add("vnp_Amount", request.Vnp_Amount.ToString());
+                data.Add("vnp_CardType", request.Vnp_CardType);
                 data.Add("vnp_OrderInfo", request.Vnp_OrderInfo);
                 data.Add("vnp_ResponseCode", request.Vnp_ResponseCode);
                 data.Add("vnp_BankCode", request.Vnp_BankCode);
@@ -82,12 +85,12 @@ namespace IMP.Application.Features.WalletTransactions.Commands
                             style: System.Globalization.DateTimeStyles.None,
                             out payDate);
                         int status;
-                        _ =  int.TryParse(request.Vnp_TransactionStatus, out status);
+                        _ = int.TryParse(request.Vnp_TransactionStatus, out status);
 
                         var walletTransaction = new WalletTransaction
                         {
                             WalletId = walletId,
-                            Amount = request.Vnp_Amount,
+                            Amount = request.Vnp_Amount/100,
                             BankId = bank.Id,
                             PayDate = payDate,
                             BankTranNo = request.Vnp_BankTranNo,

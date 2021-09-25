@@ -76,7 +76,7 @@ namespace IMP.Infrastructure.Shared.Services
             VnPayLibrary vnPay = new VnPayLibrary();
             foreach (var item in transactionData)
             {
-                vnPay.AddRequestData(item.Key, item.Value);
+                vnPay.AddResponseData(item.Key, item.Value);
             }
             var isValidateSignature = vnPay.ValidateSignature(sercureHash, secretKey: _vnPaySettings.Vnp_HashSecret);
             if (!isValidateSignature)
