@@ -8,7 +8,7 @@ namespace IMP.Domain.Entities
 {
     public class Wallet : BaseEntity
     {
-        public int Balance { get; set; }
+        public decimal Balance { get; set; }
         [ForeignKey("ApplicationUser")]
         public int? ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }

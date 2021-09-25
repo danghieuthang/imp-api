@@ -3,12 +3,15 @@ using IMP.Application.Utils;
 using IMP.Domain.Settings;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace IMP.Infrastructure.Shared.Services
 {
@@ -41,6 +44,17 @@ namespace IMP.Infrastructure.Shared.Services
             _ipAddress = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
 
         }
+        public string GetServerIp()
+        {
+            string host = _httpContextAccessor.HttpContext.Request.Host.Value;
+            if (string.IsNullOrEmpty(host) || host.Contains("localhost"))
+            {
+                return "127.0.0.1";
+            }
+            return Dns.GetHostAddresses(_httpContextAccessor.HttpContext.Request.Host.Value).ToString();
+        }
+
+
         public string CreatePaymentUrl(int amount, int walletId, string paymentInfo, string locale)
         {
             VnPayLibrary vnPay = new();
@@ -50,7 +64,7 @@ namespace IMP.Infrastructure.Shared.Services
             vnPay.AddRequestData("vnp_TmnCode", _vnPaySettings.Vnp_TmnCode);
             vnPay.AddRequestData("vnp_Amount", (amount * 100).ToString());
             vnPay.AddRequestData("vnp_BankCode", "");
-            vnPay.AddRequestData("vnp_CreateDate", DateTime.UtcNow.ToString("yyyyMMddHHmmss"));
+            vnPay.AddRequestData("vnp_CreateDate", DateTime.Now.ToString("yyyyMMddHHmmss"));
             vnPay.AddRequestData("vnp_CurrCode", "VND");
             vnPay.AddRequestData("vnp_IpAddr", _ipAddress);
             if (!string.IsNullOrEmpty(locale))
@@ -71,20 +85,80 @@ namespace IMP.Infrastructure.Shared.Services
             return vnPay.CreateRequestUrl(_vnPaySettings.Vnp_Url, _vnPaySettings.Vnp_HashSecret);
         }
 
-        public bool VerifyPaymentTransaction(Dictionary<string, string> transactionData, string sercureHash)
+        public async Task<bool> VerifyPaymentTransaction(Dictionary<string, string> requestTransactionData, string sercureHash)
         {
-            VnPayLibrary vnPay = new VnPayLibrary();
-            foreach (var item in transactionData)
+            VnPayLibrary vnPay = new();
+            foreach (var item in requestTransactionData)
             {
                 vnPay.AddResponseData(item.Key, item.Value);
             }
             var isValidateSignature = vnPay.ValidateSignature(sercureHash, secretKey: _vnPaySettings.Vnp_HashSecret);
-            if (!isValidateSignature)
+            if (isValidateSignature)
             {
-                return false;
+                var responseTranactionData = await QueryTransacion(requestTransactionData);
+
+                if (responseTranactionData != null
+                    && responseTranactionData["vnp_Amount"] == requestTransactionData["vnp_Amount"]
+                    && responseTranactionData["vnp_TxnRef"] == requestTransactionData["vnp_TxnRef"]
+                    && responseTranactionData["vnp_PayDate"] == requestTransactionData["vnp_PayDate"]
+                    // vnp_TransactionStatus: Success - 00
+                    && responseTranactionData["vnp_TransactionStatus"] == "00")
+                {
+                    return true;
+                }
             }
 
-            return true;
+            return false;
+        }
+
+        public async Task<Dictionary<string, string>> QueryTransacion(Dictionary<string, string> data)
+        {
+            VnPayLibrary vnPay = new();
+
+            vnPay.AddRequestData("vnp_Version", VnPayLibrary.VERSION);
+            vnPay.AddRequestData("vnp_Command", "querydr");
+            vnPay.AddRequestData("vnp_TmnCode", _vnPaySettings.Vnp_TmnCode);
+            vnPay.AddRequestData("vnp_TxnRef", data["vnp_TxnRef"]);
+            vnPay.AddRequestData("vnp_OrderInfo", "Query transaction No: " + data["vnp_TransactionNo"]);
+            vnPay.AddRequestData("vnp_TransDate", data["vnp_PayDate"]);
+            vnPay.AddRequestData("vnp_CreateDate", DateTime.Now.ToString("yyyyMMddHHmmss"));
+            vnPay.AddRequestData("vnp_IpAddr", GetServerIp());
+
+            string url = vnPay.CreateRequestUrl(baseUrl: _vnPaySettings.Querydr, vnp_HashSecret: _vnPaySettings.Vnp_HashSecret);
+            var vnPayQueryTransactionResponse = await GetResponseFromUrl(url);
+            if (vnPayQueryTransactionResponse != null)
+            {
+                //foreach (var item in vnPayQueryTransactionResponse)
+                //{
+                //    vnPay.AddResponseData(item.Key, item.Value);
+                //}
+                //// If signature are correct
+                //if (vnPay.ValidateSignature(vnPayQueryTransactionResponse["vnp_SecureHash"], secretKey: _vnPaySettings.Vnp_HashSecret))
+                //{
+                //    return vnPayQueryTransactionResponse;
+                //}
+                return vnPayQueryTransactionResponse;
+            }
+            return null;
+        }
+
+        private async Task<Dictionary<string, string>> GetResponseFromUrl(string url)
+        {
+            var client = new HttpClient();
+            var response = await client.GetAsync(url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                string content = await response.Content.ReadAsStringAsync();
+                Dictionary<string, string> data = new();
+                foreach (string item in content.Split("&"))
+                {
+                    string[] keyAndValue = item.Split("=");
+                    data.Add(keyAndValue[0], keyAndValue[1]);
+                }
+                return data;
+            }
+            return null;
         }
 
     }
@@ -141,7 +215,6 @@ namespace IMP.Infrastructure.Shared.Services
             String signData = queryString;
             if (signData.Length > 0)
             {
-
                 signData = signData.Remove(data.Length - 1, 1);
             }
             string vnp_SecureHash = Utils.HmacSHA512(vnp_HashSecret, signData);
@@ -154,21 +227,27 @@ namespace IMP.Infrastructure.Shared.Services
         #endregion
 
         #region Response process
-
+        /// <summary>
+        /// Check ensure that data of the transaction is not changed during the transaction the process of from VNPAY To server
+        /// </summary>
+        /// <param name="inputHash"></param>
+        /// <param name="secretKey"></param>
+        /// <returns></returns>
         public bool ValidateSignature(string inputHash, string secretKey)
         {
             string rspRaw = GetResponseData();
             string myChecksum = Utils.HmacSHA512(secretKey, rspRaw);
-            return myChecksum.Equals(inputHash, StringComparison.InvariantCultureIgnoreCase);
+            bool result = myChecksum.Equals(inputHash, StringComparison.InvariantCultureIgnoreCase);
+            return result;
         }
         private string GetResponseData()
         {
 
             StringBuilder data = new StringBuilder();
-            if (_responseData.ContainsKey("vnp_SecureHashType"))
-            {
-                _responseData.Remove("vnp_SecureHashType");
-            }
+            //if (_responseData.ContainsKey("vnp_SecureHashType"))
+            //{
+            //    _responseData.Remove("vnp_SecureHashType");
+            //}
             if (_responseData.ContainsKey("vnp_SecureHash"))
             {
                 _responseData.Remove("vnp_SecureHash");
@@ -187,7 +266,6 @@ namespace IMP.Infrastructure.Shared.Services
             }
             return data.ToString();
         }
-
         #endregion
     }
 

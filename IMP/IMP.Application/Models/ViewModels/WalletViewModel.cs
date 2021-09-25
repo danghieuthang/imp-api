@@ -8,7 +8,7 @@ namespace IMP.Application.Models.ViewModels
 {
     public class WalletViewModel : BaseViewModel<int>
     {
-        public int Balance { get; set; }
+        public decimal Balance { get; set; }
         public List<WalletTransactionViewModel> WalletTransactions { get; set; }
     }
 

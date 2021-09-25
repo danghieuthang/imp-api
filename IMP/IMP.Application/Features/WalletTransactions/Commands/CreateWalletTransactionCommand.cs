@@ -70,43 +70,72 @@ namespace IMP.Application.Features.WalletTransactions.Commands
                 data.Add("vnp_TransactionStatus", request.Vnp_TransactionStatus);
                 data.Add("vnp_SecureHashType", request.Vnp_SecureHashType);
 
-                var isVerify = _vnPayService.VerifyPaymentTransaction(data, request.Vnp_SecureHash);
+                var isVerify = await _vnPayService.VerifyPaymentTransaction(data, request.Vnp_SecureHash);
                 if (isVerify)
                 {
-                    int walletId = 0;
-                    if (int.TryParse(request.Vnp_TxnRef.Split("_").Last(), out walletId))
+                    if (!await IsExistWalletTransactionNo(request.Vnp_TransactionNo, cancellationToken))
                     {
-                        var bank = await UnitOfWork.Repository<Bank>().FindSingleAsync(x => x.Code.ToLower() == request.Vnp_BankCode.ToLower());
-
-                        DateTime payDate;
-                        _ = DateTime.TryParseExact(request.Vnp_PayDate,
-                            format: "yyyyMMddHHmmss",
-                            provider: System.Globalization.CultureInfo.InvariantCulture,
-                            style: System.Globalization.DateTimeStyles.None,
-                            out payDate);
-                        int status;
-                        _ = int.TryParse(request.Vnp_TransactionStatus, out status);
-
-                        var walletTransaction = new WalletTransaction
+                        int walletId = 0;
+                        if (int.TryParse(request.Vnp_TxnRef.Split("_").Last(), out walletId))
                         {
-                            WalletId = walletId,
-                            Amount = request.Vnp_Amount/100,
-                            BankId = bank.Id,
-                            PayDate = payDate,
-                            BankTranNo = request.Vnp_BankTranNo,
-                            TransactionInfo = request.Vnp_OrderInfo,
-                            TransactionStatus = status,
-                            TransactionNo = request.Vnp_TransactionNo,
-                            TransactionType = (int)TransactionType.Recharge
-                        };
-                        await UnitOfWork.Repository<WalletTransaction>().AddAsync(walletTransaction);
-                        await UnitOfWork.CommitAsync();
+                            var bank = await UnitOfWork.Repository<Bank>().FindSingleAsync(x => x.Code.ToLower() == request.Vnp_BankCode.ToLower());
 
-                        var walletTransactionView = Mapper.Map<WalletTransactionViewModel>(walletTransaction);
-                        return new Response<WalletTransactionViewModel>(walletTransactionView);
+                            DateTime payDate;
+                            _ = DateTime.TryParseExact(request.Vnp_PayDate,
+                                format: "yyyyMMddHHmmss",
+                                provider: System.Globalization.CultureInfo.InvariantCulture,
+                                style: System.Globalization.DateTimeStyles.None,
+                                out payDate);
+                            int status;
+                            _ = int.TryParse(request.Vnp_TransactionStatus, out status);
+
+                            var walletTransaction = new WalletTransaction
+                            {
+                                WalletId = walletId,
+                                Amount = request.Vnp_Amount / 100,
+                                BankId = bank.Id,
+                                PayDate = payDate,
+                                BankTranNo = request.Vnp_BankTranNo,
+                                TransactionInfo = request.Vnp_OrderInfo,
+                                TransactionStatus = status,
+                                TransactionNo = request.Vnp_TransactionNo,
+                                TransactionType = (int)TransactionType.Recharge
+                            };
+                            await UnitOfWork.Repository<WalletTransaction>().AddAsync(walletTransaction);
+                            await UnitOfWork.CommitAsync();
+
+                            // Recharge to wallet
+                            await RechargeWalletAfterTransactionVerified(request.Vnp_Amount / 100, walletId);
+
+                            var walletTransactionView = Mapper.Map<WalletTransactionViewModel>(walletTransaction);
+                            return new Response<WalletTransactionViewModel>(walletTransactionView);
+                        }
                     }
+
+                    return new Response<WalletTransactionViewModel>(message: "Giao dịch đã tồn tại.");
+
                 }
                 return new Response<WalletTransactionViewModel>(message: "Giao dịch không hợp lệ.");
+            }
+            private async Task<bool> IsExistWalletTransactionNo(string transactionNo, CancellationToken cancellationToken)
+            {
+                return await UnitOfWork.Repository<WalletTransaction>().IsExistAsync(x => x.TransactionNo == transactionNo);
+            }
+
+            /// <summary>
+            /// Recharge money to wallet after transaction verified
+            /// </summary>
+            /// <param name="amount">Amount(VND)</param>
+            /// <param name="walletId">The id of wallet</param>
+            private async Task RechargeWalletAfterTransactionVerified(decimal amount, int walletId)
+            {
+                var walletRepository = UnitOfWork.Repository<Wallet>();
+
+                var wallet = await walletRepository.GetByIdAsync(walletId);
+                wallet.Balance += amount;
+                walletRepository.Update(wallet);
+
+                await UnitOfWork.CommitAsync();
             }
         }
     }
