@@ -22,7 +22,7 @@ namespace IMP.Application.Features.WalletTransactions.Commands
         [FromQuery(Name = "vnp_TxnRef")]
         public string Vnp_TxnRef { get; set; }
         [FromQuery(Name = "vnp_Amount")]
-        public int Vnp_Amount { get; set; }
+        public decimal Vnp_Amount { get; set; }
         [FromQuery(Name = "vnp_OrderInfo")]
         public string Vnp_OrderInfo { get; set; }
         [FromQuery(Name = "vnp_ResponseCode")]
@@ -30,13 +30,13 @@ namespace IMP.Application.Features.WalletTransactions.Commands
         [FromQuery(Name = "vnp_BankCode")]
         public string Vnp_BankCode { get; set; }
         [FromQuery(Name = "vnp_BankTranNo")]
-        public int Vnp_BankTranNo { get; set; }
+        public string Vnp_BankTranNo { get; set; }
         [FromQuery(Name = "vnp_PayDate")]
         public string Vnp_PayDate { get; set; }
         [FromQuery(Name = "vnp_TransactionNo")]
-        public int Vnp_TransactionNo { get; set; }
+        public string Vnp_TransactionNo { get; set; }
         [FromQuery(Name = "vnp_TransactionStatus")]
-        public WalletTransactionStatus Vnp_TransactionStatus { get; set; }
+        public string Vnp_TransactionStatus { get; set; }
         [FromQuery(Name = "vnp_SecureHashType")]
         public string Vnp_SecureHashType { get; set; }
         [FromQuery(Name = "vnp_SecureHash")]
@@ -61,10 +61,10 @@ namespace IMP.Application.Features.WalletTransactions.Commands
                 data.Add("vnp_OrderInfo", request.Vnp_OrderInfo);
                 data.Add("vnp_ResponseCode", request.Vnp_ResponseCode);
                 data.Add("vnp_BankCode", request.Vnp_BankCode);
-                data.Add("vnp_BankTranNo", request.Vnp_BankTranNo.ToString());
+                data.Add("vnp_BankTranNo", request.Vnp_BankTranNo);
                 data.Add("vnp_PayDate", request.Vnp_PayDate);
-                data.Add("vnp_TransactionNo", request.Vnp_TransactionNo.ToString());
-                data.Add("vnp_TransactionStatus", request.Vnp_TransactionStatus.ToString());
+                data.Add("vnp_TransactionNo", request.Vnp_TransactionNo);
+                data.Add("vnp_TransactionStatus", request.Vnp_TransactionStatus);
                 data.Add("vnp_SecureHashType", request.Vnp_SecureHashType);
 
                 var isVerify = _vnPayService.VerifyPaymentTransaction(data, request.Vnp_SecureHash);
@@ -81,6 +81,8 @@ namespace IMP.Application.Features.WalletTransactions.Commands
                             provider: System.Globalization.CultureInfo.InvariantCulture,
                             style: System.Globalization.DateTimeStyles.None,
                             out payDate);
+                        int status;
+                        _ =  int.TryParse(request.Vnp_TransactionStatus, out status);
 
                         var walletTransaction = new WalletTransaction
                         {
@@ -90,7 +92,7 @@ namespace IMP.Application.Features.WalletTransactions.Commands
                             PayDate = payDate,
                             BankTranNo = request.Vnp_BankTranNo,
                             TransactionInfo = request.Vnp_OrderInfo,
-                            TransactionStatus = (int)request.Vnp_TransactionStatus,
+                            TransactionStatus = status,
                             TransactionNo = request.Vnp_TransactionNo,
                             TransactionType = (int)TransactionType.Recharge
                         };

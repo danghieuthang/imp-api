@@ -1,6 +1,7 @@
 ﻿using IMP.Domain.Common;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
@@ -16,11 +17,13 @@ namespace IMP.Domain.Entities
         /// <summary>
         /// Number transaction at banking
         /// </summary>
-        public int BankTranNo { get; set; }
+        [StringLength(256)]
+        public string BankTranNo { get; set; }
         /// <summary>
         /// Number transaction at vnpay
         /// </summary>
-        public int TransactionNo { get; set; }
+        [StringLength(256)]
+        public string TransactionNo { get; set; }
         /// <summary>
         /// Payment time, recorded at VNPAY in GMT+7
         /// </summary>
