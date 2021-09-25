@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IMP.Application.Enums
 {
-    public enum TransactionStatus
+    public enum WalletTransactionStatus
     {
         TransactionFailure = 01,
         TransactionSuccessful = 02,

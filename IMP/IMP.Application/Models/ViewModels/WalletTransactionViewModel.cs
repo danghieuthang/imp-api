@@ -20,7 +20,7 @@ namespace IMP.Application.Models.ViewModels
         /// Payment time, recorded at VNPAY in GMT+7
         /// </summary>
         public DateTime PayDate { get; set; }
-        public TransactionStatus TransactionStatus { get; set; }
+        public WalletTransactionStatus TransactionStatus { get; set; }
         public int WalletId { get; set; }
         public TransactionType TransactionType { get; set; }
     }

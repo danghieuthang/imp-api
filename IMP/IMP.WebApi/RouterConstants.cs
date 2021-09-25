@@ -24,6 +24,6 @@ namespace IMP.WebApi
         public const string BlockCampaign = Common + "block-campaigns";
         public const string Voucher = Common + "vouchers";
         public const string Wallet = Common + "wallets";
-        public const string WalletTransction = Common + "wallet-transactions";
+        public const string WalletTransaction = Common + "wallet-transactions";
     }
 }

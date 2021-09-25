@@ -36,6 +36,7 @@ namespace IMP.Infrastructure.Shared.Services
             {
                 _returnUrl = "https://" + _returnUrl;
             }
+            _returnUrl = _returnUrl + "/api/v1/wallet-transactions/confirm-transaction";
 
             _ipAddress = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
 
@@ -63,12 +64,29 @@ namespace IMP.Infrastructure.Shared.Services
             vnPay.AddRequestData("vnp_OrderInfo", paymentInfo);
             vnPay.AddRequestData("vnp_OrderType", "other"); //default value: other
             vnPay.AddRequestData("vnp_ReturnUrl", _returnUrl);
-            vnPay.AddRequestData("vnp_TxnRef", DateTime.Now.Ticks.ToString()); // Mã tham chiếu của giao dịch tại hệ thống của merchant. Mã này là duy nhất dùng để phân biệt các đơn hàng gửi sang VNPAY. Không được trùng lặp trong ngày
+            vnPay.AddRequestData("vnp_TxnRef", DateTime.Now.Ticks.ToString() + "_" + walletId); // Mã tham chiếu của giao dịch tại hệ thống của merchant. Mã này là duy nhất dùng để phân biệt các đơn hàng gửi sang VNPAY. Không được trùng lặp trong ngày
 
             //Add Params of 2.1.0 Version
             vnPay.AddRequestData("vnp_ExpireDate", DateTime.Now.AddMinutes(15).ToString("yyyyMMddHHmmss"));
             return vnPay.CreateRequestUrl(_vnPaySettings.Vnp_Url, _vnPaySettings.Vnp_HashSecret);
         }
+
+        public bool VerifyPaymentTransaction(Dictionary<string, string> transactionData, string sercureHash)
+        {
+            VnPayLibrary vnPay = new VnPayLibrary();
+            foreach (var item in transactionData)
+            {
+                vnPay.AddRequestData(item.Key, item.Value);
+            }
+            var isValidateSignature = vnPay.ValidateSignature(sercureHash, secretKey: _vnPaySettings.Vnp_HashSecret);
+            if (!isValidateSignature)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
     }
 
     public class VnPayLibrary
@@ -131,7 +149,6 @@ namespace IMP.Infrastructure.Shared.Services
 
             return baseUrl;
         }
-
 
 
         #endregion
