@@ -52,6 +52,7 @@ namespace IMP.WebApi
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseSwaggerExtension();
+            app.UseReDocExtension();
             app.UseErrorHandlingMiddleware();
             app.UseHealthChecks("/health");
 
