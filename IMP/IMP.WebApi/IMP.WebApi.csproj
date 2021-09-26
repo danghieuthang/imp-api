@@ -57,4 +57,10 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="IMP.WebApi.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
