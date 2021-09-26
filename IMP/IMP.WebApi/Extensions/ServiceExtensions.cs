@@ -6,9 +6,6 @@ using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace IMP.WebApi.Extensions
 {
     public static class ServiceExtensions
@@ -69,6 +66,12 @@ namespace IMP.WebApi.Extensions
                 config.AssumeDefaultVersionWhenUnspecified = true;
                 // Advertise the API versions supported for the particular endpoint
                 config.ReportApiVersions = true;
+            });
+
+            services.AddVersionedApiExplorer(config =>
+            {
+                config.GroupNameFormat = "'v'VVV";
+                config.SubstituteApiVersionInUrl = true;
             });
         }
 
