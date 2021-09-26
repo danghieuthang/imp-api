@@ -5,6 +5,7 @@ using IMP.Application.Models;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
 using IMP.Domain.Entities;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,10 @@ namespace IMP.Application.Features.WalletTransactions.Queries.GetTransactionsByW
     public class GetWalletTransactionByWalletIdQuery : PageRequest, IListQuery<WalletTransactionViewModel>
     {
         private int _applicationUserId;
+        [FromQuery(Name = "from-date")]
+        public DateTime? FromDate { get; set; }
+        [FromQuery(Name = "to-date")]
+        public DateTime? ToDate { get; set; }
 
         public void SetApplicationUserId(int walletId)
         {
@@ -33,7 +38,9 @@ namespace IMP.Application.Features.WalletTransactions.Queries.GetTransactionsByW
 
             public override async Task<Response<IPagedList<WalletTransactionViewModel>>> Handle(GetWalletTransactionByWalletIdQuery request, CancellationToken cancellationToken)
             {
-                var page = await _walletTransactionRepository.GetPagedList(predicate: x => x.Wallet.ApplicationUserId == request._applicationUserId,
+                var page = await _walletTransactionRepository.GetPagedList(predicate: x => x.Wallet.ApplicationUserId == request._applicationUserId
+                    && (!request.FromDate.HasValue || x.Created.Date >= request.FromDate.Value.Date)
+                    && (!request.ToDate.HasValue || x.Created.Date <= request.ToDate.Value.Date),
                         orderBy: request.OrderField,
                         orderByDecensing: request.OrderBy == OrderBy.DESC,
                         pageIndex: request.PageIndex,
