@@ -12,7 +12,7 @@ namespace IMP.Domain.Entities
         public decimal Amount { get; set; }
         public string TransactionInfo { get; set; }
         [ForeignKey("Bank")]
-        public int BankId { get; set; }
+        public int? BankId { get; set; }
         public Bank Bank { get; set; }
         /// <summary>
         /// Number transaction at banking

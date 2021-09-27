@@ -1,5 +1,10 @@
 ﻿using IMP.Application.Features.WalletTransactions.Commands;
+using IMP.Application.Features.WalletTransactions.Queries.GetAllTransactions;
+using IMP.Application.Models.ViewModels;
+using IMP.Application.Wrappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace IMP.WebApi.Controllers.v1
@@ -18,6 +23,19 @@ namespace IMP.WebApi.Controllers.v1
         {
             var walletTransactionView = await Mediator.Send(command);
             return Ok(walletTransactionView);
+        }
+
+        /// <summary>
+        /// Query wallet transactions. Only for Administrator
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [HttpGet()]
+        [Authorize(Roles = "Administrator")]
+        [ProducesResponseType(typeof(Response<IPagedList<WalletTransactionViewModel>>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> Get([FromQuery] GetAllTransactionsQuery query)
+        {
+            return Ok(await Mediator.Send(query));
         }
     }
 }

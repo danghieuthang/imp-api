@@ -97,7 +97,7 @@ namespace IMP.Application.Features.WalletTransactions.Commands
                                 PayDate = payDate,
                                 BankTranNo = request.Vnp_BankTranNo,
                                 TransactionInfo = request.Vnp_OrderInfo,
-                                TransactionStatus = status,
+                                TransactionStatus = status == 0 ? (int)WalletTransactionStatus.Successful : (int)WalletTransactionStatus.Failure,
                                 TransactionNo = request.Vnp_TransactionNo,
                                 TransactionType = (int)TransactionType.Recharge
                             };

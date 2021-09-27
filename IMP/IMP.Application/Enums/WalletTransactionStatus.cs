@@ -8,7 +8,9 @@ namespace IMP.Application.Enums
 {
     public enum WalletTransactionStatus
     {
-        TransactionFailure = 01,
-        TransactionSuccessful = 02,
+        Processing = 1,
+        Successful = 2,
+        Failure = 3,
+        Cancelled = 4,
     }
 }

@@ -7,7 +7,7 @@ namespace IMP.Application.Models.ViewModels
     {
         public decimal Amount { get; set; }
         public string TransactionInfo { get; set; }
-        public BankViewModel Bank { get; set; }
+        public int? BankId { get; set; }
         /// <summary>
         /// Number transaction at banking
         /// </summary>

@@ -9,7 +9,7 @@ namespace IMP.Application.Models.ViewModels
     public class WalletViewModel : BaseViewModel<int>
     {
         public decimal Balance { get; set; }
-        public List<WalletTransactionViewModel> WalletTransactions { get; set; }
+        //public List<WalletTransactionViewModel> WalletTransactions { get; set; }
     }
 
     public class ChargeWalletRequest
