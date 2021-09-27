@@ -1,4 +1,6 @@
 ﻿using IMP.Application.Features.Banks.Queries.GetAllBank;
+using IMP.Application.Models.ViewModels;
+using IMP.Application.Wrappers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,6 +14,11 @@ namespace IMP.WebApi.Controllers.v1
     [Route(RouterConstants.Bank)]
     public class BankController : BaseApiController
     {
+        /// <summary>
+        /// Get list banking
+        /// </summary>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<IEnumerable<BankViewModel>>), 200)]
         [HttpGet]
         public async Task<IActionResult> Get()
         {

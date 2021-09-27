@@ -5,6 +5,11 @@ namespace IMP.WebApi.Controllers
 {
     public class MetaController : BaseApiController
     {
+        /// <summary>
+        /// Check api info
+        /// </summary>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(string), 200)]
         [HttpGet("/info")]
         public ActionResult<string> Info()
         {

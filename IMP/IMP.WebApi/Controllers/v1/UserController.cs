@@ -4,6 +4,8 @@ using IMP.Application.Features.ApplicationUsers.Commands.UpdateUserPaymentInfo;
 using IMP.Application.Features.ApplicationUsers.Commands.VerifyEmail;
 using IMP.Application.Features.ApplicationUsers.Queries.GetUserById;
 using IMP.Application.Interfaces;
+using IMP.Application.Models.ViewModels;
+using IMP.Application.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -31,6 +33,7 @@ namespace IMP.WebApi.Controllers.v1
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
+        [ProducesResponseType(typeof(Response<ApplicationUserViewModel>), 200)]
         [HttpPut("me")]
         public async Task<IActionResult> Update([FromBody] UpdateUserInformationCommand command)
         {
@@ -45,6 +48,7 @@ namespace IMP.WebApi.Controllers.v1
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
+        [ProducesResponseType(typeof(Response<PaymentInforViewModel>), 200)]
         [HttpPut("me/payment-info")]
         public async Task<IActionResult> Update([FromBody] UpdateUserPaymentInfoCommand command)
         {
@@ -59,6 +63,7 @@ namespace IMP.WebApi.Controllers.v1
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [ProducesResponseType(typeof(Response<ApplicationUserViewModel>), 200)]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] int id)
         {
@@ -69,6 +74,7 @@ namespace IMP.WebApi.Controllers.v1
         /// Get user information of authenticated user
         /// </summary>
         /// <returns></returns>
+        [ProducesResponseType(typeof(Response<ApplicationUserViewModel>), 200)]
         [HttpGet("me")]
         public async Task<IActionResult> Get()
         {
@@ -81,6 +87,7 @@ namespace IMP.WebApi.Controllers.v1
         /// Create verify email request
         /// </summary>
         /// <returns></returns>
+        [ProducesResponseType(typeof(Response<string>), 200)]
         [HttpPost("me/otps")]
         public async Task<IActionResult> CreateVerifyEmail()
         {
@@ -90,10 +97,11 @@ namespace IMP.WebApi.Controllers.v1
         }
 
         /// <summary>
-        /// Verify email
+        /// Verify email linked with profile
         /// </summary>
         /// <param name="command">The verify email command</param>
         /// <returns></returns>
+        [ProducesResponseType(typeof(Response<string>), 200)]
         [HttpPost("me/verify-email")]
         public async Task<IActionResult> VerifyEmail([FromBody] VerifyEmailCommand command)
         {
