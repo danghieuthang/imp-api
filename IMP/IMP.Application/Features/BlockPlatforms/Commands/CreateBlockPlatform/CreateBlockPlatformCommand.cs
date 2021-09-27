@@ -16,7 +16,7 @@ namespace IMP.Application.Features.BlockPlatforms.Commands.CreateBlockPlatform
         public int BlockId { get; set; }
         public int InfluencerPlatformId { get; set; }
         public int Position { get; set; }
-        public bool IsActived { get; set; }
+        //public bool IsActived { get; set; }
 
         public class CreateBlockPlatformCommandHander : CommandHandler<CreateBlockPlatformCommand, BlockPlatformViewModel>
         {
@@ -29,7 +29,7 @@ namespace IMP.Application.Features.BlockPlatforms.Commands.CreateBlockPlatform
             public override async Task<Response<BlockPlatformViewModel>> Handle(CreateBlockPlatformCommand request, CancellationToken cancellationToken)
             {
                 var blockPlatform = Mapper.Map<BlockPlatform>(request);
-
+                blockPlatform.IsActived = true;
                 await _blockPlatformRepository.AddAsync(blockPlatform);
                 await UnitOfWork.CommitAsync();
 

@@ -18,7 +18,7 @@ namespace IMP.Application.Features.BlockCampaigns.Commands.CreateBlockCampaign
         public int CampaignId { get; set; }
         public int BlockId { get; set; }
         public int Position { get; set; }
-        public bool IsActived { get; set; }
+        //public bool IsActived { get; set; }
         public class CreateBlockCampaignCommandHandler : CommandHandler<CreateBlockCampaignCommand, BlockCampaignViewModel>
         {
             public CreateBlockCampaignCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
@@ -29,6 +29,7 @@ namespace IMP.Application.Features.BlockCampaigns.Commands.CreateBlockCampaign
             {
                 var repository = UnitOfWork.Repository<BlockCampaign>();
                 var blockCampaign = Mapper.Map<BlockCampaign>(request);
+                blockCampaign.IsActived = true;
 
                 await repository.AddAsync(blockCampaign);
                 await UnitOfWork.CommitAsync();
