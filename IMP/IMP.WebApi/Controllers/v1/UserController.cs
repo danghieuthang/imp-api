@@ -27,7 +27,7 @@ namespace IMP.WebApi.Controllers.v1
         }
 
         /// <summary>
-        /// Update user information
+        /// Update user information for authenticated user
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>

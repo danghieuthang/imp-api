@@ -1,5 +1,7 @@
 ﻿using IMP.Application.Features.WalletTransactions.Commands;
+using IMP.Application.Features.WalletTransactions.Commands.CancelWalletTransaction;
 using IMP.Application.Features.WalletTransactions.Queries.GetAllTransactions;
+using IMP.Application.Interfaces;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
 using Microsoft.AspNetCore.Authorization;
@@ -13,12 +15,19 @@ namespace IMP.WebApi.Controllers.v1
     [Route(RouterConstants.WalletTransaction)]
     public class WalletTransactionController : BaseApiController
     {
+        private readonly IAuthenticatedUserService _authenticatedUserService;
+
+        public WalletTransactionController(IAuthenticatedUserService authenticatedUserService)
+        {
+            _authenticatedUserService = authenticatedUserService;
+        }
+
         /// <summary>
         /// API để VNPAY gọi ngược lại khi giao dịch thành công.
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        [HttpGet("confirm-transaction")]
+        [HttpGet("confirm-transaction-vnpay")]
         public async Task<IActionResult> ConfirmWalletTransaction([FromQuery] CreateWalletTransactionCommand command)
         {
             var walletTransactionView = await Mediator.Send(command);
@@ -36,6 +45,43 @@ namespace IMP.WebApi.Controllers.v1
         public async Task<IActionResult> Get([FromQuery] GetAllTransactionsQuery query)
         {
             return Ok(await Mediator.Send(query));
+        }
+
+        /// <summary>
+        /// Confirm a transaction successfull has status is Processing. Only for Administrator
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        [HttpPut("{id}/confirm-successfully")]
+        [Authorize(Roles = "Administrator")]
+        [ProducesResponseType(typeof(Response<CompletedWalletTransactionCommand>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] CompletedWalletTransactionCommand command)
+        {
+            if (id != command.Id)
+            {
+                return BadRequest();
+            }
+            return Ok(await Mediator.Send(command));
+        }
+        /// <summary>
+        /// Cancel a transaction has status is Processing. Only for Administrator or owner of transaction
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPut("{id}/cancel")]
+        [Authorize]
+        [ProducesResponseType(typeof(Response<WalletTransactionViewModel>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> Update([FromRoute] int id)
+        {
+            var command = new CancelWalletTransactionCommand { Id = id };
+
+            // if not admin
+            if (_authenticatedUserService.IsAdmin.HasValue && !_authenticatedUserService.IsAdmin.Value)
+            {
+                command.ApplicationUserId = _authenticatedUserService.ApplicationUserId;
+            }
+            return Ok(await Mediator.Send(command));
         }
     }
 }

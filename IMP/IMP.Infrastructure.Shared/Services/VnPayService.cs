@@ -39,7 +39,7 @@ namespace IMP.Infrastructure.Shared.Services
             {
                 _returnUrl = "https://" + _returnUrl;
             }
-            _returnUrl = _returnUrl + "/api/v1/wallet-transactions/confirm-transaction";
+            _returnUrl = _returnUrl + "/api/v1/wallet-transactions/confirm-transaction-vnpay";
 
             _ipAddress = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
 

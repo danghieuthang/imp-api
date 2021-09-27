@@ -8,5 +8,7 @@ namespace IMP.Application.Interfaces
     {
         string UserId { get; }
         string AppId { get; }
+        bool? IsAdmin { get; }
+        int ApplicationUserId { get; }
     }
 }

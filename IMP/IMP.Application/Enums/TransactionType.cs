@@ -8,7 +8,13 @@ namespace IMP.Application.Enums
 {
     public enum TransactionType
     {
+        /// <summary>
+        /// Recharge
+        /// </summary>
         Recharge = 01,
+        /// <summary>
+        /// Withdrawal
+        /// </summary>
         Withdrawal = 03,
     }
 }

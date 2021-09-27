@@ -54,7 +54,7 @@ namespace IMP.WebApi.Controllers.v1
         }
 
         /// <summary>
-        /// Request charge money to wallet
+        /// Request charge money to wallet for authenticated user
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
@@ -67,7 +67,7 @@ namespace IMP.WebApi.Controllers.v1
         }
 
         /// <summary>
-        /// Request withdraw money from wallet
+        /// Request withdraw money from wallet for authenticated user
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
