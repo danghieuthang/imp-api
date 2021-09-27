@@ -39,10 +39,25 @@ namespace IMP.Application.Features.WalletTransactions.Commands
                     walletTranaction.PayDate = DateTime.UtcNow;
                     _walletTransactionRepository.Update(walletTranaction);
                     await UnitOfWork.CommitAsync();
+                    _ = await SubtractWalletAfterWithdraw(walletTranaction.WalletId, walletTranaction.Amount);
                     var walletTransactionView = Mapper.Map<WalletTransactionViewModel>(walletTranaction);
                     return new Response<WalletTransactionViewModel>(walletTransactionView);
                 }
                 return new Response<WalletTransactionViewModel>(error: new Models.ValidationError("id", "Không tồn tại."));
+            }
+
+            private async Task<bool> SubtractWalletAfterWithdraw(int walletId, decimal amount)
+            {
+                var walletRepository = UnitOfWork.Repository<Wallet>();
+                var wallet = await walletRepository.GetByIdAsync(walletId);
+                if (wallet != null)
+                {
+                    wallet.Balance -= amount;
+                    walletRepository.Update(wallet);
+                    await UnitOfWork.CommitAsync();
+                    return true;
+                };
+                return false;
             }
         }
     }
