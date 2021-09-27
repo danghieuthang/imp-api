@@ -17,7 +17,7 @@ namespace IMP.Application.Features.Blocks.Commands.CreateBlock
             _blockRepository = unitOfWork.Repository<Block>();
             _blockTypeRepository = unitOfWork.Repository<BlockType>();
             _pageRepository = unitOfWork.Repository<Page>();
-            
+
             RuleFor(x => x.Title).MustMaxLength(256);
             RuleFor(x => x.Avatar).MustMaxLength(256);
             RuleFor(x => x.Bio).MustMaxLength(256);
@@ -30,22 +30,13 @@ namespace IMP.Application.Features.Blocks.Commands.CreateBlock
             RuleFor(x => x.PageId).MustAsync(async (block, id, cancellationToken) =>
             {
                 return await _pageRepository.IsExistAsync(x => x.Id == id && x.InfluencerId == block.InfluencerId);
-            }).WithMessage("Không hợp lệ.")
-            .DependentRules(() =>
-            {
-                RuleFor(x => x.Position).MustAsync(
-                async (block, position, cancellationToken) =>
-                {
-                    return await _blockRepository.IsExistAsync(x => x.PageId == block.PageId && x.Position == position);
-                }
-            ).WithMessage("Đã tồn tại.");
-            });
+            }).WithMessage("Không hợp lệ.");
 
             RuleFor(x => x.BlockTypeId).MustExistEntityId(
                 async (id, y) => await _blockTypeRepository.IsExistAsync(id));
 
-            RuleFor(x => x.ParentId).MustExistEntityId(
-                async (id, y) => await _blockRepository.IsExistAsync(id));
+            RuleFor(x => x.ParentId.Value).MustExistEntityId(
+                async (id, y) => await _blockRepository.IsExistAsync(id)).When(x => x.ParentId.HasValue);
         }
 
     }

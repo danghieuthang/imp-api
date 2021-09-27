@@ -18,7 +18,7 @@ namespace IMP.Domain.Entities
         public BlockType BlockType { get; set; }
 
         [ForeignKey("Block")]
-        public int ParentId { get; set; }
+        public int? ParentId { get; set; }
         public Block Parent { get; set; }
 
         [MaxLength(256)]

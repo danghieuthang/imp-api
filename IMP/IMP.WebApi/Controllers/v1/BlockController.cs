@@ -9,19 +9,20 @@ using IMP.Application.Features.Blocks.Commands.UpdateBlock;
 using IMP.Application.Interfaces;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IMP.WebApi.Controllers.v1
 {
     [ApiVersion("1.0")]
     [Route(RouterConstants.Block)]
+    [Authorize(Roles = "Influencer")]
     public class BlockController : BaseApiController
     {
         private readonly int _appId;
         public BlockController(IAuthenticatedUserService authenticatedUserService)
         {
-            _appId = 0;
-            int.TryParse(authenticatedUserService.AppId, out _appId);
+            _appId = authenticatedUserService.ApplicationUserId;
         }
         /// <summary>
         /// Get all block platform of a block
@@ -30,6 +31,7 @@ namespace IMP.WebApi.Controllers.v1
         /// <returns></returns>
         [ProducesResponseType(typeof(Response<IEnumerable<BlockPlatformViewModel>>), 200)]
         [HttpGet("{id}/block-platforms")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetBlockPlatform([FromRoute] int id)
         {
             return Ok(await Mediator.Send(new GetAllBlockPlatformByBlockIdQuery { BlockId = id }));
@@ -40,6 +42,7 @@ namespace IMP.WebApi.Controllers.v1
         /// </summary>
         /// <param name="id">The id of block campaign</param>
         /// <returns></returns>
+        [AllowAnonymous]
         [ProducesResponseType(typeof(Response<IEnumerable<BlockCampaignViewModel>>), 200)]
         [HttpGet("{id}/block-campaigns")]
         public async Task<IActionResult> GetBlockCampaign([FromRoute] int id)

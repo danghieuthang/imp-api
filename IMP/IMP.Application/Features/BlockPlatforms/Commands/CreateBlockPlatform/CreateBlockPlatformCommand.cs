@@ -34,8 +34,8 @@ namespace IMP.Application.Features.BlockPlatforms.Commands.CreateBlockPlatform
                 await UnitOfWork.CommitAsync();
 
                 blockPlatform = await _blockPlatformRepository.FindSingleAsync(x => x.Id == blockPlatform.Id, includeProperties: x => x.InfluencerPlatform);
-                var blockPlatformView = Mapper.Map<BlockCampaignViewModel>(blockPlatform);
-                return new Response<BlockPlatformViewModel>();
+                var blockPlatformView = Mapper.Map<BlockPlatformViewModel>(blockPlatform);
+                return new Response<BlockPlatformViewModel>(blockPlatformView);
             }
         }
     }

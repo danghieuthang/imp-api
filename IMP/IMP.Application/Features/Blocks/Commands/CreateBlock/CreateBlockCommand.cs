@@ -14,7 +14,7 @@ namespace IMP.Application.Features.Blocks.Commands.CreateBlock
     {
         public int PageId { get; set; }
         public int BlockTypeId { get; set; }
-        public int ParentId { get; set; }
+        public int? ParentId { get; set; }
         public string Title { get; set; }
         public string Avatar { get; set; }
         public string Bio { get; set; }
@@ -27,24 +27,21 @@ namespace IMP.Application.Features.Blocks.Commands.CreateBlock
         [JsonIgnore]
         public int InfluencerId { get; set; }
 
-        public class CreateBlockCommandHandler : IRequestHandler<CreateBlockCommand, Response<BlockViewModel>>
+        public class CreateBlockCommandHandler : CommandHandler<CreateBlockCommand, BlockViewModel>
         {
-            private readonly IUnitOfWork _unitOfWork;
             private readonly IGenericRepository<Block> _blockRepository;
-            private readonly IMapper _mapper;
-            public CreateBlockCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
+            public CreateBlockCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
             {
-                _unitOfWork = unitOfWork;
-                _blockRepository = _unitOfWork.Repository<Block>();
-                _mapper = mapper;
+                _blockRepository = unitOfWork.Repository<Block>();
             }
 
-            public async Task<Response<BlockViewModel>> Handle(CreateBlockCommand request, CancellationToken cancellationToken)
+            public override async Task<Response<BlockViewModel>> Handle(CreateBlockCommand request, CancellationToken cancellationToken)
             {
-                var block = _mapper.Map<Block>(request);
+                var block = Mapper.Map<Block>(request);
+                block.IsActived = true;
                 block = await _blockRepository.AddAsync(block);
-                await _unitOfWork.CommitAsync();
-                var view = _mapper.Map<BlockViewModel>(block);
+                await UnitOfWork.CommitAsync();
+                var view = Mapper.Map<BlockViewModel>(block);
                 return new Response<BlockViewModel>(view);
             }
         }

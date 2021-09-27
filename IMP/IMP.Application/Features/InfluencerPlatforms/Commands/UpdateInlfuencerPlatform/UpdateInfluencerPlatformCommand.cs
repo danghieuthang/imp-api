@@ -44,10 +44,10 @@ namespace IMP.Application.Features.InfluencerPlatforms.Commands.UpdateInlfuencer
                 {
                     Id = influencerPlatform.Id,
                     Url = influencerPlatform.Url,
-                    //Influencer = new ApplicationUserViewModel
-                    //{
-                    //    Id = influencerPlatform.InfluencerId
-                    //},
+                    Influencer = new ApplicationUserViewModel
+                    {
+                        Id = influencerPlatform.InfluencerId
+                    },
                     Platform = new PlatformViewModel
                     {
                         Id = influencerPlatform.PlatformId,

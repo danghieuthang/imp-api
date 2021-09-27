@@ -20,7 +20,7 @@ namespace IMP.Application.Features.BlockPlatforms.Queries.GetAllBlockPlatformByB
 
             public override async Task<Response<IEnumerable<BlockPlatformViewModel>>> Handle(GetAllBlockPlatformByBlockIdQuery request, CancellationToken cancellationToken)
             {
-                var blockPlatforms = await Repository.FindAllAsync(x => x.BlockId == request.BlockId, includeProperties: x => x.InfluencerPlatform);
+                var blockPlatforms = await Repository.FindAllAsync(x => x.BlockId == request.BlockId, x => x.InfluencerPlatform);
                 var blockPlatformViews = Mapper.Map<IEnumerable<BlockPlatformViewModel>>(blockPlatforms);
                 return new Response<IEnumerable<BlockPlatformViewModel>>(blockPlatformViews);
             }

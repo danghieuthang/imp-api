@@ -17,7 +17,7 @@ namespace IMP.Application.Features.Blocks.Commands.UpdateBlock
         public int Id { get; set; }
         public int PageId { get; set; }
         public int BlockTypeId { get; set; }
-        public int ParentId { get; set; }
+        public int? ParentId { get; set; }
         public string Title { get; set; }
         public string Avatar { get; set; }
         public string Bio { get; set; }
@@ -27,6 +27,7 @@ namespace IMP.Application.Features.Blocks.Commands.UpdateBlock
         public string ImageUrl { get; set; }
         public string VideoUrl { get; set; }
         public int Position { get; set; }
+        public bool IsActived { get; set; }
         [JsonIgnore]
         public int InfluencerId { get; set; }
 
@@ -54,7 +55,7 @@ namespace IMP.Application.Features.Blocks.Commands.UpdateBlock
                     var view = _mapper.Map<BlockViewModel>(block);
                     return new Response<BlockViewModel>(view);
                 }
-                throw new ValidationException(new ValidationError("id","Block không tồn tại."));
+                throw new ValidationException(new ValidationError("id", "Block không tồn tại."));
             }
         }
     }

@@ -208,7 +208,7 @@ namespace IMP.Application.Extensions
               .WithMessage($"Url không hợp lệ.");
             }
             return ruleBuilder
-                .NotNull().WithMessage("Số điện thoại chưa có.")
+                .NotNull().WithMessage("Url chưa có.")
                 .Must(x =>
                 {
                     if (string.IsNullOrEmpty(x))

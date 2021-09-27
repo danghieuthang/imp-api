@@ -11,7 +11,7 @@ namespace IMP.Application.Models.ViewModels
     {
         public int PageId { get; set; }
         public int BlockTypeId { get; set; }
-        public int ParentId { get; set; }
+        public int? ParentId { get; set; }
         public string Title { get; set; }
         public string Avatar { get; set; }
         public string Bio { get; set; }

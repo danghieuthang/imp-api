@@ -8,10 +8,11 @@ namespace IMP.Application.Features.Pages.Commands.DeletePage
     {
         public DeletePageCommandValidator(IUnitOfWork unitOfWork)
         {
+            
             RuleFor(x => x.Id).MustAsync(async (x, y, z) =>
               {
                   return await unitOfWork.Repository<Page>().IsExistAsync(x => x.Id == y && x.InfluencerId == x.InfluencerId);
-              }).WithMessage("Không có quyền xóa.");
+              }).WithMessage("Không tồn tại hoặc không có quyền xóa.");
         }
     }
 }
