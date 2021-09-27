@@ -1,22 +1,146 @@
 <?xml version="1.0"?>
 <doc>
-    <assembly>
-        <name>IMP.WebApi</name>
-    </assembly>
-    <members>
-        <member name="M:IMP.WebApi.Controllers.v1.PlatformController.Get(IMP.Application.Features.Platforms.Queries.GetAllPlatforms.GetAllPlatformsQuery)">
-            <summary>
-            Get list platform
-            </summary>
-            <param name="query">The Get Platform Parameter</param>
-            <returns></returns>
-        </member>
-        <member name="M:IMP.WebApi.Controllers.v1.PlatformController.Create(IMP.Application.Features.Platforms.Commands.CreatePlatform.CreatePlatformCommand)">
-            <summary>
-            Create new platform
-            </summary>
-            <param name="command">The CreatePlatformCommand</param>
-            <returns></returns>
-        </member>
-    </members>
+	<assembly>
+		<name>IMP.WebApi</name>
+	</assembly>
+	<members>
+		<member name="M:IMP.WebApi.Controllers.AccountController.ChangeUsername(System.String)">
+			<summary>
+				This api only for user register with social
+				Each social account has only one turn change username
+			</summary>
+			<param name="username"></param>
+			<returns></returns>
+		</member>
+		<member name="M:IMP.WebApi.Controllers.AccountController.RefreshToken(IMP.Application.Models.Account.RefreshTokenRequest)">
+			<summary>
+				Create new access token from refresh token
+			</summary>
+			<param name="request">User can set refresh token in here or cookie</param>
+			<returns></returns>
+		</member>
+		<member name="M:IMP.WebApi.Controllers.v1.FileController.UploadImage(IMP.Application.Models.File.UploadFileRequest)">
+			<summary>
+				Upload a image to
+			</summary>
+			<param name="request"></param>
+			<returns></returns>
+		</member>
+		<member name="M:IMP.WebApi.Controllers.v1.FileController.UploadVideo(IMP.Application.Models.File.UploadFileRequest)">
+			<summary>
+				Upload a video to
+			</summary>
+			<param name="request"></param>
+			<returns></returns>
+		</member>
+		<member name="M:IMP.WebApi.Controllers.v1.PlatformController.Get">
+			<summary>
+				Get list platform
+			</summary>
+			<returns></returns>
+		</member>
+		<member name="M:IMP.WebApi.Controllers.v1.PlatformController.Create(IMP.Application.Features.Platforms.Commands.CreatePlatform.CreatePlatformCommand)">
+			<summary>
+				Create new platform
+			</summary>
+			<param name="command">The CreatePlatformCommand</param>
+			<returns></returns>
+		</member>
+		<member name="M:IMP.WebApi.Controllers.v1.UserController.Update(IMP.Application.Features.ApplicationUsers.Commands.UpdateUserInfomation.UpdateUserInformationCommand)">
+			<summary>
+				Update user information for authenticated user
+			</summary>
+			<param name="command"></param>
+			<returns></returns>
+		</member>
+		<member name="M:IMP.WebApi.Controllers.v1.UserController.Update(IMP.Application.Features.ApplicationUsers.Commands.UpdateUserPaymentInfo.UpdateUserPaymentInfoCommand)">
+			<summary>
+				Update payment info for autheticated user
+			</summary>
+			<param name="command"></param>
+			<returns></returns>
+		</member>
+		<member name="M:IMP.WebApi.Controllers.v1.UserController.Get(System.Int32)">
+			<summary>
+				Get user information by id
+			</summary>
+			<param name="id"></param>
+			<returns></returns>
+		</member>
+		<member name="M:IMP.WebApi.Controllers.v1.UserController.Get">
+			<summary>
+				Get user information of authenticated user
+			</summary>
+			<returns></returns>
+		</member>
+		<member name="M:IMP.WebApi.Controllers.v1.UserController.CreateVerifyEmail">
+			<summary>
+				Create verify email request
+			</summary>
+			<returns></returns>
+		</member>
+		<member name="M:IMP.WebApi.Controllers.v1.UserController.VerifyEmail(IMP.Application.Features.ApplicationUsers.Commands.VerifyEmail.VerifyEmailCommand)">
+			<summary>
+				Verify email
+			</summary>
+			<param name="command">The verify email command</param>
+			<returns></returns>
+		</member>
+		<member name="M:IMP.WebApi.Controllers.v1.WalletController.Get">
+			<summary>
+				Get wallet of authenticated user
+			</summary>
+			<returns></returns>
+		</member>
+		<member name="M:IMP.WebApi.Controllers.v1.WalletController.Get(IMP.Application.Features.WalletTransactions.Queries.GetTransactionsByWalletId.GetWalletTransactionByWalletIdQuery)">
+			<summary>
+				Query transaction of authenticated user
+			</summary>
+			<param name="query"></param>
+			<returns></returns>
+		</member>
+		<member name="M:IMP.WebApi.Controllers.v1.WalletController.RequestCharge(IMP.Application.Features.Wallets.Commands.RequestCharge.RequestChargeWalletCommand)">
+			<summary>
+				Request charge money to wallet for authenticated user
+			</summary>
+			<param name="command"></param>
+			<returns></returns>
+		</member>
+		<member name="M:IMP.WebApi.Controllers.v1.WalletController.RequestWithDraw(IMP.Application.Features.Wallets.Commands.RequestWithdraw.RequestWithdrawWalletCommand)">
+			<summary>
+				Request withdraw money from wallet for authenticated user
+			</summary>
+			<param name="command"></param>
+			<returns></returns>
+		</member>
+		<member name="M:IMP.WebApi.Controllers.v1.WalletTransactionController.ConfirmWalletTransaction(IMP.Application.Features.WalletTransactions.Commands.CreateWalletTransactionCommand)">
+			<summary>
+				API để VNPAY gọi ngược lại khi giao dịch thành công.
+			</summary>
+			<param name="command"></param>
+			<returns></returns>
+		</member>
+		<member name="M:IMP.WebApi.Controllers.v1.WalletTransactionController.Get(IMP.Application.Features.WalletTransactions.Queries.GetAllTransactions.GetAllTransactionsQuery)">
+			<summary>
+				Query wallet transactions. Only for Administrator
+			</summary>
+			<param name="query"></param>
+			<returns></returns>
+		</member>
+		<member name="M:IMP.WebApi.Controllers.v1.WalletTransactionController.Update(System.Int32,IMP.Application.Features.WalletTransactions.Commands.CompletedWalletTransactionCommand)">
+			<summary>
+				Confirm a transaction successfull has status is Processing. Only for Administrator
+			</summary>
+			<param name="id"></param>
+			<param name="command"></param>
+			<returns></returns>
+		</member>
+		<member name="M:IMP.WebApi.Controllers.v1.WalletTransactionController.Update(System.Int32)">
+			<summary>
+				Cancel a transaction has status is Processing. Only for Administrator or owner of transaction
+			</summary>
+			<param name="id"></param>
+			<returns></returns>
+		</member>
+	</members>
 </doc>
