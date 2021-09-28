@@ -21,14 +21,14 @@ namespace IMP.Application.Features.Campaigns.Queries.GetAllCampaigns
 {
     public class GetAllCampaignQuery : IListQuery<CampaignViewModel>
     {
-        [FromQuery(Name ="page_index")]
+        [FromQuery(Name = "page_index")]
         public int PageIndex { get; set; }
         [FromQuery(Name = "page_size")]
         public int PageSize { get; set; }
 
         [FromQuery(Name = "order_field")]
         public string OrderField { get; set; }
-        [FromQuery(Name ="order_by")]
+        [FromQuery(Name = "order_by")]
         public OrderBy OrderBy { get; set; }
 
         public class Validator : AbstractValidator<GetAllCampaignQuery>
@@ -50,7 +50,7 @@ namespace IMP.Application.Features.Campaigns.Queries.GetAllCampaigns
             public override async Task<Response<IPagedList<CampaignViewModel>>> Handle(GetAllCampaignQuery request, CancellationToken cancellationToken)
             {
 
-                var page = await _campaignRepository.GetPagedList(pageIndex: request.PageIndex, pageSize: request.PageSize, orderBy: request.OrderField, orderByDecensing: request.OrderBy == OrderBy.DESC);
+                var page = await _campaignRepository.GetPagedList(include: x => x.Include(campaign => campaign.CampaignImages), pageIndex: request.PageIndex, pageSize: request.PageSize, orderBy: request.OrderField, orderByDecensing: request.OrderBy == OrderBy.DESC);
                 var pageViews = page.ToResponsePagedList<CampaignViewModel>(Mapper);
                 return new Response<IPagedList<CampaignViewModel>>(pageViews);
             }

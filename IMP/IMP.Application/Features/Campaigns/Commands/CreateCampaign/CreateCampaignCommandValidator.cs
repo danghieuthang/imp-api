@@ -5,6 +5,7 @@ using IMP.Application.Interfaces.Repositories;
 using IMP.Domain.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,7 +26,7 @@ namespace IMP.Application.Features.Campaigns.Commands.CreateCampaign
             _applicationUserRepository = unitOfWork.Repository<ApplicationUser>();
 
             this.RuleFor(c => c.Title).MustRequired(256);
-            this.RuleFor(c => c.AditionalInfomation).MustRequired(2000);
+            this.RuleFor(c => c.AdditionalInfomation).MustRequired(2000);
             this.RuleFor(c => c.Description).MustRequired(2000);
             this.RuleFor(c => c.Condition).MustRequired(2000);
             this.RuleFor(c => c.StartDate).MustValidDate();
@@ -39,6 +40,11 @@ namespace IMP.Application.Features.Campaigns.Commands.CreateCampaign
             this.RuleFor(c => c.PlatformId).MustExistEntityId(IsPlatformExist);
             this.RuleFor(c => c.CampaignTypeId).MustExistEntityId(IsCampainTypeExist);
             this.RuleFor(c => c.BrandId).MustAsync(IsValidBrand).WithMessage("{PropertyValue} không phải là nhãn hàng.");
+            this.RuleFor(c => c.Images).ListMustContainFewerThan(5);
+            this.RuleForEach(c => c.Images).ChildRules(image =>
+            {
+                image.RuleFor(image => image.Url).MustValidUrl();
+            }).When(c => c.Images.Count > 0);
         }
 
         public async Task<bool> IsPlatformExist(int id, CancellationToken cancellationToken)

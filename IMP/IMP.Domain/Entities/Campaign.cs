@@ -26,11 +26,11 @@ namespace IMP.Domain.Entities
         [StringLength(2000)]
         public string Description { get; set; }
         [StringLength(2000)]
-        public string AditionalInfomation { get; set; }
+        public string AdditionalInfomation { get; set; }
         [StringLength(2000)]
         public string Reward { get; set; }
         [StringLength(256)]
-        public string ReferalWebsite { get; set; }
+        public string ReferralWebsite { get; set; }
         public string Keywords { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
@@ -46,5 +46,6 @@ namespace IMP.Domain.Entities
         public ICollection<BlockCampaign> BlockCampaigns { get; set; }
         public ICollection<Complaint> Complaints { get; set; }
         public ICollection<CampaignMilestone> CampaignMilestones { get; set; }
+        public ICollection<CampaignImage> CampaignImages { get; set; }
     }
 }

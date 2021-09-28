@@ -37,6 +37,7 @@ namespace IMP.Infrastructure.Persistence.Contexts
         public DbSet<Campaign> Campaigns { get; set; }
         public DbSet<CampaignActivity> CampaignActivities { get; set; }
         public DbSet<CampaignMember> CampaignMembers { get; set; }
+        public DbSet<CampaignImage> CampaignImages { get; set; }
         public DbSet<CampaignType> CampaignTypes { get; set; }
         public DbSet<Complaint> Complaints { get; set; }
         public DbSet<Evidence> Evidences { get; set; }

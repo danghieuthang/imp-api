@@ -22,6 +22,19 @@ namespace IMP.Application.Features.Campaigns.Queries.GetCampaignById
             public GetCampaignByIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
             {
             }
+
+            public override async Task<Response<CampaignViewModel>> Handle(GetCampaignByIdQuery request, CancellationToken cancellationToken)
+            {
+                var entity = await Repository.FindSingleAsync(x => x.Id == request.Id, includeProperties: x => x.CampaignImages);
+                if (entity == null)
+                {
+                    //var error = new ValidationError("id", $"'{request.Id}' không tồn tại");
+                    throw new KeyNotFoundException();
+                }
+
+                var data = Mapper.Map<CampaignViewModel>(entity);
+                return new Response<CampaignViewModel>(data);
+            }
         }
     }
 

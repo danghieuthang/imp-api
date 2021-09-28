@@ -45,6 +45,7 @@ namespace IMP.Application.Mappings
 
             #region campaign
             CreateMap<Campaign, CampaignViewModel>();
+            CreateMap<CampaignImage, CampaignImageViewModel>();
             CreateMap<CreateCampaignCommand, Campaign>();
             #endregion
 
