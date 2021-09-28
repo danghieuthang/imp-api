@@ -22,7 +22,7 @@ namespace IMP.Application.Features.Locations.Queries.GetAllLocations
 
             public GetAllLocationQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
             {
-                _locationRepository = unitOfWork.Repository<Location>();
+                _locationRepository = unitOfWork.CacheRepository<Location>();
                 _mapper = mapper;
             }
 

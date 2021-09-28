@@ -252,21 +252,22 @@ namespace IMP.Application.Interfaces
       where TViewModel : BaseViewModel<int>, new()
       where TEntity : BaseEntity, new()
     {
-        private readonly IGenericRepository<TEntity> _repository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         public GetAllQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _repository = unitOfWork.Repository<TEntity>();
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
         public virtual async Task<Response<IEnumerable<TViewModel>>> Handle(TRequest request, CancellationToken cancellationToken)
         {
-            var entities = await _repository.GetAllAsync();
+            var entities = await Repository.GetAllAsync();
             var data = _mapper.Map<IEnumerable<TViewModel>>(entities);
             return new Response<IEnumerable<TViewModel>>(data);
         }
-        public IGenericRepository<TEntity> Repository => _repository;
+        public IGenericRepository<TEntity> Repository => _unitOfWork.Repository<TEntity>();
+        public ICachedRepository<TEntity> CacheRepository => _unitOfWork.CacheRepository<TEntity>();
         public IMapper Mapper => _mapper;
     }
     #endregion

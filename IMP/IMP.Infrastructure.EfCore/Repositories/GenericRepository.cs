@@ -45,7 +45,6 @@ namespace IMP.Infrastructure.EfCore.Repositories
         }
 
 
-
         public async Task<Tuple<IReadOnlyList<TEntity>, int>> GetPagedReponseAsync(int pageNumber, int pageSize)
         {
             var query = GetAll();
@@ -78,7 +77,7 @@ namespace IMP.Infrastructure.EfCore.Repositories
             _dbContext.Set<TEntity>().Remove(entity);
         }
 
-        public async Task<IReadOnlyList<TEntity>> GetAllAsync()
+        public virtual async Task<IReadOnlyList<TEntity>> GetAllAsync()
         {
             return await _dbContext
                  .Set<TEntity>()

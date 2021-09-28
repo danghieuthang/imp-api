@@ -1,6 +1,7 @@
 ﻿using IMP.Application.Interfaces;
 using IMP.Application.Wrappers;
 using IMP.Domain.Common;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
@@ -12,115 +13,30 @@ using System.Threading.Tasks;
 
 namespace IMP.Infrastructure.EfCore.Repositories
 {
-    public class CachedRepository<TEntity> : ICachedRepository<TEntity>, IGenericRepository<TEntity> where TEntity : BaseEntity
+    public class CachedRepository<TEntity> : GenericRepository<TEntity>, ICachedRepository<TEntity> where TEntity : BaseEntity
     {
-        private readonly IGenericRepository<TEntity> _entityRepository;
-        private static readonly object CacheLockObject = new object();
+        private readonly ICacheService _cacheService;
+        public string CacheKey => typeof(TEntity).Name;
 
-        public string CacheKey { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public CachedRepository()
+        public CachedRepository(ICacheService cacheService, DbContext dbContext) : base(dbContext)
         {
+            _cacheService = cacheService;
         }
 
-        public void InvalidateCache()
+        public void RefreshCache()
         {
-            throw new NotImplementedException();
+            _cacheService.Remove(CacheKey);
         }
 
-        public void InsertIntoCache()
+        public override async Task<IReadOnlyList<TEntity>> GetAllAsync()
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<TEntity> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<TEntity> GetByIdAsync(int id, List<string> includeProperties)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<TEntity> FindSingleAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includeProperties)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IReadOnlyList<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includeProperties)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> IsExistAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> IsExistAsync(Expression<Func<TEntity, bool>> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IReadOnlyList<TEntity>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IPagedList<TEntity>> GetPagedList(Expression<Func<TEntity, bool>> predicate = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null, int pageIndex = 0, int pageSize = 20, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IPagedList<TEntity>> GetPagedList(Expression<Func<TEntity, bool>> predicate = null, string orderBy = null, bool orderByDecensing = false, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null, int pageIndex = 0, int pageSize = 20, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IQueryable<TEntity> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IQueryable<TEntity> GetAll(Expression<Func<TEntity, bool>> predicate = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IQueryable<TResult> GetAll<TResult>(Expression<Func<TEntity, TResult>> selector, Expression<Func<TEntity, bool>> predicate = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<TEntity> AddAsync(TEntity entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task AddManyAsync(IEnumerable<TEntity> entities)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(TEntity entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(TEntity entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
+            if (!_cacheService.TryGet(CacheKey, out IReadOnlyList<TEntity> cacheList))
+            {
+                cacheList = await base.GetAllAsync();
+                _cacheService.Set(CacheKey, cacheList);
+            }
+            return cacheList;
         }
     }
 }

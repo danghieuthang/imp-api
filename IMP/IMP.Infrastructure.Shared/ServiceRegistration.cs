@@ -1,5 +1,6 @@
 ﻿using IMP.Application.Interfaces;
 using IMP.Domain.Settings;
+using IMP.Infrastructure.Shared.Caches;
 using IMP.Infrastructure.Shared.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +31,16 @@ namespace IMP.Infrastructure.Shared
             services.AddTransient<IFileService, FileService>();
             services.AddTransient<ITiktokService, TiktokService>();
             services.AddScoped<IVnPayService, VnPayService>();
+
+            #region Register Caching service
+            services.Configure<CacheSettings>(_config.GetSection("CacheSettings"));
+            services.AddMemoryCache();
+            services.AddTransient<ICacheService, MemoryCacheService>();
+            //services.AddStackExchangeRedisCache(options =>
+            //{
+            //    options.Configuration = "localhost:4455";
+            //});
+            #endregion
         }
     }
 }

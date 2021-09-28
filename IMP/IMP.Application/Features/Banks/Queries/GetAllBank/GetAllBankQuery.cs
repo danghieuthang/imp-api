@@ -20,6 +20,13 @@ namespace IMP.Application.Features.Banks.Queries.GetAllBank
             public GetAllBankQueryHandler(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
             {
             }
+
+            public override async Task<Response<IEnumerable<BankViewModel>>> Handle(GetAllBankQuery request, CancellationToken cancellationToken)
+            {
+                var banks = await CacheRepository.GetAllAsync();
+                var bankViews = Mapper.Map<IEnumerable<BankViewModel>>(banks);
+                return new Response<IEnumerable<BankViewModel>>(bankViews);
+            }
         }
     }
 }

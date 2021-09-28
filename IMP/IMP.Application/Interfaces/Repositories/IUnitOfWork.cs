@@ -23,6 +23,13 @@ namespace IMP.Application.Interfaces
         /// <typeparam name="TEntity">The type of the entity.</typeparam>
         /// <returns>An instance of type inherited from <see cref="IGenericRepository{TEntity}}"/> interface.</returns>
         IGenericRepository<TEntity> Repository<TEntity>(bool hasCustomRepository = false) where TEntity : BaseEntity;
+        /// <summary>
+        /// Gets the specified cache repository for the <typeparamref name="TEntity"/>
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the entity.</typeparam>
+        /// <param name="hasCustomRepository"><c>True<c> if providibg custom cache repository</c>/param>
+        /// <returns>An instance of type inherited from <see cref="ICachedRepository{TEntity}"/> interface.</returns>
+        ICachedRepository<TEntity> CacheRepository<TEntity>(bool hasCustomRepository = false) where TEntity : BaseEntity;
         int ExecuteSqlCommand(string sql, params object[] parameters);
         IQueryable<TEntity> FromSql<TEntity>(string sql, params object[] parameters) where TEntity : class;
     }

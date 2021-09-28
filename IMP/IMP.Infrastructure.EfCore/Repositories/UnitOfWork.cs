@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;  
+using System.Text;
 using System.Threading.Tasks;
 
 namespace IMP.Infrastructure.EfCore.Repositories
@@ -15,11 +15,12 @@ namespace IMP.Infrastructure.EfCore.Repositories
         private readonly TContext _context;
         private bool _disposed;
         private Dictionary<string, object> _repositoties;
+        private readonly ICacheService _cacheService;
 
-
-        public UnitOfWork(TContext context)
+        public UnitOfWork(TContext context, ICacheService cacheService)
         {
             _context = context;
+            _cacheService = cacheService;
         }
 
         public TContext DbContext => _context;
@@ -51,6 +52,10 @@ namespace IMP.Infrastructure.EfCore.Repositories
             if (hasCustomRepository)
             {
                 var repository = _context.GetService<IGenericRepository<TEntity>>();
+                if (repository != null)
+                {
+                    return repository;
+                }
             }
             var type = typeof(TEntity).Name;
             if (!_repositoties.ContainsKey(type))
@@ -60,6 +65,29 @@ namespace IMP.Infrastructure.EfCore.Repositories
             }
             return (IGenericRepository<TEntity>)_repositoties[type];
         }
+        public ICachedRepository<TEntity> CacheRepository<TEntity>(bool hasCustomRepository = false) where TEntity : BaseEntity
+        {
+            if (_repositoties == null)
+            {
+                _repositoties = new Dictionary<string, object>();
+            }
+            if (hasCustomRepository)
+            {
+                var repository = _context.GetService<ICachedRepository<TEntity>>();
+                if (repository != null)
+                {
+                    return repository;
+                }
+            }
+            var type = typeof(TEntity).Name;
+            if (!_repositoties.ContainsKey(type))
+            {
+                var respositoryInstance = new CachedRepository<TEntity>(_cacheService, _context);
+                _repositoties.Add(type, respositoryInstance);
+            }
+            return (ICachedRepository<TEntity>)_repositoties[type];
+        }
+
 
         public void Commit()
         {
