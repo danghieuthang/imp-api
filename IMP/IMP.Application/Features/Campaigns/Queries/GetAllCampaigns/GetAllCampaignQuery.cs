@@ -16,27 +16,15 @@ using IMP.Application.Interfaces;
 using IMP.Application.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using IMP.Application.Models;
+using IMP.Application.Validations;
 
 namespace IMP.Application.Features.Campaigns.Queries.GetAllCampaigns
 {
-    public class GetAllCampaignQuery : IListQuery<CampaignViewModel>
+    public class GetAllCampaignQuery : PageRequest, IListQuery<CampaignViewModel>
     {
-        [FromQuery(Name = "page_index")]
-        public int PageIndex { get; set; }
-        [FromQuery(Name = "page_size")]
-        public int PageSize { get; set; }
-
-        [FromQuery(Name = "order_field")]
-        public string OrderField { get; set; }
-        [FromQuery(Name = "order_by")]
-        public OrderBy OrderBy { get; set; }
-
-        public class Validator : AbstractValidator<GetAllCampaignQuery>
+        public class GetAllCampaignQueryValidator : PageRequestValidator<GetAllCampaignQuery, CampaignViewModel>
         {
-            public Validator()
-            {
-                RuleFor(x => x.OrderField).MustValidOrderField(typeof(CampaignViewModel));
-            }
         }
 
         public class GetAllCampaignQueryHandler : ListQueryHandler<GetAllCampaignQuery, CampaignViewModel>

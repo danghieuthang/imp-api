@@ -3,6 +3,7 @@ using IMP.Application.Enums;
 using IMP.Application.Interfaces;
 using IMP.Application.Models;
 using IMP.Application.Models.ViewModels;
+using IMP.Application.Validations;
 using IMP.Application.Wrappers;
 using IMP.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -27,6 +28,11 @@ namespace IMP.Application.Features.WalletTransactions.Queries.GetAllTransactions
         public DateTime? ToDate { get; set; }
         [FromQuery(Name = "transaction-no")]
         public string TransactionNo { get; set; }
+
+        public class GetAllTransactionsQueryValidator : PageRequestValidator<GetAllTransactionsQuery, WalletTransactionViewModel>
+        {
+
+        }
 
         public class GetAllTransactionQueryHandler : ListQueryHandler<GetAllTransactionsQuery, WalletTransactionViewModel>
         {

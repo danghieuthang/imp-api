@@ -20,6 +20,7 @@ namespace IMP.Application.Wrappers
         {
             Succeeded = false;
             Message = message;
+            Errors = new List<ValidationError>();
         }
         public Response(ValidationError error, string message = null)
         {
