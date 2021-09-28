@@ -4,6 +4,7 @@ using IMP.Infrastructure.Identity;
 using IMP.Infrastructure.Persistence;
 using IMP.Infrastructure.Shared;
 using IMP.WebApi.Extensions;
+using IMP.WebApi.Models;
 using IMP.WebApi.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,6 +25,7 @@ namespace IMP.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCorsExtension();
+            services.AddSignalRExtension();
             services.AddApplicationLayer();
             services.AddIdentityInfrastructure(_config);
             services.AddPersistenceInfrastructure(_config);
@@ -60,6 +62,10 @@ namespace IMP.WebApi
              {
                  endpoints.MapControllers();
              });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHub<NotificationHub>("/notify");
+            });
         }
     }
 }

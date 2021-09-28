@@ -69,6 +69,7 @@ namespace IMP.WebApi.Controllers
             var origin = Request.Headers["origin"];
             return StatusCode(201, await _accountService.RegisterAsync(request, origin));
         }
+
         /// <summary>
         /// Register account with social platform
         /// </summary>
