@@ -20,6 +20,8 @@ namespace IMP.Application.Models.Compaign
         public int Status { get; set; }
         public string Condition { get; set; }
         public bool IsActived { get; set; }
+        public int TransactionTypeId { get; set; }
+        public int PlatformId { get; set; }
         public List<CampaignImageViewModel> CampaignImages { get; set; }
     }
 
