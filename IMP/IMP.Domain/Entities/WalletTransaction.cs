@@ -10,7 +10,10 @@ namespace IMP.Domain.Entities
     public class WalletTransaction : BaseEntity
     {
         public decimal Amount { get; set; }
+        [StringLength(256)]
         public string TransactionInfo { get; set; }
+        [StringLength(256)]
+        public string Note { get; set; }
         [ForeignKey("Bank")]
         public int? BankId { get; set; }
         public Bank Bank { get; set; }
@@ -23,15 +26,23 @@ namespace IMP.Domain.Entities
         /// Number transaction at vnpay
         /// </summary>
         [StringLength(256)]
-        public string TransactionNo { get; set; }
+        public string VnpTransactionNo { get; set; }
         /// <summary>
         /// Payment time, recorded at VNPAY in GMT+7
         /// </summary>
         public DateTime PayDate { get; set; }
         public int TransactionStatus { get; set; }
-        [ForeignKey("Wallet")]
-        public int WalletId { get; set; }
-        public Wallet Wallet{ get; set; }
         public int TransactionType { get; set; }
+        public int? SenderId { get; set; }
+        public int? ReceiverId { get; set; }
+
+        public int? WalletToId { get; set; }
+        public int? WalletFromId { get; set; }
+        public string Evidences { get; set; }
+
+        public virtual Wallet WalletTo { get; set; }
+        public virtual Wallet WalletFrom { get; set; }
+        public virtual ApplicationUser Sender { get; set; }
+        public virtual ApplicationUser Receiver { get; set; }
     }
 }

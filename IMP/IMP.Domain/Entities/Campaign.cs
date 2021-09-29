@@ -26,7 +26,7 @@ namespace IMP.Domain.Entities
         [StringLength(2000)]
         public string Description { get; set; }
         [StringLength(2000)]
-        public string AdditionalInfomation { get; set; }
+        public string AdditionalInformation { get; set; }
         [StringLength(2000)]
         public string Reward { get; set; }
         [StringLength(256)]

@@ -13,6 +13,8 @@ namespace IMP.Domain.Entities
         public ApplicationUser()
         {
             Otps = new Collection<Otp>();
+            TransactionsReceived = new Collection<WalletTransaction>();
+            TransactionsSent = new Collection<WalletTransaction>();
         }
         #region personal infomation
         [MaxLength(256)]
@@ -81,13 +83,7 @@ namespace IMP.Domain.Entities
         [StringLength(2000)]
         public string Description { get; set; }
         #endregion
-
-        [ForeignKey("Wallet")]
-        public int WalletId { get; set; }
         public Wallet Wallet { get; set; }
-
-        [ForeignKey("PaymentInfor")]
-        public int? PaymentInforId { get; set; }
         public PaymentInfor PaymentInfor { get; set; }
 
         [ForeignKey("Ranking")]
@@ -112,5 +108,8 @@ namespace IMP.Domain.Entities
 
             }
         }
+
+        public virtual ICollection<WalletTransaction> TransactionsSent { get; set; }
+        public virtual ICollection<WalletTransaction> TransactionsReceived { get; set; }
     }
 }

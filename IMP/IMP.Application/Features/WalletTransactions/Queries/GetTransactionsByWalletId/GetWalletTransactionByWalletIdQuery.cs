@@ -6,6 +6,7 @@ using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
 using IMP.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,10 +18,14 @@ namespace IMP.Application.Features.WalletTransactions.Queries.GetTransactionsByW
 {
     public class GetWalletTransactionByWalletIdQuery : PageRequest, IListQuery<WalletTransactionViewModel>
     {
+        [FromQuery(Name = "transaction_type")]
+        public TransactionType? TranscationType { get; set; }
+        [FromQuery(Name = "transaction_status")]
+        public WalletTransactionStatus? TransactionStatus { get; set; }
         private int _applicationUserId;
-        [FromQuery(Name = "from-date")]
+        [FromQuery(Name = "from_date")]
         public DateTime? FromDate { get; set; }
-        [FromQuery(Name = "to-date")]
+        [FromQuery(Name = "to_date")]
         public DateTime? ToDate { get; set; }
 
         public void SetApplicationUserId(int walletId)
@@ -38,9 +43,14 @@ namespace IMP.Application.Features.WalletTransactions.Queries.GetTransactionsByW
 
             public override async Task<Response<IPagedList<WalletTransactionViewModel>>> Handle(GetWalletTransactionByWalletIdQuery request, CancellationToken cancellationToken)
             {
-                var page = await _walletTransactionRepository.GetPagedList(predicate: x => x.Wallet.ApplicationUserId == request._applicationUserId
+                var page = await _walletTransactionRepository.GetPagedList(predicate: x =>
+                   (x.WalletTo.ApplicationUserId == request._applicationUserId
+                    || x.WalletFrom.ApplicationUserId == request._applicationUserId
+                    || x.Sender.Id == request._applicationUserId
+                    || x.Receiver.Id == request._applicationUserId)
                     && (!request.FromDate.HasValue || x.Created.Date >= request.FromDate.Value.Date)
                     && (!request.ToDate.HasValue || x.Created.Date <= request.ToDate.Value.Date),
+                    include: x => x.Include(t => t.Sender).Include(t => t.Receiver),
                         orderBy: request.OrderField,
                         orderByDecensing: request.OrderBy == OrderBy.DESC,
                         pageIndex: request.PageIndex,

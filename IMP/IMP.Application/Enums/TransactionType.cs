@@ -12,6 +12,7 @@ namespace IMP.Application.Enums
         /// Recharge
         /// </summary>
         Recharge = 01,
+        Transfer = 02,
         /// <summary>
         /// Withdrawal
         /// </summary>

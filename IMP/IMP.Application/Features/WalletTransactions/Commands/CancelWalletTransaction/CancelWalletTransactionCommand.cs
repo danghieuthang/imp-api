@@ -4,6 +4,7 @@ using IMP.Application.Interfaces;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
 using IMP.Domain.Entities;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,11 @@ namespace IMP.Application.Features.WalletTransactions.Commands.CancelWalletTrans
     public class CancelWalletTransactionCommand : ICommand<WalletTransactionViewModel>
     {
         public int Id { get; set; }
+        [JsonIgnore]
         public int? ApplicationUserId { get; set; }
+        public string Note { get; set; }
+        [JsonIgnore]
+        public int? AdminId { get; set; }
         public class CancelWalletTransactionCommandHandler : CommandHandler<CancelWalletTransactionCommand, WalletTransactionViewModel>
         {
             private readonly IGenericRepository<WalletTransaction> _walletTransactionRepository;
@@ -27,21 +32,32 @@ namespace IMP.Application.Features.WalletTransactions.Commands.CancelWalletTrans
 
             public override async Task<Response<WalletTransactionViewModel>> Handle(CancelWalletTransactionCommand request, CancellationToken cancellationToken)
             {
-                var walletTranaction = await _walletTransactionRepository.FindSingleAsync(x => x.Id == request.Id, includeProperties: x => x.Wallet);
-                if (walletTranaction != null)
+                var walletTransaction = await _walletTransactionRepository.FindSingleAsync(x => x.Id == request.Id, includeProperties: x => x.WalletFrom);
+                if (walletTransaction != null)
                 {
-                    if (walletTranaction.TransactionStatus != (int)WalletTransactionStatus.Processing)
+                    // if status is not new and owner of transaction
+                    if (walletTransaction.TransactionStatus != (int)WalletTransactionStatus.New && request.ApplicationUserId.HasValue)
                     {
                         return new Response<WalletTransactionViewModel>(error: new Models.ValidationError("id", "Chỉ có thể hủy các giao dịch chưa xử lí."));
                     }
-                    if (request.ApplicationUserId.HasValue && walletTranaction.Wallet.ApplicationUserId != request.ApplicationUserId)
+                    if (request.ApplicationUserId.HasValue && walletTransaction.WalletTo.ApplicationUserId != request.ApplicationUserId)
                     {
                         return new Response<WalletTransactionViewModel>(error: new Models.ValidationError("id", "Không có quyền."));
                     }
-                    walletTranaction.TransactionStatus = (int)WalletTransactionStatus.Cancelled;
-                    _walletTransactionRepository.Update(walletTranaction);
+                    if(request.ApplicationUserId.HasValue){ // if user cancel, set sender is user
+                        walletTransaction.SenderId = request.ApplicationUserId;
+                    }else{ // if admin cancel, set sender is user
+                        walletTransaction.SenderId = request.AdminId;
+                    }
+                    walletTransaction.Note = request.Note;
+                    walletTransaction.TransactionStatus = (int)WalletTransactionStatus.Cancelled;
+
+                    _walletTransactionRepository.Update(walletTransaction);
                     await UnitOfWork.CommitAsync();
-                    var walletTransactionView = Mapper.Map<WalletTransactionViewModel>(walletTranaction);
+
+
+                    walletTransaction = await _walletTransactionRepository.FindSingleAsync(x => x.Id == request.Id, x => x.Sender, x => x.Receiver);
+                    var walletTransactionView = Mapper.Map<WalletTransactionViewModel>(walletTransaction);
                     return new Response<WalletTransactionViewModel>(walletTransactionView);
                 }
                 return new Response<WalletTransactionViewModel>(error: new Models.ValidationError("id", "Không tồn tại."));

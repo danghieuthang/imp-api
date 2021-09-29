@@ -24,6 +24,7 @@ using IMP.Application.Features.BlockPlatforms.Commands.UpdateBlockPlatform;
 using IMP.Application.Features.BlockCampaigns.Commands.CreateBlockCampaign;
 using IMP.Application.Features.BlockCampaigns.Commands.UpdateBlockCampaign;
 using IMP.Application.Features.Vouchers.Commands.CreateVoucher;
+using Newtonsoft.Json;
 
 namespace IMP.Application.Mappings
 {
@@ -98,7 +99,11 @@ namespace IMP.Application.Mappings
 
             #region wallet
             CreateMap<Wallet, WalletViewModel>();
-            CreateMap<WalletTransaction, WalletTransactionViewModel>();
+            CreateMap<WalletTransaction, WalletTransactionViewModel>().ForMember(x => x.Evidences, o =>
+            {
+                o.MapFrom(x => JsonConvert.DeserializeObject<List<TransactionEvidence>>(x.Evidences));
+            });
+            CreateMap<ApplicationUser, TransactionUserViewModel>();
             #endregion
         }
     }

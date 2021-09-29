@@ -110,7 +110,7 @@ namespace IMP.WebApi.Extensions
         }
         public static void AddSignalRExtension(this IServiceCollection services){
             services.AddSignalR();
-            services.AddScoped<IInvokeNotificationHub, IInvokeNotificationHub>();
+            services.AddScoped<IInvokeNotificationHub, InvokeNotificationHub>();
         }
     }
 }

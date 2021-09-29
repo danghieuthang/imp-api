@@ -23,7 +23,7 @@ namespace IMP.Application.Extensions
         /// <returns></returns>
         public static IRuleBuilderOptions<T, IList<TElement>> ListMustContainFewerThan<T, TElement>(this IRuleBuilder<T, IList<TElement>> ruleBuilder, int num)
         {
-            return ruleBuilder.Must(list => list.Count < num).WithMessage($"List không được chứa nhiều hơn {num} item.");
+            return ruleBuilder.Must(list => list.Count <= num).WithMessage($"List không được chứa nhiều hơn {num} item.");
         }
         public static IRuleBuilderOptions<T, int> MustPositiveInteger<T>(this IRuleBuilder<T, int> ruleBuilder)
         {

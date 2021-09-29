@@ -446,7 +446,7 @@
 			<param name="command"></param>
 			<returns></returns>
 		</member>
-		<member name="M:IMP.WebApi.Controllers.v1.WalletTransactionController.ConfirmWalletTransaction(IMP.Application.Features.WalletTransactions.Commands.CreateWalletTransactionCommand)">
+		<member name="M:IMP.WebApi.Controllers.v1.WalletTransactionController.ConfirmWalletTransaction(IMP.Application.Features.WalletTransactions.Commands.ConfirmVnpWalletTransaction.ConfirmVnpWalletTransactionCommand)">
 			<summary>
 				API để VNPAY gọi ngược lại khi giao dịch thành công.
 			</summary>
@@ -470,9 +470,23 @@
 		</member>
 		<member name="M:IMP.WebApi.Controllers.v1.WalletTransactionController.Update(System.Int32)">
 			<summary>
+				Change status of new transaction to processing. This transaction will lock by admin requet processing
+			</summary>
+			<param name="id">The id of transaction.</param>
+			<returns></returns>
+		</member>
+		<member name="M:IMP.WebApi.Controllers.v1.WalletTransactionController.Update(System.Int32,IMP.Application.Features.WalletTransactions.Commands.CancelWalletTransaction.CancelWalletTransactionCommand)">
+			<summary>
 				Cancel a transaction has status is Processing. Only for Administrator or owner of transaction
 			</summary>
 			<param name="id"></param>
+			<returns></returns>
+		</member>
+		<member name="M:IMP.WebApi.Controllers.v1.WalletTransactionController.Create(IMP.Application.Features.WalletTransactions.Commands.CreateWalletTransaction.CreateWalletTransactionCommand)">
+			<summary>
+				Create transaction transfer money from wallet to another wallet
+			</summary>
+			<param name="command">The Create Wallet Transaction Command.</param>
 			<returns></returns>
 		</member>
 		<member name="M:IMP.WebApi.Controllers.BlockTypeController.Get">

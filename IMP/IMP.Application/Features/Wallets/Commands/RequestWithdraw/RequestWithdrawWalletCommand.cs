@@ -23,12 +23,22 @@ namespace IMP.Application.Features.Wallets.Commands.RequestWithdraw
         public int Amount { get; set; }
         public class RequestWithdrawWalletCommandHandler : CommandHandler<RequestWithdrawWalletCommand, WalletTransactionViewModel>
         {
+            private readonly IGenericRepository<WalletTransaction> _walletTransactionRepository;
             public RequestWithdrawWalletCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
             {
+                _walletTransactionRepository = unitOfWork.Repository<WalletTransaction>();
             }
 
             public override async Task<Response<WalletTransactionViewModel>> Handle(RequestWithdrawWalletCommand request, CancellationToken cancellationToken)
             {
+                if (await _walletTransactionRepository.IsExistAsync(x =>
+                     x.ReceiverId == request.ApplicationUserId
+                     && (x.TransactionStatus == (int)WalletTransactionStatus.New 
+                     || x.TransactionStatus == (int)WalletTransactionStatus.Processing)
+                     ))
+                {
+                    return new Response<WalletTransactionViewModel>(error: new Models.ValidationError("application_user_id", "Đang có 1 yêu cầu rút tiền đang đợi xuử lí."));
+                }
                 var wallet = await UnitOfWork.Repository<Wallet>().FindSingleAsync(x => x.ApplicationUserId == request.ApplicationUserId);
                 if (wallet != null)
                 {
@@ -38,9 +48,10 @@ namespace IMP.Application.Features.Wallets.Commands.RequestWithdraw
                         {
                             Amount = request.Amount,
                             TransactionType = (int)TransactionType.Withdrawal,
-                            TransactionStatus = (int)WalletTransactionStatus.Processing,
-                            WalletId = wallet.Id,
-                            TransactionInfo = "Rút tiền"
+                            TransactionStatus = (int)WalletTransactionStatus.New,
+                            WalletFromId = wallet.Id,
+                            TransactionInfo = "Rút tiền",
+                            ReceiverId = request.ApplicationUserId
                         };
                         await UnitOfWork.Repository<WalletTransaction>().AddAsync(walletTransaction);
                         await UnitOfWork.CommitAsync();
