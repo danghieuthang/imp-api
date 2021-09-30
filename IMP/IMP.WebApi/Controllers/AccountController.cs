@@ -176,6 +176,17 @@ namespace IMP.WebApi.Controllers
             return Ok(await _accountService.RevokeToken(refeshToken, GenerateIPAddress()));
         }
 
+        /// <summary>
+        /// Check jwt is expired
+        /// </summary>
+        /// <returns></returns>
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [HttpGet("check-expired")]
+        [Authorize]
+        public async Task<IActionResult> CheckExpire()
+        {
+            return Ok(200);
+        }
 
         private string GenerateIPAddress()
         {
