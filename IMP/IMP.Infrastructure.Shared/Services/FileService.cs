@@ -8,6 +8,7 @@ using IMP.Domain.Settings;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using IMP.Application.Exceptions;
+using IMP.Application.Wrappers;
 
 namespace IMP.Infrastructure.Shared.Services
 {
@@ -35,7 +36,7 @@ namespace IMP.Infrastructure.Shared.Services
             };
             return errors;
         }
-        public async Task<UploadFileResponse> UploadImage(string user, UploadFileRequest request)
+        public async Task<Response<UploadFileResponse>> UploadImage(string user, UploadFileRequest request)
         {
             var errors = ValidateFile(request.File);
             if (errors.Count > 0)
@@ -44,10 +45,10 @@ namespace IMP.Infrastructure.Shared.Services
             }
             request.Subfolders.Insert(0, user);
             string url = await _firebaseService.UploadFile(request.File.OpenReadStream(), request.File.FileName, request.Subfolders.ToArray());
-            return new UploadFileResponse(url);
+            return new Response<UploadFileResponse>(new UploadFileResponse(url));
         }
 
-        public Task<UploadFileResponse> UploadVideo(string user, UploadFileRequest request)
+        public Task<Response<UploadFileResponse>> UploadVideo(string user, UploadFileRequest request)
         {
             throw new System.NotImplementedException();
         }
