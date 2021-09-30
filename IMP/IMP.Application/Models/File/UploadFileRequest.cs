@@ -18,5 +18,9 @@ namespace IMP.Application.Models.File
         /// <value>A folder</value>
         [FromForm(Name = "subfolders")]
         public List<string> Subfolders { get; set; }
+        public UploadFileRequest()
+        {
+            Subfolders = new List<string>();
+        }
     }
 }
