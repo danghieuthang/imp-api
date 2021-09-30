@@ -48,8 +48,12 @@ namespace IMP.Application.Mappings
             CreateMap<Campaign, CampaignViewModel>();
             CreateMap<CampaignImage, CampaignImageViewModel>();
             CreateMap<CreateCampaignCommand, Campaign>();
+            CreateMap<CampaignMilestone, CampaignMilestoneViewModel>();
             #endregion
 
+            #region milestone
+            CreateMap<Milestone, MilestoneViewModel>();
+            #endregion
             #region block type
             CreateMap<BlockType, BlockTypeViewModel>();
             CreateMap<CreateBlockTypeCommand, BlockType>();

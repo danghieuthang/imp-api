@@ -85,6 +85,7 @@ namespace IMP.WebApi.Controllers.v1
         /// Cancel a transaction has status is Processing. Only for Administrator or owner of transaction
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="command">The Cancel Wallet Tranaction Command</param>
         /// <returns></returns>
         [HttpPut("{id}/cancel")]
         [Authorize]

@@ -10,9 +10,17 @@ using System.Threading.Tasks;
 using IMP.Application.Interfaces;
 using System.Collections.Generic;
 using IMP.Application.Enums;
+using System.Linq;
 
 namespace IMP.Application.Features.Campaigns.Commands.CreateCampaign
 {
+    public class CampaignMilestoneRequest
+    {
+        public int MilestoneId { get; set; }
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+    }
+
     public class Image
     {
         public int Position { get; set; }
@@ -37,6 +45,8 @@ namespace IMP.Application.Features.Campaigns.Commands.CreateCampaign
         public string Condition { get; set; }
         [JsonProperty("campaign_images")]
         public List<Image> Images { get; set; }
+        [JsonProperty("campaign_milestones")]
+        public List<CampaignMilestoneRequest> CampaignMilestoneRequests { get; set; }
     }
 
     public class CreateCampaignCommandHandler : CommandHandler<CreateCampaignCommand, CampaignViewModel>
@@ -57,8 +67,10 @@ namespace IMP.Application.Features.Campaigns.Commands.CreateCampaign
             await UnitOfWork.CommitAsync();
 
             await CreateCampaignImages(request.Images, campaign.Id);
+            await CreateCampaignMilestones(request.CampaignMilestoneRequests, campaign.Id);
+            await UnitOfWork.CommitAsync();
 
-            campaign = await _campaignRepository.FindSingleAsync(x => x.Id == campaign.Id, x => x.CampaignImages);
+            campaign = await _campaignRepository.FindSingleAsync(x => x.Id == campaign.Id, x => x.CampaignImages, x => x.CampaignMilestones);
             var campaignView = _mapper.Map<CampaignViewModel>(campaign);
             return new Response<CampaignViewModel>(campaignView);
         }
@@ -75,7 +87,18 @@ namespace IMP.Application.Features.Campaigns.Commands.CreateCampaign
                 });
             }
             await UnitOfWork.Repository<CampaignImage>().AddManyAsync(campaignImages);
-            await UnitOfWork.CommitAsync();
+        }
+
+        private async Task CreateCampaignMilestones(List<CampaignMilestoneRequest> campaignMilestoneRequests, int campaignId)
+        {
+            var campaignMilestones = campaignMilestoneRequests.Select(x => new CampaignMilestone
+            {
+                CampaignId = campaignId,
+                FromDate = x.FromDate,
+                ToDate = x.ToDate,
+                MilestoneId = x.MilestoneId
+            }).ToList();
+            await UnitOfWork.Repository<CampaignMilestone>().AddManyAsync(campaignMilestones);
         }
 
     }

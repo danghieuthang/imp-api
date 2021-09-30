@@ -183,7 +183,7 @@ namespace IMP.WebApi.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [HttpGet("check-expired")]
         [Authorize]
-        public async Task<IActionResult> CheckExpire()
+        public IActionResult CheckExpire()
         {
             return Ok(200);
         }

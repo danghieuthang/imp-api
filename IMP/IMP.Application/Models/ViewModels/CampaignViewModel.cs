@@ -24,6 +24,7 @@ namespace IMP.Application.Models.Compaign
         public int CampaignTypeId { get; set; }
         public int PlatformId { get; set; }
         public List<CampaignImageViewModel> CampaignImages { get; set; }
+        public List<CampaignMilestoneViewModel> CampaignMilestones { get; set; }
     }
 
     public class CampaignImageViewModel : BaseViewModel<int>

@@ -56,6 +56,21 @@ namespace IMP.Application.Features.WalletTransactions.Queries.GetTransactionsByW
                         pageIndex: request.PageIndex,
                         pageSize: request.PageSize,
                         cancellationToken: cancellationToken);
+
+                page.Items = page.Items.Select(x =>
+                {
+                    var tran = x;
+                    if (x.SenderId != request._applicationUserId)
+                    {
+                        x.SenderBalance = null;
+                    }
+                    if (x.ReceiverId != request._applicationUserId)
+                    {
+                        x.ReceiverBalance = null;
+                    }
+                    return x;
+                }).ToList();
+
                 var pageView = page.ToResponsePagedList<WalletTransactionViewModel>(Mapper);
                 return new Response<IPagedList<WalletTransactionViewModel>>(pageView);
             }

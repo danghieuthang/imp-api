@@ -66,6 +66,16 @@ namespace IMP.Application.Extensions
         {
             return ruleBuilder.GreaterThanOrEqualTo(DateTime.UtcNow).WithMessage("Ngày không hợp lệ.");
         }
+        /// <summary>
+        /// Check date is feature date
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ruleBuilder"></param>
+        /// <returns></returns>
+        public static IRuleBuilderOptions<T, DateTime> MustValidDate<T>(this IRuleBuilder<T, DateTime> ruleBuilder)
+        {
+            return ruleBuilder.GreaterThanOrEqualTo(DateTime.UtcNow).WithMessage("Ngày không hợp lệ.");
+        }
         public static IRuleBuilderOptions<T, TimeSpan?> MustValidTime<T>(this IRuleBuilder<T, TimeSpan?> ruleBuilder)
         {
             return ruleBuilder.Must(x =>
@@ -89,6 +99,17 @@ namespace IMP.Application.Extensions
         public static IRuleBuilderOptions<T, DateTime?> MustGreaterThan<T>(this IRuleBuilder<T, DateTime?> ruleBuilder, DateTime? fromDate)
         {
             return ruleBuilder.GreaterThanOrEqualTo(fromDate.Value).WithMessage($"Ngày phải lớn hơn {fromDate.Value}.");
+        }
+        // <summary>
+        /// Check date múst be greater than a date provide
+        /// </summary>
+        /// <param name="ruleBuilder"></param>
+        /// <param name="fromDate">From Date</param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static IRuleBuilderOptions<T, DateTime> MustGreaterThan<T>(this IRuleBuilder<T, DateTime> ruleBuilder, DateTime fromDate)
+        {
+            return ruleBuilder.GreaterThanOrEqualTo(fromDate).WithMessage($"Ngày phải lớn hơn {fromDate}.");
         }
 
         /// <summary>

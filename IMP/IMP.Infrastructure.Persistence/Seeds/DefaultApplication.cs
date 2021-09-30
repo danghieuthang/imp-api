@@ -11,9 +11,23 @@ using System.Threading.Tasks;
 
 namespace IMP.Infrastructure.Persistence.Seeds
 {
-    public static class DefaultBank
+    public static class DefaultApplication
     {
-        public static async Task SeedAsync(IUnitOfWork unitOfWork)
+        public static async Task SeedApplicationData(IUnitOfWork unitOfWork)
+        {
+            //List<Task> tasks = new();
+
+            //tasks.Add(SeedBankAsync(unitOfWork));
+            //tasks.Add(DefaultLocation.SeedLocationAsync(unitOfWork));
+            //tasks.Add(DefaultMileStone.SeedMilestonesAsync(unitOfWork));
+            //await Task.WhenAll(tasks);
+
+            await SeedBankAsync(unitOfWork);
+            await DefaultLocation.SeedLocationAsync(unitOfWork);
+            await DefaultMileStone.SeedMilestonesAsync(unitOfWork);
+
+        }
+        public static async Task SeedBankAsync(IUnitOfWork unitOfWork)
         {
             var bankRepository = unitOfWork.Repository<Bank>();
             var banks = await bankRepository.GetAllAsync();
@@ -34,30 +48,6 @@ namespace IMP.Infrastructure.Persistence.Seeds
                     await unitOfWork.CommitAsync();
                 }
             }
-
-            // Seed transaction type
-            //var transactionTypeRepository = unitOfWork.Repository<TransactionType>();
-            //var transactionTypes = await transactionTypeRepository.GetAllAsync();
-            //if (transactionTypes.Count == 0)
-            //{
-            //    List<TransactionType> transactionTypeDomain = new List<TransactionType>
-            //    {
-            //        new TransactionType
-            //        {
-            //             Id=1,
-            //             Name="Recharge",
-            //             Description = "Nạp tiền"
-            //        },
-            //        new TransactionType
-            //        {
-            //             Id=2,
-            //             Name="Withdrawal",
-            //             Description = "Rút tiền"
-            //        }
-            //    };
-            //    await transactionTypeRepository.AddManyAsync(transactionTypeDomain);
-            //    await unitOfWork.CommitAsync();
-            //}
         }
     }
 }

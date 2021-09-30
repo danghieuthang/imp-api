@@ -38,7 +38,14 @@ namespace IMP.Application.Features.Campaigns.Queries.GetAllCampaigns
             public override async Task<Response<IPagedList<CampaignViewModel>>> Handle(GetAllCampaignQuery request, CancellationToken cancellationToken)
             {
 
-                var page = await _campaignRepository.GetPagedList(include: x => x.Include(campaign => campaign.CampaignImages), pageIndex: request.PageIndex, pageSize: request.PageSize, orderBy: request.OrderField, orderByDecensing: request.OrderBy == OrderBy.DESC);
+                var page = await _campaignRepository.GetPagedList(
+                    include: x => x.Include(campaign => campaign.CampaignImages)
+                                    .Include(campaign => campaign.CampaignMilestones), 
+                    pageIndex: request.PageIndex, 
+                    pageSize: request.PageSize, 
+                    orderBy: request.OrderField, 
+                    orderByDecensing: request.OrderBy == OrderBy.DESC);
+
                 var pageViews = page.ToResponsePagedList<CampaignViewModel>(Mapper);
                 return new Response<IPagedList<CampaignViewModel>>(pageViews);
             }

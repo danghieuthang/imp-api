@@ -26,6 +26,8 @@ namespace IMP.Application.Models.ViewModels
         public WalletTransactionStatus TransactionStatus { get; set; }
         public TransactionUserViewModel Sender { get; set; }
         public TransactionUserViewModel Receiver { get; set; }
+        public decimal? SenderBalance { get; set; }
+        public decimal? ReceiverBalance { get; set; }
         public TransactionType TransactionType { get; set; }
         public List<TransactionEvidence> Evidences { get; set; }
     }

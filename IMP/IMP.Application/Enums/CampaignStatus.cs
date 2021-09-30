@@ -6,7 +6,11 @@ namespace IMP.Application.Enums
 {
     public enum CampaignStatus
     {
+        DRAFT,
         OPEN,
-        CLOSE
+        APPROVED,
+        PROCESSING,
+        ANNOUNCED,
+        CLOSED
     }
 }

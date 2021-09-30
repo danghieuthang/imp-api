@@ -29,7 +29,7 @@ namespace IMP.Application.Wrappers
         /// <summary>
         /// Gets the current page items.
         /// </summary>
-        IList<T> Items { get; }
+        IList<T> Items { get; set; }
 
         IPagedList<TViewModel> ToResponsePagedList<TViewModel>(IMapper mapper) where TViewModel : class;
     }

@@ -78,7 +78,12 @@ namespace IMP.Application.Features.WalletTransactions.Commands.ConfirmVnpWalletT
                         int walletId = 0;
                         if (int.TryParse(request.Vnp_TxnRef.Split("_").Last(), out walletId))
                         {
-                            var wallet = await UnitOfWork.Repository<Wallet>().GetByIdAsync(walletId);
+                            var walletRepository = UnitOfWork.Repository<Wallet>();
+
+                            var wallet = await walletRepository.GetByIdAsync(walletId);
+                            //Update wallet balance
+                            wallet.Balance += request.Vnp_Amount / 100;
+
                             var bank = await UnitOfWork.Repository<Bank>().FindSingleAsync(x => x.Code.ToLower() == request.Vnp_BankCode.ToLower());
 
                             DateTime payDate;
@@ -102,9 +107,15 @@ namespace IMP.Application.Features.WalletTransactions.Commands.ConfirmVnpWalletT
                                 VnpTransactionNo = request.Vnp_TransactionNo,
                                 TransactionType = (int)TransactionType.Recharge,
                                 ReceiverId = wallet.ApplicationUserId,
-                                SenderId = wallet.ApplicationUserId
+                                SenderId = wallet.ApplicationUserId,
+                                ReceiverBalance = wallet.Balance,
                             };
+
                             await UnitOfWork.Repository<WalletTransaction>().AddAsync(walletTransaction);
+
+                            walletRepository.Update(wallet);
+
+                            // Commit transaction
                             await UnitOfWork.CommitAsync();
 
                             // Recharge to wallet
@@ -138,7 +149,7 @@ namespace IMP.Application.Features.WalletTransactions.Commands.ConfirmVnpWalletT
                 wallet.Balance += amount;
                 walletRepository.Update(wallet);
 
-                await UnitOfWork.CommitAsync();
+                //await UnitOfWork.CommitAsync();
             }
         }
     }

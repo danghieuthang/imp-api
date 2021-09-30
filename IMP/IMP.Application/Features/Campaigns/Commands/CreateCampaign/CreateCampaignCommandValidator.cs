@@ -46,6 +46,18 @@ namespace IMP.Application.Features.Campaigns.Commands.CreateCampaign
             {
                 image.RuleFor(image => image.Url).MustValidUrl();
             }).When(c => c.Images.Count > 0);
+
+            RuleForEach(x => x.CampaignMilestoneRequests).ChildRules(c =>
+            {
+                c.RuleFor(x => x.MilestoneId).MustExistEntityId(async (milestoneId, cancellationToken)
+                    => await unitOfWork.Repository<Milestone>().IsExistAsync(milestoneId));
+                c.RuleFor(x => x.FromDate).MustValidDate()
+                .Must((campaignMilestone, dateFrom) =>
+                {
+                    return campaignMilestone.ToDate.CompareTo(dateFrom) > 0;
+                }).WithMessage("{PropertyValue} phải bé hơn ngày kết thúc.");
+
+            }).When(x => x.CampaignMilestoneRequests.Count > 0);
         }
 
         public async Task<bool> IsPlatformExist(int id, CancellationToken cancellationToken)

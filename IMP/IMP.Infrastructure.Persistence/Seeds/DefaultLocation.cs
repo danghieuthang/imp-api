@@ -31,7 +31,7 @@ namespace IMP.Infrastructure.Persistence.Seeds
     public static class DefaultLocation
     {
         public static string LocationFile = "vietnam_cities.json";
-        public static async Task SeedAsync(IUnitOfWork unitOfWork)
+        public static async Task SeedLocationAsync(IUnitOfWork unitOfWork)
         {
             var locationRepository = unitOfWork.Repository<Location>();
             var locations = await locationRepository.GetAllAsync();

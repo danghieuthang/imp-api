@@ -32,6 +32,7 @@ namespace IMP.Application.Features.WalletTransactions.Commands.CreateWalletTrans
             {
                 var walletFrom = await _walletRepository.FindSingleAsync(x => x.ApplicationUserId == request.ApplicationUserFrom);
                 var walletTo = await _walletRepository.FindSingleAsync(x => x.ApplicationUserId == request.ApplicationUserTo);
+
                 var walletTransaction = new WalletTransaction
                 {
                     Amount = request.Amount,
@@ -43,12 +44,16 @@ namespace IMP.Application.Features.WalletTransactions.Commands.CreateWalletTrans
                     PayDate = DateTime.UtcNow,
                     WalletToId = walletTo.Id,
                     WalletFromId = walletFrom.Id,
+                    SenderBalance = walletFrom.Balance-request.Amount,
+                    ReceiverBalance = walletTo.Balance+request.Amount
                 };
                 // add wallet transction
                 await _walletTransactionRepository.AddAsync(walletTransaction);
-                // update wallet after transaction
+
+                // set balance for wallet
                 walletFrom.Balance -= request.Amount;
                 walletTo.Balance += request.Amount;
+
 
                 _walletRepository.Update(walletFrom);
                 _walletRepository.Update(walletTo);

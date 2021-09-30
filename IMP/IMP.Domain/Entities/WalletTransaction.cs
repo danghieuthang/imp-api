@@ -33,6 +33,8 @@ namespace IMP.Domain.Entities
         public DateTime PayDate { get; set; }
         public int TransactionStatus { get; set; }
         public int TransactionType { get; set; }
+        public decimal? SenderBalance { get; set; }
+        public decimal? ReceiverBalance { get; set; }
         public int? SenderId { get; set; }
         public int? ReceiverId { get; set; }
 

@@ -49,41 +49,38 @@ namespace IMP.Application.Features.WalletTransactions.Commands
                     {
                         return new Response<WalletTransactionViewModel>(error: new Models.ValidationError("id", "Giao dịch này đã bị nhân viên khác xử lí."));
                     }
+
+                    // get withdraw wallet
+                    var walletRepository = UnitOfWork.Repository<Wallet>();
+                    var wallet = await walletRepository.GetByIdAsync(walletTransaction.WalletFromId.Value);
+                    if (wallet != null)
+                    {
+                        wallet.Balance -= walletTransaction.Amount;
+                        walletRepository.Update(wallet);
+                    };
+
+                    // Add evidences to transacion
                     if (request.Evidences.Count > 0)
                     {
                         walletTransaction.Evidences = JsonConvert.SerializeObject(request.Evidences);
                     }
+                    // Update transaction info
                     walletTransaction.BankId = request.BankId;
                     walletTransaction.TransactionStatus = (int)WalletTransactionStatus.Successful;
                     walletTransaction.BankTranNo = request.BankTranNo;
                     walletTransaction.PayDate = DateTime.UtcNow;
+                    walletTransaction.SenderBalance = wallet.Balance;
+
                     _walletTransactionRepository.Update(walletTransaction);
+
+                    // Commit
                     await UnitOfWork.CommitAsync();
-                    _ = await SubtractWalletAfterWithdraw(walletTransaction.WalletFromId, walletTransaction.Amount);
 
                     walletTransaction = await _walletTransactionRepository.FindSingleAsync(x => x.Id == request.Id, x => x.Sender, x => x.Receiver);
                     var walletTransactionView = Mapper.Map<WalletTransactionViewModel>(walletTransaction);
                     return new Response<WalletTransactionViewModel>(walletTransactionView);
                 }
                 return new Response<WalletTransactionViewModel>(error: new Models.ValidationError("id", "Không tồn tại."));
-            }
-
-            private async Task<bool> SubtractWalletAfterWithdraw(int? walletId, decimal amount)
-            {
-                if (!walletId.HasValue)
-                {
-                    return false;
-                }
-                var walletRepository = UnitOfWork.Repository<Wallet>();
-                var wallet = await walletRepository.GetByIdAsync(walletId.Value);
-                if (wallet != null)
-                {
-                    wallet.Balance -= amount;
-                    walletRepository.Update(wallet);
-                    await UnitOfWork.CommitAsync();
-                    return true;
-                };
-                return false;
             }
         }
     }

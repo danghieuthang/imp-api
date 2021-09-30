@@ -11,11 +11,12 @@ namespace IMP.Domain.Entities
     public class Milestone : BaseEntity
     {
         [MaxLength(256)]
-        public string Name { get; set; }
+        public string NameVi { get; set; }
+        [MaxLength(256)]
+        public string NameEn { get; set; }
 
         [MaxLength(2000)]
         public string Description { get; set; }
-
         public ICollection<CampaignMilestone> CampaignMilestones { get; set; }
     }
 }
