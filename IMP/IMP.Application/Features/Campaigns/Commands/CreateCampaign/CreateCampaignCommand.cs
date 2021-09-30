@@ -27,6 +27,7 @@ namespace IMP.Application.Features.Campaigns.Commands.CreateCampaign
         public string Title { get; set; }
         public string Description { get; set; }
         public string AdditionalInfomation { get; set; }
+        public string ProductInformation { get; set; }
         public string Reward { get; set; }
         public string ReferralWebsite { get; set; }
         public string Keywords { get; set; }

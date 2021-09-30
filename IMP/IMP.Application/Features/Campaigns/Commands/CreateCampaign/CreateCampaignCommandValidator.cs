@@ -26,7 +26,8 @@ namespace IMP.Application.Features.Campaigns.Commands.CreateCampaign
             _applicationUserRepository = unitOfWork.Repository<ApplicationUser>();
 
             this.RuleFor(c => c.Title).MustRequired(256);
-            this.RuleFor(c => c.AdditionalInfomation).MustRequired(2000);
+            this.RuleFor(c => c.AdditionalInfomation).MustMaxLength(2000);
+            this.RuleFor(c => c.ProductInformation).MustMaxLength(2000);
             this.RuleFor(c => c.Description).MustRequired(2000);
             this.RuleFor(c => c.Condition).MustRequired(2000);
             this.RuleFor(c => c.StartDate).MustValidDate();

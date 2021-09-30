@@ -28,6 +28,8 @@ namespace IMP.Domain.Entities
         [StringLength(2000)]
         public string AdditionalInformation { get; set; }
         [StringLength(2000)]
+        public string ProductInformation { get; set; }
+        [StringLength(2000)]
         public string Reward { get; set; }
         [StringLength(256)]
         public string ReferralWebsite { get; set; }

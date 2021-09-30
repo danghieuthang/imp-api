@@ -11,6 +11,7 @@ namespace IMP.Application.Models.Compaign
         public string Title { get; set; }
         public string Description { get; set; }
         public string AdditionalInformation { get; set; }
+        public string ProductInformation { get; set; }
         public string Reward { get; set; }
         public string ReferralWebsite { get; set; }
         public string Keywords { get; set; }
