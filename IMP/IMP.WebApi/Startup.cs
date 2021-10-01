@@ -4,6 +4,7 @@ using IMP.Infrastructure.Identity;
 using IMP.Infrastructure.Persistence;
 using IMP.Infrastructure.Shared;
 using IMP.WebApi.Extensions;
+using IMP.WebApi.Hangfire;
 using IMP.WebApi.Models;
 using IMP.WebApi.Services;
 using Microsoft.AspNetCore.Builder;
@@ -35,6 +36,8 @@ namespace IMP.WebApi
             services.AddApiVersioningExtension();
             services.AddHealthChecks();
             services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
+
+            services.AddHangfireExtension();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -66,6 +69,7 @@ namespace IMP.WebApi
             {
                 endpoints.MapHub<NotificationHub>("/notify");
             });
+            app.UseHangfireDashboardExtension(_config);
         }
     }
 }
