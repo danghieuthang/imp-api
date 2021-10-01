@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using IMP.Application.Enums;
 using IMP.Application.Interfaces;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
@@ -28,7 +29,10 @@ namespace IMP.Application.Features.Wallets.Queries.GetWalletByUserId
                 var wallet = await _walletRepository.FindSingleAsync(x => x.ApplicationUserId == request.ApplicationUserId);
                 if (wallet != null)
                 {
+                    bool isCanWithdraw = !await UnitOfWork.Repository<WalletTransaction>().IsExistAsync(x => x.WalletToId == wallet.Id && x.TransactionType == (int)TransactionType.Withdrawal && (x.TransactionStatus == (int)WalletTransactionStatus.New || x.TransactionStatus == (int)WalletTransactionStatus.Processing));
+
                     var walletView = Mapper.Map<WalletViewModel>(wallet);
+                    walletView.IsCanWithdraw = isCanWithdraw;
                     return new Response<WalletViewModel>(walletView);
                 }
                 return new Response<WalletViewModel>(error: new Models.ValidationError("application_user_id", "Không hợp lệ."));
