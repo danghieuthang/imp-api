@@ -30,6 +30,7 @@ namespace IMP.Application.Models.ViewModels
         public decimal? ReceiverBalance { get; set; }
         public TransactionType TransactionType { get; set; }
         public List<TransactionEvidence> Evidences { get; set; }
+        public bool IsSender => Sender != null;
     }
 
     public class TransactionUserViewModel : BaseViewModel<int>
