@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FluentValidation;
+using IMP.Application.Constants;
 using IMP.Application.Interfaces;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
@@ -24,7 +25,7 @@ namespace IMP.Application.Features.Wallets.Commands.RequestCharge
         {
             public RequestChargeWalletCommandValidator()
             {
-                RuleFor(x => x.Amount).GreaterThan(1000).WithMessage("Tiền nạp phải lớn hơn 1000 VND.");
+                RuleFor(x => x.Amount).GreaterThan(50000).WithMessage("Tiền nạp phải lớn hơn 50000 VND.").WithErrorCode(ErrorConstants.Application.WalletTransaction.AmountNotValid.ToString());
             }
         }
 

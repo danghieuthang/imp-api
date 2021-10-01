@@ -16,17 +16,19 @@ namespace IMP.Application.Wrappers
             Message = message;
             Data = data;
         }
-        public Response(string message)
+        public Response(string message, int code = 0)
         {
             Succeeded = false;
             Message = message;
             Errors = new List<ValidationError>();
+            Code = code;
         }
-        public Response(ValidationError error, string message = null)
+        public Response(ValidationError error, string message = null, int code = 0)
         {
             Succeeded = false;
             Message = message;
             Errors = new List<ValidationError> { error };
+            Code = code;
         }
         public bool Succeeded { get; set; }
         public string Message { get; set; }

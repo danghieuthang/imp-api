@@ -25,8 +25,16 @@ namespace IMP.Application.Behaviours
                 var validationResults = await Task.WhenAll(_validators.Select(v => v.ValidateAsync(context, cancellationToken)));
                 var failures = validationResults.SelectMany(r => r.Errors).Where(f => f != null).ToList();
 
+                string strCode = failures.Where(x => !string.IsNullOrEmpty(x.ErrorCode)).Select(x => x.ErrorCode).FirstOrDefault();
+                int code = 0;
+
+                if (!string.IsNullOrEmpty(strCode))
+                {
+                    _ = int.TryParse(strCode, out code);
+                };
+
                 if (failures.Count != 0)
-                    throw new Exceptions.ValidationException(failures);
+                    throw new Exceptions.ValidationException(failures, code: code);
             }
             return await next();
         }

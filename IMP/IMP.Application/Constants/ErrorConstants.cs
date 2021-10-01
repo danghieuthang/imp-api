@@ -22,5 +22,15 @@ namespace IMP.Application.Constants
             public const int RefreshTokenWasExpired = 2;
 
         }
+
+        public static class Application
+        {
+            public static class WalletTransaction
+            {
+                public const int AmountNotValid = 1;
+                public const int BalanceNotEnough = 2;
+                public const int ExistWithdrawRequest = 3;
+            }
+        }
     }
 }
