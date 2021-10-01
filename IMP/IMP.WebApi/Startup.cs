@@ -37,7 +37,7 @@ namespace IMP.WebApi
             services.AddHealthChecks();
             services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
 
-            services.AddHangfireExtension();
+            services.AddHangfireExtension(_config);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
