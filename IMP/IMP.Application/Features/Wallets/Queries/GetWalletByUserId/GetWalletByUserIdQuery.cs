@@ -29,7 +29,7 @@ namespace IMP.Application.Features.Wallets.Queries.GetWalletByUserId
                 var wallet = await _walletRepository.FindSingleAsync(x => x.ApplicationUserId == request.ApplicationUserId);
                 if (wallet != null)
                 {
-                    bool isCanWithdraw = !await UnitOfWork.Repository<WalletTransaction>().IsExistAsync(x => x.WalletToId == wallet.Id && x.TransactionType == (int)TransactionType.Withdrawal && (x.TransactionStatus == (int)WalletTransactionStatus.New || x.TransactionStatus == (int)WalletTransactionStatus.Processing));
+                    bool isCanWithdraw = !await UnitOfWork.Repository<WalletTransaction>().IsExistAsync(x => x.WalletFromId == wallet.Id && x.TransactionType == (int)TransactionType.Withdrawal && (x.TransactionStatus == (int)WalletTransactionStatus.New || x.TransactionStatus == (int)WalletTransactionStatus.Processing));
 
                     var walletView = Mapper.Map<WalletViewModel>(wallet);
                     walletView.IsCanWithdraw = isCanWithdraw;
