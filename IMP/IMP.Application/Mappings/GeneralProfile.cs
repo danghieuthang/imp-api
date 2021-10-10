@@ -87,6 +87,15 @@ namespace IMP.Application.Mappings
                   opt.MapFrom(x => CreateDynamicObjectFromItems(x.Items));
               });
             CreateMap<CreateBlockCommand, Block>();
+            CreateMap<BlockRequest, Block>().ForMember(dest => dest.Items, opt =>
+              {
+                  opt.MapFrom(x => x.Data.Properties().Select(x =>
+                  new BlockItem
+                  {
+                      Key = x.Name,
+                      Value = x.Value.ToString()
+                  }).ToList());
+              });
             CreateMap<UpdateBlockCommand, Block>();
             #endregion
 
@@ -109,6 +118,7 @@ namespace IMP.Application.Mappings
         public IDictionary<string, string> CreateDynamicObjectFromItems(ICollection<BlockItem> items)
         {
             var result = new Dictionary<string, string>();
+            if (items == null) return result;
             foreach (var item in items)
             {
                 result.Add(item.Key, item.Value);

@@ -35,7 +35,7 @@ namespace IMP.Application.Features.Blocks.Commands.CreateBlock
             RuleFor(x => x.BlockTypeId).MustExistEntityId(
                 async (id, y) => await _blockTypeRepository.IsExistAsync(id));
 
-            RuleForEach(x => x.BlockChilds).ChildRules((o) =>
+            RuleForEach(x => x.ChildBlocks).ChildRules((o) =>
             {
                 RuleFor(o => o.BlockTypeId).MustExistEntityId(async (id, y) => await _blockTypeRepository.IsExistAsync(id));
             });

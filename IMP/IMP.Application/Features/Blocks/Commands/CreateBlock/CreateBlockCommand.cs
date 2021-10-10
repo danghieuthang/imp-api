@@ -21,7 +21,7 @@ namespace IMP.Application.Features.Blocks.Commands.CreateBlock
         public string Variant { get; set; }
         public int Position { get; set; }
         public JObject Data { get; set; }
-        public List<BlockRequest> BlockChilds { get; set; }
+        public List<BlockRequest> ChildBlocks { get; set; }
     }
     public class CreateBlockRequest : BlockRequest
     {
@@ -45,16 +45,12 @@ namespace IMP.Application.Features.Blocks.Commands.CreateBlock
             {
                 var block = Mapper.Map<Block>(request);
                 block.Enable = true;
-                //Dictionary<string, string> items = (Dictionary<string, string>)CommonHelper.DictionaryFromDynamic(request.Data);
-                //block.Items = items.Keys.Select(x => new BlockItem { Key = x, Value = items[x] }).ToList();
-
-                var items = request.Data.Properties().Select(x => new BlockItem { Key = x.Name, Value = x.Value.ToString() }).ToList();
-                block.Items = items;
                 block = await _blockRepository.AddAsync(block);
                 await UnitOfWork.CommitAsync();
                 var view = Mapper.Map<BlockViewModel>(block);
                 return new Response<BlockViewModel>(view);
             }
+
         }
     }
 }

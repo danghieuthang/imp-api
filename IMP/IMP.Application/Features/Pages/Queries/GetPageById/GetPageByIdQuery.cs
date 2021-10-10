@@ -25,7 +25,11 @@ namespace IMP.Application.Features.Pages.Queries.GetPageById
             public override async Task<Response<PageViewModel>> Handle(GetPageByIdQuery request, CancellationToken cancellationToken)
             {
                 var page = await Repository.FindSingleAsync(x => x.Id == request.Id,
-                    include: x => x.Include(y => y.Blocks).ThenInclude(y => y.Items));
+                    include: x =>
+                        x.Include(page => page.Blocks)
+                            .ThenInclude(block => block.Items)
+                         .Include(y => y.Blocks)
+                            .ThenInclude(block => block.ChildBlocks));
 
                 var pageView = Mapper.Map<PageViewModel>(page);
                 return new Response<PageViewModel>(pageView);
