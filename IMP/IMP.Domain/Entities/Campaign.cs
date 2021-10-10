@@ -45,7 +45,6 @@ namespace IMP.Domain.Entities
         public ICollection<CampaignMember> CampaignMembers { get; set; }
         public ICollection<Voucher> Vouchers { get; set; }
         public ICollection<CampaignActivity> CampaignActivities { get; set; }
-        public ICollection<BlockCampaign> BlockCampaigns { get; set; }
         public ICollection<Complaint> Complaints { get; set; }
         public ICollection<CampaignMilestone> CampaignMilestones { get; set; }
         public ICollection<CampaignImage> CampaignImages { get; set; }

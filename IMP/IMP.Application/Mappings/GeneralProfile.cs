@@ -19,12 +19,11 @@ using IMP.Application.Features.Pages.Commands.CreatePage;
 using IMP.Application.Features.Pages.Commands.UpdatePage;
 using IMP.Application.Features.Blocks.Commands.CreateBlock;
 using IMP.Application.Features.Blocks.Commands.UpdateBlock;
-using IMP.Application.Features.BlockPlatforms.Commands.CreateBlockPlatform;
-using IMP.Application.Features.BlockPlatforms.Commands.UpdateBlockPlatform;
-using IMP.Application.Features.BlockCampaigns.Commands.CreateBlockCampaign;
-using IMP.Application.Features.BlockCampaigns.Commands.UpdateBlockCampaign;
 using IMP.Application.Features.Vouchers.Commands.CreateVoucher;
 using Newtonsoft.Json;
+using System.Linq;
+using System.Dynamic;
+using System.Linq.Expressions;
 
 namespace IMP.Application.Mappings
 {
@@ -82,17 +81,13 @@ namespace IMP.Application.Mappings
             CreateMap<CreatePageCommand, Page>();
             CreateMap<UpdatePageCommand, Page>();
 
-            CreateMap<Block, BlockViewModel>();
+            CreateMap<Block, BlockViewModel>()
+                .ForMember(dest => dest.Data, opt =>
+              {
+                  opt.MapFrom(x => CreateDynamicObjectFromItems(x.Items));
+              });
             CreateMap<CreateBlockCommand, Block>();
             CreateMap<UpdateBlockCommand, Block>();
-
-            CreateMap<BlockPlatform, BlockPlatformViewModel>();
-            CreateMap<CreateBlockPlatformCommand, BlockPlatform>();
-            CreateMap<UpdateBlockPlatformCommand, BlockPlatform>();
-
-            CreateMap<BlockCampaign, BlockCampaignViewModel>();
-            CreateMap<CreateBlockCampaignCommand, BlockCampaign>();
-            CreateMap<UpdateBlockCampaignCommand, BlockCampaign>();
             #endregion
 
             #region voucher
@@ -110,5 +105,16 @@ namespace IMP.Application.Mappings
             CreateMap<ApplicationUser, TransactionUserViewModel>();
             #endregion
         }
+
+        public IDictionary<string, string> CreateDynamicObjectFromItems(ICollection<BlockItem> items)
+        {
+            var result = new Dictionary<string, string>();
+            foreach (var item in items)
+            {
+                result.Add(item.Key, item.Value);
+            }
+            return result;
+        }
+
     }
 }

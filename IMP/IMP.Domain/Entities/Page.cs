@@ -14,12 +14,17 @@ namespace IMP.Domain.Entities
         public int InfluencerId { get; set; }
         public ApplicationUser Influencer { get; set; }
 
-        [MaxLength(256)]
-        public string Title { get; set; }
-        [MaxLength(256)]
-        public string BackgroundPhoto { get; set; }
-        public int PositionPage { get; set; }
-
+        [StringLength(256)]
+        public string BackgroundType { get; set; }
+        public int FontSize { get; set; }
+        [StringLength(256)]
+        public string Background { get; set; }
+        [StringLength(256)]
+        public string BioLink { get; set; }
+        [StringLength(256)]
+        public string FontFamily { get; set; }
+        [StringLength(256)]
+        public string TextColor { get; set; }
         public ICollection<Block> Blocks { get; set; }
     }
 }

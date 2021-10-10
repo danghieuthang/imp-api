@@ -8,9 +8,12 @@ namespace IMP.Application.Models.ViewModels
 {
     public class PageViewModel : BaseViewModel<int>
     {
-        public int InfluencerId { get; set; }
-        public string Title { get; set; }
-        public string BackgroundPhoto { get; set; }
-        public int PositionPage { get; set; }
+        public string BackgroundType { get; set; }
+        public int FontSize { get; set; }
+        public string Background { get; set; }
+        public string BioLink { get; set; }
+        public string FontFamily { get; set; }
+        public string TextColor { get; set; }
+        public List<BlockViewModel> Blocks { get; set; }
     }
 }

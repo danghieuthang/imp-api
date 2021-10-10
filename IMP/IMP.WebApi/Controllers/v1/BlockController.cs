@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using IMP.Application.Features.BlockCampaigns.Queries.GetAllBlockCampaignByBlockId;
-using IMP.Application.Features.BlockPlatforms.Queries.GetAllBlockPlatformByBlockId;
 using IMP.Application.Features.Blocks.Commands.CreateBlock;
 using IMP.Application.Features.Blocks.Commands.DeleteBlock;
 using IMP.Application.Features.Blocks.Commands.UpdateBlock;
@@ -23,31 +21,6 @@ namespace IMP.WebApi.Controllers.v1
         public BlockController(IAuthenticatedUserService authenticatedUserService)
         {
             _appId = authenticatedUserService.ApplicationUserId;
-        }
-        /// <summary>
-        /// Get all block platform of a block
-        /// </summary>
-        /// <param name="id">The block id</param>
-        /// <returns></returns>
-        [ProducesResponseType(typeof(Response<IEnumerable<BlockPlatformViewModel>>), 200)]
-        [HttpGet("{id}/block-platforms")]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetBlockPlatform([FromRoute] int id)
-        {
-            return Ok(await Mediator.Send(new GetAllBlockPlatformByBlockIdQuery { BlockId = id }));
-        }
-
-        /// <summary>
-        /// Get all block campaign of block
-        /// </summary>
-        /// <param name="id">The id of block campaign</param>
-        /// <returns></returns>
-        [AllowAnonymous]
-        [ProducesResponseType(typeof(Response<IEnumerable<BlockCampaignViewModel>>), 200)]
-        [HttpGet("{id}/block-campaigns")]
-        public async Task<IActionResult> GetBlockCampaign([FromRoute] int id)
-        {
-            return Ok(await Mediator.Send(new GetAllBlockCampaignByBlockIdQuery { BlockId = id }));
         }
 
         /// <summary>

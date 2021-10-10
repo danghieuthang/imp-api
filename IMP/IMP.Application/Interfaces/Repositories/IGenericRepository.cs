@@ -22,6 +22,7 @@ namespace IMP.Application.Interfaces
         Task<TEntity> GetByIdAsync(TKey id);
         Task<TEntity> GetByIdAsync(TKey id, List<string> includeProperties);
         Task<TEntity> FindSingleAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includeProperties);
+        Task<TEntity> FindSingleAsync(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null);
         Task<IReadOnlyList<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includeProperties);
         Task<bool> IsExistAsync(TKey id);
         Task<bool> IsExistAsync(Expression<Func<TEntity, bool>> predicate);

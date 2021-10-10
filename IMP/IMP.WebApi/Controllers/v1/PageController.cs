@@ -6,6 +6,7 @@ using IMP.Application.Features.Pages.Commands.CreatePage;
 using IMP.Application.Features.Pages.Commands.DeletePage;
 using IMP.Application.Features.Pages.Commands.UpdatePage;
 using IMP.Application.Features.Pages.Queries.GetAllPageOfInfluencer;
+using IMP.Application.Features.Pages.Queries.GetPageById;
 using IMP.Application.Interfaces;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
@@ -37,6 +38,21 @@ namespace IMP.WebApi.Controllers.v1
             int id = 0;
             int.TryParse(_authenticatedUserService.AppId, out id);
             return Ok(await Mediator.Send(new GetAllPageOfInfluencerQuery { InfluencerId = id }));
+        }
+
+        /// <summary>
+        /// Get page by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<PageViewModel>), 200)]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new GetPageByIdQuery
+            {
+                Id = id
+            }));
         }
 
         /// <summary>

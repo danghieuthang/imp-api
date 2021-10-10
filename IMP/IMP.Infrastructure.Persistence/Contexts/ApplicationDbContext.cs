@@ -31,8 +31,6 @@ namespace IMP.Infrastructure.Persistence.Contexts
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<ApplicantHistory> ApplicantHistories { get; set; }
         public DbSet<Block> Blocks { get; set; }
-        public DbSet<BlockCampaign> BlockCampaigns { get; set; }
-        public DbSet<BlockPlatform> BlockPlatforms { get; set; }
         public DbSet<BlockType> BlockTypes { get; set; }
         public DbSet<Campaign> Campaigns { get; set; }
         public DbSet<CampaignActivity> CampaignActivities { get; set; }

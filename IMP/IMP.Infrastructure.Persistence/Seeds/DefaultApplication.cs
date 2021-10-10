@@ -23,10 +23,47 @@ namespace IMP.Infrastructure.Persistence.Seeds
             //await Task.WhenAll(tasks);
 
             await SeedBankAsync(unitOfWork);
+            await SeedBlockTypeAsync(unitOfWork);
             await DefaultLocation.SeedLocationAsync(unitOfWork);
             await DefaultMileStone.SeedMilestonesAsync(unitOfWork);
 
         }
+        public static async Task SeedBlockTypeAsync(IUnitOfWork unitOfWork)
+        {
+            var blockTypeRepository = unitOfWork.Repository<BlockType>();
+            var blockTypes = await blockTypeRepository.GetAllAsync();
+            if (blockTypes.Count == 0)
+            {
+                var blockTypesDefault = new List<BlockType>{
+                    new BlockType{
+                        Name="Header Block",
+                    },
+                    new BlockType{
+                        Name="Quote Block",
+                    },
+                    new BlockType{
+                        Name="Link Block",
+                    },new BlockType{
+                        Name="Youtube Block",
+                    }
+                    ,new BlockType{
+                        Name="Image Block",
+                    }
+                    ,new BlockType{
+                        Name="Product Block",
+                    },new BlockType{
+                        Name="Voucher Block",
+                    },new BlockType{
+                        Name="Text Block",
+                    },new BlockType{
+                        Name="Text Social",
+                    }
+                };
+                await blockTypeRepository.AddManyAsync(blockTypesDefault);
+                await unitOfWork.CommitAsync();
+            }
+        }
+
         public static async Task SeedBankAsync(IUnitOfWork unitOfWork)
         {
             var bankRepository = unitOfWork.Repository<Bank>();

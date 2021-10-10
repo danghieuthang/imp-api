@@ -272,6 +272,12 @@ namespace IMP.Infrastructure.EfCore.Repositories
             }
             return await GetAll().Where(predicate).CountAsync();
         }
+
+        public async Task<TEntity> FindSingleAsync(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null)
+        {
+            var query = GetAll(predicate: predicate, include: include);
+            return await query.AsNoTracking().FirstOrDefaultAsync();
+        }
     }
 
     /// <summary>

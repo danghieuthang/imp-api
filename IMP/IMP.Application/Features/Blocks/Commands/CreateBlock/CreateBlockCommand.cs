@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -7,25 +8,30 @@ using IMP.Application.Wrappers;
 using IMP.Domain.Entities;
 using MediatR;
 using Newtonsoft.Json;
+using IMP.Application.Extensions;
+using IMP.Application.Helpers;
+using System.Linq;
+using Newtonsoft.Json.Linq;
 
 namespace IMP.Application.Features.Blocks.Commands.CreateBlock
 {
-    public class CreateBlockCommand : ICommand<BlockViewModel>
+    public class BlockRequest
     {
-        public int PageId { get; set; }
         public int BlockTypeId { get; set; }
-        public int? ParentId { get; set; }
-        public string Title { get; set; }
-        public string Avatar { get; set; }
-        public string Bio { get; set; }
-        public string Location { get; set; }
-        public string Text { get; set; }
-        public string TextArea { get; set; }
-        public string ImageUrl { get; set; }
-        public string VideoUrl { get; set; }
+        public string Variant { get; set; }
         public int Position { get; set; }
+        public JObject Data { get; set; }
+        public List<BlockRequest> BlockChilds { get; set; }
+    }
+    public class CreateBlockRequest : BlockRequest
+    {
         [JsonIgnore]
         public int InfluencerId { get; set; }
+        public int PageId { get; set; }
+    }
+
+    public class CreateBlockCommand : CreateBlockRequest, ICommand<BlockViewModel>
+    {
 
         public class CreateBlockCommandHandler : CommandHandler<CreateBlockCommand, BlockViewModel>
         {
@@ -38,7 +44,12 @@ namespace IMP.Application.Features.Blocks.Commands.CreateBlock
             public override async Task<Response<BlockViewModel>> Handle(CreateBlockCommand request, CancellationToken cancellationToken)
             {
                 var block = Mapper.Map<Block>(request);
-                block.IsActived = true;
+                block.Enable = true;
+                //Dictionary<string, string> items = (Dictionary<string, string>)CommonHelper.DictionaryFromDynamic(request.Data);
+                //block.Items = items.Keys.Select(x => new BlockItem { Key = x, Value = items[x] }).ToList();
+
+                var items = request.Data.Properties().Select(x => new BlockItem { Key = x.Name, Value = x.Value.ToString() }).ToList();
+                block.Items = items;
                 block = await _blockRepository.AddAsync(block);
                 await UnitOfWork.CommitAsync();
                 var view = Mapper.Map<BlockViewModel>(block);
