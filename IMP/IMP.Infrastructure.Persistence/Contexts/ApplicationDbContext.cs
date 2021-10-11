@@ -31,6 +31,7 @@ namespace IMP.Infrastructure.Persistence.Contexts
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<ApplicantHistory> ApplicantHistories { get; set; }
         public DbSet<Block> Blocks { get; set; }
+        public DbSet<BlockItem> BlockItems { get; set; }
         public DbSet<BlockType> BlockTypes { get; set; }
         public DbSet<Campaign> Campaigns { get; set; }
         public DbSet<CampaignActivity> CampaignActivities { get; set; }
@@ -97,27 +98,27 @@ namespace IMP.Infrastructure.Persistence.Contexts
 
             //Application User
             //builder.Entity<ApplicationUser>().HasIndex("UserName").IsUnique();
-            
-            builder.Entity<WalletTransaction>()
-                    .HasOne<Wallet>(wt=>wt.WalletFrom)
-                    .WithMany(w=>w.FromTransactions)
-                    .HasForeignKey(wt=>wt.WalletFromId);
 
             builder.Entity<WalletTransaction>()
-                    .HasOne<Wallet>(wt=>wt.WalletTo)
-                    .WithMany(w=>w.ToTransactions)
-                    .HasForeignKey(wt=>wt.WalletToId);
+                    .HasOne<Wallet>(wt => wt.WalletFrom)
+                    .WithMany(w => w.FromTransactions)
+                    .HasForeignKey(wt => wt.WalletFromId);
 
             builder.Entity<WalletTransaction>()
-                    .HasOne<ApplicationUser>(wt=>wt.Sender)
-                    .WithMany(a=>a.TransactionsSent)
-                    .HasForeignKey(wt=>wt.SenderId);
+                    .HasOne<Wallet>(wt => wt.WalletTo)
+                    .WithMany(w => w.ToTransactions)
+                    .HasForeignKey(wt => wt.WalletToId);
 
-             builder.Entity<WalletTransaction>()
-                    .HasOne<ApplicationUser>(wt=>wt.Receiver)
-                    .WithMany(a=>a.TransactionsReceived)
-                    .HasForeignKey(wt=>wt.ReceiverId);
-            
+            builder.Entity<WalletTransaction>()
+                    .HasOne<ApplicationUser>(wt => wt.Sender)
+                    .WithMany(a => a.TransactionsSent)
+                    .HasForeignKey(wt => wt.SenderId);
+
+            builder.Entity<WalletTransaction>()
+                   .HasOne<ApplicationUser>(wt => wt.Receiver)
+                   .WithMany(a => a.TransactionsReceived)
+                   .HasForeignKey(wt => wt.ReceiverId);
+
             base.OnModelCreating(builder);
         }
     }

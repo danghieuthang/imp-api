@@ -82,14 +82,14 @@ namespace IMP.Application.Mappings
             CreateMap<UpdatePageCommand, Page>();
 
             CreateMap<Block, BlockViewModel>()
-                .ForMember(dest => dest.Data, opt =>
+                .ForMember(dest => dest.Items, opt =>
               {
                   opt.MapFrom(x => CreateDynamicObjectFromItems(x.Items));
               });
             CreateMap<CreateBlockCommand, Block>();
             CreateMap<BlockRequest, Block>().ForMember(dest => dest.Items, opt =>
               {
-                  opt.MapFrom(x => x.Data.Properties().Select(x =>
+                  opt.MapFrom(x => x.Items.Properties().Select(x =>
                   new BlockItem
                   {
                       Key = x.Name,

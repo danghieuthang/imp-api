@@ -13,7 +13,7 @@ namespace IMP.Application.Models.ViewModels
         public string Variant { get; set; }
         public int Position { get; set; }
         public bool Enable { get; set; }
-        public dynamic Data { get; set; }
+        public dynamic Items { get; set; }
         public List<BlockViewModel> ChildBlocks { get; set; }
     }
 
