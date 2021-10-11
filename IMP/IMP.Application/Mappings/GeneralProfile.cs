@@ -9,9 +9,7 @@ using IMP.Application.Features.CampaignTypes.Commands.UpdateCampaignType;
 using IMP.Application.Features.Platforms.Commands.CreatePlatform;
 using IMP.Application.Features.Platforms.Commands.UpdatePlatform;
 using IMP.Domain.Entities;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using IMP.Application.Features.InfluencerPlatforms.Commands.CreateInfluencerPlatform;
 using IMP.Application.Features.InfluencerPlatforms.Commands.UpdateInlfuencerPlatform;
 using IMP.Application.Features.ApplicationUsers.Commands.UpdateUserInfomation;
@@ -20,10 +18,7 @@ using IMP.Application.Features.Pages.Commands.UpdatePage;
 using IMP.Application.Features.Blocks.Commands.CreateBlock;
 using IMP.Application.Features.Blocks.Commands.UpdateBlock;
 using IMP.Application.Features.Vouchers.Commands.CreateVoucher;
-using Newtonsoft.Json;
 using System.Linq;
-using System.Dynamic;
-using System.Linq.Expressions;
 
 namespace IMP.Application.Mappings
 {
@@ -82,14 +77,14 @@ namespace IMP.Application.Mappings
             CreateMap<UpdatePageCommand, Page>();
 
             CreateMap<Block, BlockViewModel>()
-                .ForMember(dest => dest.Items, opt =>
+                .ForMember(dest => dest.Data, opt =>
               {
                   opt.MapFrom(x => CreateDynamicObjectFromItems(x.Items));
               });
             CreateMap<CreateBlockCommand, Block>();
             CreateMap<BlockRequest, Block>().ForMember(dest => dest.Items, opt =>
               {
-                  opt.MapFrom(x => x.Items.Properties().Select(x =>
+                  opt.MapFrom(x => x.Data.Properties().Select(x =>
                   new BlockItem
                   {
                       Key = x.Name,
@@ -109,7 +104,7 @@ namespace IMP.Application.Mappings
             CreateMap<Wallet, WalletViewModel>();
             CreateMap<WalletTransaction, WalletTransactionViewModel>().ForMember(x => x.Evidences, o =>
             {
-                o.MapFrom(x => JsonConvert.DeserializeObject<List<TransactionEvidence>>(x.Evidences));
+                o.MapFrom(x => Newtonsoft.Json.JsonConvert.DeserializeObject<List<TransactionEvidence>>(x.Evidences));
             });
             CreateMap<ApplicationUser, TransactionUserViewModel>();
             #endregion

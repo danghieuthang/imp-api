@@ -20,7 +20,8 @@ namespace IMP.Application.Features.Blocks.Commands.CreateBlock
         public int BlockTypeId { get; set; }
         public string Variant { get; set; }
         public int Position { get; set; }
-        public JObject Items { get; set; }
+        [JsonProperty("items")]
+        public JObject Data { get; set; }
         public List<BlockRequest> ChildBlocks { get; set; }
     }
     public class CreateBlockRequest : BlockRequest

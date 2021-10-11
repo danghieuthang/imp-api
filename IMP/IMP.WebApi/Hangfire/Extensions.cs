@@ -11,8 +11,8 @@ namespace IMP.WebApi.Hangfire
 {
     public static class Extensions
     {
-        private static ICampaignService ICampaignService;
-        private static BackgroundJobs jobSchedule = new(ICampaignService);
+        private static readonly ICampaignService ICampaignService;
+        private static readonly BackgroundJobs jobSchedule = new(ICampaignService);
 
         public static void AddHangfireExtension(this IServiceCollection services, IConfiguration configuration)
         {

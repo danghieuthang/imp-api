@@ -5,6 +5,7 @@ using IMP.Domain.Common;
 
 namespace IMP.Domain.Entities
 {
+    [Table("BlockItems")]
     public class BlockItem : BaseEntity
     {
         [StringLength(256)]

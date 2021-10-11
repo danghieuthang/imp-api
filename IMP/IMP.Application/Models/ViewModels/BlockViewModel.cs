@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IMP.Application.Models.Compaign;
+using Newtonsoft.Json;
 
 namespace IMP.Application.Models.ViewModels
 {
@@ -13,7 +14,8 @@ namespace IMP.Application.Models.ViewModels
         public string Variant { get; set; }
         public int Position { get; set; }
         public bool Enable { get; set; }
-        public dynamic Items { get; set; }
+        [JsonProperty("items")]
+        public dynamic Data { get; set; }
         public List<BlockViewModel> ChildBlocks { get; set; }
     }
 
