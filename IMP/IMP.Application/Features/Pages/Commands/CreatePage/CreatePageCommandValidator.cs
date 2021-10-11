@@ -18,8 +18,7 @@ namespace IMP.Application.Features.Pages.Commands.CreatePage
         {
             _applicationUserRepository = unitOfWork.Repository<ApplicationUser>();
 
-            //RuleFor(x => x.Title).MustRequired(256);
-            //RuleFor(x => x.BackgroundPhoto).MustValidUrl();
+            RuleFor(x => x.BackgroundType).MustRequired(256);
             RuleFor(x => x.InfluencerId).MustExistEntityId(IsExistUser);
         }
 

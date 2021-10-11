@@ -15,9 +15,12 @@ namespace IMP.Application.Features.Pages.Commands.UpdatePage
         public int Id { get; set; }
         [JsonIgnore]
         public int InfluencerId { get; set; }
-        public string Title { get; set; }
-        public string BackgroundPhoto { get; set; }
-        public int PositionPage { get; set; }
+        public string BackgroundType { get; set; }
+        public int FontSize { get; set; }
+        public string Background { get; set; }
+        //public string BioLink { get; set; }
+        public string FontFamily { get; set; }
+        public string TextColor { get; set; }
         public class UpdatePageCommandHandler : IRequestHandler<UpdatePageCommand, Response<PageViewModel>>
         {
             private readonly IUnitOfWork _unitOfWork;

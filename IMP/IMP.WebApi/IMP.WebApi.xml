@@ -82,6 +82,12 @@
 			</summary>
 			<returns></returns>
 		</member>
+		<member name="M:IMP.WebApi.Controllers.AccountController.CheckExpire">
+			<summary>
+				Check jwt is expired
+			</summary>
+			<returns></returns>
+		</member>
 		<member name="M:IMP.WebApi.Controllers.MetaController.Info">
 			<summary>
 				Check api info
@@ -92,42 +98,6 @@
 			<summary>
 				Get list banking
 			</summary>
-			<returns></returns>
-		</member>
-		<member name="M:IMP.WebApi.Controllers.v1.BlockCampaignController.Create(IMP.Application.Features.BlockCampaigns.Commands.CreateBlockCampaign.CreateBlockCampaignCommand)">
-			<summary>
-				Create new a block campaign
-			</summary>
-			<param name="command">The Create Block Campaign Command</param>
-			<returns></returns>
-		</member>
-		<member name="M:IMP.WebApi.Controllers.v1.BlockCampaignController.Update(System.Int32,IMP.Application.Features.BlockCampaigns.Commands.UpdateBlockCampaign.UpdateBlockCampaignCommand)">
-			<summary>
-				Update a block campaign
-			</summary>
-			<param name="id">The id of campaign</param>
-			<param name="command">The Update Block Campaign Command</param>
-			<returns></returns>
-		</member>
-		<member name="M:IMP.WebApi.Controllers.v1.BlockCampaignController.Delete(System.Int32)">
-			<summary>
-				Delete a block campaign by id
-			</summary>
-			<param name="id">The block campaign id</param>
-			<returns></returns>
-		</member>
-		<member name="M:IMP.WebApi.Controllers.v1.BlockController.GetBlockPlatform(System.Int32)">
-			<summary>
-				Get all block platform of a block
-			</summary>
-			<param name="id">The block id</param>
-			<returns></returns>
-		</member>
-		<member name="M:IMP.WebApi.Controllers.v1.BlockController.GetBlockCampaign(System.Int32)">
-			<summary>
-				Get all block campaign of block
-			</summary>
-			<param name="id">The id of block campaign</param>
 			<returns></returns>
 		</member>
 		<member name="M:IMP.WebApi.Controllers.v1.BlockController.Create(IMP.Application.Features.Blocks.Commands.CreateBlock.CreateBlockCommand)">
@@ -150,28 +120,6 @@
 				Delete a block
 			</summary>
 			<param name="id">The block id</param>
-			<returns></returns>
-		</member>
-		<member name="M:IMP.WebApi.Controllers.v1.BlockPlatformController.Create(IMP.Application.Features.BlockPlatforms.Commands.CreateBlockPlatform.CreateBlockPlatformCommand)">
-			<summary>
-				Create a new block platoform
-			</summary>
-			<param name="command">The Create Block Platform Command</param>
-			<returns></returns>
-		</member>
-		<member name="M:IMP.WebApi.Controllers.v1.BlockPlatformController.Create(System.Int32,IMP.Application.Features.BlockPlatforms.Commands.UpdateBlockPlatform.UpdateBlockPlatformCommand)">
-			<summary>
-				Update a block platform
-			</summary>
-			<param name="id">The id of block platform</param>
-			<param name="command">The Update Block Platform Command</param>
-			<returns></returns>
-		</member>
-		<member name="M:IMP.WebApi.Controllers.v1.BlockPlatformController.Delete(System.Int32)">
-			<summary>
-				Delete a block platform by id
-			</summary>
-			<param name="id">The id of block platform</param>
 			<returns></returns>
 		</member>
 		<member name="M:IMP.WebApi.Controllers.v1.CampaignController.GetCampaigns(IMP.Application.Features.Campaigns.Queries.GetAllCampaigns.GetAllCampaignQuery)">
@@ -287,10 +235,30 @@
 			<param name="command">The Verify Influencer Platform Command</param>
 			<returns></returns>
 		</member>
+		<member name="M:IMP.WebApi.Controllers.v1.MilestoneController.Get">
+			<summary>
+				Get all milestones
+			</summary>
+			<returns></returns>
+		</member>
 		<member name="M:IMP.WebApi.Controllers.v1.PageController.Get">
 			<summary>
 				Get all page of authenticated user
 			</summary>
+			<returns></returns>
+		</member>
+		<member name="M:IMP.WebApi.Controllers.v1.PageController.Get(System.Int32)">
+			<summary>
+				Get page by id
+			</summary>
+			<param name="id"></param>
+			<returns></returns>
+		</member>
+		<member name="M:IMP.WebApi.Controllers.v1.PageController.Get(System.String)">
+			<summary>
+				Get page by bio link
+			</summary>
+			<param name="biolink">The bio link</param>
 			<returns></returns>
 		</member>
 		<member name="M:IMP.WebApi.Controllers.v1.PageController.GetBlockByPage(System.Int32)">
@@ -480,6 +448,7 @@
 				Cancel a transaction has status is Processing. Only for Administrator or owner of transaction
 			</summary>
 			<param name="id"></param>
+			<param name="command">The Cancel Wallet Tranaction Command</param>
 			<returns></returns>
 		</member>
 		<member name="M:IMP.WebApi.Controllers.v1.WalletTransactionController.Create(IMP.Application.Features.WalletTransactions.Commands.CreateWalletTransaction.CreateWalletTransactionCommand)">

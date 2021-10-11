@@ -23,8 +23,8 @@ namespace IMP.Application.Features.Pages.Commands.UpdatePage
               {
                   return await _applicationUserRepository.IsExistAsync(x);
               });
-            RuleFor(x => x.BackgroundPhoto).MustValidUrl();
-            RuleFor(x => x.Title).MustRequired(256);
+            // RuleFor(x => x.BackgroundPhoto).MustValidUrl();
+            // RuleFor(x => x.Title).MustRequired(256);
         }
     }
 }

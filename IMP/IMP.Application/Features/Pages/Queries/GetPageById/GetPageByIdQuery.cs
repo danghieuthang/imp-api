@@ -16,6 +16,7 @@ namespace IMP.Application.Features.Pages.Queries.GetPageById
     public class GetPageByIdQuery : IGetByIdQuery<Page, PageViewModel>
     {
         public int Id { get; set; }
+        public string BioLink { get; set; }
         public class GetPageByIdQueryHandler : GetByIdQueryHandler<GetPageByIdQuery, Page, PageViewModel>
         {
             public GetPageByIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
@@ -24,7 +25,8 @@ namespace IMP.Application.Features.Pages.Queries.GetPageById
 
             public override async Task<Response<PageViewModel>> Handle(GetPageByIdQuery request, CancellationToken cancellationToken)
             {
-                var page = await Repository.FindSingleAsync(x => x.Id == request.Id,
+                var page = await Repository.FindSingleAsync(
+                    predicate: x => (request.BioLink == null && x.Id == request.Id) || (request.BioLink != null && x.BioLink == request.BioLink),
                     include: x =>
                         x.Include(page => page.Blocks)
                             .ThenInclude(block => block.Items)

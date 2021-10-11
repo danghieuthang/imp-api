@@ -54,6 +54,21 @@ namespace IMP.WebApi.Controllers.v1
                 Id = id
             }));
         }
+        /// <summary>
+        /// Get page by bio link
+        /// </summary>
+        /// <param name="biolink">The bio link</param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<PageViewModel>), 200)]
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> Get([FromQuery] string biolink)
+        {
+            return Ok(await Mediator.Send(new GetPageByIdQuery
+            {
+                BioLink = biolink
+            }));
+        }
 
         /// <summary>
         /// Get all block of page
