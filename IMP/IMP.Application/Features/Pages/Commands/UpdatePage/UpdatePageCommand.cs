@@ -12,6 +12,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System;
+using IMP.Application.Helpers;
 
 namespace IMP.Application.Features.Pages.Commands.UpdatePage
 {
@@ -23,6 +25,7 @@ namespace IMP.Application.Features.Pages.Commands.UpdatePage
         public int Position { get; set; }
         [JsonProperty("items")]
         public JObject Data { get; set; }
+        public bool Enable { get; set; }
         public List<UpdateBlockRequest> ChildBlocks { get; set; }
     }
     public class UpdatePageCommand : ICommand<PageViewModel>
@@ -33,7 +36,7 @@ namespace IMP.Application.Features.Pages.Commands.UpdatePage
         public string BackgroundType { get; set; }
         public int FontSize { get; set; }
         public string Background { get; set; }
-        //public string BioLink { get; set; }
+        public string BioLink { get; set; }
         public string FontFamily { get; set; }
         public string TextColor { get; set; }
         public List<UpdateBlockRequest> Blocks { get; set; }
@@ -70,18 +73,32 @@ namespace IMP.Application.Features.Pages.Commands.UpdatePage
                     //                .ThenInclude(block => block.ChildBlocks).ThenInclude(x => x.Items));
 
                     //await UpdatePage(pageDomain);
+                    if (string.IsNullOrEmpty(pageRequest.BioLink))
+                    {
+                        pageRequest.BioLink = pageDomain.BioLink;
+                    }
 
                     _pageRepository.Update(pageRequest);
                     await UnitOfWork.CommitAsync();
 
-                    var view = Mapper.Map<PageViewModel>(pageDomain);
+                    var view = Mapper.Map<PageViewModel>(pageRequest);
                     return new Response<PageViewModel>(view);
                 }
                 return new Response<PageViewModel>(error: new Models.ValidationError("id", "KHông tồn tại."));
 
-
             }
-
+            private async Task<string> GenerateBioLink()
+            {
+                var random = new Random();
+                // random biolink length
+                int size = random.Next(10, 15);
+                string biolink = StringHelper.RandomString(size: size, lowerCase: true);
+                while (await _pageRepository.IsExistAsync(x => x.BioLink == biolink))
+                {
+                    biolink = StringHelper.RandomString(size: size, lowerCase: true);
+                }
+                return biolink;
+            }
             public async Task UpdatePage(Page page)
             {
                 foreach (var block in page.Blocks)

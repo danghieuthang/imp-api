@@ -34,6 +34,16 @@ namespace IMP.Application.Features.Pages.Commands.UpdatePage
                 if (y.Id == 0) return true;
                 return await _blockRepository.IsExistAsync(y.Id);
             }).WithMessage("'{PropertyValue}' không tồn tại.").WithErrorCode(errorCode: ErrorConstants.Application.Page.BlockIdNotValid.ToString());
+
+            RuleFor(x => x.BioLink).MustValidNickname(message: "Không hợp lệ").WithErrorCode(errorCode: ErrorConstants.Application.Page.BioLinkNotValid.ToString())
+                .MustAsync(async (x, y, z) =>
+            {
+                if (string.IsNullOrEmpty(y))
+                {
+                    return true;
+                }
+                return !await _pageRepository.IsExistAsync(predicate: page => page.BioLink == y && page.Id != x.Id);
+            }).WithMessage("Đã tồn tại.").WithErrorCode(errorCode: ErrorConstants.Application.Page.BioLinkNotValid.ToString());
         }
     }
 }

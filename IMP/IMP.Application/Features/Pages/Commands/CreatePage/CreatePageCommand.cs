@@ -21,7 +21,7 @@ namespace IMP.Application.Features.Pages.Commands.CreatePage
         public string BackgroundType { get; set; }
         public int FontSize { get; set; }
         public string Background { get; set; }
-        //public string BioLink { get; set; }
+        public string BioLink { get; set; }
         public string FontFamily { get; set; }
         public string TextColor { get; set; }
 
@@ -37,7 +37,10 @@ namespace IMP.Application.Features.Pages.Commands.CreatePage
             {
 
                 var entity = Mapper.Map<Page>(request);
-                entity.BioLink = await GenerateBioLink();
+                if (string.IsNullOrEmpty(entity.BioLink))
+                {
+                    entity.BioLink = await GenerateBioLink();
+                }
                 entity = await _pageRepository.AddAsync(entity);
                 await UnitOfWork.CommitAsync();
                 var view = Mapper.Map<PageViewModel>(entity);

@@ -34,6 +34,8 @@ namespace IMP.Application.Constants
             public static class Page
             {
                 public const int BlockIdNotValid = 1;
+                public const int BioLinkDuplicate = 2;
+                public const int BioLinkNotValid = 2;
             }
         }
     }
