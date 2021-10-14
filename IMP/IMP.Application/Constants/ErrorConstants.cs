@@ -35,7 +35,7 @@ namespace IMP.Application.Constants
             {
                 public const int BlockIdNotValid = 1;
                 public const int BioLinkDuplicate = 2;
-                public const int BioLinkNotValid = 2;
+                public const int BioLinkNotValid = 3;
             }
         }
     }
