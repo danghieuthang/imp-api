@@ -96,6 +96,7 @@ namespace IMP.Application.Interfaces
         Task<TEntity> AddAsync(TEntity entity);
         Task AddManyAsync(IEnumerable<TEntity> entities);
         void Update(TEntity entity);
+        void Update(TEntity newEntity, TEntity existingEntity);
         void Delete(TEntity entity);
         void Dispose();
     }

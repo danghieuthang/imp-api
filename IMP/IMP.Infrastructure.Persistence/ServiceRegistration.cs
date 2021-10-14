@@ -22,9 +22,11 @@ namespace IMP.Infrastructure.Persistence
             else
             {
                 services.AddDbContext<ApplicationDbContext>(options =>
-               options.UseSqlServer(
-                   configuration.GetConnectionString("DefaultConnection"),
-                   b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+                {
+                    options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName));
+                    options.EnableSensitiveDataLogging();
+                }
+               );
             }
             #region Repositories and UnitOfWork
             services.AddDefaultUnitOfWork<ApplicationDbContext>();

@@ -31,6 +31,10 @@ namespace IMP.Application.Constants
                 public const int BalanceNotEnough = 2;
                 public const int ExistWithdrawRequest = 3;
             }
+            public static class Page
+            {
+                public const int BlockIdNotValid = 1;
+            }
         }
     }
 }

@@ -69,7 +69,23 @@ namespace IMP.Infrastructure.EfCore.Repositories
 
         public void Update(TEntity entity)
         {
-            _dbContext.Entry(entity).State = EntityState.Modified;
+            var local = _dbContext.Set<TEntity>()
+                            .Local
+                            .FirstOrDefault(entry => entry.Id.Equals(entity.Id));
+
+            // check if local is not null 
+            if (local != null)
+            {
+                // detach
+                _dbContext.Entry(local).State = EntityState.Detached;
+            }
+            _dbContext.Update<TEntity>(entity);
+            //_dbContext.Entry(entity).State = EntityState.Modified;
+        }
+
+        public void Update(TEntity newEntity, TEntity existingEntity)
+        {
+            _dbContext.InsertUpdateOrDeleteGraph(newEntity: newEntity, existingEntity: existingEntity);
         }
 
         public void Delete(TEntity entity)

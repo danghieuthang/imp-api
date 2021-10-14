@@ -91,6 +91,15 @@ namespace IMP.Application.Mappings
                       Value = x.Value.ToString()
                   }).ToList());
               });
+            CreateMap<UpdateBlockRequest, Block>().ForMember(dest => dest.Items, opt =>
+            {
+                opt.MapFrom(x => x.Data.Properties().Select(x =>
+                new BlockItem
+                {
+                    Key = x.Name,
+                    Value = x.Value.ToString()
+                }).ToList());
+            });
             CreateMap<UpdateBlockCommand, Block>();
             #endregion
 

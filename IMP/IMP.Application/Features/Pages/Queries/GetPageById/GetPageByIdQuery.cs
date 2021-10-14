@@ -27,11 +27,11 @@ namespace IMP.Application.Features.Pages.Queries.GetPageById
             {
                 var page = await Repository.FindSingleAsync(
                     predicate: x => (request.BioLink == null && x.Id == request.Id) || (request.BioLink != null && x.BioLink == request.BioLink),
-                    include: x =>
-                        x.Include(page => page.Blocks)
+                    include: pages =>
+                        pages.Include(page => page.Blocks)
                             .ThenInclude(block => block.Items)
                          .Include(y => y.Blocks)
-                            .ThenInclude(block => block.ChildBlocks));
+                            .ThenInclude(block => block.ChildBlocks).ThenInclude(x=>x.Items));
 
                 var pageView = Mapper.Map<PageViewModel>(page);
                 return new Response<PageViewModel>(pageView);
