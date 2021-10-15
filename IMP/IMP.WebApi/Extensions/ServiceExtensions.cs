@@ -103,14 +103,15 @@ namespace IMP.WebApi.Extensions
                    builder =>
                    {
                        builder.AllowAnyMethod()
-                       .AllowAnyOrigin()
+                       .WithOrigins("http://localhost:3000")
+                       .WithOrigins("http://192.168.43.2:3000")
                        .AllowAnyHeader()
                        .AllowCredentials();
-
                    });
             });
         }
-        public static void AddSignalRExtension(this IServiceCollection services){
+        public static void AddSignalRExtension(this IServiceCollection services)
+        {
             services.AddSignalR();
             services.AddScoped<IInvokeNotificationHub, InvokeNotificationHub>();
         }
