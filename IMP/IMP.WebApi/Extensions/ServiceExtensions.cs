@@ -104,7 +104,9 @@ namespace IMP.WebApi.Extensions
                    {
                        builder.AllowAnyMethod()
                        .AllowAnyOrigin()
-                       .AllowAnyHeader();
+                       .AllowAnyHeader()
+                       .AllowCredentials();
+
                    });
             });
         }
