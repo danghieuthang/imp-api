@@ -41,6 +41,20 @@ namespace IMP.WebApi.Controllers.v1
         }
 
         /// <summary>
+        /// Get wallet by id
+        /// </summary>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<WalletViewModel>), (int)HttpStatusCode.OK)]
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetWalletById([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new GetWalletByUserIdQuery { ApplicationUserId = _appId, WalletId = id }));
+        }
+
+
+
+        /// <summary>
         /// Query transaction of authenticated user
         /// </summary>
         /// <param name="query"></param>
@@ -48,6 +62,19 @@ namespace IMP.WebApi.Controllers.v1
         [ProducesResponseType(typeof(Response<IPagedList<WalletTransactionViewModel>>), (int)HttpStatusCode.OK)]
         [HttpGet("me/transactions")]
         public async Task<IActionResult> Get([FromQuery] GetWalletTransactionByWalletIdQuery query)
+        {
+            query.SetApplicationUserId(_appId);
+            return Ok(await Mediator.Send(query));
+        }
+
+        /// <summary>
+        /// Get transaction of wallet id
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<IPagedList<WalletTransactionViewModel>>), (int)HttpStatusCode.OK)]
+        [HttpGet("{id}/transactions")]
+        public async Task<IActionResult> GetTransactionOfWallet(int id, [FromQuery] GetWalletTransactionByWalletIdQuery query)
         {
             query.SetApplicationUserId(_appId);
             return Ok(await Mediator.Send(query));

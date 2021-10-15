@@ -325,6 +325,23 @@ namespace IMP.Application.Extensions
                 .WithMessage("Tên không hợp lệ.");
         }
 
+        public static IRuleBuilderOptions<T, string> MustValidEmail<T>(this IRuleBuilder<T, string> ruleBuilder, bool allowNull=true)
+        {
+            string pattern = @"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$";
+            Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
+            return ruleBuilder
+                .NotNull().WithMessage("Email chưa có.")
+                .Must(x =>
+                {
+                    if (string.IsNullOrEmpty(x))
+                    {
+                        return true;
+                    }
+                    return regex.IsMatch(x);
+                })
+                .WithMessage("Email không hợp lệ.");
+        }
+
         public static IRuleBuilderOptions<T, string> MustValidNickname<T>(this IRuleBuilder<T, string> ruleBuilder, bool allowNull = false)
         {
             string pattern = @"^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$";

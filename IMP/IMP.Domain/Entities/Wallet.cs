@@ -17,7 +17,7 @@ namespace IMP.Domain.Entities
         public decimal Balance { get; set; }
         [ForeignKey("ApplicationUser")]
         public int? ApplicationUserId { get; set; }
-        public ApplicationUser ApplicationUser { get; set; }
+
         public ICollection<WalletTransaction> FromTransactions { get; set; }
         public ICollection<WalletTransaction> ToTransactions { get; set; }
     }

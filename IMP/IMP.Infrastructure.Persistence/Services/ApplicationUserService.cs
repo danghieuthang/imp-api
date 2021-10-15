@@ -1,4 +1,5 @@
-﻿using IMP.Application.Interfaces.Repositories;
+﻿using IMP.Application.Enums;
+using IMP.Application.Interfaces.Repositories;
 using IMP.Domain.Entities;
 using IMP.Infrastructure.Persistence.Services;
 using System;
@@ -20,7 +21,7 @@ namespace IMP.Application.Interfaces.Services
             _applicationUserRepository = _unitOfWork.Repository<ApplicationUser>();
         }
 
-        public async Task<ApplicationUser> CreateUser(string email = null, string avatar = null)
+        public async Task<ApplicationUser> CreateUser(RegisterRole role, string email = null, string avatar = null)
         {
             var user = new ApplicationUser
             {
@@ -29,11 +30,25 @@ namespace IMP.Application.Interfaces.Services
                 PaymentInfor = new PaymentInfor(),
                 Wallet = new Wallet()
             };
+            // if role is brand
+            if (role == RegisterRole.Brand)
+            {
+                user.Brand = new Brand
+                {
+                    Email = email
+                };
+            }
             user = await _applicationUserRepository.AddAsync(user);
             await _unitOfWork.CommitAsync();
 
             user.Wallet.ApplicationUserId = user.Id;
             _unitOfWork.Repository<Wallet>().Update(user.Wallet);
+
+            // Update wallet for brand
+            var brand = user.Brand;
+            brand.WalletId = user.Wallet.Id;
+            _unitOfWork.Repository<Brand>().Update(brand);
+
             await _unitOfWork.CommitAsync();
 
             return user;

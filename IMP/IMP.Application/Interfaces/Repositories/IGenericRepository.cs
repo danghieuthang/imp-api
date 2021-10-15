@@ -34,7 +34,7 @@ namespace IMP.Application.Interfaces
         /// <param name="orderBy">A name of field to order.</param>
         /// <param name="include">A function to include navigation properties</param>
         /// <param name="pageIndex">The index of page.</param>
-        /// <returns>An <see cref="IPagedList{TEntity}"/> that contains elements that satisfy the condition specified by <paramref name="predicate"/>.</returns>
+        /// <returns>An <see cref="IPagedList{TEntity}"/> that contains elements that specified condition by <paramref name="predicate"/>.</returns>
         /// <remarks>This method default no-tracking query.</remarks>
         Task<IPagedList<TEntity>> GetPagedList(Expression<Func<TEntity, bool>> predicate = null,
                                          Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,

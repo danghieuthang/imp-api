@@ -83,12 +83,17 @@ namespace IMP.Domain.Entities
         [StringLength(2000)]
         public string Description { get; set; }
         #endregion
+
         public Wallet Wallet { get; set; }
         public PaymentInfor PaymentInfor { get; set; }
 
         [ForeignKey("Ranking")]
         public int? RankingId { get; set; }
         public Ranking Ranking { get; set; }
+
+        [ForeignKey("Brand")]
+        public int? BrandId { get; set; }
+        public Brand Brand { get; set; }
 
         public ICollection<Page> Pages { get; set; }
         public ICollection<Otp> Otps { get; set; }

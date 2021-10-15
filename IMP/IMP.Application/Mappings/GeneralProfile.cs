@@ -19,6 +19,7 @@ using IMP.Application.Features.Blocks.Commands.CreateBlock;
 using IMP.Application.Features.Blocks.Commands.UpdateBlock;
 using IMP.Application.Features.Vouchers.Commands.CreateVoucher;
 using System.Linq;
+using IMP.Application.Features.Brands.Commands.UpdateBrand;
 
 namespace IMP.Application.Mappings
 {
@@ -66,6 +67,15 @@ namespace IMP.Application.Mappings
             CreateMap<PaymentInfor, PaymentInforViewModel>();
             CreateMap<Bank, BankViewModel>();
             #endregion
+
+            #region brand
+            CreateMap<Brand, BrandViewModel>().ForMember(dest => dest.JobB, opt =>
+              {
+                  opt.MapFrom(brand => CreateListJobFromJobStr(brand.Job));
+              });
+
+            CreateMap<UpdateBrandCommand, Brand>();
+            #endregion brand
 
             #region location
             CreateMap<Location, LocationViewModel>();
@@ -128,6 +138,11 @@ namespace IMP.Application.Mappings
                 result.Add(item.Key, item.Value);
             }
             return result;
+        }
+
+        public List<string> CreateListJobFromJobStr(string job)
+        {
+            return job.Split(";").ToList();
         }
 
     }

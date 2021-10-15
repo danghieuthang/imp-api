@@ -15,6 +15,7 @@ namespace IMP.Application.Features.Wallets.Queries.GetWalletByUserId
 {
     public class GetWalletByUserIdQuery : IQuery<WalletViewModel>
     {
+        public int? WalletId { get; set; }
         public int ApplicationUserId { get; set; }
         public class GetWalletByUserIdQueryHandler : QueryHandler<GetWalletByUserIdQuery, WalletViewModel>
         {
@@ -26,7 +27,9 @@ namespace IMP.Application.Features.Wallets.Queries.GetWalletByUserId
 
             public override async Task<Response<WalletViewModel>> Handle(GetWalletByUserIdQuery request, CancellationToken cancellationToken)
             {
-                var wallet = await _walletRepository.FindSingleAsync(x => x.ApplicationUserId == request.ApplicationUserId);
+                var wallet = await _walletRepository.FindSingleAsync(x =>
+                        (request.WalletId == null && x.ApplicationUserId == request.ApplicationUserId)
+                        || (request.WalletId.HasValue && x.Id==request.WalletId));
                 if (wallet != null)
                 {
                     bool isCanWithdraw = !await UnitOfWork.Repository<WalletTransaction>().IsExistAsync(x => x.WalletFromId == wallet.Id && x.TransactionType == (int)TransactionType.Withdrawal && (x.TransactionStatus == (int)WalletTransactionStatus.New || x.TransactionStatus == (int)WalletTransactionStatus.Processing));

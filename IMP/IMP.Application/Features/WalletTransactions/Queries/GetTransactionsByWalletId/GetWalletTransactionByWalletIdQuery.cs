@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,6 +29,12 @@ namespace IMP.Application.Features.WalletTransactions.Queries.GetTransactionsByW
         [FromQuery(Name = "to_date")]
         public DateTime? ToDate { get; set; }
 
+        private int? _walletId;
+        public void SetWalletId(int id)
+        {
+            _walletId = id;
+        }
+
         public void SetApplicationUserId(int walletId)
         {
             _applicationUserId = walletId;
@@ -43,13 +50,28 @@ namespace IMP.Application.Features.WalletTransactions.Queries.GetTransactionsByW
 
             public override async Task<Response<IPagedList<WalletTransactionViewModel>>> Handle(GetWalletTransactionByWalletIdQuery request, CancellationToken cancellationToken)
             {
-                var page = await _walletTransactionRepository.GetPagedList(predicate: x =>
-                   (x.WalletTo.ApplicationUserId == request._applicationUserId
-                    || x.WalletFrom.ApplicationUserId == request._applicationUserId
-                    || x.Sender.Id == request._applicationUserId
-                    || x.Receiver.Id == request._applicationUserId)
-                    && (!request.FromDate.HasValue || x.Created.Date >= request.FromDate.Value.Date)
-                    && (!request.ToDate.HasValue || x.Created.Date <= request.ToDate.Value.Date),
+                // build predicate
+                Expression<Func<WalletTransaction, bool>> predicate;
+
+                if (request._walletId.HasValue)
+                {
+                    predicate = x => (x.WalletTo.Id == request._walletId.Value
+                                || x.WalletFrom.Id == request._walletId.Value)
+                                && (!request.FromDate.HasValue || x.Created.Date >= request.FromDate.Value.Date)
+                                && (!request.ToDate.HasValue || x.Created.Date <= request.ToDate.Value.Date);
+                }
+                else
+                {
+                    predicate = x => (x.WalletTo.ApplicationUserId == request._applicationUserId
+                                || x.WalletFrom.ApplicationUserId == request._applicationUserId
+                                || x.Sender.Id == request._applicationUserId
+                                || x.Receiver.Id == request._applicationUserId)
+                                && (!request.FromDate.HasValue || x.Created.Date >= request.FromDate.Value.Date)
+                                && (!request.ToDate.HasValue || x.Created.Date <= request.ToDate.Value.Date);
+                }
+
+                var page = await _walletTransactionRepository.GetPagedList(
+                    predicate: predicate,
                     include: x => x.Include(t => t.Sender).Include(t => t.Receiver),
                         orderBy: request.OrderField,
                         orderByDecensing: request.OrderBy == OrderBy.DESC,
