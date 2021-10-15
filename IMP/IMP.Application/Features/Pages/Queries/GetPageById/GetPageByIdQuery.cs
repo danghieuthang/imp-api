@@ -32,9 +32,12 @@ namespace IMP.Application.Features.Pages.Queries.GetPageById
                             .ThenInclude(block => block.Items)
                          .Include(y => y.Blocks)
                             .ThenInclude(block => block.ChildBlocks).ThenInclude(x=>x.Items));
-
-                var pageView = Mapper.Map<PageViewModel>(page);
-                return new Response<PageViewModel>(pageView);
+                if (page != null)
+                {
+                    var pageView = Mapper.Map<PageViewModel>(page);
+                    return new Response<PageViewModel>(pageView);
+                }
+                return new Response<PageViewModel>(message: "Không tìm thấy");
             }
         }
     }
