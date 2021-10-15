@@ -37,7 +37,7 @@ namespace IMP.Application.Features.Pages.Queries.GetPageById
                     var pageView = Mapper.Map<PageViewModel>(page);
                     return new Response<PageViewModel>(pageView);
                 }
-                return new Response<PageViewModel>(message: "Không tìm thấy");
+                throw new KeyNotFoundException(message: "Không tìm thấy");
             }
         }
     }
