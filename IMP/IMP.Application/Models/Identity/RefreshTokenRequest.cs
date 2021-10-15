@@ -8,4 +8,8 @@ namespace IMP.Application.Models.Account
         {
         }
     }
+    public class RevokeTokenRequest : RefreshTokenRequest
+    {
+
+    }
 }

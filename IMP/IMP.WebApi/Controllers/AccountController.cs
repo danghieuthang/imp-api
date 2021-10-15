@@ -170,10 +170,12 @@ namespace IMP.WebApi.Controllers
         /// <returns></returns>
         [ProducesResponseType(typeof(Response<string>), (int)HttpStatusCode.OK)]
         [HttpPost("revoke-token")]
-        public async Task<IActionResult> RevokeToken()
+        public async Task<IActionResult> RevokeToken([FromBody] RevokeTokenRequest request)
         {
-            var refeshToken = Request.Cookies["refresh-token"];
-            return Ok(await _accountService.RevokeToken(refeshToken, GenerateIPAddress()));
+            if (string.IsNullOrEmpty(request.RefreshToken))
+                request.RefreshToken = Request.Cookies["refresh-token"];
+
+            return Ok(await _accountService.RevokeToken(request.RefreshToken, GenerateIPAddress()));
         }
 
         /// <summary>
