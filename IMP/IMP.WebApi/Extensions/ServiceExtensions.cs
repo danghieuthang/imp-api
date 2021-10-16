@@ -105,7 +105,7 @@ namespace IMP.WebApi.Extensions
                        builder.AllowAnyMethod()
                        .WithOrigins("http://localhost:3000")
                        .WithOrigins("http://192.168.43.2:3000")
-                       .WithOrigins("https://influencermarketingplatform.nothleft.online/")
+                       .WithOrigins("https://influencermarketingplatform.nothleft.online")
                        .AllowAnyHeader()
                        .AllowCredentials();
                    });
