@@ -5,6 +5,7 @@ using IMP.Application.Features.Blocks.Queries;
 using IMP.Application.Features.Pages.Commands.CreatePage;
 using IMP.Application.Features.Pages.Commands.DeletePage;
 using IMP.Application.Features.Pages.Commands.UpdatePage;
+using IMP.Application.Features.Pages.Commands.UpdatePageStatus;
 using IMP.Application.Features.Pages.Queries.GetAllPageOfInfluencer;
 using IMP.Application.Features.Pages.Queries.GetPageById;
 using IMP.Application.Interfaces;
@@ -129,6 +130,22 @@ namespace IMP.WebApi.Controllers.v1
             int influencerId = 0;
             int.TryParse(_authenticatedUserService.AppId, out influencerId);
             return Ok(await Mediator.Send(new DeletePageCommand { Id = id, InfluencerId = influencerId }));
+        }
+        /// <summary>
+        /// Upate status of page
+        /// </summary>
+        /// <param name="id">The id of page</param>
+        /// <param name="command">The Uppdate Page Status Model request</param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<PageViewModel>), 200)]
+        [HttpPut("{id}/change-status")]
+        public async Task<IActionResult> UpdateStatus([FromRoute] int id, [FromBody] UpdatePageStatusCommand command)
+        {
+            if (id != command.Id)
+            {
+                return BadRequest();
+            }
+            return Ok(await Mediator.Send(command));
         }
     }
 }

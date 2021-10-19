@@ -10,9 +10,16 @@ namespace IMP.Domain.Entities
     public class VoucherCode : BaseEntity
     {
         [ForeignKey("ApplicationUser")]
-        public int InfluencerId { get; set; }
+        public int? InfluencerId { get; set; }
+
+        [ForeignKey("Voucher")]
+        public int VoucherId { get; set; }
+
         [MaxLength(256)]
         public string Code { get; set; }
+
+        public ApplicationUser Influencer { get; set; }
+        public Voucher Voucher { get; set; }
         public ICollection<VoucherTransaction> VoucherTransactions { get; set; }
 
 

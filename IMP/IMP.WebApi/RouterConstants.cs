@@ -23,6 +23,7 @@ namespace IMP.WebApi
         public const string BlockPlatform = Common + "block-platforms";
         public const string BlockCampaign = Common + "block-campaigns";
         public const string Voucher = Common + "vouchers";
+        public const string VoucherCode = Common + "voucher-codes";
         public const string Wallet = Common + "wallets";
         public const string WalletTransaction = Common + "wallet-transactions";
         public const string Milestones = Common + "milestones";

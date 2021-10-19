@@ -18,7 +18,6 @@ namespace IMP.Application.Features.Vouchers.Commands.CreateVoucher
         public string VoucherName { get; set; }
         public string Image { get; set; }
         public int Quantity { get; set; }
-        public int UserQuantity { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public TimeSpan? FromTime { get; set; }

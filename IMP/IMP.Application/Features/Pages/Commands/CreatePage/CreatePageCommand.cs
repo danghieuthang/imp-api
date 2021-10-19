@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using IMP.Application.Enums;
 using IMP.Application.Helpers;
 using IMP.Application.Interfaces;
 using IMP.Application.Models.ViewModels;
@@ -41,6 +42,9 @@ namespace IMP.Application.Features.Pages.Commands.CreatePage
                 {
                     entity.BioLink = await GenerateBioLink();
                 }
+                //set status
+                entity.Status = (int)PageStatus.LiveMode;
+
                 entity = await _pageRepository.AddAsync(entity);
                 await UnitOfWork.CommitAsync();
                 var view = Mapper.Map<PageViewModel>(entity);

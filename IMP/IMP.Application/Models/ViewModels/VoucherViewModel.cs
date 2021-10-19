@@ -10,7 +10,7 @@ namespace IMP.Application.Models.ViewModels
         public string Image { get; set; }
         public string Thumnail { get; set; }
         public int Quantity { get; set; }
-        public int UserQuantity { get; set; }
+        public int QuantityUsed { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public TimeSpan? FromTime { get; set; }
@@ -26,7 +26,12 @@ namespace IMP.Application.Models.ViewModels
     public class VoucherCodeViewModel : BaseViewModel<int>
     {
 
-        public int InfluencerId { get; set; }
+        //public int InfluencerId { get; set; }
         public string Code { get; set; }
+    }
+
+    public class VoucherTransactionViewModel : BaseViewModel<int>
+    {
+        public int VoucherCodeId { get; set; }
     }
 }

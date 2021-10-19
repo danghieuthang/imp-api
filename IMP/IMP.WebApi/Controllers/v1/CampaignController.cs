@@ -64,7 +64,7 @@ namespace IMP.WebApi.Controllers.v1
         {
             int brandId = 0;
             _ = int.TryParse(_authenticatedUserService.AppId, out brandId);
-            command.BrandId = brandId;
+            command.ApplicationUserId = brandId;
             return StatusCode(201, await Mediator.Send(command));
         }
 

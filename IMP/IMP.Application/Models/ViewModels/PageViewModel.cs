@@ -15,5 +15,6 @@ namespace IMP.Application.Models.ViewModels
         public string FontFamily { get; set; }
         public string TextColor { get; set; }
         public List<BlockViewModel> Blocks { get; set; }
+        public int Status { get; set; }
     }
 }

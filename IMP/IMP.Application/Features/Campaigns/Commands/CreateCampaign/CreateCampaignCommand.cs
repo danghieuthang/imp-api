@@ -11,6 +11,7 @@ using IMP.Application.Interfaces;
 using System.Collections.Generic;
 using IMP.Application.Enums;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace IMP.Application.Features.Campaigns.Commands.CreateCampaign
 {
@@ -31,7 +32,7 @@ namespace IMP.Application.Features.Campaigns.Commands.CreateCampaign
         public int PlatformId { get; set; }
         public int CampaignTypeId { get; set; }
         [JsonIgnore]
-        public int BrandId { get; set; }
+        public int ApplicationUserId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string AdditionalInfomation { get; set; }
@@ -61,7 +62,12 @@ namespace IMP.Application.Features.Campaigns.Commands.CreateCampaign
 
         public override async Task<Response<CampaignViewModel>> Handle(CreateCampaignCommand request, CancellationToken cancellationToken)
         {
+            var applicationUser = await UnitOfWork.Repository<ApplicationUser>().FindSingleAsync(x => x.Id == request.ApplicationUserId);
+
             var campaign = _mapper.Map<Campaign>(request);
+            campaign.CreatedById = request.ApplicationUserId;
+            campaign.BrandId = applicationUser.BrandId.Value;
+
             campaign.Status = (int)CampaignStatus.OPEN;
             campaign = await _campaignRepository.AddAsync(campaign);
             await UnitOfWork.CommitAsync();

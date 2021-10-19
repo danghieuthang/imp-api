@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System;
 using IMP.Application.Helpers;
+using IMP.Application.Enums;
 
 namespace IMP.Application.Features.Pages.Commands.UpdatePage
 {
@@ -39,6 +40,7 @@ namespace IMP.Application.Features.Pages.Commands.UpdatePage
         public string BioLink { get; set; }
         public string FontFamily { get; set; }
         public string TextColor { get; set; }
+        public PageStatus Status { get; set; }
         public List<UpdateBlockRequest> Blocks { get; set; }
 
         public class UpdatePageCommandHandler : CommandHandler<UpdatePageCommand, PageViewModel>

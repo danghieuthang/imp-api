@@ -26,5 +26,6 @@ namespace IMP.Domain.Entities
         [StringLength(256)]
         public string TextColor { get; set; }
         public ICollection<Block> Blocks { get; set; }
+        public int Status { get; set; }
     }
 }

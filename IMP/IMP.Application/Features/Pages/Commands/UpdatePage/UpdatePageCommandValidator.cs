@@ -17,7 +17,7 @@ namespace IMP.Application.Features.Pages.Commands.UpdatePage
             _pageRepository = unitOfWork.Repository<Page>();
             _blockRepository = unitOfWork.Repository<Block>();
             _applicationUserRepository = unitOfWork.Repository<ApplicationUser>();
-
+            RuleFor(x => x.Status).NotEqual(Enums.PageStatus.LiveMode).WithMessage("Chỉ được update bio page ở trạng thái Live.");
             RuleFor(x => x.Id).MustAsync(async (x, y, z) =>
             {
                 return await _pageRepository.IsExistAsync(x => x.Id == y && x.InfluencerId == x.InfluencerId);

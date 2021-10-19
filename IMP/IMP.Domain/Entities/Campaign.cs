@@ -11,15 +11,16 @@ namespace IMP.Domain.Entities
     {
         [ForeignKey("Platform")]
         public int PlatformId { get; set; }
-        public Platform Platform { get; set; }
 
         [ForeignKey("CampaignType")]
         public int CampaignTypeId { get; set; }
-        public CampaignType CampaignType { get; set; }
 
         [ForeignKey("ApplicationUser")]
+        public int CreatedById { get; set; }
+
+        [ForeignKey("Brand")]
         public int BrandId { get; set; }
-        public ApplicationUser Brand { get; set; }
+  
 
         [StringLength(256)]
         public string Title { get; set; }
@@ -41,6 +42,12 @@ namespace IMP.Domain.Entities
         [StringLength(2000)]
         public string Condition { get; set; }
         public bool IsActived { get; set; }
+
+
+        public Platform Platform { get; set; }
+        public CampaignType CampaignType { get; set; }
+        public ApplicationUser CreatedBy { get; set; }
+        public Brand Brand { get; set; }
 
         public ICollection<CampaignMember> CampaignMembers { get; set; }
         public ICollection<Voucher> Vouchers { get; set; }

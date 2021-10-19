@@ -40,7 +40,7 @@ namespace IMP.Application.Features.Campaigns.Commands.CreateCampaign
 
             this.RuleFor(c => c.PlatformId).MustExistEntityId(IsPlatformExist);
             this.RuleFor(c => c.CampaignTypeId).MustExistEntityId(IsCampainTypeExist);
-            this.RuleFor(c => c.BrandId).MustAsync(IsValidBrand).WithMessage("{PropertyValue} không phải là nhãn hàng.");
+            this.RuleFor(c => c.ApplicationUserId).MustAsync(IsValidBrand).WithMessage("{PropertyValue} không phải là nhãn hàng.");
             this.RuleFor(c => c.Images).ListMustContainFewerThan(5);
             this.RuleForEach(c => c.Images).ChildRules(image =>
             {
@@ -73,7 +73,7 @@ namespace IMP.Application.Features.Campaigns.Commands.CreateCampaign
         public async Task<bool> IsValidBrand(int id, CancellationToken cancellationToken)
         {
             var user = await _applicationUserRepository.GetByIdAsync(id);
-            return user != null;
+            return user != null && user.BrandId.HasValue;
         }
     }
 }
