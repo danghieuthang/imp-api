@@ -8,7 +8,7 @@ namespace IMP.Application.Enums
 {
     public enum PageStatus
     {
-        LiveMode = 0,
+        UnPublished = 0,
         Publish = 1
     }
 }

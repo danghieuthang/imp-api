@@ -43,7 +43,7 @@ namespace IMP.Application.Features.Pages.Commands.CreatePage
                     entity.BioLink = await GenerateBioLink();
                 }
                 //set status
-                entity.Status = (int)PageStatus.LiveMode;
+                entity.Status = (int)PageStatus.UnPublished;
 
                 entity = await _pageRepository.AddAsync(entity);
                 await UnitOfWork.CommitAsync();

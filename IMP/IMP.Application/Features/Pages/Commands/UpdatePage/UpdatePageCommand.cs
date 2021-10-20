@@ -63,6 +63,10 @@ namespace IMP.Application.Features.Pages.Commands.UpdatePage
                              .Include(y => y.Blocks)
                                 .ThenInclude(block => block.ChildBlocks).ThenInclude(x => x.Items));
 
+                if (pageDomain.Status != (int)PageStatus.UnPublished)
+                {
+                    return new Response<PageViewModel>(error: new Models.ValidationError("id", "Chỉ được update page chưa published." ));
+                }
                 if (pageDomain != null)
                 {
                     await RemoveBlockBeforeUpdate(pageDomain, pageRequest);
