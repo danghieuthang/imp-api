@@ -35,6 +35,7 @@ namespace IMP.Infrastructure.Persistence.Contexts
         public DbSet<BlockItem> BlockItems { get; set; }
         public DbSet<BlockType> BlockTypes { get; set; }
         public DbSet<Campaign> Campaigns { get; set; }
+        public DbSet<CampaignCondition> CampaignConditions{ get; set; }
         public DbSet<CampaignActivity> CampaignActivities { get; set; }
         public DbSet<CampaignMember> CampaignMembers { get; set; }
         public DbSet<CampaignImage> CampaignImages { get; set; }

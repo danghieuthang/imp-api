@@ -39,8 +39,7 @@ namespace IMP.Application.Features.Campaigns.Queries.GetAllCampaigns
             {
 
                 var page = await _campaignRepository.GetPagedList(
-                    include: x => x.Include(campaign => campaign.CampaignImages)
-                                    .Include(campaign => campaign.CampaignMilestones), 
+                    include: x => x.Include(campaign => campaign.CampaignImages),
                     pageIndex: request.PageIndex, 
                     pageSize: request.PageSize, 
                     orderBy: request.OrderField, 

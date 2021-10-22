@@ -25,7 +25,7 @@ namespace IMP.Application.Features.Campaigns.Queries.GetCampaignById
 
             public override async Task<Response<CampaignViewModel>> Handle(GetCampaignByIdQuery request, CancellationToken cancellationToken)
             {
-                var entity = await Repository.FindSingleAsync(x => x.Id == request.Id, x => x.CampaignImages, x => x.CampaignMilestones);
+                var entity = await Repository.FindSingleAsync(x => x.Id == request.Id, x => x.CampaignImages);
                 if (entity == null)
                 {
                     //var error = new ValidationError("id", $"'{request.Id}' không tồn tại");

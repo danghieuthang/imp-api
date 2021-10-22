@@ -16,7 +16,7 @@ namespace IMP.Domain.Entities
 
         [StringLength(256)]
         public string BackgroundType { get; set; }
-        public int FontSize { get; set; }
+        public double FontSize { get; set; }
         [StringLength(256)]
         public string Background { get; set; }
         [StringLength(256)]

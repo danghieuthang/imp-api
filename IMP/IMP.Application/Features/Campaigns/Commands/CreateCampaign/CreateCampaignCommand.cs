@@ -76,7 +76,7 @@ namespace IMP.Application.Features.Campaigns.Commands.CreateCampaign
             await CreateCampaignMilestones(request.CampaignMilestoneRequests, campaign.Id);
             await UnitOfWork.CommitAsync();
 
-            campaign = await _campaignRepository.FindSingleAsync(x => x.Id == campaign.Id, x => x.CampaignImages, x => x.CampaignMilestones);
+            campaign = await _campaignRepository.FindSingleAsync(x => x.Id == campaign.Id, x => x.CampaignImages);
             var campaignView = _mapper.Map<CampaignViewModel>(campaign);
             return new Response<CampaignViewModel>(campaignView);
         }

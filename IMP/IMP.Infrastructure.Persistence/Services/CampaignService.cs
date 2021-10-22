@@ -23,40 +23,40 @@ namespace IMP.Infrastructure.Persistence.Services
 
         public async Task AutoUpdateCampaignStatus()
         {
-            var campaigns = await _campaignRepostory.GetAll(
-                predicate: x => x.Status != (int)CampaignStatus.DRAFT && x.Status != (int)CampaignStatus.CLOSED,
-                orderBy: x => x.OrderBy(y => y.Created),
-                include: x => x.Include(y => y.CampaignMilestones)).ToListAsync();
+            //var campaigns = await _campaignRepostory.GetAll(
+            //    predicate: x => x.Status != (int)CampaignStatus.DRAFT && x.Status != (int)CampaignStatus.CLOSED,
+            //    orderBy: x => x.OrderBy(y => y.Created),
+            //    include: x => x.Include(y => y.CampaignMilestones)).ToListAsync();
 
-            foreach (var campaign in campaigns)
-            {
-                foreach (var campaignMilestone in campaign.CampaignMilestones)
-                {
-                    // get Indochina time
-                    DateTime now = DateTime.UtcNow.AddHours(7);
-                    if (campaignMilestone.FromDate <= now && campaignMilestone.ToDate >= now)
-                    {
-                        switch (campaignMilestone.MilestoneId)
-                        {
-                            // if nộp đơn và duyệt đdơn
-                            case 1:
-                            case 2:
-                                campaign.Status = (int)CampaignStatus.APPROVED;
-                                break;
-                            // if quảng cáo
-                            case 3:
-                                campaign.Status = (int)CampaignStatus.PROCESSING;
-                                break;
-                            // if thông báo
-                            case 4:
-                                campaign.Status = (int)CampaignStatus.ANNOUNCED;
-                                break;
-                        }
-                    }
-                }
-                _campaignRepostory.Update(campaign);
-            }
-            await _unitOfWork.CommitAsync();
+            //foreach (var campaign in campaigns)
+            //{
+            //    foreach (var campaignMilestone in campaign.CampaignMilestones)
+            //    {
+            //        // get Indochina time
+            //        DateTime now = DateTime.UtcNow.AddHours(7);
+            //        if (campaignMilestone.FromDate <= now && campaignMilestone.ToDate >= now)
+            //        {
+            //            switch (campaignMilestone.MilestoneId)
+            //            {
+            //                // if nộp đơn và duyệt đdơn
+            //                case 1:
+            //                case 2:
+            //                    campaign.Status = (int)CampaignStatus.APPROVED;
+            //                    break;
+            //                // if quảng cáo
+            //                case 3:
+            //                    campaign.Status = (int)CampaignStatus.PROCESSING;
+            //                    break;
+            //                // if thông báo
+            //                case 4:
+            //                    campaign.Status = (int)CampaignStatus.ANNOUNCED;
+            //                    break;
+            //            }
+            //        }
+            //    }
+            //    _campaignRepostory.Update(campaign);
+            //}
+            //await _unitOfWork.CommitAsync();
         }
     }
 }

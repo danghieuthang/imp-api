@@ -35,7 +35,7 @@ namespace IMP.Application.Features.Pages.Commands.UpdatePage
         [JsonIgnore]
         public int InfluencerId { get; set; }
         public string BackgroundType { get; set; }
-        public int FontSize { get; set; }
+        public double FontSize { get; set; }
         public string Background { get; set; }
         public string BioLink { get; set; }
         public string FontFamily { get; set; }
