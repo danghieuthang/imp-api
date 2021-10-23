@@ -171,10 +171,13 @@ namespace IMP.Infrastructure.Identity.Services
         {
 
             var userWithSameUserName = await _userManager.FindByEmailAsync(request.Email);
-            if (userWithSameUserName != null)
+            if (userWithSameUserName != null && userWithSameUserName.EmailConfirmed)
             {
                 var error = new ValidationError("email", $"Email '{request.Email}' is already taken.");
                 throw new ValidationException(error);
+            }else if (userWithSameUserName != null)
+            {
+               await _userManager.DeleteAsync(userWithSameUserName);
             }
 
             var user = new User

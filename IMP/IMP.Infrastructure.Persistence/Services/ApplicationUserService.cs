@@ -44,10 +44,14 @@ namespace IMP.Application.Interfaces.Services
             user.Wallet.ApplicationUserId = user.Id;
             _unitOfWork.Repository<Wallet>().Update(user.Wallet);
 
-            // Update wallet for brand
-            var brand = user.Brand;
-            brand.WalletId = user.Wallet.Id;
-            _unitOfWork.Repository<Brand>().Update(brand);
+            if (role == RegisterRole.Brand)
+            {
+                // Update wallet for brand
+                var brand = user.Brand;
+                brand.WalletId = user.Wallet.Id;
+                _unitOfWork.Repository<Brand>().Update(brand);
+
+            }
 
             await _unitOfWork.CommitAsync();
 
