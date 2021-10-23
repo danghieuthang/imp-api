@@ -14,5 +14,6 @@ namespace IMP.Domain.Common
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public T Id { get; set; }
+        public bool IsDelete { get; set; }
     }
 }
