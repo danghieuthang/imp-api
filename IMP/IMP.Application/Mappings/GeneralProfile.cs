@@ -135,7 +135,8 @@ namespace IMP.Application.Mappings
             if (items == null) return result;
             foreach (var item in items)
             {
-                result.Add(item.Key, item.Value);
+                if (!result.ContainsKey(item.Key))
+                    result.Add(item.Key, item.Value);
             }
             return result;
         }
