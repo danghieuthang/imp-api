@@ -42,6 +42,10 @@ namespace IMP.Application.Features.Pages.Commands.UpdatePage
         public string TextColor { get; set; }
         public PageStatus Status { get; set; }
         public List<UpdateBlockRequest> Blocks { get; set; }
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
 
         public class UpdatePageCommandHandler : CommandHandler<UpdatePageCommand, PageViewModel>
         {

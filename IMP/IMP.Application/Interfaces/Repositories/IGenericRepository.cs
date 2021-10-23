@@ -98,6 +98,7 @@ namespace IMP.Application.Interfaces
         void Update(TEntity entity);
         void Update(TEntity newEntity, TEntity existingEntity);
         void Delete(TEntity entity);
+        void DeleteCompletely(TEntity entity);
         void Dispose();
     }
 

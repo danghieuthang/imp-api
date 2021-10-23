@@ -13,6 +13,8 @@ using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Serilog;
 
 namespace IMP.WebApi.Controllers.v1
 {
@@ -22,7 +24,7 @@ namespace IMP.WebApi.Controllers.v1
     public class PageController : BaseApiController
     {
         private readonly IAuthenticatedUserService _authenticatedUserService;
-
+        private readonly ILogger _logger = Log.ForContext<PageController>();
         public PageController(IAuthenticatedUserService authenticatedUserService)
         {
             _authenticatedUserService = authenticatedUserService;
@@ -115,7 +117,16 @@ namespace IMP.WebApi.Controllers.v1
             int influencerId = 0;
             int.TryParse(_authenticatedUserService.AppId, out influencerId);
             command.InfluencerId = influencerId;
-            return Ok(await Mediator.Send(command));
+            var request = command.Clone();
+            var response = await Mediator.Send(command);
+
+            _ = Task.Run(() =>
+            {
+                string reqs = JsonConvert.SerializeObject(request);
+                string res = JsonConvert.SerializeObject(response.Data);
+                _logger.Information($"User: {influencerId}:\n \t\tRequest: {reqs}\n\t\tResponse: {res}");
+            });
+            return Ok(response);
         }
 
         /// <summary>

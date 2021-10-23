@@ -35,7 +35,7 @@ namespace IMP.Infrastructure.EfCore.Repositories
 
         public virtual async Task<TEntity> GetByIdAsync(TKey id, List<string> includeProperties)
         {
-            var query = _dbContext.Set<TEntity>().Where(x => x.IsDelete == false).AsQueryable();
+            var query = _dbContext.Set<TEntity>().Where(x => x.IsDeleted == false).AsQueryable();
             // include
             if (includeProperties is not null && includeProperties.Count > 0)
             {
@@ -98,16 +98,21 @@ namespace IMP.Infrastructure.EfCore.Repositories
                 _dbContext.Entry(local).State = EntityState.Detached;
             }
 
-            entity.IsDelete = true;
+            entity.IsDeleted = true;
             _dbContext.Update<TEntity>(entity);
 
+        }
+
+        public void DeleteCompletely(TEntity entity)
+        {
+            _dbContext.Set<TEntity>().Remove(entity);
         }
 
         public virtual async Task<IReadOnlyList<TEntity>> GetAllAsync()
         {
             return await _dbContext
                  .Set<TEntity>()
-                 .Where(x => x.IsDelete == false)
+                 .Where(x => x.IsDeleted == false)
                  .ToListAsync();
         }
 
@@ -141,7 +146,7 @@ namespace IMP.Infrastructure.EfCore.Repositories
         }
         private IQueryable<TEntity> GetAll(List<string> includes = null, string orderField = null, OrderBy? orderBy = null)
         {
-            var query = _dbContext.Set<TEntity>().AsQueryable().Where(x => x.IsDelete == false);
+            var query = _dbContext.Set<TEntity>().AsQueryable().Where(x => x.IsDeleted == false);
             // order
             if (orderField is not null)
             {
@@ -180,7 +185,7 @@ namespace IMP.Infrastructure.EfCore.Repositories
 
         public IQueryable<TEntity> FindAll(params Expression<Func<TEntity, object>>[] includeProperties)
         {
-            IQueryable<TEntity> query = _dbContext.Set<TEntity>().Where(x => x.IsDelete == false);
+            IQueryable<TEntity> query = _dbContext.Set<TEntity>().Where(x => x.IsDeleted == false);
             if (includeProperties != null)
             {
                 foreach (var includeProperty in includeProperties)

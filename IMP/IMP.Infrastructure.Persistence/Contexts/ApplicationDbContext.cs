@@ -2,9 +2,11 @@
 using IMP.Domain.Common;
 using IMP.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Threading;
@@ -35,7 +37,7 @@ namespace IMP.Infrastructure.Persistence.Contexts
         public DbSet<BlockItem> BlockItems { get; set; }
         public DbSet<BlockType> BlockTypes { get; set; }
         public DbSet<Campaign> Campaigns { get; set; }
-        public DbSet<CampaignCondition> CampaignConditions{ get; set; }
+        public DbSet<CampaignCondition> CampaignConditions { get; set; }
         public DbSet<CampaignActivity> CampaignActivities { get; set; }
         public DbSet<CampaignMember> CampaignMembers { get; set; }
         public DbSet<CampaignImage> CampaignImages { get; set; }
@@ -73,7 +75,7 @@ namespace IMP.Infrastructure.Persistence.Contexts
                 {
                     case EntityState.Added:
                         entry.Entity.Created = _dateTime.NowUtc;
-                        entry.Entity.IsDelete = false;
+                        entry.Entity.IsDeleted = false;
                         break;
                     case EntityState.Modified:
                         entry.Entity.LastModified = _dateTime.NowUtc;
@@ -121,7 +123,18 @@ namespace IMP.Infrastructure.Persistence.Contexts
                    .WithMany(a => a.TransactionsReceived)
                    .HasForeignKey(wt => wt.ReceiverId);
 
+            // Filter deleted
+            builder.EntitiesOfType<ISoftDeletable>(builder =>
+            {
+                var param = Expression.Parameter(builder.Metadata.ClrType, "p");
+                var body = Expression.Equal(Expression.Property(param, nameof(ISoftDeletable.IsDeleted)), Expression.Constant(false));
+                builder.HasQueryFilter(Expression.Lambda(body, param));
+            });
+
             base.OnModelCreating(builder);
         }
+
+
+       
     }
 }

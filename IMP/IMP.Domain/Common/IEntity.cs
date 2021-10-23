@@ -9,11 +9,14 @@ namespace IMP.Domain.Common
     {
         public T Id { get; set; }
     }
-
-    public abstract class Entity<T> : IEntity<T>
+    public interface ISoftDeletable
+    {
+        bool IsDeleted { get; set; }
+    }
+    public abstract class Entity<T> : IEntity<T>, ISoftDeletable
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public T Id { get; set; }
-        public bool IsDelete { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }
