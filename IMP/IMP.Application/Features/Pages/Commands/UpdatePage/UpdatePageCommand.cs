@@ -177,7 +177,7 @@ namespace IMP.Application.Features.Pages.Commands.UpdatePage
                         {
                             foreach (var item in domainBlock.Items)
                             {
-                                UnitOfWork.Repository<BlockItem>().Delete(item);
+                                UnitOfWork.Repository<BlockItem>().DeleteCompletely(item);
                             }
                         }
                         await RemoveBlockBeforeUpdate(domainBlocks: domainBlock.ChildBlocks, requestBlocks: requestBlocks.Where(x => x.Id == domainBlock.Id).FirstOrDefault().ChildBlocks);
