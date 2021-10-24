@@ -28,7 +28,8 @@ namespace IMP.Application.Interfaces.Services
                 Email = email,
                 Avatar = avatar,
                 PaymentInfor = new PaymentInfor(),
-                Wallet = new Wallet()
+                Wallet = new Wallet(),
+                IsEmailVerified = email != null
             };
             // if role is brand
             if (role == RegisterRole.Brand)
