@@ -41,6 +41,7 @@ namespace IMP.Infrastructure.Identity.Services
         private readonly IFacebookService _facebookService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUnitOfWork<IdentityContext> _unitOfWork;
+        private readonly string _endpoint = "https://influencermarketingplatform.nothleft.online";
         public AccountService(UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager,
             IOptions<JWTSettings> jwtSettings,
@@ -266,16 +267,17 @@ namespace IMP.Infrastructure.Identity.Services
         {
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-            string domain = _httpContextAccessor.HttpContext.Request.Host.Value;
-            if (string.IsNullOrEmpty(domain))
-            {
-                domain = "http://localhost";
-            }
-            else
-            {
-                domain = "https://" + domain;
-            }
-            var route = "/api/accounts/confirm-email/";
+            //string domain = _httpContextAccessor.HttpContext.Request.Host.Value;
+            //if (string.IsNullOrEmpty(domain))
+            //{
+            //    domain = "http://localhost";
+            //}
+            //else
+            //{
+            //    domain = "https://" + domain;
+            //}
+            string domain = _endpoint;
+            var route = "/account/verify";
             var _enpointUri = new Uri(string.Concat($"{domain}", route));
             var verificationUri = QueryHelpers.AddQueryString(_enpointUri.ToString(), "userId", user.Id);
             verificationUri = QueryHelpers.AddQueryString(verificationUri, "code", code);
