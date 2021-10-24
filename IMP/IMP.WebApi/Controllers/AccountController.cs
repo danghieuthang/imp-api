@@ -93,7 +93,15 @@ namespace IMP.WebApi.Controllers
         public async Task<IActionResult> ConfirmEmailAsync([FromQuery] string userId, [FromQuery] string code)
         {
             var origin = Request.Headers["origin"];
-            return Ok(await _accountService.ConfirmEmailAsync(userId, code));
+            var response = await _accountService.ConfirmEmailAsync(userId, code);
+            if (response.Succeeded)
+            {
+                return Ok(response);
+            }
+            else
+            {
+                return StatusCode(400, response);
+            }
         }
 
         /// <summary>
@@ -117,7 +125,15 @@ namespace IMP.WebApi.Controllers
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword(ResetPasswordRequest model)
         {
-            return Ok(await _accountService.ResetPassword(model));
+            var response = await _accountService.ResetPassword(model);
+            if (response.Succeeded)
+            {
+                return Ok(response);
+            }
+            else
+            {
+                return StatusCode(400, response);
+            }
         }
 
         /// <summary>
