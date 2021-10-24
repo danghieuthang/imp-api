@@ -345,7 +345,7 @@ namespace IMP.Infrastructure.Identity.Services
             var _enpointUri = new Uri(string.Concat($"{domain}/", route));
             var emailRequest = new EmailRequest()
             {
-                Body = $"You reset token is - {code}",
+                Body = $"To reset password, click <a href='http://localhost:3000/user/change-password?token={code}&email={model.Email}'>here</a>",
                 To = model.Email,
                 Subject = "Reset Password",
             };
