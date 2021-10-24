@@ -342,10 +342,11 @@ namespace IMP.Infrastructure.Identity.Services
                 domain = "https://" + domain;
             }
 
-            var _enpointUri = new Uri(string.Concat($"{domain}/", route));
+            //var _enpointUri = new Uri(string.Concat($"{domain}/", route));           
+            var _enpointUri = new Uri($"https://influencermarketingplatform.nothleft.online/user/change-password?token={code}&email={model.Email}");
             var emailRequest = new EmailRequest()
             {
-                Body = $"To reset password, click <a href='http://localhost:3000/user/change-password?token={code}&email={model.Email}'>here</a>",
+                Body = $"To reset password, click <a href='{_enpointUri}'>here</a>",
                 To = model.Email,
                 Subject = "Reset Password",
             };
