@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using IMP.Application.Features.Blocks.Commands.CreateBlock;
 using IMP.Application.Features.Blocks.Commands.DeleteBlock;
 using IMP.Application.Features.Blocks.Commands.UpdateBlock;
+using IMP.Application.Features.Blocks.Commands.UpdateBlockPosition;
 using IMP.Application.Interfaces;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;

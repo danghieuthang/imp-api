@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using IMP.Application.Features.Blocks.Commands.UpdateBlockPosition;
 using IMP.Application.Features.Blocks.Queries;
 using IMP.Application.Features.Pages.Commands.CreatePage;
 using IMP.Application.Features.Pages.Commands.DeletePage;
@@ -117,15 +118,16 @@ namespace IMP.WebApi.Controllers.v1
             int influencerId = 0;
             int.TryParse(_authenticatedUserService.AppId, out influencerId);
             command.InfluencerId = influencerId;
-            var request = command.Clone();
-            var response = await Mediator.Send(command);
+            //var request = command.Clone();
+            //var response = await Mediator.Send(command);
 
-            _ = Task.Run(() =>
-            {
-                string reqs = JsonConvert.SerializeObject(request);
-                string res = JsonConvert.SerializeObject(response.Data);
-                _logger.Information($"User: {influencerId}:\n \t\tRequest: {reqs}\n\t\tResponse: {res}");
-            });
+            //_ = Task.Run(() =>
+            //{
+            //    string reqs = JsonConvert.SerializeObject(request);
+            //    string res = JsonConvert.SerializeObject(response.Data);
+            //    string logContent = $"User: {influencerId}:\n \t\tRequest: {reqs}\n\t\tResponse: {res}";
+            //    _logger.Information(logContent);
+            //});
             return Ok(response);
         }
 
@@ -156,6 +158,14 @@ namespace IMP.WebApi.Controllers.v1
             {
                 return BadRequest();
             }
+            return Ok(await Mediator.Send(command));
+        }
+
+        [ProducesResponseType(typeof(Response<int>), 200)]
+        [HttpPut("{id}/update-position")]
+        public async Task<IActionResult> UpdateBlockPosition([FromRoute] int id, [FromBody] UpdateBlockPositionCommand command)
+        {
+            command.InfluencerId = _authenticatedUserService.ApplicationUserId;
             return Ok(await Mediator.Send(command));
         }
     }

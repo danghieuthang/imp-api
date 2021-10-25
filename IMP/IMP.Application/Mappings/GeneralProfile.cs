@@ -91,7 +91,15 @@ namespace IMP.Application.Mappings
               {
                   opt.MapFrom(x => CreateDynamicObjectFromItems(x.Items));
               });
-            CreateMap<CreateBlockCommand, Block>();
+            CreateMap<CreateBlockCommand, Block>().ForMember(dest => dest.Items, opt =>
+            {
+                opt.MapFrom(x => x.Data.Properties().Select(x =>
+                new BlockItem
+                {
+                    Key = x.Name,
+                    Value = x.Value.ToString()
+                }).ToList());
+            });
             CreateMap<BlockRequest, Block>().ForMember(dest => dest.Items, opt =>
               {
                   opt.MapFrom(x => x.Data.Properties().Select(x =>
@@ -101,6 +109,17 @@ namespace IMP.Application.Mappings
                       Value = x.Value.ToString()
                   }).ToList());
               });
+
+            CreateMap<UpdateBlockCommand, Block>().ForMember(dest => dest.Items, opt =>
+            {
+                opt.MapFrom(x => x.Data.Properties().Select(x =>
+                new BlockItem
+                {
+                    Key = x.Name,
+                    Value = x.Value.ToString()
+                }).ToList());
+            });
+
             CreateMap<UpdateBlockRequest, Block>().ForMember(dest => dest.Items, opt =>
             {
                 opt.MapFrom(x => x.Data.Properties().Select(x =>
@@ -110,7 +129,6 @@ namespace IMP.Application.Mappings
                     Value = x.Value.ToString()
                 }).ToList());
             });
-            CreateMap<UpdateBlockCommand, Block>();
             #endregion
 
             #region voucher

@@ -133,8 +133,5 @@ namespace IMP.Infrastructure.Persistence.Contexts
 
             base.OnModelCreating(builder);
         }
-
-
-       
     }
 }

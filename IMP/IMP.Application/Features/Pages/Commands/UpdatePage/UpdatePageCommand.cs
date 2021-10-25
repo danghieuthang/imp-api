@@ -41,7 +41,7 @@ namespace IMP.Application.Features.Pages.Commands.UpdatePage
         public string FontFamily { get; set; }
         public string TextColor { get; set; }
         public PageStatus Status { get; set; }
-        public List<UpdateBlockRequest> Blocks { get; set; }
+        //public List<UpdateBlockRequest> Blocks { get; set; }
         public object Clone()
         {
             return this.MemberwiseClone();
@@ -73,7 +73,7 @@ namespace IMP.Application.Features.Pages.Commands.UpdatePage
                 }
                 if (pageDomain != null)
                 {
-                    await RemoveBlockBeforeUpdate(pageDomain, pageRequest);
+                    //await RemoveBlockBeforeUpdate(pageDomain, pageRequest);
                     // re get data after remove
                     //pageDomain = await _pageRepository.FindSingleAsync(x => x.Id == request.Id,
                     //    include: pages =>

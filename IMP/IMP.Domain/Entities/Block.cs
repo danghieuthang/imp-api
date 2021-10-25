@@ -9,6 +9,11 @@ namespace IMP.Domain.Entities
 {
     public class Block : BaseEntity
     {
+        public Block()
+        {
+            Items = new List<BlockItem>();
+            ChildBlocks = new List<Block>();
+        }
         [ForeignKey("Page")]
         public int? PageId { get; set; }
 

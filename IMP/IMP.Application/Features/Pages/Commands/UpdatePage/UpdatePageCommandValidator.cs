@@ -29,11 +29,11 @@ namespace IMP.Application.Features.Pages.Commands.UpdatePage
             // RuleFor(x => x.BackgroundPhoto).MustValidUrl();
             // RuleFor(x => x.Title).MustRequired(256);
 
-            RuleForEach(x => x.Blocks).MustAsync(async (x, y, z) =>
-            {
-                if (y.Id == 0) return true;
-                return await _blockRepository.IsExistAsync(y.Id);
-            }).WithMessage("'{PropertyValue}' không tồn tại.").WithErrorCode(errorCode: ErrorConstants.Application.Page.BlockIdNotValid.ToString());
+            //RuleForEach(x => x.Blocks).MustAsync(async (x, y, z) =>
+            //{
+            //    if (y.Id == 0) return true;
+            //    return await _blockRepository.IsExistAsync(y.Id);
+            //}).WithMessage("'{PropertyValue}' không tồn tại.").WithErrorCode(errorCode: ErrorConstants.Application.Page.BlockIdNotValid.ToString());
 
             RuleFor(x => x.BioLink).MustValidNickname(message: "Không hợp lệ").WithErrorCode(errorCode: ErrorConstants.Application.Page.BioLinkNotValid.ToString())
                 .MustAsync(async (x, y, z) =>
