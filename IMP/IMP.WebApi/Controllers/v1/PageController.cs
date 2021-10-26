@@ -119,7 +119,7 @@ namespace IMP.WebApi.Controllers.v1
             int.TryParse(_authenticatedUserService.AppId, out influencerId);
             command.InfluencerId = influencerId;
             //var request = command.Clone();
-            //var response = await Mediator.Send(command);
+            var response = await Mediator.Send(command);
 
             //_ = Task.Run(() =>
             //{
