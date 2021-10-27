@@ -5,7 +5,7 @@ using IMP.Application.Interfaces;
 using IMP.Application.Models;
 using IMP.Application.Wrappers;
 using IMP.Domain.Entities;
-
+using System.Linq;
 namespace IMP.Application.Features.Blocks.Commands.DeleteBlock
 {
     public class DeleteBlockCommand : IDeleteCommand<Block>
@@ -33,9 +33,22 @@ namespace IMP.Application.Features.Blocks.Commands.DeleteBlock
                     throw new ValidationException(error);
                 }
                 Repository.Delete(entity);
+
+                #region Update other block position of page
+                var blocks = Repository.GetAll(
+                        predicate: x => x.PageId == entity.PageId && x.Position > entity.Position,
+                        orderBy: x => x.OrderBy(y => y.Position))
+                        .ToList();
+                foreach(var block in blocks){
+                    block.Position--;
+                    Repository.Update(block);
+                }
+                #endregion
+
                 await UnitOfWork.CommitAsync();
                 return new Response<int>(entity.Id);
             }
+
 
 
         }

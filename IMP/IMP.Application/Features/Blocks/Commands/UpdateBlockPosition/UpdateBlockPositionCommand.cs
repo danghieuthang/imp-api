@@ -45,7 +45,6 @@ namespace IMP.Application.Features.Blocks.Commands.UpdateBlockPosition
             _blockRepository.Update(fromBlock);
             _blockRepository.Update(toblock);
             await UnitOfWork.CommitAsync();
-            await UnitOfWork.CommitAsync();
 
             return new Response<int>(toblock.Id);
 
