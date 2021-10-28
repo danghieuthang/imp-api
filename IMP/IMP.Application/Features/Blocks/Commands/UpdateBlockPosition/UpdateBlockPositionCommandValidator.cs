@@ -11,7 +11,7 @@ namespace IMP.Application.Features.Blocks.Commands.UpdateBlockPosition
     {
         public UpdateBlockPositionCommandValidator()
         {
-            RuleFor(x => x.ToPosition).Must((x, y) => x.FromPosition != x.ToPosition).WithMessage("Vị trí bị trùng");
+            // RuleFor(x => x.ToPosition).Must((x, y) => x.FromPosition != x.ToPosition).WithMessage("Vị trí bị trùng");
         }
     }
 }

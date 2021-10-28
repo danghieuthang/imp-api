@@ -15,12 +15,14 @@ using System.Threading.Tasks;
 
 namespace IMP.Application.Features.Blocks.Commands.UpdateBlockPosition
 {
+    public class UpdateBlockPositionRequest
+    {
+        public int BlockId { get; set; }
+        public int Position { get; set; }
+    }
     public class UpdateBlockPositionCommand : ICommand<int>
     {
-        public int FromId { get; set; }
-        public int ToId { get; set; }
-        public int FromPosition { get; set; }
-        public int ToPosition { get; set; }
+        public List<UpdateBlockPositionRequest> Blocks { get; set; }
         [JsonIgnore]
         public int InfluencerId { get; set; }
     }
@@ -34,20 +36,21 @@ namespace IMP.Application.Features.Blocks.Commands.UpdateBlockPosition
 
         public override async Task<Response<int>> Handle(UpdateBlockPositionCommand request, CancellationToken cancellationToken)
         {
-            var fromBlock = await _blockRepository.FindSingleAsync(x => x.Id == request.FromId);
-            var toblock = await _blockRepository.FindSingleAsync(x => x.Id == request.ToId);
+            var blockRequests = request.Blocks.ToDictionary(x => x.BlockId);
+            var blocks = await _blockRepository.FindAllAsync(x => blockRequests.Keys.Contains(x.Id));
 
-            ValidationBeforeUpdate(fromBlock, toblock, request.InfluencerId);
-
-            fromBlock.Position = request.FromPosition;
-            toblock.Position = request.ToPosition;
-
-            _blockRepository.Update(fromBlock);
-            _blockRepository.Update(toblock);
+            foreach (var block in blocks)
+            {
+                UpdateBlockPositionRequest blockRequest;
+                if (blockRequests.TryGetValue(block.Id, out blockRequest))
+                {
+                    block.Position = blockRequest.Position;
+                    _blockRepository.Update(block);
+                }
+            }
             await UnitOfWork.CommitAsync();
 
-            return new Response<int>(toblock.Id);
-
+            return new Response<int>(0);
         }
         private void ValidationBeforeUpdate(Block blockFrom, Block blockTo, int influencerId)
         {
