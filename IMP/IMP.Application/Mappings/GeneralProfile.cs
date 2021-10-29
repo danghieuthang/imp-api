@@ -93,6 +93,7 @@ namespace IMP.Application.Mappings
                 {
                     opt.MapFrom(x => JsonConvert.DeserializeObject<List<string>>(x.Interests));
                 });
+
             CreateMap<InfluencerConfigurationLocation, InfluencerConfigurationLocationViewModel>();
             CreateMap<TargetConfiguration, TargetConfigurationViewModel>().ForMember(dest => dest.Purposes, opt =>
               {

@@ -17,8 +17,6 @@ namespace IMP.Application.Models.Compaign
         public bool? MaritalStatus { get; set; }
         public bool? Pregnant { get; set; }
         public List<string> Purposes { get; set; }
-
-        public int CampaignId { get; set; }
         public List<TargetConfigurationLocationViewModel> Locations { get; set; }
     }
 

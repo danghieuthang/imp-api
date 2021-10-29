@@ -12,16 +12,14 @@ namespace IMP.Application.Models.Compaign
         public bool UnlimitedAge { get; set; }
         public string Gender { get; set; }
 
-        public string Interests { get; set; }
-        public string Jobs { get; set; }
+        public List<string> Interests { get; set; }
+        public List<string> Jobs { get; set; }
 
         public bool? ChildStatus { get; set; }
         public bool? MaritalStatus { get; set; }
         public bool? Pregnant { get; set; }
 
         public List<string> Others { get; set; }
-
-        public int CampaignId { get; set; }
 
         public List<InfluencerConfigurationLocationViewModel> Locations { get; set; }
     }
