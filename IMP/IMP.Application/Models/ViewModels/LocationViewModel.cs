@@ -15,6 +15,10 @@ namespace IMP.Application.Models.ViewModels
         public string Level { get; set; }
         public LocationViewModel Parent { get; set; }
         public IEnumerable<LocationViewModel> Locations { get; set; }
+    }
 
+    public class LocationRequest
+    {
+        public int LocationId { get; set; }
     }
 }

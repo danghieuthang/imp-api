@@ -14,12 +14,15 @@ namespace IMP.Domain.Entities
 
         [ForeignKey("Voucher")]
         public int VoucherId { get; set; }
+        [ForeignKey("Campaign")]
+        public int? CampaignId { get; set; }
 
         [MaxLength(256)]
         public string Code { get; set; }
 
         public ApplicationUser Influencer { get; set; }
         public Voucher Voucher { get; set; }
+        public Campaign Campaign { get; set; }
         public ICollection<VoucherTransaction> VoucherTransactions { get; set; }
 
 

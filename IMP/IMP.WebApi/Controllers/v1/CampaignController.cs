@@ -1,4 +1,7 @@
 ﻿using IMP.Application.Features.Campaigns.Commands.CreateCampaign;
+using IMP.Application.Features.Campaigns.Commands.CreateDraftCampaign;
+using IMP.Application.Features.Campaigns.Commands.UpdateCampaignInfluencerConfiguration;
+using IMP.Application.Features.Campaigns.Commands.UpdateCampaignTargetConfiguration;
 using IMP.Application.Features.Campaigns.Queries.GetAllCampaigns;
 using IMP.Application.Features.Campaigns.Queries.GetCampaignById;
 using IMP.Application.Features.Vouchers.Queries;
@@ -60,14 +63,46 @@ namespace IMP.WebApi.Controllers.v1
         [ProducesResponseType(typeof(Response<CampaignViewModel>), 201)]
         [HttpPost]
         [Authorize(Roles = "Brand")]
-        public async Task<IActionResult> Create([FromBody] CreateCampaignCommand command)
+        public async Task<IActionResult> Create()
         {
-            int brandId = 0;
-            _ = int.TryParse(_authenticatedUserService.AppId, out brandId);
-            command.ApplicationUserId = brandId;
-            return StatusCode(201, await Mediator.Send(command));
+            return StatusCode(201, await Mediator.Send(new CreateDraftCampaignCommand()));
         }
 
+        /// <summary>
+        /// Update campaign target configuration
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<CampaignViewModel>), 200)]
+        [HttpPut("{id}/target-configuration")]
+        [Authorize(Roles = "Brand")]
+        public async Task<IActionResult> UpdateTargetConfiguration([FromRoute] int id, [FromBody] UpdateTargetConfigurationCommand command)
+        {
+            if (id! != command.CampaignId)
+            {
+                return BadRequest();
+            }
+            return StatusCode(200, await Mediator.Send(command));
+        }
+
+        /// <summary>
+        /// Update campaign influencer configuration
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<CampaignViewModel>), 200)]
+        [HttpPut("{id}/influencer-configuration")]
+        [Authorize(Roles = "Brand")]
+        public async Task<IActionResult> UpdateInfluencerConfiguration([FromRoute] int id, [FromBody] UpdateInfluencerConfigurationCommand command)
+        {
+            if (id != command.CampaignId)
+            {
+                return BadRequest();
+            }
+            return StatusCode(200, await Mediator.Send(command));
+        }
         /// <summary>
         /// Get all voucher of a campaign
         /// </summary>

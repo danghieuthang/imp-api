@@ -21,17 +21,17 @@ namespace IMP.Application.Features.Vouchers.Commands.DeleteVoucher
 
             public override async Task<Response<int>> Handle(DeleteVoucherCommand request, CancellationToken cancellationToken)
             {
-                var voucher = await Repository.FindSingleAsync(x => x.Id == request.Id, includeProperties: x => x.Campaign);
-                if (voucher != null)
-                {
-                    if (voucher.Campaign.BrandId == request.BrandId)
-                    {
-                        Repository.Delete(voucher);
-                        await UnitOfWork.CommitAsync();
-                    }
-                    else
-                        throw new ValidationException(new ValidationError("id", $"Không có quyền xoá."));
-                }
+                var voucher = await Repository.FindSingleAsync(x => x.Id == request.Id);
+                //if (voucher != null)
+                //{
+                //    if (voucher.Campaign.BrandId == request.BrandId)
+                //    {
+                //        Repository.Delete(voucher);
+                //        await UnitOfWork.CommitAsync();
+                //    }
+                //    else
+                //        throw new ValidationException(new ValidationError("id", $"Không có quyền xoá."));
+                //}
                 throw new ValidationException(new ValidationError("id", $"'{request.Id}' không tồn tại."));
 
             }

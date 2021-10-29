@@ -10,6 +10,7 @@ namespace IMP.Domain.Entities
     {
         [MaxLength(256)]
         public string Name { get; set; }
+        public int Score { get; set; }
 
         public ICollection<Ranking> Rankings { get; set; }
     }

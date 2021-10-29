@@ -37,11 +37,16 @@ namespace IMP.Infrastructure.Persistence.Contexts
         public DbSet<BlockItem> BlockItems { get; set; }
         public DbSet<BlockType> BlockTypes { get; set; }
         public DbSet<Campaign> Campaigns { get; set; }
-        public DbSet<CampaignCondition> CampaignConditions { get; set; }
+        public DbSet<InfluencerConfiguration> InfluencerConfigurations { get; set; }
+        public DbSet<InfluencerConfigurationLocation> InfluencerConfigurationLocations { get; set; }
+        public DbSet<TargetConfiguration> TargetCustomerConfigurations { get; set; }
+        public DbSet<TargetConfigurationLocation> TargetConfigurationLocations { get; set; }
         public DbSet<CampaignActivity> CampaignActivities { get; set; }
         public DbSet<CampaignMember> CampaignMembers { get; set; }
         public DbSet<CampaignImage> CampaignImages { get; set; }
         public DbSet<CampaignType> CampaignTypes { get; set; }
+        public DbSet<CampaignVoucher> CampaignVouchers { get; set; }
+        public DbSet<RewardVoucher> RewardVouchers { get; set; }
         public DbSet<Complaint> Complaints { get; set; }
         public DbSet<Evidence> Evidences { get; set; }
         public DbSet<InfluencerPlatform> InfluencerPlatforms { get; set; }
@@ -62,6 +67,8 @@ namespace IMP.Infrastructure.Persistence.Contexts
         public DbSet<Milestone> Milestones { get; set; }
         public DbSet<CampaignMilestone> CampaignMilestones { get; set; }
         public DbSet<Otp> Otps { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<ActivityResult> ActivityResults { get; set; }
 
         #endregion  Dbsets
 
@@ -122,6 +129,7 @@ namespace IMP.Infrastructure.Persistence.Contexts
                    .HasOne<ApplicationUser>(wt => wt.Receiver)
                    .WithMany(a => a.TransactionsReceived)
                    .HasForeignKey(wt => wt.ReceiverId);
+
 
             // Filter deleted
             builder.EntitiesOfType<ISoftDeletable>(builder =>

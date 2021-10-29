@@ -19,10 +19,11 @@ namespace IMP.Domain.Entities
 
         [StringLength(256)]
         public string Name { get; set; }
-        [StringLength(2000)]
+        [StringLength(256)]
         public string Description { get; set; }
-        public int Position { get; set; }
-
+        [StringLength(2000)]
+        public string HowToDo { get; set; }
         public ICollection<MemberActivity> MemberActivities { get; set; }
+        public ICollection<ActivityResult> ActivityResults { get; set; }
     }
 }

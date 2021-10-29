@@ -32,5 +32,7 @@ namespace IMP.Domain.Entities
 
         public ICollection<ApplicationUser> ApplicationUsers { get; set; }
         public ICollection<Location> Locations { get; set; }
+        public ICollection<TargetConfigurationLocation> TargetCustomerConfigurations {get; set; }
+        public ICollection<InfluencerConfigurationLocation> InfluencerConfigurationLocations { get; set; }
     }
 }

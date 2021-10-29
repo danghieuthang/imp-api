@@ -24,9 +24,9 @@ namespace IMP.Infrastructure.Persistence.Seeds
 
             await SeedBankAsync(unitOfWork);
             await SeedBlockTypeAsync(unitOfWork);
+            await SeedRankLevelAsync(unitOfWork);
             await DefaultLocation.SeedLocationAsync(unitOfWork);
             await DefaultMileStone.SeedMilestonesAsync(unitOfWork);
-
         }
         public static async Task SeedBlockTypeAsync(IUnitOfWork unitOfWork)
         {
@@ -84,6 +84,43 @@ namespace IMP.Infrastructure.Persistence.Seeds
                     await bankRepository.AddManyAsync(banks);
                     await unitOfWork.CommitAsync();
                 }
+            }
+        }
+
+        public static async Task SeedRankLevelAsync(IUnitOfWork unitOfWork)
+        {
+            var rankLevelRepository = unitOfWork.Repository<RankLevel>();
+            var levels = await rankLevelRepository.GetAllAsync();
+            if (levels.Count == 0)
+            {
+                var rankLevelDefault = new List<RankLevel>
+                {
+                    new RankLevel
+                    {
+                        Name="Đồng",
+                        Score=0,
+                    },
+                    new RankLevel
+                    {
+                        Name="Bạc",
+                        Score=100,
+
+                    },
+                     new RankLevel
+                    {
+                        Name="Vàng",
+                        Score=1000,
+
+                    },
+                     new RankLevel
+                    {
+                        Name="Kim Cương",
+                        Score=100000,
+                    },
+                };
+                await rankLevelRepository.AddManyAsync(rankLevelDefault);
+                await unitOfWork.CommitAsync();
+
             }
         }
     }

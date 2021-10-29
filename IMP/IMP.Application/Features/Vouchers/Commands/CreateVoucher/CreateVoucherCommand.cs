@@ -6,6 +6,7 @@ using IMP.Application.Interfaces;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
 using IMP.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace IMP.Application.Features.Vouchers.Commands.CreateVoucher
@@ -13,8 +14,7 @@ namespace IMP.Application.Features.Vouchers.Commands.CreateVoucher
     public class CreateVoucherCommand : ICommand<VoucherViewModel>
     {
         [JsonIgnore]
-        public int BrandId { get; set; }
-        public int CampaignId { get; set; }
+        public int ApplicationUserId { get; set; }
         public string VoucherName { get; set; }
         public string Image { get; set; }
         public int Quantity { get; set; }
@@ -35,9 +35,14 @@ namespace IMP.Application.Features.Vouchers.Commands.CreateVoucher
 
             public override async Task<Response<VoucherViewModel>> Handle(CreateVoucherCommand request, CancellationToken cancellationToken)
             {
+                var applicationUser = await UnitOfWork.Repository<ApplicationUser>().FindSingleAsync(x => x.Id == request.ApplicationUserId);
+
                 var voucher = Mapper.Map<Voucher>(request);
+                voucher.BrandId = applicationUser.BrandId.Value;
+
                 await UnitOfWork.Repository<Voucher>().AddAsync(voucher);
                 await UnitOfWork.CommitAsync();
+
                 var voucherView = Mapper.Map<VoucherViewModel>(voucher);
                 return new Response<VoucherViewModel>(voucherView);
             }

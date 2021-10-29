@@ -44,10 +44,19 @@ namespace IMP.Application.Features.Campaigns.Commands.CreateCampaign
         public DateTime? EndDate { get; set; }
         public int MaxInfluencer { get; set; }
         public string Condition { get; set; }
+        public decimal PrizeMoney { get; set; }
+        public bool IsPrizePerVoucher { get; set; }
+        #region timeline
+        public DateTime? Openning { get; set; }
+        public DateTime? Applying { get; set; }
+        public DateTime? Advertising { get; set; }
+        public DateTime? Evaluating { get; set; }
+        public DateTime? Announcing { get; set; }
+        public DateTime? Closed { get; set; }
+        #endregion
+
         [JsonProperty("campaign_images")]
         public List<Image> Images { get; set; }
-        [JsonProperty("campaign_milestones")]
-        public List<CampaignMilestoneRequest> CampaignMilestoneRequests { get; set; }
     }
 
     public class CreateCampaignCommandHandler : CommandHandler<CreateCampaignCommand, CampaignViewModel>
@@ -68,12 +77,11 @@ namespace IMP.Application.Features.Campaigns.Commands.CreateCampaign
             campaign.CreatedById = request.ApplicationUserId;
             campaign.BrandId = applicationUser.BrandId.Value;
 
-            campaign.Status = (int)CampaignStatus.OPEN;
+            campaign.Status = (int)CampaignStatus.Pending;
             campaign = await _campaignRepository.AddAsync(campaign);
             await UnitOfWork.CommitAsync();
 
             await CreateCampaignImages(request.Images, campaign.Id);
-            await CreateCampaignMilestones(request.CampaignMilestoneRequests, campaign.Id);
             await UnitOfWork.CommitAsync();
 
             campaign = await _campaignRepository.FindSingleAsync(x => x.Id == campaign.Id, x => x.CampaignImages);

@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Features\Campaigns\Commands\DeleteCampaignById\**" />
+    <EmbeddedResource Remove="Features\Campaigns\Commands\DeleteCampaignById\**" />
+    <None Remove="Features\Campaigns\Commands\DeleteCampaignById\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="FluentValidation" Version="10.3.3" />
@@ -23,8 +29,7 @@
   <ItemGroup>
     <Folder Include="Features\ApplicationUsers\Queries\GetListUser\" />
     <Folder Include="Features\Banks\Commands\" />
-    <Folder Include="Features\Campaigns\Commands\DeleteCampaignById\" />
-    <Folder Include="Features\Campaigns\Commands\UpdateCampaign\" />
+    <Folder Include="Features\Campaigns\Commands\CreateCampaignTarget\" />
   </ItemGroup>
 
 </Project>

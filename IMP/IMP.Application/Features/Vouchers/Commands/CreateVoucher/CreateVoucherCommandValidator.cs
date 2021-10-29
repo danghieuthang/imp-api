@@ -10,13 +10,6 @@ namespace IMP.Application.Features.Vouchers.Commands.CreateVoucher
     {
         public CreateVoucherCommandValidator(IUnitOfWork unitOfWork)
         {
-            RuleFor(x => x.CampaignId).MustAsync(async (campaign, id, cancellationToken) =>
-              {
-                  var camp = await unitOfWork.Repository<Campaign>().GetByIdAsync(id);
-                  if (camp != null && camp.BrandId == campaign.BrandId) return true;
-                  return false;
-              }).WithMessage("Không hợp lệ (không tồn tại hoặc không có quyền).");
-
             RuleFor(x => x.VoucherName).MustRequired(256);
             RuleFor(x => x.Image).MustValidUrl(allowNull: true);
             RuleFor(x => x.Target).MustMaxLength(256);

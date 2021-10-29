@@ -26,7 +26,7 @@ namespace IMP.Application.Features.VoucherCodes.DeleteVoucherCode
             public override async Task<Response<int>> Handle(DeleteVoucherCodeCommand request, CancellationToken cancellationToken)
             {
                 var user = await UnitOfWork.Repository<ApplicationUser>().GetByIdAsync(request.ApplicationUserId);
-                var entity = await Repository.FindSingleAsync(x => x.Id == request.Id, include: x => x.Include(y => y.Voucher).ThenInclude(y => y.Campaign));
+                var entity = await Repository.FindSingleAsync(x => x.Id == request.Id, include: x => x.Include(y => y.Voucher));
 
                 if (entity == null)
                 {
@@ -34,7 +34,7 @@ namespace IMP.Application.Features.VoucherCodes.DeleteVoucherCode
                     throw new ValidationException(error);
                 }
 
-                if (entity.Voucher.Campaign.BrandId != user.BrandId)
+                if (entity.Voucher.BrandId != user.BrandId)
                 {
                     var error = new ValidationError("id", $"Không có quyền xóa.");
                     throw new ValidationException(error);

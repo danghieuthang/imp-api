@@ -16,9 +16,8 @@ namespace IMP.Application.Features.Vouchers.Commands.UpdateVoucher
     public class UpdateVoucherCommand : ICommand<VoucherViewModel>
     {
         [JsonIgnore]
-        public int BrandId { get; set; }
+        public int ApplicationUserId { get; set; }
         public int Id { get; set; }
-        public int CampaignId { get; set; }
         public string VoucherName { get; set; }
         public string Image { get; set; }
         public int Quantity { get; set; }

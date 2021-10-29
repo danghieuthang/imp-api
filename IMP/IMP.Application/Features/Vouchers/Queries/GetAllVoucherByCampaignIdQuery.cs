@@ -20,7 +20,7 @@ namespace IMP.Application.Features.Vouchers.Queries
 
             public override async Task<Response<IEnumerable<VoucherViewModel>>> Handle(GetAllVoucherByCampaignIdQuery request, CancellationToken cancellationToken)
             {
-                var vouchers = await Repository.FindAllAsync(x => x.CampaignId == request.CampaignId);
+                var vouchers = await Repository.FindAllAsync(x => 1 == 1);
                 var voucherViews = Mapper.Map<IEnumerable<VoucherViewModel>>(vouchers);
                 return new Response<IEnumerable<VoucherViewModel>>(voucherViews);
             }

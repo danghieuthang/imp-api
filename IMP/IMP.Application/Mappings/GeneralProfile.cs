@@ -20,6 +20,10 @@ using IMP.Application.Features.Blocks.Commands.UpdateBlock;
 using IMP.Application.Features.Vouchers.Commands.CreateVoucher;
 using System.Linq;
 using IMP.Application.Features.Brands.Commands.UpdateBrand;
+using IMP.Application.Features.Vouchers.Commands.AssignVoucherForCampaign;
+using IMP.Application.Features.Campaigns.Commands.UpdateCampaignInfluencerConfiguration;
+using IMP.Application.Features.Campaigns.Commands.UpdateCampaignTargetConfiguration;
+using Newtonsoft.Json;
 
 namespace IMP.Application.Mappings
 {
@@ -44,6 +48,65 @@ namespace IMP.Application.Mappings
             CreateMap<CampaignImage, CampaignImageViewModel>();
             CreateMap<CreateCampaignCommand, Campaign>();
             CreateMap<CampaignMilestone, CampaignMilestoneViewModel>();
+
+            CreateMap<LocationRequest, InfluencerConfigurationLocation>();
+            CreateMap<LocationRequest, TargetConfigurationLocation>();
+
+            CreateMap<UpdateInfluencerConfigurationCommand, InfluencerConfiguration>()
+                .ForMember(dest => dest.OtherCondition, opt =>
+                  {
+                      opt.MapFrom(x => JsonConvert.SerializeObject(x.Others));
+                  })
+                .ForMember(dest => dest.Jobs, opt =>
+                  {
+                      opt.MapFrom(x => JsonConvert.SerializeObject(x.Jobs));
+                  })
+                .ForMember(dest => dest.Interests, opt =>
+                {
+                    opt.MapFrom(x => JsonConvert.SerializeObject(x.Interests));
+                });
+
+            CreateMap<UpdateTargetConfigurationCommand, TargetConfiguration>()
+                .ForMember(dest => dest.Purpose, opt =>
+                  {
+                      opt.MapFrom(x => JsonConvert.SerializeObject(x.Purposes));
+                  })
+                .ForMember(dest => dest.Jobs, opt =>
+                {
+                    opt.MapFrom(x => JsonConvert.SerializeObject(x.Jobs));
+                })
+                .ForMember(dest => dest.Interests, opt =>
+                {
+                    opt.MapFrom(x => JsonConvert.SerializeObject(x.Interests));
+                });
+
+            CreateMap<InfluencerConfiguration, InfluencerConfigurationViewModel>()
+                .ForMember(dest => dest.Others, opt =>
+                  {
+                      opt.MapFrom(x => JsonConvert.DeserializeObject<List<string>>(x.OtherCondition));
+                  })
+                .ForMember(dest => dest.Jobs, opt =>
+                  {
+                      opt.MapFrom(x => JsonConvert.DeserializeObject<List<string>>(x.Jobs));
+                  })
+                .ForMember(dest => dest.Interests, opt =>
+                {
+                    opt.MapFrom(x => JsonConvert.DeserializeObject<List<string>>(x.Interests));
+                });
+            CreateMap<InfluencerConfigurationLocation, InfluencerConfigurationLocationViewModel>();
+            CreateMap<TargetConfiguration, TargetConfigurationViewModel>().ForMember(dest => dest.Purposes, opt =>
+              {
+                  opt.MapFrom(x => JsonConvert.DeserializeObject<List<string>>(x.Purpose));
+              })
+                .ForMember(dest => dest.Jobs, opt =>
+                  {
+                      opt.MapFrom(x => JsonConvert.DeserializeObject<List<string>>(x.Jobs));
+                  })
+                .ForMember(dest => dest.Interests, opt =>
+                  {
+                      opt.MapFrom(x => JsonConvert.DeserializeObject<List<string>>(x.Interests));
+                  });
+            CreateMap<TargetConfigurationLocation, TargetConfigurationLocationViewModel>();
             #endregion
 
             #region milestone
@@ -134,6 +197,8 @@ namespace IMP.Application.Mappings
             #region voucher
             CreateMap<Voucher, VoucherViewModel>();
             CreateMap<CreateVoucherCommand, Voucher>();
+            CreateMap<AssignVoucherToCampaignCommand, CampaignVoucher>();
+            CreateMap<CampaignVoucher, CampaignVoucherViewModel>();
 
             #endregion
 
@@ -144,6 +209,10 @@ namespace IMP.Application.Mappings
                 o.MapFrom(x => Newtonsoft.Json.JsonConvert.DeserializeObject<List<TransactionEvidence>>(x.Evidences));
             });
             CreateMap<ApplicationUser, TransactionUserViewModel>();
+            #endregion
+
+            #region ranking
+            CreateMap<RankLevel, RankLevelViewModel>();
             #endregion
         }
 

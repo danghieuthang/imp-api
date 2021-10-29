@@ -30,7 +30,7 @@ namespace IMP.WebApi.Controllers.v1
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateVoucherCommand command)
         {
-            command.BrandId = _appId;
+            command.ApplicationUserId = _appId;
             return StatusCode(201, await Mediator.Send(command));
         }
         /// <summary>
@@ -47,7 +47,7 @@ namespace IMP.WebApi.Controllers.v1
             {
                 return BadRequest();
             }
-            command.BrandId = _appId;
+            command.ApplicationUserId = _appId;
             return Ok(await Mediator.Send(command));
         }
         /// <summary>
