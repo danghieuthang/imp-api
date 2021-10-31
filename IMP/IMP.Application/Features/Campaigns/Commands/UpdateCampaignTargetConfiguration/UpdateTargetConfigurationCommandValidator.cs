@@ -38,6 +38,7 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaignTargetConfig
             {
                 locations.RuleFor(x => x.LocationId).Must(locationId => locationIds.Contains(locationId)).WithMessage("Khu vực không tồn tại.");
             });
+
         }
     }
 }

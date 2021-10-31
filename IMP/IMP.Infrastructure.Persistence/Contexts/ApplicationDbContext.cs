@@ -46,7 +46,7 @@ namespace IMP.Infrastructure.Persistence.Contexts
         public DbSet<CampaignImage> CampaignImages { get; set; }
         public DbSet<CampaignType> CampaignTypes { get; set; }
         public DbSet<CampaignVoucher> CampaignVouchers { get; set; }
-        public DbSet<RewardVoucher> RewardVouchers { get; set; }
+        public DbSet<CampaignReward> CampaignRewards { get; set; }
         public DbSet<Complaint> Complaints { get; set; }
         public DbSet<Evidence> Evidences { get; set; }
         public DbSet<InfluencerPlatform> InfluencerPlatforms { get; set; }

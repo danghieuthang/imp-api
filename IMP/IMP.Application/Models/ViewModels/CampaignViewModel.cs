@@ -19,8 +19,8 @@ namespace IMP.Application.Models.Compaign
         public string Description { get; set; }
         public string AdditionalInformation { get; set; }
         public string QA { get; set; }
-        public string Website { get; set; }
-        public string Fanpage { get; set; }
+        public List<string> Websites { get; set; }
+        public List<string> Fanpages { get; set; }
 
         #endregion
 
@@ -54,6 +54,7 @@ namespace IMP.Application.Models.Compaign
         #region Product/service configuration
 
         public int CampaignTypeId { get; set; }
+        public List<ProductViewModel> Products{ get; set; }
         public string Keywords { get; set; }
         public string Hashtags { get; set; }
         public string ProductInformation { get; set; }
@@ -62,9 +63,7 @@ namespace IMP.Application.Models.Compaign
         #endregion
 
         #region Reward configuration
-        public decimal FixedBonus { get; set; }
-        public string Currency { get; set; }
-        public decimal BestInfluencerBonus { get; set; }
+       
         #endregion
 
         public int Status { get; set; }
@@ -73,11 +72,25 @@ namespace IMP.Application.Models.Compaign
         public BrandViewModel Brand { get; set; }
         public InfluencerConfigurationViewModel InfluencerConfiguration { get; set; }
         public TargetConfigurationViewModel TargetConfiguration { get; set; }
+        public List<CampaignRewardViewModel> DefaultRewards { get; set; }
+        public List<CampaignRewardViewModel> BestInfluencerRewards { get; set; }
     }
 
     public class CampaignImageViewModel : BaseViewModel<int>
     {
         public int Position { get; set; }
         public string Url { get; set; }
+    }
+
+    public class CampaignImageRequest
+    {
+        public int Position { get; set; }
+        public string Url { get; set; }
+    }
+
+    public class CampaignRewardRequest
+    {
+        public string Name { get; set; }
+        public decimal Price { get; set; }
     }
 }

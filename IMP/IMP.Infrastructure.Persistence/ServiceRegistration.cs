@@ -23,7 +23,11 @@ namespace IMP.Infrastructure.Persistence
             {
                 services.AddDbContext<ApplicationDbContext>(options =>
                 {
-                    options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName));
+                    options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), b =>
+                    {
+                        b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
+                        b.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                    });
                     options.EnableSensitiveDataLogging();
                 }
                );

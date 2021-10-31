@@ -66,6 +66,10 @@ namespace IMP.Application.Extensions
         {
             return ruleBuilder.GreaterThanOrEqualTo(DateTime.UtcNow).WithMessage("Ngày không hợp lệ.");
         }
+        public static IRuleBuilderOptions<T, DateTime> MustGreaterThanNow<T>(this IRuleBuilder<T, DateTime> ruleBuilder)
+        {
+            return ruleBuilder.GreaterThan(DateTime.UtcNow).WithMessage("Ngày phải lớn hơn hiện tại.");
+        }
         /// <summary>
         /// Check date is feature date
         /// </summary>
@@ -325,7 +329,7 @@ namespace IMP.Application.Extensions
                 .WithMessage("Tên không hợp lệ.");
         }
 
-        public static IRuleBuilderOptions<T, string> MustValidEmail<T>(this IRuleBuilder<T, string> ruleBuilder, bool allowNull=true)
+        public static IRuleBuilderOptions<T, string> MustValidEmail<T>(this IRuleBuilder<T, string> ruleBuilder, bool allowNull = true)
         {
             string pattern = @"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$";
             Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);

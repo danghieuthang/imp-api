@@ -24,6 +24,7 @@ using IMP.Application.Features.Vouchers.Commands.AssignVoucherForCampaign;
 using IMP.Application.Features.Campaigns.Commands.UpdateCampaignInfluencerConfiguration;
 using IMP.Application.Features.Campaigns.Commands.UpdateCampaignTargetConfiguration;
 using Newtonsoft.Json;
+using IMP.Application.Features.Campaigns.Commands.UpdateCampaign;
 
 namespace IMP.Application.Mappings
 {
@@ -44,10 +45,51 @@ namespace IMP.Application.Mappings
             #endregion campaign type
 
             #region campaign
-            CreateMap<Campaign, CampaignViewModel>();
+
+            CreateMap<ProductRequest, Product>();
+            CreateMap<Product, ProductViewModel>();
+
+            CreateMap<Campaign, CampaignViewModel>()
+                .ForMember(dest => dest.Websites, opt =>
+                  {
+                      opt.MapFrom(x => JsonConvert.DeserializeObject<List<string>>(x.Website));
+                  })
+                .ForMember(dest => dest.Fanpages, opt =>
+                  {
+                      opt.MapFrom(x => JsonConvert.DeserializeObject<List<string>>(x.Fanpage));
+                  })
+                .ForMember(dest => dest.DefaultRewards, opt =>
+                  {
+                      opt.MapFrom(x => x.CampaignRewards.Where(c => c.IsDefaultReward == true).Select(x => new CampaignRewardViewModel
+                      {
+                          Name = x.Name,
+                          Price = x.Price,
+                          Currency = x.Currency
+                      }));
+                  })
+                .ForMember(dest => dest.BestInfluencerRewards, opt =>
+                {
+                    opt.MapFrom(x => x.CampaignRewards.Where(c => c.IsDefaultReward == false).Select(x => new CampaignRewardViewModel
+                    {
+                        Name = x.Name,
+                        Price = x.Price,
+                        Currency = x.Currency
+                    }));
+                });
+
             CreateMap<CampaignImage, CampaignImageViewModel>();
             CreateMap<CreateCampaignCommand, Campaign>();
             CreateMap<CampaignMilestone, CampaignMilestoneViewModel>();
+
+            CreateMap<UpdateCampaignInformationCommand, Campaign>()
+                .ForMember(dest => dest.Website, opt =>
+                  {
+                      opt.MapFrom(x => JsonConvert.SerializeObject(x.Websites));
+                  })
+                .ForMember(dest => dest.Fanpage, opt =>
+                {
+                    opt.MapFrom(x => JsonConvert.SerializeObject(x.Fanpages));
+                });
 
             CreateMap<LocationRequest, InfluencerConfigurationLocation>();
             CreateMap<LocationRequest, TargetConfigurationLocation>();

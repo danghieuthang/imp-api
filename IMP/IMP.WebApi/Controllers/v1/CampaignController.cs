@@ -1,5 +1,6 @@
 ﻿using IMP.Application.Features.Campaigns.Commands.CreateCampaign;
 using IMP.Application.Features.Campaigns.Commands.CreateDraftCampaign;
+using IMP.Application.Features.Campaigns.Commands.UpdateCampaign;
 using IMP.Application.Features.Campaigns.Commands.UpdateCampaignInfluencerConfiguration;
 using IMP.Application.Features.Campaigns.Commands.UpdateCampaignTargetConfiguration;
 using IMP.Application.Features.Campaigns.Queries.GetAllCampaigns;
@@ -102,6 +103,19 @@ namespace IMP.WebApi.Controllers.v1
                 return BadRequest();
             }
             return StatusCode(200, await Mediator.Send(command));
+        }
+
+        [ProducesResponseType(typeof(Response<CampaignViewModel>), 200)]
+        [HttpPut("{id}")]
+        [Authorize(Roles = "Brand")]
+        public async Task<IActionResult> UpdateInformation([FromRoute] int id, [FromBody] UpdateCampaignInformationCommand command)
+        {
+            if (id != command.Id)
+            {
+                return BadRequest();
+            }
+
+            return Ok(await Mediator.Send(command));
         }
         /// <summary>
         /// Get all voucher of a campaign

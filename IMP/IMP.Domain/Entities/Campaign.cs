@@ -9,6 +9,13 @@ namespace IMP.Domain.Entities
 {
     public partial class Campaign : BaseEntity
     {
+        public Campaign()
+        {
+            CampaignImages = new List<CampaignImage>();
+            Products = new List<Product>();
+            Vouchers = new List<CampaignVoucher>();
+            CampaignRewards = new List<CampaignReward>();
+        }
         [ForeignKey("ApplicationUser")]
         public int CreatedById { get; set; }
 
@@ -75,11 +82,8 @@ namespace IMP.Domain.Entities
         #endregion
 
         #region Reward configuration
-        public decimal FixedBonus { get; set; }
-        public ICollection<RewardVoucher> RewardVouchers { get; set; }
+        public ICollection<CampaignReward> CampaignRewards { get; set; }
         [StringLength(50)]
-        public string Currency { get; set; }
-        public decimal BestInfluencerBonus { get; set; }
         #endregion
 
         public int Status { get; set; }

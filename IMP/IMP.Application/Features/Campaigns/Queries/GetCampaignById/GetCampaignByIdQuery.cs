@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using IMP.Application.Interfaces;
 using IMP.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace IMP.Application.Features.Campaigns.Queries.GetCampaignById
 {
@@ -25,7 +26,14 @@ namespace IMP.Application.Features.Campaigns.Queries.GetCampaignById
 
             public override async Task<Response<CampaignViewModel>> Handle(GetCampaignByIdQuery request, CancellationToken cancellationToken)
             {
-                var entity = await Repository.FindSingleAsync(x => x.Id == request.Id, x => x.CampaignImages, x => x.TargetConfiguration, x => x.InfluencerConfiguration, x => x.TargetConfiguration.Locations, x => x.InfluencerConfiguration.Locations);
+                var entity = await Repository.FindSingleAsync(x => x.Id == request.Id,
+                    include: c => c.Include(x => x.CampaignImages)
+                            .Include(x => x.Products)
+                            .Include(x => x.CampaignRewards)
+                            .Include(x => x.Vouchers)
+                            .Include(x => x.TargetConfiguration).ThenInclude(x => x.Locations)
+                            .Include(x => x.InfluencerConfiguration).ThenInclude(x => x.Locations));
+
                 if (entity == null)
                 {
                     //var error = new ValidationError("id", $"'{request.Id}' không tồn tại");
