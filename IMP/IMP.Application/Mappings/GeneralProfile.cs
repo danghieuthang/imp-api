@@ -25,6 +25,8 @@ using IMP.Application.Features.Campaigns.Commands.UpdateCampaignInfluencerConfig
 using IMP.Application.Features.Campaigns.Commands.UpdateCampaignTargetConfiguration;
 using Newtonsoft.Json;
 using IMP.Application.Features.Campaigns.Commands.UpdateCampaign;
+using IMP.Application.Features.Campaigns.Commands.UpdateCampaignActivities;
+using IMP.Application.Features.ActivityTypes.Commands.CreateActivityType;
 
 namespace IMP.Application.Mappings
 {
@@ -150,6 +152,14 @@ namespace IMP.Application.Mappings
                       opt.MapFrom(x => JsonConvert.DeserializeObject<List<string>>(x.Interests));
                   });
             CreateMap<TargetConfigurationLocation, TargetConfigurationLocationViewModel>();
+
+            // Campaign activity
+            CreateMap<CampaignActivity, CampaignActivityViewModel>();
+            CreateMap<ActivityResult, ActivityResultViewModel>();
+            CreateMap<CampaignActivityUpdateModel, CampaignActivity>();
+            CreateMap<ActivityResultUpdateModel, ActivityResult>();
+            CreateMap<ActivityType, ActivityTypeViewModel>();
+            CreateMap<CreateActivityTypeCommand, ActivityType>();
             #endregion
 
             #region milestone

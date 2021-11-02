@@ -1,6 +1,7 @@
 ﻿using IMP.Application.Features.Campaigns.Commands.CreateCampaign;
 using IMP.Application.Features.Campaigns.Commands.CreateDraftCampaign;
 using IMP.Application.Features.Campaigns.Commands.UpdateCampaign;
+using IMP.Application.Features.Campaigns.Commands.UpdateCampaignActivities;
 using IMP.Application.Features.Campaigns.Commands.UpdateCampaignInfluencerConfiguration;
 using IMP.Application.Features.Campaigns.Commands.UpdateCampaignTargetConfiguration;
 using IMP.Application.Features.Campaigns.Queries.GetAllCampaigns;
@@ -115,6 +116,18 @@ namespace IMP.WebApi.Controllers.v1
                 return BadRequest();
             }
 
+            return Ok(await Mediator.Send(command));
+        }
+
+        [HttpPut("{id}/activities")]
+        [ProducesResponseType(typeof(Response<CampaignViewModel>), 200)]
+        [Authorize(Roles = "Brand")]
+        public async Task<IActionResult> UpdateActivities([FromRoute] int id, [FromBody] UpdateCampaignActivitiesCommand command)
+        {
+            if (id != command.CampaignId)
+            {
+                return BadRequest();
+            }
             return Ok(await Mediator.Send(command));
         }
         /// <summary>

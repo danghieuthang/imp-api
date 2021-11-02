@@ -29,5 +29,6 @@ namespace IMP.WebApi
         public const string Milestones = Common + "milestones";
         public const string Brand = Common + "brands";
         public const string RankLevel = Common + "rank-level";
+        public const string ActivityType = Common + "activity-types";
     }
 }

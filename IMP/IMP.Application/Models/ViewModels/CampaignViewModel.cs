@@ -54,7 +54,7 @@ namespace IMP.Application.Models.Compaign
         #region Product/service configuration
 
         public int CampaignTypeId { get; set; }
-        public List<ProductViewModel> Products{ get; set; }
+        public List<ProductViewModel> Products { get; set; }
         public string Keywords { get; set; }
         public string Hashtags { get; set; }
         public string ProductInformation { get; set; }
@@ -63,7 +63,7 @@ namespace IMP.Application.Models.Compaign
         #endregion
 
         #region Reward configuration
-       
+
         #endregion
 
         public int Status { get; set; }
@@ -74,6 +74,7 @@ namespace IMP.Application.Models.Compaign
         public TargetConfigurationViewModel TargetConfiguration { get; set; }
         public List<CampaignRewardViewModel> DefaultRewards { get; set; }
         public List<CampaignRewardViewModel> BestInfluencerRewards { get; set; }
+        public List<CampaignActivityViewModel> CampaignActivities { get; set; }
     }
 
     public class CampaignImageViewModel : BaseViewModel<int>
