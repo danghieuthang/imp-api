@@ -1,4 +1,5 @@
 ﻿using IMP.Application.Interfaces;
+using IMP.Application.Interfaces.Shared;
 using IMP.Domain.Settings;
 using IMP.Infrastructure.Shared.Caches;
 using IMP.Infrastructure.Shared.Services;
@@ -31,6 +32,7 @@ namespace IMP.Infrastructure.Shared
             services.AddTransient<IFileService, FileService>();
             services.AddTransient<ITiktokService, TiktokService>();
             services.AddScoped<IVnPayService, VnPayService>();
+            services.AddScoped<IZaloService, ZaloService>();
 
             #region Register Caching service
             services.Configure<CacheSettings>(_config.GetSection("CacheSettings"));

@@ -26,6 +26,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using IMP.Application.Constants;
 using IMP.Infrastructure.Identity.Contexts;
+using IMP.Application.Interfaces.Shared;
 
 namespace IMP.Infrastructure.Identity.Services
 {
@@ -39,6 +40,7 @@ namespace IMP.Infrastructure.Identity.Services
         private readonly IApplicationUserService _applicationUserService;
         private readonly IGoogleService _googleServices;
         private readonly IFacebookService _facebookService;
+        private readonly IZaloService _zaloService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUnitOfWork<IdentityContext> _unitOfWork;
         private readonly string _endpoint = "https://influencermarketingplatform.nothleft.online";
@@ -52,7 +54,7 @@ namespace IMP.Infrastructure.Identity.Services
             IGoogleService googleServices,
             IFacebookService facebookService,
             IHttpContextAccessor httpContextAccessor,
-            IUnitOfWork<IdentityContext> unitOfWork)
+            IUnitOfWork<IdentityContext> unitOfWork, IZaloService zaloService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -64,6 +66,7 @@ namespace IMP.Infrastructure.Identity.Services
             _facebookService = facebookService;
             _httpContextAccessor = httpContextAccessor;
             _unitOfWork = unitOfWork;
+            _zaloService = zaloService;
         }
 
         public async Task<Response<AuthenticationResponse>> AuthenticateAsync(AuthenticationRequest request, string ipAddress)
@@ -235,7 +238,7 @@ namespace IMP.Infrastructure.Identity.Services
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                //new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim("uid", user.Id),
                 new Claim("appid", user.ApplicationUserId.GetValueOrDefault().ToString()),
                 new Claim("ip", ipAddress)
@@ -525,6 +528,18 @@ namespace IMP.Infrastructure.Identity.Services
                 return new Response<AuthenticationResponse>(response, $"Authenticated Facebook {userInfo.Email}");
             }
 
+            if (request.Provider.Equals("Zalo", StringComparison.CurrentCultureIgnoreCase))
+            {
+                var userInfo = await _zaloService.ValidationAccessToken(request.Token);
+                if (userInfo == null)
+                {
+                    var error = new ValidationError("token", "Token not valid.");
+                    throw new ValidationException(error);
+                }
+                var response = await AuthenticationWithoutPassword(providerId: userInfo.ProviderUserId, ipAddress: ipAddress);
+                return new Response<AuthenticationResponse>(response, $"Authenticated Zalo {userInfo.Email}");
+            }
+
             throw new ValidationException(new ValidationError("provider", "Provider not support."));
         }
 
@@ -567,7 +582,24 @@ namespace IMP.Infrastructure.Identity.Services
                 };
                 return new Response<RegisterResponse>(response, $"Authenticated Facebook {userInfo.Email}");
             }
-
+            if (request.Provider.Equals("Zalo", StringComparison.CurrentCultureIgnoreCase))
+            {
+                var userInfo = await _zaloService.ValidationAccessToken(request.Token);
+                if (userInfo == null)
+                {
+                    var error = new ValidationError("token", "Token not valid.");
+                    throw new ValidationException(error);
+                }
+                var user = await RegisterSocialAsync(userInfo, request.Role);
+                var response = new RegisterResponse
+                {
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    UserName = user.UserName
+                };
+                return new Response<RegisterResponse>(response, $"Authenticated Zalo {userInfo.Email}");
+            }
             throw new ValidationException(new ValidationError("provider", "Provider not support."));
         }
 
