@@ -40,8 +40,8 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
 
         public int CampaignTypeId { get; set; }
         public List<ProductRequest> Products { get; set; }
-        public string Keywords { get; set; }
-        public string Hashtags { get; set; }
+        public List<string> Keywords { get; set; }
+        public List<string> Hashtags { get; set; }
         public string ProductInformation { get; set; }
         public string SampleContent { get; set; }
 

@@ -55,8 +55,8 @@ namespace IMP.Application.Models.Compaign
 
         public int CampaignTypeId { get; set; }
         public List<ProductViewModel> Products { get; set; }
-        public string Keywords { get; set; }
-        public string Hashtags { get; set; }
+        public List<string> Keywords { get; set; }
+        public List<string> Hashtags { get; set; }
         public string ProductInformation { get; set; }
         public string SampleContent { get; set; }
 

@@ -60,6 +60,14 @@ namespace IMP.Application.Mappings
                   {
                       opt.MapFrom(x => JsonConvert.DeserializeObject<List<string>>(x.Fanpage));
                   })
+                .ForMember(dest => dest.Hashtags, opt =>
+                {
+                    opt.MapFrom(x => JsonConvert.DeserializeObject<List<string>>(x.Hashtags));
+                })
+                .ForMember(dest => dest.Keywords, opt =>
+                {
+                    opt.MapFrom(x => JsonConvert.DeserializeObject<List<string>>(x.Keywords));
+                })
                 .ForMember(dest => dest.DefaultRewards, opt =>
                   {
                       opt.MapFrom(x => x.CampaignRewards.Where(c => c.IsDefaultReward == true).Select(x => new CampaignRewardViewModel
@@ -91,6 +99,14 @@ namespace IMP.Application.Mappings
                 .ForMember(dest => dest.Fanpage, opt =>
                 {
                     opt.MapFrom(x => JsonConvert.SerializeObject(x.Fanpages));
+                })
+                .ForMember(dest => dest.Hashtags, opt =>
+                 {
+                     opt.MapFrom(x => JsonConvert.SerializeObject(x.Hashtags));
+                 })
+                .ForMember(dest => dest.Keywords, opt =>
+                {
+                    opt.MapFrom(x => JsonConvert.SerializeObject(x.Keywords));
                 });
 
             CreateMap<LocationRequest, InfluencerConfigurationLocation>();
