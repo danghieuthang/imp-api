@@ -171,14 +171,15 @@ namespace IMP.Infrastructure.Identity.Services
         public async Task<Response<string>> RegisterAsync(RegisterRequest request, string origin)
         {
 
-            var userWithSameUserName = await _userManager.FindByEmailAsync(request.Email);
+            var userWithSameUserName = _userManager.Users.Where(x => x.Email == request.Email).FirstOrDefault();
             if (userWithSameUserName != null && userWithSameUserName.EmailConfirmed)
             {
                 var error = new ValidationError("email", $"Email '{request.Email}' is already taken.");
                 throw new ValidationException(error);
-            }else if (userWithSameUserName != null)
+            }
+            else if (userWithSameUserName != null)
             {
-               await _userManager.DeleteAsync(userWithSameUserName);
+                await _userManager.DeleteAsync(userWithSameUserName);
             }
 
             var user = new User
