@@ -13,8 +13,6 @@ namespace IMP.Application.Features.Vouchers.Commands.CreateVoucher
 {
     public class CreateVoucherCommand : ICommand<VoucherViewModel>
     {
-        [JsonIgnore]
-        public int ApplicationUserId { get; set; }
         public string VoucherName { get; set; }
         public string Image { get; set; }
         public int Quantity { get; set; }
@@ -29,13 +27,15 @@ namespace IMP.Application.Features.Vouchers.Commands.CreateVoucher
 
         public class CreateVoucherCommandHandler : CommandHandler<CreateVoucherCommand, VoucherViewModel>
         {
-            public CreateVoucherCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+            private readonly IAuthenticatedUserService _authenticatedUserService;
+            public CreateVoucherCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticatedUserService authenticatedUserService) : base(unitOfWork, mapper)
             {
+                _authenticatedUserService = authenticatedUserService;
             }
 
             public override async Task<Response<VoucherViewModel>> Handle(CreateVoucherCommand request, CancellationToken cancellationToken)
             {
-                var applicationUser = await UnitOfWork.Repository<ApplicationUser>().FindSingleAsync(x => x.Id == request.ApplicationUserId);
+                var applicationUser = await UnitOfWork.Repository<ApplicationUser>().FindSingleAsync(x => x.Id == _authenticatedUserService.ApplicationUserId);
 
                 var voucher = Mapper.Map<Voucher>(request);
                 voucher.BrandId = applicationUser.BrandId.Value;
@@ -44,6 +44,7 @@ namespace IMP.Application.Features.Vouchers.Commands.CreateVoucher
                 await UnitOfWork.CommitAsync();
 
                 var voucherView = Mapper.Map<VoucherViewModel>(voucher);
+
                 return new Response<VoucherViewModel>(voucherView);
             }
         }

@@ -12,24 +12,24 @@ using System.Threading.Tasks;
 
 namespace IMP.Application.Features.Vouchers.Commands.AssignVoucherForCampaign
 {
-    public class AssignVoucherToCampaignCommand: ICommand<CampaignVoucherViewModel>
+    public class AssignVoucherToCampaignCommand : ICommand<CampaignVoucherViewModel>
     {
-        public int CampaignId { get; set; }
         public int VoucherId { get; set; }
+        public int CampaignId { get; set; }
         public int Quantity { get; set; }
         public class AssignVoucherForCampaignCommandHandler : CommandHandler<AssignVoucherToCampaignCommand, CampaignVoucherViewModel>
         {
-            public AssignVoucherForCampaignCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+            private readonly IAuthenticatedUserService _authenticatedUserService;
+            public AssignVoucherForCampaignCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticatedUserService authenticatedUserService) : base(unitOfWork, mapper)
             {
+                _authenticatedUserService = authenticatedUserService;
             }
 
             public override async Task<Response<CampaignVoucherViewModel>> Handle(AssignVoucherToCampaignCommand request, CancellationToken cancellationToken)
             {
                 var campaignVoucher = Mapper.Map<CampaignVoucher>(request);
-
                 await UnitOfWork.Repository<CampaignVoucher>().AddAsync(campaignVoucher);
                 await UnitOfWork.CommitAsync();
-
                 var campaignVoucherView = Mapper.Map<CampaignVoucherViewModel>(campaignVoucher);
                 return new Response<CampaignVoucherViewModel>(campaignVoucherView);
             }

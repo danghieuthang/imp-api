@@ -1,7 +1,9 @@
 using System.Threading.Tasks;
+using IMP.Application.Features.Vouchers.Commands.AssignVoucherForCampaign;
 using IMP.Application.Features.Vouchers.Commands.CreateVoucher;
 using IMP.Application.Features.Vouchers.Commands.DeleteVoucher;
 using IMP.Application.Features.Vouchers.Commands.UpdateVoucher;
+using IMP.Application.Features.Vouchers.Queries.GetVoucherById;
 using IMP.Application.Interfaces;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
@@ -15,11 +17,9 @@ namespace IMP.WebApi.Controllers.v1
     [Authorize(Roles = "Brand")]
     public class VoucherController : BaseApiController
     {
-        private readonly int _appId;
-        public VoucherController(IAuthenticatedUserService authenticatedUserService)
+        public VoucherController()
         {
-            _appId = 0;
-            int.TryParse(authenticatedUserService.AppId, out _appId);
+
         }
         /// <summary>
         /// Create a voucher
@@ -30,7 +30,6 @@ namespace IMP.WebApi.Controllers.v1
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateVoucherCommand command)
         {
-            command.ApplicationUserId = _appId;
             return StatusCode(201, await Mediator.Send(command));
         }
         /// <summary>
@@ -47,7 +46,6 @@ namespace IMP.WebApi.Controllers.v1
             {
                 return BadRequest();
             }
-            command.ApplicationUserId = _appId;
             return Ok(await Mediator.Send(command));
         }
         /// <summary>
@@ -60,10 +58,27 @@ namespace IMP.WebApi.Controllers.v1
         {
             var command = new DeleteVoucherCommand
             {
-                Id = id,
-                BrandId = _appId
+                Id = id
             };
 
+            return Ok(await Mediator.Send(command));
+        }
+
+        [ProducesResponseType(typeof(Response<VoucherViewModel>), 200)]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new GetVoucherByIdQuery { Id = id }));
+        }
+
+        [ProducesResponseType(typeof(Response<CampaignVoucherViewModel>), 200)]
+        [HttpPost("{id}/assign-to-campaign")]
+        public async Task<IActionResult> AssignVoucherForCampaign([FromRoute] int id, [FromBody] AssignVoucherToCampaignCommand command)
+        {
+            if (id != command.VoucherId)
+            {
+                return BadRequest();
+            }
             return Ok(await Mediator.Send(command));
         }
     }

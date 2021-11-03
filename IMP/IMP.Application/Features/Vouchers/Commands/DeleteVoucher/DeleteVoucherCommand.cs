@@ -10,28 +10,30 @@ namespace IMP.Application.Features.Vouchers.Commands.DeleteVoucher
 {
     public class DeleteVoucherCommand : IDeleteCommand<Voucher>
     {
-        public int BrandId { get; set; }
         public int Id { get; set; }
         public class DeleteVoucherCommandHandler : DeleteCommandHandler<Voucher, DeleteVoucherCommand>
         {
-            public DeleteVoucherCommandHandler(IUnitOfWork unitOfWork) : base(unitOfWork)
+            private readonly IAuthenticatedUserService _authenticatedUserService;
+            public DeleteVoucherCommandHandler(IUnitOfWork unitOfWork, IAuthenticatedUserService authenticatedUserService) : base(unitOfWork)
             {
+                _authenticatedUserService = authenticatedUserService;
             }
 
 
             public override async Task<Response<int>> Handle(DeleteVoucherCommand request, CancellationToken cancellationToken)
             {
+                var user = await UnitOfWork.Repository<ApplicationUser>().GetByIdAsync(_authenticatedUserService.ApplicationUserId);
                 var voucher = await Repository.FindSingleAsync(x => x.Id == request.Id);
-                //if (voucher != null)
-                //{
-                //    if (voucher.Campaign.BrandId == request.BrandId)
-                //    {
-                //        Repository.Delete(voucher);
-                //        await UnitOfWork.CommitAsync();
-                //    }
-                //    else
-                //        throw new ValidationException(new ValidationError("id", $"Không có quyền xoá."));
-                //}
+                if (voucher != null)
+                {
+                    if (voucher.BrandId == user.BrandId)
+                    {
+                        Repository.Delete(voucher);
+                        await UnitOfWork.CommitAsync();
+                    }
+                    else
+                        throw new ValidationException(new ValidationError("id", $"Không có quyền xoá."));
+                }
                 throw new ValidationException(new ValidationError("id", $"'{request.Id}' không tồn tại."));
 
             }

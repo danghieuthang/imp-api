@@ -22,5 +22,6 @@ namespace IMP.Domain.Entities
         public bool IsDefaultReward { get; set; }
         public bool IsBestInfluencerReward { get; set; }
         public ICollection<CampaignReward> RewardVouchers { get; set; }
+        public Voucher Voucher { get; set; }
     }
 }

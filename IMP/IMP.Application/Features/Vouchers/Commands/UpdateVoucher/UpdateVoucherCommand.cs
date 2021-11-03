@@ -15,8 +15,6 @@ namespace IMP.Application.Features.Vouchers.Commands.UpdateVoucher
 {
     public class UpdateVoucherCommand : ICommand<VoucherViewModel>
     {
-        [JsonIgnore]
-        public int ApplicationUserId { get; set; }
         public int Id { get; set; }
         public string VoucherName { get; set; }
         public string Image { get; set; }
@@ -32,14 +30,21 @@ namespace IMP.Application.Features.Vouchers.Commands.UpdateVoucher
 
         public class UpdateVoucherCommandHandler : CommandHandler<UpdateVoucherCommand, VoucherViewModel>
         {
-            public UpdateVoucherCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+            private readonly IAuthenticatedUserService _authenticatedUserService;
+            public UpdateVoucherCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticatedUserService authenticatedUserService) : base(unitOfWork, mapper)
             {
+                _authenticatedUserService = authenticatedUserService;
             }
 
             public override async Task<Response<VoucherViewModel>> Handle(UpdateVoucherCommand request, CancellationToken cancellationToken)
             {
+                var applicationUser = await UnitOfWork.Repository<ApplicationUser>().GetByIdAsync(_authenticatedUserService.ApplicationUserId);
                 var repository = UnitOfWork.Repository<Voucher>();
                 var voucher = await repository.GetByIdAsync(request.Id);
+                if (voucher.BrandId != applicationUser.BrandId)
+                {
+                    throw new ValidationException(new ValidationError("", $"Không có sửa thông tin."));
+                }
                 if (voucher != null)
                 {
                     Mapper.Map(request, voucher);

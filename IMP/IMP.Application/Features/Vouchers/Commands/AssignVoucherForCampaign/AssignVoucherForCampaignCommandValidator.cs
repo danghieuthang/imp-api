@@ -16,11 +16,17 @@ namespace IMP.Application.Features.Vouchers.Commands.AssignVoucherForCampaign
             {
                 return await unitOfWork.Repository<Campaign>().IsExistAsync(campaignId);
             });
-            
+
             RuleFor(x => x.VoucherId).MustExistEntityId(async (voucherId, cancellationToken) =>
             {
                 return await unitOfWork.Repository<Voucher>().IsExistAsync(voucherId);
             });
+
+            RuleFor(x => x.VoucherId).MustAsync(async (voucher, id, c) =>
+            {
+                bool isExist = await unitOfWork.Repository<CampaignVoucher>().IsExistAsync(x => x.CampaignId == voucher.CampaignId && x.VoucherId == voucher.VoucherId);
+                return !isExist;
+            }).WithMessage("Voucher đã được assign cho campaign.");
         }
     }
 }

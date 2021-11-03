@@ -60,8 +60,6 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
                 products.RuleFor(x => x.Name).MustMaxLength(255);
                 products.RuleFor(x => x.Price).GreaterThan(0).WithMessage("Giá sản phẩm phải lớn hơn 0.");
             });
-            RuleFor(x => x.Hashtags).MustMaxLength(256);
-            RuleFor(x => x.Keywords).MustMaxLength(256);
             RuleFor(x => x.ProductInformation).MustMaxLength(2000);
             RuleFor(x => x.SampleContent).MustMaxLength(2000);
 

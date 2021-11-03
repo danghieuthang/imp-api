@@ -5,7 +5,7 @@ namespace IMP.Application.Models.ViewModels
 {
     public class VoucherViewModel : BaseViewModel<int>
     {
-        public int CampaignId { get; set; }
+        public int BrandId { get; set; }
         public string VoucherName { get; set; }
         public string Image { get; set; }
         public string Thumnail { get; set; }
@@ -21,6 +21,7 @@ namespace IMP.Application.Models.ViewModels
         public string Target { get; set; }
 
         public List<VoucherCodeViewModel> VoucherCodes { get; set; }
+        public List<CampaignVoucherViewModel> CampaignVouchers { get; set; }
     }
 
     public class VoucherCodeViewModel : BaseViewModel<int>
