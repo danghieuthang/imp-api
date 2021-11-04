@@ -68,6 +68,7 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
             _campaignRewardRepository = unitOfWork.Repository<CampaignReward>();
             _productRepository = unitOfWork.Repository<Product>();
             _campaignImageRepository = unitOfWork.Repository<CampaignImage>();
+            _campaignVoucherRepository = unitOfWork.Repository<CampaignVoucher>();
         }
 
         public override async Task<Response<CampaignViewModel>> Handle(UpdateCampaignInformationCommand request, CancellationToken cancellationToken)
