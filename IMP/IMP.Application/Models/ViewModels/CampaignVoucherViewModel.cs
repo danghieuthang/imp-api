@@ -13,4 +13,10 @@ namespace IMP.Application.Models.ViewModels
         public int Quantity { get; set; }
         public int QuantityUsed { get; set; }
     }
+
+    public class CampaignVoucherRequest
+    {
+        public int VoucherId { get; set; }
+        public int Quantity { get; set; }
+    }
 }

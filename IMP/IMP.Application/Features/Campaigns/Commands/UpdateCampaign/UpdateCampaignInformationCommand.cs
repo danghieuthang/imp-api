@@ -3,6 +3,7 @@ using IMP.Application.Exceptions;
 using IMP.Application.Interfaces;
 using IMP.Application.Models;
 using IMP.Application.Models.Compaign;
+using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
 using IMP.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -50,6 +51,7 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
         #region Reward configuration
         public List<CampaignRewardRequest> DefaultRewards { get; set; }
         public List<CampaignRewardRequest> BestInfluencerRewards { get; set; }
+        public List<CampaignVoucherRequest> Vouchers { get; set; }
         #endregion
     }
 
@@ -59,6 +61,7 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
         private readonly IGenericRepository<CampaignReward> _campaignRewardRepository;
         private readonly IGenericRepository<Product> _productRepository;
         private readonly IGenericRepository<CampaignImage> _campaignImageRepository;
+        private readonly IGenericRepository<CampaignVoucher> _campaignVoucherRepository;
         public UpdateCampaignInformationCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
         {
             _campaignRepository = unitOfWork.Repository<Campaign>();
@@ -98,6 +101,8 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
                          CampaignId = campaign.Id
                      })).ToList();
 
+                campaign.Vouchers = campaign.Vouchers.Select(x => { x.CampaignId = campaign.Id; return x; }).ToList();
+
                 _campaignRepository.Update(campaign);
                 await UnitOfWork.CommitAsync();
                 var campaignView = Mapper.Map<CampaignViewModel>(campaign);
@@ -123,6 +128,11 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
             foreach (var reward in campaign.CampaignRewards)
             {
                 _campaignRewardRepository.Delete(reward);
+            }
+            // Delete vouchers
+            foreach (var voucher in campaign.Vouchers)
+            {
+                _campaignVoucherRepository.DeleteCompletely(voucher);
             }
         }
     }

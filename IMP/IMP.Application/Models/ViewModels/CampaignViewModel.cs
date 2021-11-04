@@ -53,7 +53,7 @@ namespace IMP.Application.Models.Compaign
 
         #region Product/service configuration
 
-        public int CampaignTypeId { get; set; }
+        public CampaignTypeViewModel CampaignType { get; set; }
         public List<ProductViewModel> Products { get; set; }
         public List<string> Keywords { get; set; }
         public List<string> Hashtags { get; set; }
@@ -75,6 +75,7 @@ namespace IMP.Application.Models.Compaign
         public List<CampaignRewardViewModel> DefaultRewards { get; set; }
         public List<CampaignRewardViewModel> BestInfluencerRewards { get; set; }
         public List<CampaignActivityViewModel> CampaignActivities { get; set; }
+        public List<CampaignVoucherViewModel> Vouchers { get; set; }
     }
 
     public class CampaignImageViewModel : BaseViewModel<int>

@@ -50,7 +50,7 @@ namespace IMP.Application.Mappings
 
             CreateMap<ProductRequest, Product>();
             CreateMap<Product, ProductViewModel>();
-
+            CreateMap<CampaignVoucherRequest, CampaignVoucher>();
             CreateMap<Campaign, CampaignViewModel>()
                 .ForMember(dest => dest.Websites, opt =>
                   {
