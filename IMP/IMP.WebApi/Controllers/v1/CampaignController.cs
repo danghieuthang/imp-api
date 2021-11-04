@@ -1,4 +1,5 @@
-﻿using IMP.Application.Features.Campaigns.Commands.CreateCampaign;
+﻿using IMP.Application.Features.Campaigns.Commands.ApprovalCampaign;
+using IMP.Application.Features.Campaigns.Commands.CreateCampaign;
 using IMP.Application.Features.Campaigns.Commands.CreateDraftCampaign;
 using IMP.Application.Features.Campaigns.Commands.UpdateCampaign;
 using IMP.Application.Features.Campaigns.Commands.UpdateCampaignActivities;
@@ -106,6 +107,13 @@ namespace IMP.WebApi.Controllers.v1
             return StatusCode(200, await Mediator.Send(command));
         }
 
+        /// <summary>
+        /// Update campaign information
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="command"></param>
+        /// <returns></returns>
+
         [ProducesResponseType(typeof(Response<CampaignViewModel>), 200)]
         [HttpPut("{id}")]
         [Authorize(Roles = "Brand")]
@@ -119,6 +127,12 @@ namespace IMP.WebApi.Controllers.v1
             return Ok(await Mediator.Send(command));
         }
 
+        /// <summary>
+        /// Update campaign acvitity
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="command"></param>
+        /// <returns></returns>
         [HttpPut("{id}/activities")]
         [ProducesResponseType(typeof(Response<CampaignViewModel>), 200)]
         [Authorize(Roles = "Brand")]
@@ -130,6 +144,19 @@ namespace IMP.WebApi.Controllers.v1
             }
             return Ok(await Mediator.Send(command));
         }
+        /// <summary>
+        /// Approval campaign(change status Peding => Approved)
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPut("{id}/approval")]
+        [ProducesResponseType(typeof(Response<CampaignViewModel>), 200)]
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> ApprovalCampaign([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new ApprovalCampaignCommand { Id = id }));
+        }
+
         /// <summary>
         /// Get all voucher of a campaign
         /// </summary>
