@@ -12,11 +12,15 @@ namespace IMP.Application.Models.ViewModels
         public int VoucherId { get; set; }
         public int Quantity { get; set; }
         public int QuantityUsed { get; set; }
+        public int? QuantityForInfluencer { get; set; }
+        public int PercentForInfluencer { get; set; }
     }
 
     public class CampaignVoucherRequest
     {
         public int VoucherId { get; set; }
         public int Quantity { get; set; }
+        public int? QuantityForInfluencer { get; set; }
+        public int PercentForInfluencer { get; set; }
     }
 }
