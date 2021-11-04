@@ -23,8 +23,18 @@ namespace IMP.Application.Features.Campaigns.Queries.GetAllCampaigns
 {
     public class GetAllCampaignQuery : PageRequest, IListQuery<CampaignViewModel>
     {
+        [FromQuery(Name = "status")]
         public CampaignStatus? Status { get; set; }
+        [FromQuery(Name = "brand_id")]
         public int? BrandId { get; set; }
+        [FromQuery(Name = "from_date")]
+        public DateTime? FromDate { get; set; }
+        [FromQuery(Name = "to_date")]
+        public DateTime? ToDate { get; set; }
+        [FromQuery(Name = "campaign_type_id")]
+        public int? CampaignTypeId { get; set; }
+        [FromQuery(Name = "platform_id")]
+        public int? PlatformId { get; set; }
         public class GetAllCampaignQueryValidator : PageRequestValidator<GetAllCampaignQuery, CampaignViewModel>
         {
         }
@@ -42,7 +52,11 @@ namespace IMP.Application.Features.Campaigns.Queries.GetAllCampaigns
 
                 var page = await _campaignRepository.GetPagedList(
                     predicate: x => (request.Status == null || (request.Status != null && x.Status == (int)request.Status.Value))
-                        && (request.BrandId == null || (request.BrandId != null && x.BrandId == request.BrandId)),
+                        && (request.BrandId == null || (request.BrandId != null && x.BrandId == request.BrandId))
+                        && (request.FromDate == null || (request.FromDate != null && x.Created.Date >= request.FromDate))
+                        && (request.ToDate == null || (request.ToDate != null && x.Created.Date <= request.ToDate))
+                        && (request.CampaignTypeId == null || (request.CampaignTypeId != null && x.CampaignTypeId == request.CampaignTypeId))
+                        && (request.PlatformId == null || (request.PlatformId != null && x.InfluencerConfiguration.PlatformId == request.PlatformId)),
                     include: x => x.Include(campaign => campaign.CampaignImages),
                     pageIndex: request.PageIndex,
                     pageSize: request.PageSize,
