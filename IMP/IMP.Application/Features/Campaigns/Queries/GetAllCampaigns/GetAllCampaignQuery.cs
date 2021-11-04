@@ -24,6 +24,7 @@ namespace IMP.Application.Features.Campaigns.Queries.GetAllCampaigns
     public class GetAllCampaignQuery : PageRequest, IListQuery<CampaignViewModel>
     {
         public CampaignStatus? Status { get; set; }
+        public int? BrandId { get; set; }
         public class GetAllCampaignQueryValidator : PageRequestValidator<GetAllCampaignQuery, CampaignViewModel>
         {
         }
@@ -40,7 +41,8 @@ namespace IMP.Application.Features.Campaigns.Queries.GetAllCampaigns
             {
 
                 var page = await _campaignRepository.GetPagedList(
-                    predicate: x => (request.Status == null || (request.Status != null && x.Status == (int)request.Status.Value)),
+                    predicate: x => (request.Status == null || (request.Status != null && x.Status == (int)request.Status.Value))
+                        && (request.BrandId == null || (request.BrandId != null && x.BrandId == request.BrandId)),
                     include: x => x.Include(campaign => campaign.CampaignImages),
                     pageIndex: request.PageIndex,
                     pageSize: request.PageSize,
