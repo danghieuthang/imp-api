@@ -16,7 +16,7 @@ namespace IMP.Domain.Entities
             Locations = new List<InfluencerConfigurationLocation>();
         }
         [ForeignKey("Platform")]
-        public int PlatformId { get; set; }
+        public int? PlatformId { get; set; }
         public int NumberOfInfluencer { get; set; }
         [ForeignKey("RankLevel")]
         public int LevelId { get; set; }

@@ -33,7 +33,20 @@ namespace IMP.Application.Features.Campaigns.Commands.CreateDraftCampaign
                     CreatedById = applicationUser.Id,
                     BrandId = applicationUser.BrandId.Value,
                     Status = (int)CampaignStatus.Draft,
-                    IsActived = true
+                    IsActived = true,
+                    Openning = DateTime.Now,
+                    Applying = DateTime.Now,
+                    Advertising = DateTime.Now,
+                    Evaluating = DateTime.Now,
+                    Announcing = DateTime.Now,
+                    Closed = DateTime.Now,
+                    Description = string.Empty,
+                    Title = string.Empty,
+                    AdditionalInformation = string.Empty,
+                    ProductInformation = string.Empty,
+                    SampleContent = string.Empty,
+                    InfluencerConfiguration = new InfluencerConfiguration { LevelId = 1 },
+                    TargetConfiguration = new TargetConfiguration()
                 };
 
                 await _campaignRepository.AddAsync(campaign);
