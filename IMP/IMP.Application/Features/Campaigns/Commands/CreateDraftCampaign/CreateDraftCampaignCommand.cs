@@ -45,8 +45,27 @@ namespace IMP.Application.Features.Campaigns.Commands.CreateDraftCampaign
                     AdditionalInformation = string.Empty,
                     ProductInformation = string.Empty,
                     SampleContent = string.Empty,
-                    InfluencerConfiguration = new InfluencerConfiguration { LevelId = 1, Gender = (int)Genders.None, ChildStatus = false, MaritalStatus = false, Pregnant = false, },
-                    TargetConfiguration = new TargetConfiguration { Gender = (int)Genders.None, ChildStatus = false, MaritalStatus = false, Pregnant = false, }
+                    InfluencerConfiguration = new InfluencerConfiguration
+                    {
+                        LevelId = 1,
+                        Gender = (int)Genders.None,
+                        ChildStatus = false,
+                        MaritalStatus = false,
+                        Pregnant = false,
+                        UnlimitedAge = true,
+                        AgeFrom = 18,
+                        AgeTo = 25
+                    },
+                    TargetConfiguration = new TargetConfiguration
+                    {
+                        Gender = (int)Genders.None,
+                        ChildStatus = false,
+                        MaritalStatus = false,
+                        Pregnant = false,
+                        UnlimitedAge = true,
+                        AgeFrom = 18,
+                        AgeTo = 25
+                    }
                 };
 
                 await _campaignRepository.AddAsync(campaign);
