@@ -23,7 +23,7 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaignTargetConfig
         public int? AgeFrom { get; set; }
         public int? AgeTo { get; set; }
         public bool UnlimitedAge { get; set; }
-        public string Gender { get; set; }
+        public Genders Gender { get; set; }
         public List<string> Interests { get; set; }
         public List<string> Jobs { get; set; }
 

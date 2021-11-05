@@ -23,8 +23,7 @@ namespace IMP.Domain.Entities
         public int? AgeFrom { get; set; }
         public int? AgeTo { get; set; }
         public bool UnlimitedAge { get; set; }
-        [StringLength(256)]
-        public string Gender { get; set; }
+        public int? Gender { get; set; }
 
         [StringLength(256)]
         public string Interests { get; set; }

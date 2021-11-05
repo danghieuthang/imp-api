@@ -6,8 +6,9 @@ namespace IMP.Application.Enums
 {
     public enum Genders
     {
-        MALE,
-        FEMALE,
-        OTHER
+        Male,
+        Female,
+        Other,
+        None
     }
 }

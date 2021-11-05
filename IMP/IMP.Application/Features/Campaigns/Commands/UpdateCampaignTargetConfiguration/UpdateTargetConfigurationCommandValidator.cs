@@ -25,7 +25,7 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaignTargetConfig
             }
             ).WithMessage("Tuổi không hợp lệ");
 
-            RuleFor(x => x.Gender).IsEnumName(typeof(Genders), caseSensitive: false).WithMessage("Giới tính không có {PropertyValue}");
+            RuleFor(x => x.Gender).IsInEnum().WithMessage("Giới tính không có {PropertyValue}");
 
             RuleFor(x => x.CampaignId).MustExistEntityId(async (x, y) =>
             {
