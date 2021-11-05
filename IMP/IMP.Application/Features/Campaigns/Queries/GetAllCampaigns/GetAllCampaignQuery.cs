@@ -23,18 +23,25 @@ namespace IMP.Application.Features.Campaigns.Queries.GetAllCampaigns
 {
     public class GetAllCampaignQuery : PageRequest, IListQuery<CampaignViewModel>
     {
+        public GetAllCampaignQuery()
+        {
+            Status = new List<int>();
+            TypeIds = new List<int>();
+            PlatformIds = new List<int>();
+        }
         [FromQuery(Name = "status")]
-        public CampaignStatus? Status { get; set; }
+        public List<int> Status { get; set; }
         [FromQuery(Name = "brand_id")]
         public int? BrandId { get; set; }
         [FromQuery(Name = "from_date")]
         public DateTime? FromDate { get; set; }
         [FromQuery(Name = "to_date")]
         public DateTime? ToDate { get; set; }
-        [FromQuery(Name = "campaign_type_id")]
-        public int? CampaignTypeId { get; set; }
-        [FromQuery(Name = "platform_id")]
-        public int? PlatformId { get; set; }
+        [FromQuery(Name = "type_ids")]
+        public List<int> TypeIds { get; set; }
+        [FromQuery(Name = "platform_ids")]
+        public List<int> PlatformIds { get; set; }
+        public string Name { get; set; }
         public class GetAllCampaignQueryValidator : PageRequestValidator<GetAllCampaignQuery, CampaignViewModel>
         {
         }
@@ -51,12 +58,15 @@ namespace IMP.Application.Features.Campaigns.Queries.GetAllCampaigns
             {
 
                 var page = await _campaignRepository.GetPagedList(
-                    predicate: x => (request.Status == null || (request.Status != null && x.Status == (int)request.Status.Value))
+                    predicate: x => (request.Status.Count == 0 || (request.Status.Count > 0 && request.Status.Contains(x.Status)))
                         && (request.BrandId == null || (request.BrandId != null && x.BrandId == request.BrandId))
                         && (request.FromDate == null || (request.FromDate != null && x.Created.Date >= request.FromDate))
                         && (request.ToDate == null || (request.ToDate != null && x.Created.Date <= request.ToDate))
-                        && (request.CampaignTypeId == null || (request.CampaignTypeId != null && x.CampaignTypeId == request.CampaignTypeId))
-                        && (request.PlatformId == null || (request.PlatformId != null && x.InfluencerConfiguration.PlatformId == request.PlatformId)),
+                        && (request.TypeIds.Count == 0 || (request.TypeIds.Count > 0 && request.TypeIds.Contains(x.CampaignTypeId.Value)))
+                        && (request.PlatformIds.Count == 0 || (request.PlatformIds.Count > 0 && request.PlatformIds.Contains(x.InfluencerConfiguration.PlatformId.Value)))
+                        && (string.IsNullOrWhiteSpace(request.Name) || x.Title.ToLower().Contains(request.Name.ToLower()) 
+                            || x.Description.ToLower().Contains(request.Name.ToLower())
+                            || x.AdditionalInformation.ToLower().Contains(request.Name.ToLower())),
                     include: x => x.Include(campaign => campaign.CampaignImages),
                     pageIndex: request.PageIndex,
                     pageSize: request.PageSize,
