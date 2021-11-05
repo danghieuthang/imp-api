@@ -26,6 +26,7 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaignInfluencerCo
         public int? AgeTo { get; set; }
         public bool UnlimitedAge { get; set; }
         public Genders Gender { get; set; }
+        public int? GroupId { get; set; }
 
         public List<string> Interests { get; set; }
         public List<string> Jobs { get; set; }
