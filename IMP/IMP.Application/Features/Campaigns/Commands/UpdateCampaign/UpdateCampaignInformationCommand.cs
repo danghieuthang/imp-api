@@ -29,17 +29,17 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
 
         #region Timeline
 
-        public DateTime Openning { get; set; }
-        public DateTime Applying { get; set; }
-        public DateTime Advertising { get; set; }
-        public DateTime Evaluating { get; set; }
-        public DateTime Announcing { get; set; }
-        public DateTime Closed { get; set; }
+        public DateTime? Openning { get; set; }
+        public DateTime? Applying { get; set; }
+        public DateTime? Advertising { get; set; }
+        public DateTime? Evaluating { get; set; }
+        public DateTime? Announcing { get; set; }
+        public DateTime? Closed { get; set; }
         #endregion
 
         #region Product/service configuration
 
-        public int CampaignTypeId { get; set; }
+        public int? CampaignTypeId { get; set; }
         public List<ProductRequest> Products { get; set; }
         public List<string> Keywords { get; set; }
         public List<string> Hashtags { get; set; }
@@ -76,33 +76,41 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
             var campaign = await _campaignRepository.FindSingleAsync(predicate: x => x.Id == request.Id,
                 include: campaigns => campaigns.Include(campaign => campaign.CampaignImages)
                                         .Include(x => x.Products)
-                                        .Include(x => x.CampaignRewards));
+                                        .Include(x => x.CampaignRewards)
+                                        .Include(x => x.Vouchers));
             if (campaign != null)
             {
-                DeleteBeforeUpdate(campaign);
+                DeleteBeforeUpdate(campaign, request);
                 Mapper.Map(request, campaign);
+
                 // Process Campaign Rewards
-                var defaultRewards = request.DefaultRewards.Select(x =>
-                    new CampaignReward
-                    {
-                        Name = x.Name,
-                        Price = x.Price,
-                        Currency = "VND",
-                        IsDefaultReward = true,
-                        CampaignId = campaign.Id
-                    }).ToList();
+                if (request.DefaultRewards != null && request.BestInfluencerRewards != null)
+                {
+                    var defaultRewards = request.DefaultRewards.Select(x =>
+                   new CampaignReward
+                   {
+                       Name = x.Name,
+                       Price = x.Price,
+                       Currency = "VND",
+                       IsDefaultReward = true,
+                       CampaignId = campaign.Id
+                   }).ToList();
 
-                campaign.CampaignRewards = defaultRewards.Union(request.BestInfluencerRewards.Select(x =>
-                     new CampaignReward
-                     {
-                         Name = x.Name,
-                         Price = x.Price,
-                         Currency = "VND",
-                         IsDefaultReward = false,
-                         CampaignId = campaign.Id
-                     })).ToList();
+                    campaign.CampaignRewards = defaultRewards.Union(request.BestInfluencerRewards.Select(x =>
+                         new CampaignReward
+                         {
+                             Name = x.Name,
+                             Price = x.Price,
+                             Currency = "VND",
+                             IsDefaultReward = false,
+                             CampaignId = campaign.Id
+                         })).ToList();
+                }
 
-                campaign.Vouchers = campaign.Vouchers.Select(x => { x.CampaignId = campaign.Id; return x; }).ToList();
+                if (request.Vouchers != null)
+                {
+                    campaign.Vouchers = campaign.Vouchers.Select(x => { x.CampaignId = campaign.Id; return x; }).ToList();
+                }
 
                 _campaignRepository.Update(campaign);
                 await UnitOfWork.CommitAsync();
@@ -113,27 +121,42 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
         }
 
 
-        private void DeleteBeforeUpdate(Campaign campaign)
+        private void DeleteBeforeUpdate(Campaign campaign, UpdateCampaignInformationCommand request)
         {
             // delete images
-            foreach (var image in campaign.CampaignImages)
+            if (request.Images != null)
             {
-                _campaignImageRepository.Delete(image);
+                foreach (var image in campaign.CampaignImages)
+                {
+                    _campaignImageRepository.Delete(image);
+                }
             }
+
             // Delete products
-            foreach (var product in campaign.Products)
+            if (request.Products != null)
             {
-                _productRepository.Delete(product);
+                foreach (var product in campaign.Products)
+                {
+                    _productRepository.Delete(product);
+                }
             }
+
             //Delete reward
-            foreach (var reward in campaign.CampaignRewards)
+            if (request.DefaultRewards != null || request.BestInfluencerRewards != null)
             {
-                _campaignRewardRepository.Delete(reward);
+                foreach (var reward in campaign.CampaignRewards)
+                {
+                    _campaignRewardRepository.Delete(reward);
+                }
             }
+
             // Delete vouchers
-            foreach (var voucher in campaign.Vouchers)
+            if (request.Vouchers != null)
             {
-                _campaignVoucherRepository.DeleteCompletely(voucher);
+                foreach (var voucher in campaign.Vouchers)
+                {
+                    _campaignVoucherRepository.DeleteCompletely(voucher);
+                }
             }
         }
     }

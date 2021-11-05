@@ -94,20 +94,25 @@ namespace IMP.Application.Mappings
             CreateMap<UpdateCampaignInformationCommand, Campaign>()
                 .ForMember(dest => dest.Website, opt =>
                   {
-                      opt.MapFrom(x => JsonConvert.SerializeObject(x.Websites));
+                      opt.PreCondition(src => src.Websites != null);
+                      opt.MapFrom(x => x.Websites == null ? "[]" : JsonConvert.SerializeObject(x.Websites));
                   })
                 .ForMember(dest => dest.Fanpage, opt =>
                 {
-                    opt.MapFrom(x => JsonConvert.SerializeObject(x.Fanpages));
+                    opt.PreCondition(src => src.Fanpages != null);
+                    opt.MapFrom(x => x.Fanpages == null ? "[]" : JsonConvert.SerializeObject(x.Fanpages));
                 })
                 .ForMember(dest => dest.Hashtags, opt =>
                  {
-                     opt.MapFrom(x => JsonConvert.SerializeObject(x.Hashtags));
+                     opt.PreCondition(src => src.Hashtags != null);
+                     opt.MapFrom(x => x.Hashtags == null ? "[]" : JsonConvert.SerializeObject(x.Hashtags));
                  })
                 .ForMember(dest => dest.Keywords, opt =>
                 {
-                    opt.MapFrom(x => JsonConvert.SerializeObject(x.Keywords));
-                });
+                    opt.PreCondition(src => src.Websites != null);
+                    opt.MapFrom(x => x.Websites == null ? "[]" : JsonConvert.SerializeObject(x.Keywords));
+                })
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             CreateMap<LocationRequest, InfluencerConfigurationLocation>();
             CreateMap<LocationRequest, TargetConfigurationLocation>();

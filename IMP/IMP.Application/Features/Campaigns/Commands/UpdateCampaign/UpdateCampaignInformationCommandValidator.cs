@@ -20,40 +20,45 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
             RuleFor(x => x.AdditionalInformation).MustMaxLength(2000);
 
             //timeline
-            RuleFor(x => x.Openning).MustGreaterThanNow();
+            RuleFor(x => x.Openning.Value).MustGreaterThanNow().When(x => x.Openning.HasValue);
 
-            RuleFor(x => x.Applying).Must((x, y) =>
+            RuleFor(x => x.Applying.Value).Must((x, y) =>
             {
                 return y.CompareTo(x.Openning) > 0;
-            }).WithMessage("Ngày nộp đơn phải lớn hơn ngày bắt đầu chiến dịch.");
+            }).WithMessage("Ngày nộp đơn phải lớn hơn ngày bắt đầu chiến dịch.")
+                .When(x => x.Applying.HasValue);
 
-            RuleFor(x => x.Advertising).Must((x, y) =>
+            RuleFor(x => x.Advertising.Value).Must((x, y) =>
             {
                 return y.CompareTo(x.Applying) > 0;
-            }).WithMessage("Ngày quảng cáo phải lớn hơn ngày nộp đơn.");
+            }).WithMessage("Ngày quảng cáo phải lớn hơn ngày nộp đơn.")
+                .When(x => x.Advertising.HasValue);
 
 
-            RuleFor(x => x.Evaluating).Must((x, y) =>
+            RuleFor(x => x.Evaluating.Value).Must((x, y) =>
             {
                 return y.CompareTo(x.Advertising) > 0;
-            }).WithMessage("Ngày đánh giá chiến dịch phải lơn hơn ngày quảng cáo.");
+            }).WithMessage("Ngày đánh giá chiến dịch phải lơn hơn ngày quảng cáo.")
+                .When(x => x.Evaluating.HasValue);
 
-            RuleFor(x => x.Announcing).Must((x, y) =>
+            RuleFor(x => x.Announcing.Value).Must((x, y) =>
             {
                 return y.CompareTo(x.Evaluating) > 0;
-            }).WithMessage("Ngày thông báo phải lớn hơn ngày đánh giá.");
+            }).WithMessage("Ngày thông báo phải lớn hơn ngày đánh giá.")
+                .When(x => x.Announcing.HasValue);
 
-            RuleFor(x => x.Closed).Must((x, y) =>
+            RuleFor(x => x.Closed.Value).Must((x, y) =>
             {
                 return y.CompareTo(x.Announcing) > 0;
-            }).WithMessage("Ngày kết thúc chiến dịch phải lớn hơn ngày thông báo.");
+            }).WithMessage("Ngày kết thúc chiến dịch phải lớn hơn ngày thông báo.")
+                .When(x => x.Closed.HasValue);
 
             // Product/ service
 
-            RuleFor(x => x.CampaignTypeId).MustExistEntityId(async (x, y) =>
+            RuleFor(x => x.CampaignTypeId.Value).MustExistEntityId(async (x, y) =>
             {
                 return await unitOfWork.Repository<CampaignType>().IsExistAsync(x);
-            });
+            }).When(x => x.CampaignTypeId.HasValue);
 
             RuleForEach(x => x.Products).ChildRules((products) =>
             {
