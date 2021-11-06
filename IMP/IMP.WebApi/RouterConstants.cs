@@ -30,5 +30,8 @@ namespace IMP.WebApi
         public const string Brand = Common + "brands";
         public const string RankLevel = Common + "rank-level";
         public const string ActivityType = Common + "activity-types";
+        public const string Group = Common + "groups";
+        public const string Interest = Common + "interests";
+        public const string Job = Common + "jobs";
     }
 }
