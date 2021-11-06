@@ -16,6 +16,8 @@ using IMP.WebApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +30,7 @@ namespace IMP.WebApi.Controllers.v1
     public class CampaignController : BaseApiController
     {
         private readonly IAuthenticatedUserService _authenticatedUserService;
+        private readonly ILogger _logger = Log.ForContext<CampaignController>();
 
         public CampaignController(IAuthenticatedUserService authenticatedUserService)
         {
@@ -142,6 +145,17 @@ namespace IMP.WebApi.Controllers.v1
             {
                 return BadRequest();
             }
+            var request = command.Clone();
+            var response = await Mediator.Send(command);
+
+            _ = Task.Run(() =>
+            {
+                string reqs = JsonConvert.SerializeObject(request);
+                string res = JsonConvert.SerializeObject(response.Data);
+                string logContent = $"User: {_authenticatedUserService.ApplicationUserId}:\n \t\tRequest: {reqs}\n\t\tResponse: {res}";
+                _logger.Information(logContent);
+            });
+
             return Ok(await Mediator.Send(command));
         }
         /// <summary>
@@ -156,6 +170,8 @@ namespace IMP.WebApi.Controllers.v1
         {
             return Ok(await Mediator.Send(new ApprovalCampaignCommand { Id = id }));
         }
+
+
 
         /// <summary>
         /// Get all voucher of a campaign
