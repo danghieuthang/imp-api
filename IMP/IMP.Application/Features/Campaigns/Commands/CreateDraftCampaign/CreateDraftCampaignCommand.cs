@@ -54,7 +54,8 @@ namespace IMP.Application.Features.Campaigns.Commands.CreateDraftCampaign
                         Pregnant = false,
                         UnlimitedAge = true,
                         AgeFrom = 18,
-                        AgeTo = 25
+                        AgeTo = 25,
+                        PlatformId=1
                     },
                     TargetConfiguration = new TargetConfiguration
                     {
