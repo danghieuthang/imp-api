@@ -133,7 +133,7 @@ namespace IMP.Infrastructure.Identity.Services
             }
             return username;
         }
-        private async Task<User> RegisterSocialAsync(ProviderUserDetail providerUser, RegisterRole role = RegisterRole.Influencer)
+        private async Task<User> RegisterSocialAsync(ProviderUserDetail providerUser, RegisterRole role = RegisterRole.Influencer, bool isGoogle = false)
         {
             //string username = await GenerateUnDuplicateUserName(providerUser.Name);
 
@@ -147,7 +147,7 @@ namespace IMP.Infrastructure.Identity.Services
                 ProviderUserId = providerUser.ProviderUserId,
                 IsChangeUsername = false,
             };
-            var userWithProviderId = _userManager.Users?.FirstOrDefault(x => x.ProviderUserId == user.ProviderUserId);
+            var userWithProviderId = _userManager.Users?.FirstOrDefault(x => (!isGoogle && x.ProviderUserId == user.ProviderUserId) || (isGoogle && user.Email == x.Email));
             if (userWithProviderId == null)
             {
 
@@ -512,7 +512,7 @@ namespace IMP.Infrastructure.Identity.Services
                     var error = new ValidationError("token", "Token not valid.");
                     throw new ValidationException(error);
                 }
-                var response = await AuthenticationWithoutPassword(providerId: userInfo.ProviderUserId, ipAddress: ipAddress);
+                var response = await AuthenticationWithoutPassword(email: userInfo.Email, ipAddress: ipAddress);
                 return new Response<AuthenticationResponse>(response, $"Authenticated Google {userInfo.Email}");
             }
 
@@ -553,7 +553,7 @@ namespace IMP.Infrastructure.Identity.Services
                     var error = new ValidationError("token", "Token not valid.");
                     throw new ValidationException(error);
                 }
-                var user = await RegisterSocialAsync(userInfo, request.Role);
+                var user = await RegisterSocialAsync(userInfo, request.Role, isGoogle: true);
                 var response = new RegisterResponse
                 {
                     Email = user.Email,
