@@ -193,9 +193,21 @@ namespace IMP.Application.Mappings
             #endregion
 
             #region influencer platform
-            CreateMap<InfluencerPlatform, InfluencerPlatformViewModel>();
-            CreateMap<CreateInfluencerPlatformCommand, InfluencerPlatform>();
-            CreateMap<UpdateInfluencerPlatformCommand, InfluencerPlatform>();
+            CreateMap<InfluencerPlatform, InfluencerPlatformViewModel>()
+                .ForMember(dest => dest.Interests, opt =>
+                  {
+                      opt.MapFrom(y => JsonConvert.DeserializeObject<List<string>>(y.Interests));
+                  });
+            CreateMap<CreateInfluencerPlatformCommand, InfluencerPlatform>()
+                .ForMember(dest => dest.Interests, opt =>
+                  {
+                      opt.MapFrom(x => JsonConvert.SerializeObject(x.Interests));
+                  });
+            CreateMap<UpdateInfluencerPlatformCommand, InfluencerPlatform>()
+                .ForMember(dest => dest.Interests, opt =>
+                {
+                    opt.MapFrom(x => JsonConvert.SerializeObject(x.Interests));
+                });
             #endregion
 
             #region application user

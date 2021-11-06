@@ -26,6 +26,8 @@ namespace IMP.Domain.Entities
         public string Avatar { get; set; }
         [StringLength(256)]
         public string Hashtag { get; set; }
+        [StringLength(2000)]
+        public string Interests { get; set; }
         public bool IsVerified { get; set; }
     }
 }

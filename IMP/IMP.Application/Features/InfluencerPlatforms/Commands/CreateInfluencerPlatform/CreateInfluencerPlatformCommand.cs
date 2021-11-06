@@ -22,6 +22,7 @@ namespace IMP.Application.Features.InfluencerPlatforms.Commands.CreateInfluencer
         public int InfluencerId { get; set; }
         public int PlatformId { get; set; }
         public string Url { get; set; }
+        public List<string> Interests { get; set; }
 
         public class CreateInfluencerPlatformCommandHandler : IRequestHandler<CreateInfluencerPlatformCommand, Response<InfluencerPlatformViewModel>>
         {
@@ -39,13 +40,13 @@ namespace IMP.Application.Features.InfluencerPlatforms.Commands.CreateInfluencer
             public async Task<Response<InfluencerPlatformViewModel>> Handle(CreateInfluencerPlatformCommand request, CancellationToken cancellationToken)
             {
                 var influencerPlatform = _mapper.Map<InfluencerPlatform>(request);
-                influencerPlatform.Hashtag="imp_"+StringHelper.RandomString(10);
+                influencerPlatform.Hashtag = "imp_" + StringHelper.RandomString(10);
                 influencerPlatform = await _influencerPlatformRepository.AddAsync(influencerPlatform);
                 await _unitOfWork.CommitAsync();
 
                 var influencerPlatformView = _mapper.Map<InfluencerPlatformViewModel>(influencerPlatform);
-                influencerPlatformView.Influencer = new ApplicationUserViewModel { Id = request.InfluencerId };
-                influencerPlatformView.Platform = new PlatformViewModel { Id = request.PlatformId };
+                //influencerPlatformView.Influencer = new ApplicationUserViewModel { Id = request.InfluencerId };
+                influencerPlatformView.Platform = new PlatformViewModel { Id = request.PlatformId }; 
 
                 return new Response<InfluencerPlatformViewModel>(influencerPlatformView);
             }
