@@ -17,6 +17,7 @@ namespace IMP.WebApi.Controllers.v1
         {
             var response = new Response<List<string>>
             {
+                Succeeded =true,
                 Data = new List<string>
                 {
                     "Học Sinh",
