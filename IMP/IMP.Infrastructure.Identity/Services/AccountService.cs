@@ -157,7 +157,7 @@ namespace IMP.Infrastructure.Identity.Services
                 {
                     await _userManager.AddToRoleAsync(user, role.ToString());
                     // Create Application User
-                    var applicationUser = await _applicationUserService.CreateUser(userRole: role, avatar: providerUser.Avatar);
+                    var applicationUser = await _applicationUserService.CreateUser(userRole: role, avatar: providerUser.Avatar, email: providerUser.Email);
                     // Add Application User ref to Identity User
                     if (applicationUser != null)
                     {
