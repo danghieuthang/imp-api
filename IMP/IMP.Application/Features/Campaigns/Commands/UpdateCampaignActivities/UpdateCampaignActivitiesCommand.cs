@@ -42,11 +42,11 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaignActivities
                 {
 
                     // process activities
-                    var requestActivities = request.CampaignActivities.ToDictionary(x => x.Id);
+                    List<int> requestActivitiesIds = request.CampaignActivities.Select(x => x.Id).ToList();
 
                     foreach (var activity in campaign.CampaignActivities)
                     {
-                        if (requestActivities.ContainsKey(activity.Id)) // delete activity not in request
+                        if (requestActivitiesIds.Contains(activity.Id)) // delete activity not in request
                         {
                             _campaignActivityRepository.Delete(activity);
                         }
