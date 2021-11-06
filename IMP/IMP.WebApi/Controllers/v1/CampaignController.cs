@@ -156,7 +156,7 @@ namespace IMP.WebApi.Controllers.v1
                 _logger.Information(logContent);
             });
 
-            return Ok(await Mediator.Send(command));
+            return Ok(response);
         }
         /// <summary>
         /// Approval campaign(change status Peding => Approved)
