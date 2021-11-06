@@ -32,6 +32,7 @@ namespace IMP.Application.Features.ApplicationUsers.Commands.UpdateUserInfomatio
             RuleFor(x => x.JobR).ListMustContainFewerThan(10);
             RuleFor(x => x.Email).MustAsync(async (x, y, z) =>
             {
+                if (string.IsNullOrEmpty(y)) return true;
                 var user = await _applicationUserRepostoryAsync.GetByIdAsync(x.Id);
                 if(user.Email==y){
                     return true;
