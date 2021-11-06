@@ -50,7 +50,7 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaignActivities
 
                     foreach (var activity in campaign.CampaignActivities)
                     {
-                        if (requestActivitiesIds.Contains(activity.Id)) // delete activity not in request
+                        if (!requestActivitiesIds.Contains(activity.Id)) // delete activity not in request
                         {
                             _campaignActivityRepository.Delete(activity);
                         }
