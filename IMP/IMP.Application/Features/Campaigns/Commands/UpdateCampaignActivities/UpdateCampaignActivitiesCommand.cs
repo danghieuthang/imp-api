@@ -20,6 +20,10 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaignActivities
         public int CampaignId { get; set; }
         public List<CampaignActivityUpdateModel> CampaignActivities { get; set; }
 
+        public Object Clone()
+        {
+            return this.MemberwiseClone();
+        }
         public class UpdateCampaignActivitiesCommandHandler : CommandHandler<UpdateCampaignActivitiesCommand, CampaignViewModel>
         {
             private readonly IGenericRepository<Campaign> _campaignRepository;
