@@ -50,7 +50,7 @@ namespace IMP.Application.Features.VoucherCodes.Commands.CreateVoucherCode
                     } while (voucherCodes.Contains(code));
                 }
 
-                var voucherCode = new VoucherCode { Code = code, InfluencerId = request.InfluencerId };
+                var voucherCode = new VoucherCode { Code = code};
                 await _voucherCodeRepository.AddAsync(voucherCode);
                 await UnitOfWork.CommitAsync();
 

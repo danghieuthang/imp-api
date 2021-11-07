@@ -116,5 +116,6 @@ namespace IMP.Domain.Entities
 
         public virtual ICollection<WalletTransaction> TransactionsSent { get; set; }
         public virtual ICollection<WalletTransaction> TransactionsReceived { get; set; }
+        public virtual ICollection<VoucherCodeApplicationUser> VoucherCodeApplicationUsers { get; set; }
     }
 }

@@ -2,12 +2,14 @@ using System.Threading.Tasks;
 using IMP.Application.Features.Vouchers.Commands.AssignVoucherForCampaign;
 using IMP.Application.Features.Vouchers.Commands.CreateVoucher;
 using IMP.Application.Features.Vouchers.Commands.DeleteVoucher;
+using IMP.Application.Features.Vouchers.Commands.ImportVoucherCodes;
 using IMP.Application.Features.Vouchers.Commands.UpdateVoucher;
 using IMP.Application.Features.Vouchers.Queries.GetVoucherById;
 using IMP.Application.Interfaces;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IMP.WebApi.Controllers.v1
@@ -74,6 +76,23 @@ namespace IMP.WebApi.Controllers.v1
         [ProducesResponseType(typeof(Response<CampaignVoucherViewModel>), 200)]
         [HttpPost("{id}/assign-to-campaign")]
         public async Task<IActionResult> AssignVoucherForCampaign([FromRoute] int id, [FromBody] AssignVoucherToCampaignCommand command)
+        {
+            if (id != command.VoucherId)
+            {
+                return BadRequest();
+            }
+            return Ok(await Mediator.Send(command));
+        }
+
+        /// <summary>
+        /// Import voucher code for voucher
+        /// </summary>
+        /// <param name="id">The id of voucher</param>
+        /// <param name="file">The file voucher code</param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<bool>), 200)]
+        [HttpPost("{id}/import-codes")]
+        public async Task<IActionResult> ImportVoucherCodes([FromRoute] int id, [FromForm] ImportVoucherCodesCommand command)
         {
             if (id != command.VoucherId)
             {

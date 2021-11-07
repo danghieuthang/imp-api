@@ -27,8 +27,9 @@ namespace IMP.Application.Models.ViewModels
     public class VoucherCodeViewModel : BaseViewModel<int>
     {
 
-        //public int InfluencerId { get; set; }
         public string Code { get; set; }
+        public int Quantity { get; set; }
+        public int QuantityUsed { get; set; }
     }
 
     public class VoucherTransactionViewModel : BaseViewModel<int>
