@@ -43,7 +43,7 @@ namespace IMP.Domain.Entities
         /// <summary>
         /// Ngày mở chiến dịch trên web
         /// </summary>
-        public DateTime? OpenningDate { get; set; }
+        public DateTime? OpeningDate { get; set; }
         /// <summary>
         /// Ngày nộp đơn & duyệt đơn Advertising: Ngày quảng cáo
         /// </summary>

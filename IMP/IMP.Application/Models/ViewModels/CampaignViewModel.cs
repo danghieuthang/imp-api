@@ -29,8 +29,7 @@ namespace IMP.Application.Models.Compaign
         /// <summary>
         /// Ngày mở chiến dịch trên web
         /// </summary>
-        [JsonProperty("openning_date")]
-        public DateTime? OpenningDate { get; set; }
+        public DateTime? OpeningDate { get; set; }
         /// <summary>
         /// Ngày nộp đơn & duyệt đơn Advertising: Ngày quảng cáo
         /// </summary>
