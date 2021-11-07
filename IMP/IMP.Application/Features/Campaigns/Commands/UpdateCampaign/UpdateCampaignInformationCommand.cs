@@ -81,7 +81,7 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
                                         .Include(x => x.Vouchers));
             if (campaign != null)
             {
-                DeleteBeforeUpdate(campaign, request);
+               await DeleteBeforeUpdate(campaign, request);
                 Mapper.Map(request, campaign);
 
                 // Process Campaign Rewards
@@ -122,14 +122,14 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
         }
 
 
-        private void DeleteBeforeUpdate(Campaign campaign, UpdateCampaignInformationCommand request)
+        private async Task DeleteBeforeUpdate(Campaign campaign, UpdateCampaignInformationCommand request)
         {
             // delete images
             if (request.Images != null)
             {
                 foreach (var image in campaign.CampaignImages)
                 {
-                    _campaignImageRepository.Delete(image);
+                    _campaignImageRepository.DeleteCompletely(image);
                 }
             }
 
@@ -138,7 +138,7 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
             {
                 foreach (var product in campaign.Products)
                 {
-                    _productRepository.Delete(product);
+                    _productRepository.DeleteCompletely(product);
                 }
             }
 
@@ -147,7 +147,7 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
             {
                 foreach (var reward in campaign.CampaignRewards)
                 {
-                    _campaignRewardRepository.Delete(reward);
+                    _campaignRewardRepository.DeleteCompletely(reward);
                 }
             }
 
