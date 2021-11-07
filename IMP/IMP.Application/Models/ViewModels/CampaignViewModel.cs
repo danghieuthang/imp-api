@@ -29,32 +29,32 @@ namespace IMP.Application.Models.Compaign
         /// <summary>
         /// Ngày mở chiến dịch trên web
         /// </summary>
-        [JsonProperty("OpenningDate")]
+        [JsonProperty("openning_date")]
         public DateTime? Openning { get; set; }
         /// <summary>
         /// Ngày nộp đơn & duyệt đơn Advertising: Ngày quảng cáo
         /// </summary>
-        [JsonProperty("ApplyingDate")]
+        [JsonProperty("applying_date")]
         public DateTime? Applying { get; set; }
         /// <summary>
         /// Ngày quảng cáo
         /// </summary>
-        [JsonProperty("AdvertisingDate")]
+        [JsonProperty("advertising_date")]
         public DateTime? Advertising { get; set; }
         /// <summary>
         /// Ngày đánh giá chiến dịch
         /// </summary>
-        [JsonProperty("EvaluatingDate")]
+        [JsonProperty("evaluating_date")]
         public DateTime? Evaluating { get; set; }
         /// <summary>
         /// Ngày thông báo
         /// </summary>
-        [JsonProperty("AnnouncingDate")]
+        [JsonProperty("announcing_date")]
         public DateTime? Announcing { get; set; }
         /// <summary>
         /// Ngày kết thúc, ngày này bắt buộc phải chuyển hết hoa hồng cho influencer
         /// </summary>
-        [JsonProperty("ClosedDate")]
+        [JsonProperty("closed_date")]
         public DateTime? Closed { get; set; }
         #endregion
 
