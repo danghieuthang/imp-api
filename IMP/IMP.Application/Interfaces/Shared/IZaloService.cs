@@ -10,5 +10,7 @@ namespace IMP.Application.Interfaces.Shared
     public interface IZaloService
     {
         Task<ProviderUserDetail> ValidationAccessToken(string accessToken);
+        Task<bool> SendMessageAsync(string clientAccessToken);
+        Task<string> GetLoginUrlAsync(string callBackUrl);
     }
 }

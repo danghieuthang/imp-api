@@ -94,6 +94,7 @@ namespace IMP.Application.Interfaces
         /// <returns></returns>
         Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate = null);
         Task<TEntity> AddAsync(TEntity entity);
+        TEntity Add(TEntity entity);
         Task AddManyAsync(IEnumerable<TEntity> entities);
         void Update(TEntity entity);
         void Update(TEntity newEntity, TEntity existingEntity);

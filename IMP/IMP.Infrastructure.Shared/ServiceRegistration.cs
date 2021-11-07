@@ -21,6 +21,7 @@ namespace IMP.Infrastructure.Shared
             services.Configure<InstagramSettings>(_config.GetSection("Authentication").GetSection("Instagram"));
             services.Configure<OtpSettings>(_config.GetSection("OtpSettings"));
             services.Configure<VnPaySettings>(_config.GetSection("VnpaySettings"));
+            services.Configure<ZaloSettings>(_config.GetSection("ZaloSettings"));
 
             #endregion Registers for configutation
 

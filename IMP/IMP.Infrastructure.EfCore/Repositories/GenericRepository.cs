@@ -57,34 +57,24 @@ namespace IMP.Infrastructure.EfCore.Repositories
         public async Task<TEntity> AddAsync(TEntity entity)
         {
             await _dbContext.Set<TEntity>().AddAsync(entity);
-            //_dbContext.Entry(entity).State = EntityState.Detached;
             return entity;
         }
+
+        public TEntity Add(TEntity entity)
+        {
+            _dbContext.Set<TEntity>().Add(entity);
+            return entity;
+        }
+
 
         public async Task AddManyAsync(IEnumerable<TEntity> entities)
         {
             await _dbContext.Set<TEntity>().AddRangeAsync(entities);
-            //_dbContext.Entry(entities).State = EntityState.Detached;
         }
 
         public void Update(TEntity entity)
         {
-            //    var local = _dbContext.Set<TEntity>()
-            //                    .Local
-            //                    .FirstOrDefault(entry => entry.Id.Equals(entity.Id));
-
-            //    // check if local is not null 
-            //    if (local != null)
-            //    {
-            //        // detach
-            //        _dbContext.Entry(local).State = EntityState.Detached;
-            //    }
-            //    _dbContext.Update<TEntity>(entity);
-            //_dbContext.Set<TEntity>().Attach(entity);
-            //_dbContext.Entry<TEntity>(entity).State = EntityState.Modified;
-
             _dbContext.Update<TEntity>(entity);
-
         }
 
         public void Update(TEntity newEntity, TEntity existingEntity)
@@ -103,8 +93,7 @@ namespace IMP.Infrastructure.EfCore.Repositories
             }
 
             entity.IsDeleted = true;
-            _dbContext.Update<TEntity>(entity);
-
+            _dbContext.Update(entity);
         }
 
         public void DeleteCompletely(TEntity entity)

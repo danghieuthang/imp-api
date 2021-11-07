@@ -1,20 +1,25 @@
 ﻿using IMP.Application.Interfaces.Shared;
 using IMP.Application.Models.Account;
+using IMP.Domain.Settings;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using ZaloDotNetSDK;
 
 namespace IMP.Infrastructure.Shared.Services
 {
     public class ZaloService : IZaloService
     {
-        public ZaloService()
+        private readonly ZaloSettings _zaloSettings;
+        public ZaloService(IOptions<ZaloSettings> options)
         {
-
+            _zaloSettings = options.Value;
         }
         public async Task<ProviderUserDetail> ValidationAccessToken(string accessToken)
         {
@@ -36,6 +41,27 @@ namespace IMP.Infrastructure.Shared.Services
                     };
             }
             return null;
+        }
+
+        public async Task<bool> SendMessageAsync(string clientAccessToken)
+        {
+            var user = await ValidationAccessToken(clientAccessToken);
+            if (user == null)
+            {
+                return false;
+            }
+            ZaloClient client = new ZaloClient(_zaloSettings.AccessToken);
+            JObject resultQuantam = client.getListFollower(0, 20);
+
+            JObject result = client.sendTextMessageToUserId(user.ProviderUserId, "This is message");
+            return true;
+        }
+
+        public async Task<string> GetLoginUrlAsync(string callBackUrl)
+        {
+            ZaloAppInfo appInfo = new ZaloAppInfo(_zaloSettings.AppId, _zaloSettings.SecretKey, callBackUrl);
+            ZaloAppClient appClient = new ZaloAppClient(appInfo);
+            return appClient.getLoginUrl();
         }
     }
 }

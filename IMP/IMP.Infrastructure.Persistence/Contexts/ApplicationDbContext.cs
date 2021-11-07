@@ -69,6 +69,8 @@ namespace IMP.Infrastructure.Persistence.Contexts
         public DbSet<Otp> Otps { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ActivityResult> ActivityResults { get; set; }
+        public DbSet<VoucherCodeApplicationUser> VoucherCodeApplicationUsers { get; set; }
+
 
         #endregion  Dbsets
 
