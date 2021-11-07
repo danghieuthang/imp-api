@@ -30,18 +30,12 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
 
         #region Timeline
 
-        [JsonProperty("openning_date")]
-        public DateTime? Openning { get; set; }
-        [JsonProperty("applying_date")]
-        public DateTime? Applying { get; set; }
-        [JsonProperty("advertising_date")]
-        public DateTime? Advertising { get; set; }
-        [JsonProperty("evaluating_date")]
-        public DateTime? Evaluating { get; set; }
-        [JsonProperty("announcing_date")]
-        public DateTime? Announcing { get; set; }
-        [JsonProperty("closed_date")]
-        public DateTime? Closed { get; set; }
+        public DateTime? OpenningDate { get; set; }
+        public DateTime? ApplyingDate { get; set; }
+        public DateTime? AdvertisingDate { get; set; }
+        public DateTime? EvaluatingDate { get; set; }
+        public DateTime? AnnouncingDate { get; set; }
+        public DateTime? ClosedDate { get; set; }
         #endregion
 
         #region Product/service configuration

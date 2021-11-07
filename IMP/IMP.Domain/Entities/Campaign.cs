@@ -43,27 +43,27 @@ namespace IMP.Domain.Entities
         /// <summary>
         /// Ngày mở chiến dịch trên web
         /// </summary>
-        public DateTime? Openning { get; set; }
+        public DateTime? OpenningDate { get; set; }
         /// <summary>
         /// Ngày nộp đơn & duyệt đơn Advertising: Ngày quảng cáo
         /// </summary>
-        public DateTime? Applying { get; set; }
+        public DateTime? ApplyingDate { get; set; }
         /// <summary>
         /// Ngày quảng cáo
         /// </summary>
-        public DateTime? Advertising { get; set; }
+        public DateTime? AdvertisingDate { get; set; }
         /// <summary>
         /// Ngày đánh giá chiến dịch
         /// </summary>
-        public DateTime? Evaluating { get; set; }
+        public DateTime? EvaluatingDate { get; set; }
         /// <summary>
         /// Ngày thông báo
         /// </summary>
-        public DateTime? Announcing { get; set; }
+        public DateTime? AnnouncingDate { get; set; }
         /// <summary>
         /// Ngày kết thúc, ngày này bắt buộc phải chuyển hết hoa hồng cho influencer
         /// </summary>
-        public DateTime? Closed { get; set; }
+        public DateTime? ClosedDate { get; set; }
         #endregion
 
         #region Product/service configuration

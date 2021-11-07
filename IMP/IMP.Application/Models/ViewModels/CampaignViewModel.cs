@@ -30,32 +30,32 @@ namespace IMP.Application.Models.Compaign
         /// Ngày mở chiến dịch trên web
         /// </summary>
         [JsonProperty("openning_date")]
-        public DateTime? Openning { get; set; }
+        public DateTime? OpenningDate { get; set; }
         /// <summary>
         /// Ngày nộp đơn & duyệt đơn Advertising: Ngày quảng cáo
         /// </summary>
         [JsonProperty("applying_date")]
-        public DateTime? Applying { get; set; }
+        public DateTime? ApplyingDate { get; set; }
         /// <summary>
         /// Ngày quảng cáo
         /// </summary>
         [JsonProperty("advertising_date")]
-        public DateTime? Advertising { get; set; }
+        public DateTime? AdvertisingDate { get; set; }
         /// <summary>
         /// Ngày đánh giá chiến dịch
         /// </summary>
         [JsonProperty("evaluating_date")]
-        public DateTime? Evaluating { get; set; }
+        public DateTime? EvaluatingDate { get; set; }
         /// <summary>
         /// Ngày thông báo
         /// </summary>
         [JsonProperty("announcing_date")]
-        public DateTime? Announcing { get; set; }
+        public DateTime? AnnouncingDate { get; set; }
         /// <summary>
         /// Ngày kết thúc, ngày này bắt buộc phải chuyển hết hoa hồng cho influencer
         /// </summary>
         [JsonProperty("closed_date")]
-        public DateTime? Closed { get; set; }
+        public DateTime? ClosedDate { get; set; }
         #endregion
 
         #region Product/service configuration
@@ -83,6 +83,7 @@ namespace IMP.Application.Models.Compaign
         public List<CampaignRewardViewModel> BestInfluencerRewards { get; set; }
         public List<CampaignActivityViewModel> CampaignActivities { get; set; }
         public List<CampaignVoucherViewModel> Vouchers { get; set; }
+        [JsonProperty("images")]
         public List<CampaignImageViewModel> CampaignImages { get; set; }
     }
 

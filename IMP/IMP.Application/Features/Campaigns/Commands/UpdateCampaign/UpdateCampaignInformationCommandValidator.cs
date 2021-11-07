@@ -20,38 +20,38 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
             RuleFor(x => x.AdditionalInformation).MustMaxLength(2000);
 
             //timeline
-            RuleFor(x => x.Openning.Value).MustGreaterThanNow().When(x => x.Openning.HasValue);
+            RuleFor(x => x.OpenningDate.Value).MustGreaterThanNow().When(x => x.OpenningDate.HasValue);
 
-            RuleFor(x => x.Applying.Value).Must((x, y) =>
+            RuleFor(x => x.ApplyingDate.Value).Must((x, y) =>
             {
-                return y.CompareTo(x.Openning) > 0;
+                return y.CompareTo(x.OpenningDate) > 0;
             }).WithMessage("Ngày nộp đơn phải lớn hơn ngày bắt đầu chiến dịch.")
-                .When(x => x.Applying.HasValue);
+                .When(x => x.ApplyingDate.HasValue);
 
-            RuleFor(x => x.Advertising.Value).Must((x, y) =>
+            RuleFor(x => x.AdvertisingDate.Value).Must((x, y) =>
             {
-                return y.CompareTo(x.Applying) > 0;
+                return y.CompareTo(x.ApplyingDate) > 0;
             }).WithMessage("Ngày quảng cáo phải lớn hơn ngày nộp đơn.")
-                .When(x => x.Advertising.HasValue);
+                .When(x => x.AdvertisingDate.HasValue);
 
 
-            RuleFor(x => x.Evaluating.Value).Must((x, y) =>
+            RuleFor(x => x.EvaluatingDate.Value).Must((x, y) =>
             {
-                return y.CompareTo(x.Advertising) > 0;
+                return y.CompareTo(x.AdvertisingDate) > 0;
             }).WithMessage("Ngày đánh giá chiến dịch phải lơn hơn ngày quảng cáo.")
-                .When(x => x.Evaluating.HasValue);
+                .When(x => x.EvaluatingDate.HasValue);
 
-            RuleFor(x => x.Announcing.Value).Must((x, y) =>
+            RuleFor(x => x.AnnouncingDate.Value).Must((x, y) =>
             {
-                return y.CompareTo(x.Evaluating) > 0;
+                return y.CompareTo(x.EvaluatingDate) > 0;
             }).WithMessage("Ngày thông báo phải lớn hơn ngày đánh giá.")
-                .When(x => x.Announcing.HasValue);
+                .When(x => x.AnnouncingDate.HasValue);
 
-            RuleFor(x => x.Closed.Value).Must((x, y) =>
+            RuleFor(x => x.ClosedDate.Value).Must((x, y) =>
             {
-                return y.CompareTo(x.Announcing) > 0;
+                return y.CompareTo(x.AnnouncingDate) > 0;
             }).WithMessage("Ngày kết thúc chiến dịch phải lớn hơn ngày thông báo.")
-                .When(x => x.Closed.HasValue);
+                .When(x => x.ClosedDate.HasValue);
 
             // Product/ service
 

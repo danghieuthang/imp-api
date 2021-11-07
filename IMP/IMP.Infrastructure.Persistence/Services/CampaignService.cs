@@ -34,27 +34,27 @@ namespace IMP.Infrastructure.Persistence.Services
             {
                 // get Indochina time
                 DateTime now = DateTime.UtcNow.AddHours(7);
-                if (now >= campaign.Openning && now < campaign.Applying)
+                if (now >= campaign.OpenningDate && now < campaign.ApplyingDate)
                 {
                     campaign.Status = (int)CampaignStatus.Openning;
                 }
-                else if (now >= campaign.Applying && now < campaign.Advertising)
+                else if (now >= campaign.ApplyingDate && now < campaign.AdvertisingDate)
                 {
                     campaign.Status = (int)CampaignStatus.Applying;
                 }
-                else if (now >= campaign.Advertising && now < campaign.Evaluating)
+                else if (now >= campaign.AdvertisingDate && now < campaign.EvaluatingDate)
                 {
                     campaign.Status = (int)CampaignStatus.Advertising;
                 }
-                else if (now >= campaign.Evaluating && now < campaign.Announcing)
+                else if (now >= campaign.EvaluatingDate && now < campaign.AnnouncingDate)
                 {
                     campaign.Status = (int)CampaignStatus.Evaluating;
                 }
-                else if (now >= campaign.Announcing && now < campaign.Closed)
+                else if (now >= campaign.AnnouncingDate && now < campaign.ClosedDate)
                 {
                     campaign.Status = (int)CampaignStatus.Announcing;
                 }
-                else if (now >= campaign.Closed)
+                else if (now >= campaign.ClosedDate)
                 {
                     campaign.Status = (int)CampaignStatus.Closed;
                 }
