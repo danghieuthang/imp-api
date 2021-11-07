@@ -7,6 +7,7 @@ using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
 using IMP.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,11 +30,17 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
 
         #region Timeline
 
+        [JsonProperty("OpenningDate")]
         public DateTime? Openning { get; set; }
+        [JsonProperty("ApplyingDate")]
         public DateTime? Applying { get; set; }
+        [JsonProperty("AdvertisingDate")]
         public DateTime? Advertising { get; set; }
+        [JsonProperty("EvaluatingDate")]
         public DateTime? Evaluating { get; set; }
+        [JsonProperty("AnnouncingDate")]
         public DateTime? Announcing { get; set; }
+        [JsonProperty("ClosedDate")]
         public DateTime? Closed { get; set; }
         #endregion
 

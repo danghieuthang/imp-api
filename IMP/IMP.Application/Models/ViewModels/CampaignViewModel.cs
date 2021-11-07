@@ -1,4 +1,5 @@
 ﻿using IMP.Application.Models.ViewModels;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,26 +29,32 @@ namespace IMP.Application.Models.Compaign
         /// <summary>
         /// Ngày mở chiến dịch trên web
         /// </summary>
+        [JsonProperty("OpenningDate")]
         public DateTime? Openning { get; set; }
         /// <summary>
         /// Ngày nộp đơn & duyệt đơn Advertising: Ngày quảng cáo
         /// </summary>
+        [JsonProperty("ApplyingDate")]
         public DateTime? Applying { get; set; }
         /// <summary>
         /// Ngày quảng cáo
         /// </summary>
+        [JsonProperty("AdvertisingDate")]
         public DateTime? Advertising { get; set; }
         /// <summary>
         /// Ngày đánh giá chiến dịch
         /// </summary>
+        [JsonProperty("EvaluatingDate")]
         public DateTime? Evaluating { get; set; }
         /// <summary>
         /// Ngày thông báo
         /// </summary>
+        [JsonProperty("AnnouncingDate")]
         public DateTime? Announcing { get; set; }
         /// <summary>
         /// Ngày kết thúc, ngày này bắt buộc phải chuyển hết hoa hồng cho influencer
         /// </summary>
+        [JsonProperty("ClosedDate")]
         public DateTime? Closed { get; set; }
         #endregion
 
