@@ -34,7 +34,7 @@ namespace IMP.Application.Features.Campaigns.Commands.CreateDraftCampaign
                     BrandId = applicationUser.BrandId.Value,
                     Status = (int)CampaignStatus.Draft,
                     IsActived = true,
-                    OpenningDate = DateTime.Now,
+                    OpeningDate = DateTime.Now,
                     ApplyingDate = DateTime.Now,
                     AdvertisingDate = DateTime.Now,
                     EvaluatingDate = DateTime.Now,

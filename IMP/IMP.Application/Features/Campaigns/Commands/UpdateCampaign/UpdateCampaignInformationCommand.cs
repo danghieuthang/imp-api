@@ -30,7 +30,7 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
 
         #region Timeline
 
-        public DateTime? OpenningDate { get; set; }
+        public DateTime? OpeningDate { get; set; }
         public DateTime? ApplyingDate { get; set; }
         public DateTime? AdvertisingDate { get; set; }
         public DateTime? EvaluatingDate { get; set; }
