@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace IMP.Application.Features.Vouchers.Queries.GetAllVoucherByApplicationUser
 {
-    public class GetAllVoucherByApplicationUserQuery : PageRequest, IListQuery<UserVoucherCodeViewModel>
+    public class GetAllVoucherByApplicationUserQuery : PageRequest, IListQuery<UserVoucherViewModel>
     {
         [FromQuery(Name = "from_date")]
         public DateTime? FromDate { get; set; }
@@ -25,7 +25,7 @@ namespace IMP.Application.Features.Vouchers.Queries.GetAllVoucherByApplicationUs
         public DateTime? ToDate { get; set; }
 
     }
-    public class GetAllVoucherByApplicationUserQueryHandler : ListQueryHandler<GetAllVoucherByApplicationUserQuery, UserVoucherCodeViewModel>
+    public class GetAllVoucherByApplicationUserQueryHandler : ListQueryHandler<GetAllVoucherByApplicationUserQuery, UserVoucherViewModel>
     {
         private readonly IAuthenticatedUserService _authenticatedUserService;
         public GetAllVoucherByApplicationUserQueryHandler(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticatedUserService authenticatedUserService) : base(unitOfWork, mapper)
@@ -33,7 +33,7 @@ namespace IMP.Application.Features.Vouchers.Queries.GetAllVoucherByApplicationUs
             _authenticatedUserService = authenticatedUserService;
         }
 
-        public override async Task<Response<IPagedList<UserVoucherCodeViewModel>>> Handle(GetAllVoucherByApplicationUserQuery request, CancellationToken cancellationToken)
+        public override async Task<Response<IPagedList<UserVoucherViewModel>>> Handle(GetAllVoucherByApplicationUserQuery request, CancellationToken cancellationToken)
         {
 
 
@@ -45,9 +45,18 @@ namespace IMP.Application.Features.Vouchers.Queries.GetAllVoucherByApplicationUs
                     orderBy: request.OrderField,
                     orderByDecensing: request.OrderBy == OrderBy.DESC);
 
-            var voucherCodes = page.Items.Select(x => x.VoucherCode).ToList();
-            var voucherCodesView = Mapper.Map<List<UserVoucherCodeViewModel>>(voucherCodes);
-            var pageResponse = new PagedList<UserVoucherCodeViewModel>
+            var items = page.Items;
+
+            var vouchers = page.Items.GroupBy(x => x.VoucherCode.VoucherId).Select(g =>
+            {
+                var a = items.Where(i => i.VoucherCode.VoucherId == g.Key).Select(x => x.VoucherCode.Voucher).FirstOrDefault();
+                a.VoucherCodes = g.Select(x => x.VoucherCode).ToList();
+                return a;
+            }).ToList();
+
+            //var voucherCodes = page.Items.Select(x => x.VoucherCode).ToList();
+            var voucherCodesView = Mapper.Map<List<UserVoucherViewModel>>(vouchers);
+            var pageResponse = new PagedList<UserVoucherViewModel>
             {
                 Items = voucherCodesView,
                 PageIndex = page.PageIndex,
@@ -55,7 +64,7 @@ namespace IMP.Application.Features.Vouchers.Queries.GetAllVoucherByApplicationUs
                 TotalCount = page.TotalCount,
                 TotalPages = page.TotalPages
             };
-            return new Response<IPagedList<UserVoucherCodeViewModel>>(pageResponse);
+            return new Response<IPagedList<UserVoucherViewModel>>(pageResponse);
 
         }
     }

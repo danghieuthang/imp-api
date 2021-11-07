@@ -4,6 +4,7 @@ using IMP.Application.Features.Vouchers.Commands.CreateVoucher;
 using IMP.Application.Features.Vouchers.Commands.DeleteVoucher;
 using IMP.Application.Features.Vouchers.Commands.ImportVoucherCodes;
 using IMP.Application.Features.Vouchers.Commands.UpdateVoucher;
+using IMP.Application.Features.Vouchers.Queries.GetAllVoucherByApplicationUser;
 using IMP.Application.Features.Vouchers.Queries.GetVoucherById;
 using IMP.Application.Interfaces;
 using IMP.Application.Models.ViewModels;
@@ -99,6 +100,19 @@ namespace IMP.WebApi.Controllers.v1
                 return BadRequest();
             }
             return Ok(await Mediator.Send(command));
+        }
+
+        /// <summary>
+        /// Search voucher code of authencated user
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<IPagedList<UserVoucherViewModel>>), 200)]
+        [HttpGet("me")]
+        [Authorize(Roles = "Influencer")]
+        public async Task<IActionResult> GetAll([FromQuery] GetAllVoucherByApplicationUserQuery query)
+        {
+            return Ok(await Mediator.Send(query));
         }
     }
 }

@@ -33,6 +33,25 @@ namespace IMP.Application.Models.ViewModels
         public int QuantityUsed { get; set; }
     }
 
+    public class UserVoucherViewModel : BaseViewModel<int>
+    {
+        public int BrandId { get; set; }
+        public string VoucherName { get; set; }
+        public string Image { get; set; }
+        public string Thumnail { get; set; }
+        public DateTime? FromDate { get; set; }
+        public DateTime? ToDate { get; set; }
+        public TimeSpan? FromTime { get; set; }
+        public TimeSpan? ToTime { get; set; }
+        public string Description { get; set; }
+        public string Action { get; set; }
+        public string Condition { get; set; }
+        public string Target { get; set; }
+
+        public List<UserVoucherCodeViewModel> VoucherCodes { get; set; }
+        public List<CampaignVoucherViewModel> CampaignVouchers { get; set; }
+    }
+
     public class UserVoucherCodeViewModel : BaseViewModel<int>
     {
 
@@ -42,7 +61,6 @@ namespace IMP.Application.Models.ViewModels
         [JsonIgnore]
         public int QuantityUsed { get; set; }
         public bool IsCanUse => QuantityUsed < Quantity;
-        public UserCampaignVoucherViewModel CampaignVoucher { get; set; }
     }
 
     public class UserCampaignVoucherViewModel : BaseViewModel<int>

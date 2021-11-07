@@ -47,17 +47,6 @@ namespace IMP.WebApi.Controllers.v1
         {
             return Ok(await Mediator.Send(new DeleteVoucherCodeCommand { Id = id, ApplicationUserId = _authenticatedUserService.ApplicationUserId }));
         }
-        /// <summary>
-        /// Search voucher code of authencated user
-        /// </summary>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        [ProducesResponseType(typeof(Response<IPagedList<VoucherCodeViewModel>>), 200)]
-        [HttpGet("me")]
-        [Authorize(Roles = "Influencer")]
-        public async Task<IActionResult> GetAll([FromQuery] GetAllVoucherByApplicationUserQuery query)
-        {
-            return Ok(await Mediator.Send(query));
-        }
+       
     }
 }

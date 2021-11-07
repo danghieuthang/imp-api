@@ -282,6 +282,7 @@ namespace IMP.Application.Mappings
 
             #region voucher
             CreateMap<Voucher, VoucherViewModel>();
+            CreateMap<Voucher, UserVoucherViewModel>();
             CreateMap<CreateVoucherCommand, Voucher>();
             CreateMap<AssignVoucherToCampaignCommand, CampaignVoucher>();
             CreateMap<CampaignVoucher, CampaignVoucherViewModel>();
