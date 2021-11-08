@@ -36,6 +36,34 @@ namespace IMP.Application.Models.ViewModels
 
         public PaymentInforViewModel PaymentInfor { get; set; }
     }
+
+    public class InfluencerViewModel : BaseViewModel<int>
+    {
+        public string Email { get; set; }
+        public string Avatar { get; set; }
+        public string Nickname { get; set; }
+        public string PhoneNumber { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public DateTime? BirthDate { get; set; }
+        public int? Age { get; set; }
+        public string Gender { get; set; }
+        public int? LocationId { get; set; }
+
+        [JsonProperty("jobs")]
+        public List<string> JobsR { get; set; }
+
+        [JsonProperty("interests")]
+        public List<string> InterestsR { get; set; }
+        public bool? ChildStatus { get; set; }
+        public bool? MaritalStatus { get; set; }
+        [JsonProperty("pets")]
+        public List<string> PetsR { get; set; }
+        public string Description { get; set; }
+        public int WalletId { get; set; }
+
+        public PaymentInforViewModel PaymentInfor { get; set; }
+    }
     public class PaymentInforViewModel : BaseViewModel<int>
     {
         public BankViewModel Bank { get; set; }

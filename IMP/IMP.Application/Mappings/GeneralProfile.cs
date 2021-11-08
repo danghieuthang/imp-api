@@ -213,6 +213,7 @@ namespace IMP.Application.Mappings
 
             #region application user
             CreateMap<ApplicationUser, ApplicationUserViewModel>();
+            CreateMap<ApplicationUser, InfluencerViewModel>();
             CreateMap<UpdateUserInformationCommand, ApplicationUser>();
             CreateMap<PaymentInfor, PaymentInforViewModel>();
             CreateMap<Bank, BankViewModel>();
