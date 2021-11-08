@@ -19,5 +19,6 @@ namespace IMP.Application.Models.ViewModels
         public string Avatar { get; set; }
         public string Hashtag { get; set; }
         public List<string> Interests { get; set; }
+        public bool IsVerified { get; set; }
     }
 }

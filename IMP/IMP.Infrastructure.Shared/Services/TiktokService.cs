@@ -29,8 +29,10 @@ namespace IMP.Infrastructure.Shared.Services
             httpRequestMessage.RequestUri = uri;
 
             //create body
-            var body = "{'username':'" + username + "', 'hash_tag':'" + hashtag + "'}";
+            var body = "{\"username\":\"" + username + "\", \"hash_tag\": \"" + hashtag + "\"}";
             var stringContent = new StringContent(body, Encoding.UTF8, "application/json");
+
+            httpRequestMessage.Content = stringContent;
 
             var response = await client.SendAsync(httpRequestMessage);
             if (response.IsSuccessStatusCode)
@@ -41,9 +43,9 @@ namespace IMP.Infrastructure.Shared.Services
                 {
                     var socialPlatformUser = new SocialPlatformUser
                     {
-                        Name = socialUser["data"]["dy07kd21k2n1"],
-                        Avatar = socialUser["data"]["avatarThumb"],
-                        Follower = socialUser["data"]["stats"]
+                        Name = socialUser["data"]["user"]["nickname"],
+                        Avatar = socialUser["data"]["user"]["avatarThumb"],
+                        Follower = socialUser["data"]["stats"]["followerCount"]
                     };
                     return socialPlatformUser;
                 }
