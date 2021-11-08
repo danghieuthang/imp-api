@@ -17,7 +17,7 @@ namespace IMP.WebApi.Controllers.v1
 {
     [ApiVersion("1.0")]
     [Route(RouterConstants.Voucher)]
-    [Authorize(Roles = "Brand")]
+    [Authorize()]
     public class VoucherController : BaseApiController
     {
         public VoucherController()
@@ -33,6 +33,7 @@ namespace IMP.WebApi.Controllers.v1
         /// <returns></returns>
         [ProducesResponseType(typeof(Response<VoucherViewModel>), 201)]
         [HttpPost]
+        [Authorize(Roles = "Brand")]
         public async Task<IActionResult> Create([FromBody] CreateVoucherCommand command)
         {
             return StatusCode(201, await Mediator.Send(command));
@@ -45,6 +46,7 @@ namespace IMP.WebApi.Controllers.v1
         /// <returns></returns>
         [ProducesResponseType(typeof(Response<VoucherViewModel>), 200)]
         [HttpPut("{id}")]
+        [Authorize(Roles = "Brand")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateVoucherCommand command)
         {
             if (id != command.Id)
@@ -59,6 +61,7 @@ namespace IMP.WebApi.Controllers.v1
         /// <param name="id">The voucher id</param>
         /// <returns></returns>
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Brand")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var command = new DeleteVoucherCommand
@@ -71,6 +74,7 @@ namespace IMP.WebApi.Controllers.v1
 
         [ProducesResponseType(typeof(Response<VoucherViewModel>), 200)]
         [HttpGet("{id}")]
+        [Authorize(Roles = "Brand")]
         public async Task<IActionResult> Get([FromRoute] int id)
         {
             return Ok(await Mediator.Send(new GetVoucherByIdQuery { Id = id }));
@@ -78,6 +82,7 @@ namespace IMP.WebApi.Controllers.v1
 
         [ProducesResponseType(typeof(Response<CampaignVoucherViewModel>), 200)]
         [HttpPost("{id}/assign-to-campaign")]
+        [Authorize(Roles = "Brand")]
         public async Task<IActionResult> AssignVoucherForCampaign([FromRoute] int id, [FromBody] AssignVoucherToCampaignCommand command)
         {
             if (id != command.VoucherId)
@@ -95,6 +100,7 @@ namespace IMP.WebApi.Controllers.v1
         /// <returns></returns>
         [ProducesResponseType(typeof(Response<bool>), 200)]
         [HttpPost("{id}/import-codes")]
+        [Authorize(Roles = "Brand")]
         public async Task<IActionResult> ImportVoucherCodes([FromRoute] int id, [FromForm] ImportVoucherCodesCommand command)
         {
             if (id != command.VoucherId)
