@@ -1,4 +1,6 @@
 ﻿using IMP.Application.Features.Campaigns.Commands.ApprovalCampaign;
+using IMP.Application.Features.Campaigns.Commands.CancelCampaign;
+using IMP.Application.Features.Campaigns.Commands.CompletedCreateCampaign;
 using IMP.Application.Features.Campaigns.Commands.CreateCampaign;
 using IMP.Application.Features.Campaigns.Commands.CreateDraftCampaign;
 using IMP.Application.Features.Campaigns.Commands.UpdateCampaign;
@@ -158,8 +160,22 @@ namespace IMP.WebApi.Controllers.v1
 
             return Ok(response);
         }
+
         /// <summary>
-        /// Approval campaign(change status Peding => Approved)
+        /// Complete create a campaign(change status Draft => Pending)
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPut("{id}/complete-created")]
+        [ProducesResponseType(typeof(Response<CampaignViewModel>), 200)]
+        [Authorize(Roles = "Brand")]
+        public async Task<IActionResult> CompleteCreatet([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new CompletedCreateCampaignCommand { Id = id }));
+        }
+
+        /// <summary>
+        /// Approval campaign(change status Pending => Approved)
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -171,6 +187,18 @@ namespace IMP.WebApi.Controllers.v1
             return Ok(await Mediator.Send(new ApprovalCampaignCommand { Id = id }));
         }
 
+        /// <summary>
+        /// Cancel campaign(change status Pending => Canceled)
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPut("{id}/cancel")]
+        [ProducesResponseType(typeof(Response<CampaignViewModel>), 200)]
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> CancelCampaign([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new CancelCampaignCommand { Id = id }));
+        }
 
 
         /// <summary>
