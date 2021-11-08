@@ -30,7 +30,7 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaignActivities
         {
             RuleFor(x => x.Name).MustMaxLength(256);
             RuleFor(x => x.Description).MustMaxLength(2000);
-            RuleFor(x => x.HowToDo).MustMaxLength(2000);
+            //RuleFor(x => x.HowToDo).MustMaxLength(2000);
             RuleFor(x => x.ActivityTypeId).MustExistEntityId(async (id, c) =>
             {
                 return await unitOfWork.Repository<ActivityType>().IsExistAsync(id);

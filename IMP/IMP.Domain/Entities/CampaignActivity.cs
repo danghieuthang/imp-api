@@ -21,7 +21,6 @@ namespace IMP.Domain.Entities
         public string Name { get; set; }
         [StringLength(256)]
         public string Description { get; set; }
-        [StringLength(2000)]
         public string HowToDo { get; set; }
         public ICollection<MemberActivity> MemberActivities { get; set; }
         public ICollection<ActivityResult> ActivityResults { get; set; }
