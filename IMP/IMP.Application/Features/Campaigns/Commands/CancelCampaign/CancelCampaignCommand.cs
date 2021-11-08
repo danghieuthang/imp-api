@@ -1,4 +1,5 @@
-﻿using IMP.Application.Enums;
+﻿using AutoMapper;
+using IMP.Application.Enums;
 using IMP.Application.Exceptions;
 using IMP.Application.Interfaces;
 using IMP.Application.Models;
@@ -41,3 +42,4 @@ namespace IMP.Application.Features.Campaigns.Commands.CancelCampaign
             }
         }
     }
+}
