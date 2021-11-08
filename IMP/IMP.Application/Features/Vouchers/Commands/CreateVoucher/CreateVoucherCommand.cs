@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using IMP.Application.Enums;
 using IMP.Application.Interfaces;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
@@ -13,9 +14,17 @@ namespace IMP.Application.Features.Vouchers.Commands.CreateVoucher
 {
     public class CreateVoucherCommand : ICommand<VoucherViewModel>
     {
+        public VoucherType VoucherType { get; set; }
         public string VoucherName { get; set; }
-        public string Image { get; set; }
+        public string Code { get; set; }
+        public bool ApplyOncePerOrder { get; set; }
+        public bool ApplyOncePerCustomer { get; set; }
+        public bool OnlyforStaff { get; set; }
+        public decimal DiscountValue { get; set; }
+        public DiscountValueType DiscountValueType { get; set; }
+        public int? MinCheckoutItemsQuantity { get; set; }
         public int Quantity { get; set; }
+        public string Image { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public TimeSpan? FromTime { get; set; }

@@ -26,6 +26,8 @@ namespace IMP.WebApi.Controllers.v1
         }
         /// <summary>
         /// Create a voucher
+        /// Voucher Type: Shipping - 0,        Entry_Order - 1,        Specific_Product - 2
+        /// Discount Valua Type:  Fixed - 0, Percentage - 1
         /// </summary>
         /// <param name="command">The Create Voucher Command</param>
         /// <returns></returns>

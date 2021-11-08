@@ -1,6 +1,7 @@
 ﻿using IMP.Domain.Common;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
@@ -9,16 +10,32 @@ namespace IMP.Domain.Entities
 {
     public class Voucher : BaseEntity
     {
+
         [ForeignKey("Brand")]
         public int BrandId { get; set; }
         public Brand Brand { get; set; }
+
+        [DefaultValue(0)]
+        public int VoucherType { get; set; }
+
+        [StringLength(256)]
+        public string Code { get; set; }
         [StringLength(256)]
         public string VoucherName { get; set; }
+        public bool ApplyOncePerOrder { get; set; }
+        public bool ApplyOncePerCustomer { get; set; }
+        public bool OnlyforStaff { get; set; }
+        public decimal DiscountValue { get; set; }
+        public int DiscountValueType { get; set; }
+
+        public int? MinCheckoutItemsQuantity { get; set; }
+
         [StringLength(256)]
         public string Image { get; set; }
         [StringLength(256)]
         public string Thumnail { get; set; }
         public int Quantity { get; set; }
+        public int QuantityUsed { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
 
@@ -36,6 +53,6 @@ namespace IMP.Domain.Entities
         public string Target { get; set; }
 
         public ICollection<VoucherCode> VoucherCodes { get; set; }
-        public ICollection<CampaignVoucher> CampaignVouchers{ get; set; }
+        public ICollection<CampaignVoucher> CampaignVouchers { get; set; }
     }
 }
