@@ -23,7 +23,8 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
         public string Title { get; set; }
         public string Description { get; set; }
         public string AdditionalInformation { get; set; }
-        public List<CampaignImageRequest> Images { get; set; }
+        [JsonProperty("images")]
+        public List<CampaignImageRequest> CampaignImages { get; set; }
         public string QA { get; set; }
         public List<string> Websites { get; set; }
         public List<string> Fanpages { get; set; }
@@ -125,7 +126,7 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
         private async Task DeleteBeforeUpdate(Campaign campaign, UpdateCampaignInformationCommand request)
         {
             // delete images
-            if (request.Images != null)
+            if (request.CampaignImages != null)
             {
                 foreach (var image in campaign.CampaignImages)
                 {

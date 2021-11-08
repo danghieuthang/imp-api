@@ -88,6 +88,7 @@ namespace IMP.Application.Mappings
                 });
 
             CreateMap<CampaignImage, CampaignImageViewModel>();
+            CreateMap<CampaignImageRequest, CampaignImage>();
             CreateMap<CreateCampaignCommand, Campaign>();
             CreateMap<CampaignMilestone, CampaignMilestoneViewModel>();
 
