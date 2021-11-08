@@ -305,6 +305,7 @@ namespace IMP.Application.Mappings
 
             #region ranking
             CreateMap<RankLevel, RankLevelViewModel>();
+            CreateMap<Ranking, RankingViewModel>();
             #endregion
         }
 

@@ -23,7 +23,7 @@ namespace IMP.Application.Features.ApplicationUsers.Queries.GetUserById
 
             public override async Task<Response<ApplicationUserViewModel>> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
             {
-                var entity = await Repository.FindSingleAsync(x => x.Id == request.Id, x => x.PaymentInfor, x => x.PaymentInfor.Bank);
+                var entity = await Repository.FindSingleAsync(x => x.Id == request.Id, x => x.PaymentInfor, x => x.PaymentInfor.Bank, x => x.Ranking, x => x.Ranking.RankLevel);
                 if (entity == null)
                 {
                     //var error = new ValidationError("id", $"'{request.Id}' không tồn tại");

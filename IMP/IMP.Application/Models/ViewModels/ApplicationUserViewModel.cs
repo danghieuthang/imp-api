@@ -35,6 +35,7 @@ namespace IMP.Application.Models.ViewModels
         public int WalletId { get; set; }
 
         public PaymentInforViewModel PaymentInfor { get; set; }
+        public RankingViewModel Ranking { get; set; }
     }
 
     public class InfluencerViewModel : BaseViewModel<int>
@@ -63,6 +64,8 @@ namespace IMP.Application.Models.ViewModels
         public int WalletId { get; set; }
 
         public PaymentInforViewModel PaymentInfor { get; set; }
+        public RankingViewModel Ranking { get; set; }
+
     }
     public class PaymentInforViewModel : BaseViewModel<int>
     {

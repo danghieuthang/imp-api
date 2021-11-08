@@ -11,4 +11,10 @@ namespace IMP.Application.Models.ViewModels
         public string Name { get; set; }
         public int Score { get; set; }
     }
+
+    public class RankingViewModel : BaseViewModel<int>
+    {
+        public int Score { get; set; }
+        public RankLevelViewModel RankLevel { get; set; }
+    }
 }

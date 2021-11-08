@@ -87,8 +87,6 @@ namespace IMP.Domain.Entities
         public Wallet Wallet { get; set; }
         public PaymentInfor PaymentInfor { get; set; }
 
-        [ForeignKey("Ranking")]
-        public int? RankingId { get; set; }
         public Ranking Ranking { get; set; }
 
         [ForeignKey("Brand")]

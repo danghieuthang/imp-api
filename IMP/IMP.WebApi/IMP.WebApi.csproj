@@ -49,6 +49,7 @@
     <ProjectReference Include="..\IMP.Infrastructure.Shared\IMP.Infrastructure.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Datas\Sqls\" />
     <Folder Include="bin\" />
     <Folder Include="Logs\" />
   </ItemGroup>
@@ -59,10 +60,5 @@
     <Content Update="App_Datas\vietnam_cities.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="IMP.WebApi.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 </Project>

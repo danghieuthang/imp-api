@@ -18,5 +18,7 @@ namespace IMP.WebApi.Hangfire
             await _campaignService.AutoUpdateCampaignStatus();
             return true;
         }
+
+        //public async Task<bool>
     }
 }
