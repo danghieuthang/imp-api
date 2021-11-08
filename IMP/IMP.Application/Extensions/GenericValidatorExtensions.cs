@@ -40,7 +40,7 @@ namespace IMP.Application.Extensions
         {
             return ruleBuilder
                 .NotNull().NotEmpty().WithMessage("{PropertyName} chưa có dữ liệu.")
-                .MaximumLength(256).WithMessage("{PropertyName} không thể quá " + maxLength + " ký tự.");
+                .MaximumLength(maxLength).WithMessage("{PropertyName} không thể quá " + maxLength + " ký tự.");
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace IMP.Application.Extensions
         public static IRuleBuilderOptions<T, string> MustMaxLength<T>(this IRuleBuilder<T, string> ruleBuilder, int maxLength)
         {
             return ruleBuilder
-                .MaximumLength(256).WithMessage("{PropertyName} không thể quá " + maxLength + " ký tự.");
+                .MaximumLength(maxLength).WithMessage("{PropertyName} không thể quá " + maxLength + " ký tự.");
         }
 
         /// <summary>
