@@ -1,4 +1,5 @@
-﻿using IMP.Application.Features.ApplicationUsers.Queries.GetInfluencerById;
+﻿using IMP.Application.Features.ApplicationUsers.Queries.GetAllInfluencer;
+using IMP.Application.Features.ApplicationUsers.Queries.GetInfluencerById;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
 using Microsoft.AspNetCore.Http;
@@ -22,5 +23,18 @@ namespace IMP.WebApi.Controllers.v1
         {
             return Ok(await Mediator.Send(new GetInfluencerByIdCommand { Id = id }));
         }
+
+        /// <summary>
+        /// Search influencer 
+        /// </summary>
+        /// <param name="query">The Search Influencer Query</param>
+        /// <returns></returns>
+        [HttpGet()]
+        [ProducesResponseType(typeof(Response<PagedList<InfluencerViewModel>>), 200)]
+        public async Task<IActionResult> SearchInfluencer([FromQuery] GetAllInfluencerQuery query)
+        {
+            return Ok(await Mediator.Send(query));
+        }
+
     }
 }

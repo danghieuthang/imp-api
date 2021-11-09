@@ -212,8 +212,32 @@ namespace IMP.Application.Mappings
             #endregion
 
             #region application user
-            CreateMap<ApplicationUser, ApplicationUserViewModel>();
-            CreateMap<ApplicationUser, InfluencerViewModel>();
+            CreateMap<ApplicationUser, ApplicationUserViewModel>()
+                .ForMember(dest => dest.InterestsR, opt =>
+                  {
+                      opt.MapFrom(x => CreateListJobFromJobStr(x.Interests));
+                  })
+                .ForMember(dest => dest.JobsR, opt =>
+                {
+                    opt.MapFrom(x => CreateListJobFromJobStr(x.Job));
+                })
+                .ForMember(dest => dest.PetsR, opt =>
+                {
+                    opt.MapFrom(x => CreateListJobFromJobStr(x.Pet));
+                });
+            CreateMap<ApplicationUser, InfluencerViewModel>()
+                 .ForMember(dest => dest.InterestsR, opt =>
+                 {
+                     opt.MapFrom(x => CreateListJobFromJobStr(x.Interests));
+                 })
+                .ForMember(dest => dest.JobsR, opt =>
+                {
+                    opt.MapFrom(x => CreateListJobFromJobStr(x.Job));
+                })
+                .ForMember(dest => dest.PetsR, opt =>
+                {
+                    opt.MapFrom(x => CreateListJobFromJobStr(x.Pet));
+                });
             CreateMap<UpdateUserInformationCommand, ApplicationUser>();
             CreateMap<PaymentInfor, PaymentInforViewModel>();
             CreateMap<Bank, BankViewModel>();
@@ -323,6 +347,7 @@ namespace IMP.Application.Mappings
 
         public List<string> CreateListJobFromJobStr(string job)
         {
+            if (job == null) return new List<string>();
             return job.Split(";").ToList();
         }
 
