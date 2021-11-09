@@ -44,8 +44,8 @@ namespace IMP.Application.Interfaces.Services
                 user.Ranking = new Ranking
                 {
                     RankLevelId = 1,
-                    Score = 0;
-                }
+                    Score = 0
+                };
             }
             user = await _applicationUserRepository.AddAsync(user);
             await _unitOfWork.CommitAsync();
