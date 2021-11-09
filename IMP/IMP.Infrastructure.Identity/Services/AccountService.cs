@@ -207,7 +207,10 @@ namespace IMP.Infrastructure.Identity.Services
                 await _userManager.AddToRoleAsync(user, request.Role.ToString());
                 var verificationUri = await SendVerificationEmail(user, origin);
                 //TODO: Attach Email Service here and configure it via appsettings
-                await _emailService.SendAsync(new Application.Models.Email.EmailRequest() { To = user.Email, Body = $"Please confirm your account by click <a href='{verificationUri}'>Here</a>.", Subject = "Confirm Registration TMP Platform" });
+                _ = Task.Run(() =>
+                {
+                    _emailService.SendAsync(new Application.Models.Email.EmailRequest() { To = user.Email, Body = $"Please confirm your account by click <a href='{verificationUri}'>Here</a>.", Subject = "Confirm Registration TMP Platform" });
+                });
                 return new Response<string>(user.Email, message: $"User Registered.");
             }
             var errors = new List<ValidationError>();
@@ -356,7 +359,10 @@ namespace IMP.Infrastructure.Identity.Services
                 To = model.Email,
                 Subject = "Reset Password",
             };
-            await _emailService.SendAsync(emailRequest);
+            _ = Task.Run(() =>
+            {
+                _emailService.SendAsync(emailRequest);
+            });
         }
 
         public async Task<Response<string>> ResetPassword(ResetPasswordRequest model)
