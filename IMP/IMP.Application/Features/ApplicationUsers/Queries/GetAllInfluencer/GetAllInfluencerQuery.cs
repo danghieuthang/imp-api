@@ -29,7 +29,7 @@ namespace IMP.Application.Features.ApplicationUsers.Queries.GetAllInfluencer
 
             public override async Task<Response<IPagedList<InfluencerViewModel>>> Handle(GetAllInfluencerQuery request, CancellationToken cancellationToken)
             {
-                string name = request.Name.Trim().ToLower();
+                string name = request.Name != null ? request.Name.ToLower().Trim() : "";
                 var page = await UnitOfWork.Repository<ApplicationUser>().GetPagedList(
                         predicate: x => x.FirstName.ToLower().Contains(name) || x.LastName.ToLower().Contains(name) || x.Nickname.ToLower().Contains(name),
                         include: x => x.Include(y => y.Ranking).Include(y => y.InfluencerPlatforms),

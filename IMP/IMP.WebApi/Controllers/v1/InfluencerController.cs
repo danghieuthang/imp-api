@@ -13,11 +13,11 @@ namespace IMP.WebApi.Controllers.v1
     public class InfluencerController : BaseApiController
     {
         /// <summary>
-        /// Get influencer information by id
+        /// Get influencer by id
         /// </summary>
         /// <param name="id">The Id of influencer.</param>
         /// <returns></returns>
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         [ProducesResponseType(typeof(Response<InfluencerViewModel>), 200)]
         public async Task<IActionResult> GetInfluencerById([FromRoute] int id)
         {
@@ -34,6 +34,18 @@ namespace IMP.WebApi.Controllers.v1
         public async Task<IActionResult> SearchInfluencer([FromQuery] GetAllInfluencerQuery query)
         {
             return Ok(await Mediator.Send(query));
+        }
+
+        /// <summary>
+        /// Get influencer by nickname
+        /// </summary>
+        /// <param name="nickname"></param>
+        /// <returns></returns>
+        [HttpGet("{nickname}")]
+        [ProducesResponseType(typeof(Response<PagedList<InfluencerViewModel>>), 200)]
+        public async Task<IActionResult> SearchInfluencer([FromRoute] string nickname)
+        {
+            return Ok(await Mediator.Send(new GetInfluencerByIdCommand { Nickname = nickname }));
         }
 
     }

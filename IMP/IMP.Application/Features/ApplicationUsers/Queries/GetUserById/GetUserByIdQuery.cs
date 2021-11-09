@@ -31,9 +31,6 @@ namespace IMP.Application.Features.ApplicationUsers.Queries.GetUserById
                 }
 
                 var view = Mapper.Map<ApplicationUserViewModel>(entity);
-                view.InterestsR = entity.Interests?.Split(";").ToList();
-                view.JobsR = entity.Job?.Split(";").ToList();
-                view.PetsR = entity.Pet?.Split(";").ToList();
 
                 return new Response<ApplicationUserViewModel>(view);
             }
