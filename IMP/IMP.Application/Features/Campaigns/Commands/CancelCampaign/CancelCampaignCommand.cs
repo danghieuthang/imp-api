@@ -31,7 +31,7 @@ namespace IMP.Application.Features.Campaigns.Commands.CancelCampaign
                 var campaign = await _campaignRepository.GetByIdAsync(request.Id);
                 if (campaign != null && campaign.Status == (int)CampaignStatus.Pending)
                 {
-                    campaign.Status = (int)CampaignStatus.Canceled;
+                    campaign.Status = (int)CampaignStatus.Cancelled;
                     _campaignRepository.Update(campaign);
                     await UnitOfWork.CommitAsync();
                     var campaignViewModel = Mapper.Map<CampaignViewModel>(campaign);

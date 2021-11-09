@@ -162,6 +162,7 @@ namespace IMP.Infrastructure.Identity.Services
                     if (applicationUser != null)
                     {
                         user.ApplicationUserId = applicationUser.Id;
+                        user.BrandId = applicationUser.BrandId;
                         await _userManager.UpdateAsync(user);
                     }
                     return user;
@@ -201,6 +202,7 @@ namespace IMP.Infrastructure.Identity.Services
                 if (applicationUser != null)
                 {
                     user.ApplicationUserId = applicationUser.Id;
+                    user.ApplicationUserId = applicationUser.BrandId;
                     user.EmailConfirmed = false;
                     await _userManager.UpdateAsync(user);
                 }
@@ -244,6 +246,7 @@ namespace IMP.Infrastructure.Identity.Services
                 //new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim("uid", user.Id),
                 new Claim("appid", user.ApplicationUserId.GetValueOrDefault().ToString()),
+                new Claim("brandid", user.BrandId.GetValueOrDefault().ToString()),
                 new Claim("ip", ipAddress)
             }
             .Union(userClaims)

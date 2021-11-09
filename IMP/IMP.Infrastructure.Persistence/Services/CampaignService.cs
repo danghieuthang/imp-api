@@ -27,7 +27,7 @@ namespace IMP.Infrastructure.Persistence.Services
                 predicate: x => x.Status != (int)CampaignStatus.Draft
                             && x.Status != (int)CampaignStatus.Closed
                             && x.Status != (int)CampaignStatus.Pending
-                            && x.Status != (int)CampaignStatus.Canceled,
+                            && x.Status != (int)CampaignStatus.Cancelled,
                 orderBy: x => x.OrderBy(y => y.Created)).ToListAsync();
 
             foreach (var campaign in campaigns)

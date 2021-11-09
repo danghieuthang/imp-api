@@ -21,12 +21,19 @@ namespace IMP.Application.Enums
         /// <summary>
         /// Từ chối duyệt
         /// </summary>
-        Canceled,
+        Cancelled,
         Openning,
         Applying,
         Advertising,
         Evaluating,
         Announcing,
         Closed
+    }
+
+    public enum CampaignMemberStatus
+    {
+        Pending,
+        Approved,
+        Cancelled
     }
 }

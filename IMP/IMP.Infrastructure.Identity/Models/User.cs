@@ -27,5 +27,6 @@ namespace IMP.Infrastructure.Identity.Models
             return this.RefreshTokens?.Find(x => x.Token == token) != null;
         }
         public int? ApplicationUserId { get; set; }
+        public int? BrandId { get; set; }
     }
 }

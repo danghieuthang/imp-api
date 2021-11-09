@@ -10,5 +10,6 @@ namespace IMP.Application.Interfaces
         string AppId { get; }
         bool? IsAdmin { get; }
         int ApplicationUserId { get; }
+        int? BrandId { get; }
     }
 }

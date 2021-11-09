@@ -50,6 +50,9 @@ namespace IMP.WebApi.Middlewares
                         // not found error
                         response.StatusCode = (int)HttpStatusCode.NotFound;
                         break;
+                    case UnauthorizedAccessException e:
+                        response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        break;
                     default:
                         // unhandled error
                         _logger.Error(error, "Internal Server Error");

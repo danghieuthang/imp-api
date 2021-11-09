@@ -16,6 +16,12 @@ namespace IMP.WebApi.Services
             UserId = httpContextAccessor.HttpContext?.User?.FindFirstValue("uid");
             AppId = httpContextAccessor.HttpContext?.User?.FindFirstValue("appid");
             IsAdmin = httpContextAccessor.HttpContext?.User?.Claims.Where(x => x.Type == ClaimTypes.Role).Any(x => x.Value == Roles.Administrator.ToString());
+
+            int brandId;
+            if(int.TryParse(httpContextAccessor.HttpContext?.User?.FindFirstValue("brandid"), out brandId))
+            {
+                BrandId = brandId;
+            }
         }
 
         public string UserId { get; }
@@ -35,5 +41,6 @@ namespace IMP.WebApi.Services
                 return 0;
             }
         }
+        public int? BrandId { get; set; }
     }
 }

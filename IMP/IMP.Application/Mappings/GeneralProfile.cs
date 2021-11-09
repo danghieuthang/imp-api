@@ -331,6 +331,10 @@ namespace IMP.Application.Mappings
             CreateMap<RankLevel, RankLevelViewModel>();
             CreateMap<Ranking, RankingViewModel>();
             #endregion
+
+            #region campaign member
+            CreateMap<CampaignMember, CampaignMemberViewModel>();
+            #endregion
         }
 
         public IDictionary<string, string> CreateDynamicObjectFromItems(ICollection<BlockItem> items)

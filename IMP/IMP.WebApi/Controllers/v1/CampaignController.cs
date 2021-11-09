@@ -1,4 +1,5 @@
-﻿using IMP.Application.Features.Campaigns.Commands.ApprovalCampaign;
+﻿using IMP.Application.Features.Campaigns.Commands.ApplyToCampaign;
+using IMP.Application.Features.Campaigns.Commands.ApprovalCampaign;
 using IMP.Application.Features.Campaigns.Commands.CancelCampaign;
 using IMP.Application.Features.Campaigns.Commands.CompletedCreateCampaign;
 using IMP.Application.Features.Campaigns.Commands.CreateCampaign;
@@ -7,6 +8,7 @@ using IMP.Application.Features.Campaigns.Commands.UpdateCampaign;
 using IMP.Application.Features.Campaigns.Commands.UpdateCampaignActivities;
 using IMP.Application.Features.Campaigns.Commands.UpdateCampaignInfluencerConfiguration;
 using IMP.Application.Features.Campaigns.Commands.UpdateCampaignTargetConfiguration;
+using IMP.Application.Features.Campaigns.Queries.GetAllCampaignMemberByCampaignId;
 using IMP.Application.Features.Campaigns.Queries.GetAllCampaigns;
 using IMP.Application.Features.Campaigns.Queries.GetCampaignById;
 using IMP.Application.Features.Vouchers.Queries;
@@ -211,6 +213,32 @@ namespace IMP.WebApi.Controllers.v1
         public async Task<IActionResult> GetVoucherOfCampaign([FromRoute] int id)
         {
             return Ok(await Mediator.Send(new GetAllVoucherByCampaignIdQuery { CampaignId = id }));
+        }
+
+        /// <summary>
+        /// Influencer apply to campaign
+        /// </summary>
+        /// <param name="id">The id of campaign</param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<bool>), 200)]
+        [HttpPost("{id}/apply")]
+        [Authorize(Roles = "Influencer")]
+        public async Task<IActionResult> ApplyToCampaign([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new ApplyToCampaignCommand { CampaignId = id }));
+        }
+
+        /// <summary>
+        /// Search influencer in campaign
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<PagedList<CampaignMemberViewModel>>), 200)]
+        [HttpGet("{id}/members")]
+        [Authorize(Roles = "Brand")]
+        public async Task<IActionResult> SearchMember([FromQuery] GetAllCampaignMemberByCampaignIdQuery query)
+        {
+            return Ok(await Mediator.Send(query));
         }
 
     }
