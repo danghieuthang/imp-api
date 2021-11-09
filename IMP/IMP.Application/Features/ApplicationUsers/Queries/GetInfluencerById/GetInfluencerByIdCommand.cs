@@ -25,7 +25,13 @@ namespace IMP.Application.Features.ApplicationUsers.Queries.GetInfluencerById
 
         public override async Task<Response<InfluencerViewModel>> Handle(GetInfluencerByIdCommand request, CancellationToken cancellationToken)
         {
-            var user = await UnitOfWork.Repository<ApplicationUser>().FindSingleAsync(x => x.Id == request.Id, x => x.PaymentInfor, x => x.PaymentInfor.Bank, x => x.Ranking, x => x.Ranking.RankLevel);
+            var user = await UnitOfWork.Repository<ApplicationUser>().FindSingleAsync(x => x.Id == request.Id,
+                    x => x.PaymentInfor,
+                    x => x.PaymentInfor.Bank,
+                    x => x.Ranking,
+                    x => x.Ranking.RankLevel,
+                    x => x.Location,
+                    x => x.InfluencerPlatform);
             if (user == null)
             {
                 //var error = new ValidationError("id", $"'{request.Id}' không tồn tại");

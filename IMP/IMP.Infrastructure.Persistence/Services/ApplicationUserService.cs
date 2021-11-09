@@ -39,6 +39,14 @@ namespace IMP.Application.Interfaces.Services
                     Email = email
                 };
             }
+            else if (role == RegisterRole.Influencer)
+            {
+                user.Ranking = new Ranking
+                {
+                    RankLevelId = 1,
+                    Score = 0;
+                }
+            }
             user = await _applicationUserRepository.AddAsync(user);
             await _unitOfWork.CommitAsync();
 
@@ -51,7 +59,6 @@ namespace IMP.Application.Interfaces.Services
                 var brand = user.Brand;
                 brand.WalletId = user.Wallet.Id;
                 _unitOfWork.Repository<Brand>().Update(brand);
-
             }
 
             await _unitOfWork.CommitAsync();

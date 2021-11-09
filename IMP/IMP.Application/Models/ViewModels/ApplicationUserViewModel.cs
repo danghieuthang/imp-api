@@ -65,6 +65,8 @@ namespace IMP.Application.Models.ViewModels
 
         public PaymentInforViewModel PaymentInfor { get; set; }
         public RankingViewModel Ranking { get; set; }
+        public InfluencerPlatformViewModel InfluencerPlatform { get; set; }
+        public LocationViewModel Location { get; set; }
 
     }
     public class PaymentInforViewModel : BaseViewModel<int>

@@ -111,6 +111,7 @@ namespace IMP.Domain.Entities
 
             }
         }
+        public InfluencerPlatform InfluencerPlatform { get; set; }
 
         public virtual ICollection<WalletTransaction> TransactionsSent { get; set; }
         public virtual ICollection<WalletTransaction> TransactionsReceived { get; set; }
