@@ -78,6 +78,8 @@ namespace IMP.Domain.Entities
         public string Interests { get; set; }
         public bool? ChildStatus { get; set; }
         public bool? MaritalStatus { get; set; }
+        public bool? Pregnant { get; set; }
+
         public string Pet { get; set; }
 
         [StringLength(2000)]
@@ -111,8 +113,8 @@ namespace IMP.Domain.Entities
 
             }
         }
-        public InfluencerPlatform InfluencerPlatform { get; set; }
 
+        public virtual ICollection<InfluencerPlatform> InfluencerPlatforms { get; set; }
         public virtual ICollection<WalletTransaction> TransactionsSent { get; set; }
         public virtual ICollection<WalletTransaction> TransactionsReceived { get; set; }
         public virtual ICollection<VoucherCodeApplicationUser> VoucherCodeApplicationUsers { get; set; }

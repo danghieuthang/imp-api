@@ -31,7 +31,7 @@ namespace IMP.Application.Features.ApplicationUsers.Queries.GetInfluencerById
                     x => x.Ranking,
                     x => x.Ranking.RankLevel,
                     x => x.Location,
-                    x => x.InfluencerPlatform);
+                    x => x.InfluencerPlatforms);
             if (user == null)
             {
                 //var error = new ValidationError("id", $"'{request.Id}' không tồn tại");

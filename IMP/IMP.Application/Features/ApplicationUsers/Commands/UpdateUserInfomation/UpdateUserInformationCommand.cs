@@ -33,6 +33,7 @@ namespace IMP.Application.Features.ApplicationUsers.Commands.UpdateUserInfomatio
         public List<string> InterestsR { get; set; }
         public bool? ChildStatus { get; set; }
         public bool? MaritalStatus { get; set; }
+        public bool? Pregnant { get; set; }
         [JsonProperty("pets")]
         public List<string> PetR { get; set; }
         public string Description { get; set; }

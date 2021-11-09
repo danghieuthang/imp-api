@@ -29,6 +29,7 @@ namespace IMP.Application.Models.ViewModels
         public List<string> InterestsR { get; set; }
         public bool? ChildStatus { get; set; }
         public bool? MaritalStatus { get; set; }
+        public bool? Pregnant { get; set; }
         [JsonProperty("pets")]
         public List<string> PetsR { get; set; }
         public string Description { get; set; }
@@ -58,6 +59,7 @@ namespace IMP.Application.Models.ViewModels
         public List<string> InterestsR { get; set; }
         public bool? ChildStatus { get; set; }
         public bool? MaritalStatus { get; set; }
+        public bool? Pregnant { get; set; }
         [JsonProperty("pets")]
         public List<string> PetsR { get; set; }
         public string Description { get; set; }
@@ -65,7 +67,7 @@ namespace IMP.Application.Models.ViewModels
 
         public PaymentInforViewModel PaymentInfor { get; set; }
         public RankingViewModel Ranking { get; set; }
-        public InfluencerPlatformViewModel InfluencerPlatform { get; set; }
+        public List<InfluencerPlatformViewModel> InfluencerPlatforms { get; set; }
         public LocationViewModel Location { get; set; }
 
     }
