@@ -14,15 +14,12 @@ namespace IMP.Application.Features.Vouchers.Commands.CreateVoucher
 {
     public class CreateVoucherCommand : ICommand<VoucherViewModel>
     {
-        public VoucherType VoucherType { get; set; }
         public string VoucherName { get; set; }
         public string Code { get; set; }
-        public bool ApplyOncePerOrder { get; set; }
-        public bool ApplyOncePerCustomer { get; set; }
-        public bool OnlyforStaff { get; set; }
+        public bool OnlyforInfluencer { get; set; }
+        public bool OnlyforCustomer { get; set; }
         public decimal DiscountValue { get; set; }
         public DiscountValueType DiscountValueType { get; set; }
-        public int? MinCheckoutItemsQuantity { get; set; }
         public int Quantity { get; set; }
         public string Image { get; set; }
         public DateTime? FromDate { get; set; }

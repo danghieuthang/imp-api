@@ -307,8 +307,16 @@ namespace IMP.Application.Mappings
             #endregion
 
             #region voucher
-            CreateMap<Voucher, VoucherViewModel>();
-            CreateMap<Voucher, UserVoucherViewModel>();
+            CreateMap<Voucher, VoucherViewModel>()
+                .ForMember(dest => dest.DiscountProducts, opt =>
+                  {
+                      opt.MapFrom(x => JsonConvert.DeserializeObject<List<DiscountProductViewModel>>(x.DiscountProducts));
+                  });
+            CreateMap<Voucher, UserVoucherViewModel>()
+                  .ForMember(dest => dest.DiscountProducts, opt =>
+                  {
+                      opt.MapFrom(x => JsonConvert.DeserializeObject<List<DiscountProductViewModel>>(x.DiscountProducts));
+                  });
             CreateMap<CreateVoucherCommand, Voucher>();
             CreateMap<AssignVoucherToCampaignCommand, CampaignVoucher>();
             CreateMap<CampaignVoucher, CampaignVoucherViewModel>();

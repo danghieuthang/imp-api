@@ -7,15 +7,12 @@ namespace IMP.Application.Models.ViewModels
     public class VoucherViewModel : BaseViewModel<int>
     {
         public int BrandId { get; set; }
-        public int VoucherType { get; set; }
         public string VoucherName { get; set; }
         public string Code { get; set; }
-        public bool ApplyOncePerOrder { get; set; }
-        public bool ApplyOncePerCustomer { get; set; }
-        public bool OnlyforStaff { get; set; }
+        public bool OnlyforInfluencer { get; set; }
+        public bool OnlyforCustomer { get; set; }
         public decimal DiscountValue { get; set; }
         public int DiscountValueType { get; set; }
-        public int? MinCheckoutItemsQuantity { get; set; }
         public int Quantity { get; set; }
         public int QuantityUsed { get; set; }
         public string Image { get; set; }
@@ -28,9 +25,11 @@ namespace IMP.Application.Models.ViewModels
         public string Action { get; set; }
         public string Condition { get; set; }
         public string Target { get; set; }
+        public bool IsCanUse => QuantityUsed > Quantity;
 
         public List<VoucherCodeViewModel> VoucherCodes { get; set; }
         public List<CampaignVoucherViewModel> CampaignVouchers { get; set; }
+        public List<DiscountProductViewModel> DiscountProducts { get; set; }
     }
 
     public class VoucherCodeViewModel : BaseViewModel<int>
@@ -47,12 +46,13 @@ namespace IMP.Application.Models.ViewModels
         public int VoucherType { get; set; }
         public string VoucherName { get; set; }
         public string Code { get; set; }
-        public bool ApplyOncePerOrder { get; set; }
-        public bool ApplyOncePerCustomer { get; set; }
-        public bool OnlyforStaff { get; set; }
+        public bool OnlyforInfluencer { get; set; }
+        public bool OnlyforCustomer { get; set; }
         public decimal DiscountValue { get; set; }
         public int DiscountValueType { get; set; }
-        public int? MinCheckoutItemsQuantity { get; set; }
+        public int Quantity { get; set; }
+        [JsonIgnore]
+        public int QuantityUsed { get; set; }
         public string Image { get; set; }
         public string Thumnail { get; set; }
         public DateTime? FromDate { get; set; }
@@ -64,8 +64,11 @@ namespace IMP.Application.Models.ViewModels
         public string Condition { get; set; }
         public string Target { get; set; }
 
+        public bool IsCanUse => QuantityUsed > Quantity;
+
         public List<UserVoucherCodeViewModel> VoucherCodes { get; set; }
         public List<CampaignVoucherViewModel> CampaignVouchers { get; set; }
+        public List<DiscountProductViewModel> DiscountProducts { get; set; }
     }
 
     public class UserVoucherCodeViewModel : BaseViewModel<int>
@@ -87,5 +90,19 @@ namespace IMP.Application.Models.ViewModels
     public class VoucherTransactionViewModel : BaseViewModel<int>
     {
         public int VoucherCodeId { get; set; }
+    }
+
+    public class DiscountProductViewModel
+    {
+        public string Code { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+    }
+
+    public class DiscountProductRequest
+    {
+        public string Code { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
     }
 }

@@ -14,22 +14,15 @@ namespace IMP.Domain.Entities
         [ForeignKey("Brand")]
         public int BrandId { get; set; }
         public Brand Brand { get; set; }
-
-        [DefaultValue(0)]
-        public int VoucherType { get; set; }
-
         [StringLength(256)]
         public string Code { get; set; }
         [StringLength(256)]
         public string VoucherName { get; set; }
-        public bool ApplyOncePerOrder { get; set; }
-        public bool ApplyOncePerCustomer { get; set; }
-        public bool OnlyforStaff { get; set; }
+        public bool OnlyforInfluencer { get; set; }
+        public bool OnlyforCustomer { get; set; }
         public decimal DiscountValue { get; set; }
         public int DiscountValueType { get; set; }
-
-        public int? MinCheckoutItemsQuantity { get; set; }
-
+        public string DiscountProducts { get; set; }
         [StringLength(256)]
         public string Image { get; set; }
         [StringLength(256)]

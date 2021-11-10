@@ -9,6 +9,7 @@ namespace IMP.Application.Enums
     public enum DiscountValueType
     {
         Fixed,
-        Percentage
+        Percentage,
+        FreeShipping
     }
 }
