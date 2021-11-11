@@ -12,7 +12,9 @@ using IMP.Application.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
+using System.Text;
+using System.IO;
+using System;
 namespace IMP.WebApi.Controllers.v1
 {
     [ApiVersion("1.0")]
@@ -108,6 +110,25 @@ namespace IMP.WebApi.Controllers.v1
                 return BadRequest();
             }
             return Ok(await Mediator.Send(command));
+        }
+
+        /// <summary>
+        /// Download import codes template
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("download-import-codes-template")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetImportCodesTemplate()
+        {
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "App_Datas", "ExcelTemplates", "import_voucher_code_template.xlsx");
+            if (!System.IO.File.Exists(path))
+            {
+                return NotFound();
+            }
+            var stream = await System.IO.File.ReadAllBytesAsync(path);
+
+            return File(stream, "application/octet-stream", "import_voucher_code_template.xlsx");
+
         }
 
         /// <summary>
