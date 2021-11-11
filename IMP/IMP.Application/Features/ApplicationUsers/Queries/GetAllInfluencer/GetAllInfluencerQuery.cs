@@ -31,7 +31,8 @@ namespace IMP.Application.Features.ApplicationUsers.Queries.GetAllInfluencer
             {
                 string name = request.Name != null ? request.Name.ToLower().Trim() : "";
                 var page = await UnitOfWork.Repository<ApplicationUser>().GetPagedList(
-                        predicate: x => x.FirstName.ToLower().Contains(name) || x.LastName.ToLower().Contains(name) || x.Nickname.ToLower().Contains(name),
+                        predicate: x => x.BrandId == null
+                            && (x.FirstName.ToLower().Contains(name) || x.LastName.ToLower().Contains(name) || x.Nickname.ToLower().Contains(name)),
                         include: x => x.Include(y => y.Ranking).Include(y => y.InfluencerPlatforms),
                         pageIndex: request.PageIndex,
                         pageSize: request.PageSize,
