@@ -203,16 +203,16 @@ namespace IMP.Infrastructure.Identity.Services
                 {
                     user.ApplicationUserId = applicationUser.Id;
                     user.BrandId = applicationUser.BrandId;
-                    user.EmailConfirmed = false;
+                    user.EmailConfirmed = true;
                     await _userManager.UpdateAsync(user);
                 }
                 await _userManager.AddToRoleAsync(user, request.Role.ToString());
                 var verificationUri = await SendVerificationEmail(user, origin);
                 //TODO: Attach Email Service here and configure it via appsettings
-                _ = Task.Run(() =>
-                {
-                    _emailService.SendAsync(new Application.Models.Email.EmailRequest() { To = user.Email, Body = $"Please confirm your account by click <a href='{verificationUri}'>Here</a>.", Subject = "Confirm Registration TMP Platform" });
-                });
+                //_ = Task.Run(() =>
+                //{
+                //    _emailService.SendAsync(new Application.Models.Email.EmailRequest() { To = user.Email, Body = $"Please confirm your account by click <a href='{verificationUri}'>Here</a>.", Subject = "Confirm Registration TMP Platform" });
+                //});
                 return new Response<string>(user.Email, message: $"User Registered.");
             }
             var errors = new List<ValidationError>();
