@@ -391,7 +391,7 @@ namespace IMP.Infrastructure.Identity.Services
 
             if (!entity.IsActive)
             {
-                repository.Delete(entity);
+                repository.DeleteCompletely(entity);
                 await _unitOfWork.CommitAsync();
                 var error = new ValidationError("refresh_token", "Token was expired.");
                 throw new ValidationException(error, ErrorConstants.RefreshToken.RefreshTokenWasExpired);
