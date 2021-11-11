@@ -202,7 +202,7 @@ namespace IMP.Infrastructure.Identity.Services
                 if (applicationUser != null)
                 {
                     user.ApplicationUserId = applicationUser.Id;
-                    user.ApplicationUserId = applicationUser.BrandId;
+                    user.BrandId = applicationUser.BrandId;
                     user.EmailConfirmed = false;
                     await _userManager.UpdateAsync(user);
                 }
