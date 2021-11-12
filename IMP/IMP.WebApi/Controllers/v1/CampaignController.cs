@@ -63,7 +63,7 @@ namespace IMP.WebApi.Controllers.v1
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCampaignById([FromRoute] int id)
         {
-            return Ok(await Mediator.Send(new DeleteCampaignCommand { Id = id }));
+            return Ok(await Mediator.Send(new GetCampaignByIdQuery { Id = id }));
         }
 
         /// <summary>
