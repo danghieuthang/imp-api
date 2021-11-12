@@ -4,6 +4,7 @@ using IMP.Application.Features.Campaigns.Commands.CancelCampaign;
 using IMP.Application.Features.Campaigns.Commands.CompletedCreateCampaign;
 using IMP.Application.Features.Campaigns.Commands.CreateCampaign;
 using IMP.Application.Features.Campaigns.Commands.CreateDraftCampaign;
+using IMP.Application.Features.Campaigns.Commands.DeleteCampaign;
 using IMP.Application.Features.Campaigns.Commands.UpdateCampaign;
 using IMP.Application.Features.Campaigns.Commands.UpdateCampaignActivities;
 using IMP.Application.Features.Campaigns.Commands.UpdateCampaignInfluencerConfiguration;
@@ -62,7 +63,7 @@ namespace IMP.WebApi.Controllers.v1
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCampaignById([FromRoute] int id)
         {
-            return Ok(await Mediator.Send(new GetCampaignByIdQuery { Id = id }));
+            return Ok(await Mediator.Send(new DeleteCampaignCommand { Id = id }));
         }
 
         /// <summary>
@@ -241,5 +242,17 @@ namespace IMP.WebApi.Controllers.v1
             return Ok(await Mediator.Send(query));
         }
 
+        /// <summary>
+        /// Delete campaign
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<int>), 200)]
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Brand")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new DeleteCampaignCommand { Id = id }));
+        }
     }
 }
