@@ -55,7 +55,7 @@ namespace IMP.Application.Features.Campaigns.Commands.CreateDraftCampaign
                         UnlimitedAge = true,
                         AgeFrom = 18,
                         AgeTo = 25,
-                        PlatformId=1
+                        PlatformId = 1
                     },
                     TargetConfiguration = new TargetConfiguration
                     {
@@ -73,6 +73,7 @@ namespace IMP.Application.Features.Campaigns.Commands.CreateDraftCampaign
                 await UnitOfWork.CommitAsync();
 
                 var campaignView = Mapper.Map<CampaignViewModel>(campaign);
+                campaignView.InfluencerConfiguration.Platform = new Models.ViewModels.PlatformViewModel { Id = campaign.InfluencerConfiguration.PlatformId.Value };
                 return new Response<CampaignViewModel>(campaignView);
             }
         }

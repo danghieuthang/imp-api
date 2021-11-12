@@ -67,7 +67,8 @@ namespace IMP.Application.Features.Campaigns.Queries.GetAllCampaigns
                         && (request.PlatformIds.Count == 0 || (request.PlatformIds.Count > 0 && request.PlatformIds.Contains(x.InfluencerConfiguration.PlatformId.Value)))
                         && (string.IsNullOrWhiteSpace(request.Name) || x.Title.ToLower().Contains(request.Name.ToLower())
                             || x.Description.ToLower().Contains(request.Name.ToLower())
-                            || x.AdditionalInformation.ToLower().Contains(request.Name.ToLower())),
+                            || x.AdditionalInformation.ToLower().Contains(request.Name.ToLower()))
+                        && x.LastModified != null,
                     include: x => x.Include(campaign => campaign.InfluencerConfiguration).Include(campaing => campaing.TargetConfiguration),
                     pageIndex: request.PageIndex,
                     pageSize: request.PageSize,
