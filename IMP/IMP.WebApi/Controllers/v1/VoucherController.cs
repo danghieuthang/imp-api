@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text;
 using System.IO;
 using System;
+using IMP.Application.Features.Vouchers.Queries.GetAllVoucher;
+
 namespace IMP.WebApi.Controllers.v1
 {
     [ApiVersion("1.0")]
@@ -140,6 +142,17 @@ namespace IMP.WebApi.Controllers.v1
         [HttpGet("me")]
         [Authorize(Roles = "Influencer")]
         public async Task<IActionResult> GetAll([FromQuery] GetAllVoucherByApplicationUserQuery query)
+        {
+            return Ok(await Mediator.Send(query));
+        }
+        /// <summary>
+        /// Search vouchers of brand
+        /// </summary>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<IPagedList<VoucherViewModel>>), 200)]
+        [HttpGet]
+        [Authorize(Roles = "Brand")]
+        public async Task<IActionResult> GetAllVoucherByBrand([FromQuery] GetAllVoucherQuery query)
         {
             return Ok(await Mediator.Send(query));
         }
