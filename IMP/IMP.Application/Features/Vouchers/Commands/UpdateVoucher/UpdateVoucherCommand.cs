@@ -11,6 +11,7 @@ using IMP.Domain.Entities;
 using IMP.Application.Exceptions;
 using IMP.Application.Models;
 using IMP.Application.Enums;
+using System.Collections.Generic;
 
 namespace IMP.Application.Features.Vouchers.Commands.UpdateVoucher
 {
@@ -23,6 +24,8 @@ namespace IMP.Application.Features.Vouchers.Commands.UpdateVoucher
         public bool OnlyforCustomer { get; set; }
         public decimal DiscountValue { get; set; }
         public DiscountValueType DiscountValueType { get; set; }
+        public List<DiscountProductRequest> DiscountProducts { get; set; }
+
         public int Quantity { get; set; }
         public string Image { get; set; }
         public DateTime? FromDate { get; set; }

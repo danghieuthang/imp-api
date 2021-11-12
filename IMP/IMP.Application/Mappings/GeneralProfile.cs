@@ -27,6 +27,7 @@ using Newtonsoft.Json;
 using IMP.Application.Features.Campaigns.Commands.UpdateCampaign;
 using IMP.Application.Features.Campaigns.Commands.UpdateCampaignActivities;
 using IMP.Application.Features.ActivityTypes.Commands.CreateActivityType;
+using IMP.Application.Features.Vouchers.Commands.UpdateVoucher;
 
 namespace IMP.Application.Mappings
 {
@@ -317,7 +318,16 @@ namespace IMP.Application.Mappings
                   {
                       opt.MapFrom(x => JsonConvert.DeserializeObject<List<DiscountProductViewModel>>(x.DiscountProducts));
                   });
-            CreateMap<CreateVoucherCommand, Voucher>();
+            CreateMap<CreateVoucherCommand, Voucher>()
+                .ForMember(x=>x.DiscountProducts, opt =>
+                {
+                    opt.MapFrom(x => JsonConvert.SerializeObject(x.DiscountProducts));
+                });
+            CreateMap<UpdateVoucherCommand, Voucher>()
+               .ForMember(x => x.DiscountProducts, opt =>
+               {
+                   opt.MapFrom(x => JsonConvert.SerializeObject(x.DiscountProducts));
+               });
             CreateMap<AssignVoucherToCampaignCommand, CampaignVoucher>();
             CreateMap<CampaignVoucher, CampaignVoucherViewModel>();
             CreateMap<CampaignVoucher, UserCampaignVoucherViewModel>();

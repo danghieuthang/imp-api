@@ -65,10 +65,10 @@ namespace IMP.Application.Features.Campaigns.Queries.GetAllCampaigns
                         && (request.ToDate == null || (request.ToDate != null && x.Created.Date <= request.ToDate))
                         && (request.TypeIds.Count == 0 || (request.TypeIds.Count > 0 && request.TypeIds.Contains(x.CampaignTypeId.Value)))
                         && (request.PlatformIds.Count == 0 || (request.PlatformIds.Count > 0 && request.PlatformIds.Contains(x.InfluencerConfiguration.PlatformId.Value)))
-                        && (string.IsNullOrWhiteSpace(request.Name) || x.Title.ToLower().Contains(request.Name.ToLower()) 
+                        && (string.IsNullOrWhiteSpace(request.Name) || x.Title.ToLower().Contains(request.Name.ToLower())
                             || x.Description.ToLower().Contains(request.Name.ToLower())
                             || x.AdditionalInformation.ToLower().Contains(request.Name.ToLower())),
-                    include: x => x.Include(campaign => campaign.CampaignImages),
+                    include: x => x.Include(campaign => campaign.InfluencerConfiguration).Include(campaing => campaing.TargetConfiguration),
                     pageIndex: request.PageIndex,
                     pageSize: request.PageSize,
                     orderBy: request.OrderField,

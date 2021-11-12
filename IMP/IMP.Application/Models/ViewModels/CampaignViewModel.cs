@@ -11,9 +11,6 @@ namespace IMP.Application.Models.Compaign
     public class CampaignViewModel : BaseViewModel<int>
     {
         public int CreatedById { get; set; }
-
-        public int BrandId { get; set; }
-
         #region Generate Information
 
         public string Title { get; set; }

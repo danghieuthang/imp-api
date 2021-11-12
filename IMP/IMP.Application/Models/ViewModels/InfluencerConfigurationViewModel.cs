@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using IMP.Application.Models.ViewModels;
+using System.Collections.Generic;
 
 namespace IMP.Application.Models.Compaign
 {
     public class InfluencerConfigurationViewModel
     {
-        public int PlatformId { get; set; }
+        //public int PlatformId { get; set; }
+        public PlatformViewModel Platform { get; set; }
         public int NumberOfInfluencer { get; set; }
         public int LevelId { get; set; }
         public int? AgeFrom { get; set; }
