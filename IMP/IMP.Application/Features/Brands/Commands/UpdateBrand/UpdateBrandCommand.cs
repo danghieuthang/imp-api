@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using IMP.Application.Exceptions;
 using IMP.Application.Interfaces;
+using IMP.Application.Models;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
 using IMP.Domain.Entities;
@@ -32,14 +34,14 @@ namespace IMP.Application.Features.Brands.Commands.UpdateBrand
     public class UpdateBrandCommand : CreateBrandRequest, ICommand<BrandViewModel>
     {
         public int Id { get; set; }
-        [JsonIgnore]
-        public int ApplicationUserId { get; set; }
         public class UpdateBrandCommandHandler : CommandHandler<UpdateBrandCommand, BrandViewModel>
         {
-            private IGenericRepository<Brand> _brandRepository;
-            public UpdateBrandCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+            private readonly IGenericRepository<Brand> _brandRepository;
+            private readonly IAuthenticatedUserService _authenticatedUserService;
+            public UpdateBrandCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticatedUserService authenticatedUserService) : base(unitOfWork, mapper)
             {
                 _brandRepository = unitOfWork.Repository<Brand>();
+                _authenticatedUserService = authenticatedUserService;
             }
 
             public override async Task<Response<BrandViewModel>> Handle(UpdateBrandCommand request, CancellationToken cancellationToken)
@@ -47,6 +49,11 @@ namespace IMP.Application.Features.Brands.Commands.UpdateBrand
                 var brand = await _brandRepository.GetByIdAsync(request.Id);
                 if (brand != null)
                 {
+                    if (brand.Id != _authenticatedUserService.BrandId)
+                    {
+                        throw new ValidationException(new ValidationError("", "Không có quyền cập nhật nhãn hàng này"));
+                    }
+
                     Mapper.Map(request, brand);
                     _brandRepository.Update(brand);
 

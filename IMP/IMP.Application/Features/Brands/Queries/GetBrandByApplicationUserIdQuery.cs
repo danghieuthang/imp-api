@@ -15,20 +15,20 @@ namespace IMP.Application.Features.Brands.Queries
 {
     public class GetBrandByApplicationUserIdQuery : IQuery<BrandViewModel>
     {
-        public int ApplicationUserId { get; set; }
         public class GetBrandByApplicationUserIdQueryHandler : QueryHandler<GetBrandByApplicationUserIdQuery, BrandViewModel>
         {
-            public GetBrandByApplicationUserIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+            private readonly IAuthenticatedUserService _authenticatedUserService;
+            public GetBrandByApplicationUserIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticatedUserService authenticatedUserService) : base(unitOfWork, mapper)
             {
+                _authenticatedUserService = authenticatedUserService;
             }
 
             public override async Task<Response<BrandViewModel>> Handle(GetBrandByApplicationUserIdQuery request, CancellationToken cancellationToken)
             {
-                var user = await UnitOfWork.Repository<ApplicationUser>().FindSingleAsync(x => x.Id == request.ApplicationUserId,
-                        include: x => x.Include(y => y.Brand));
-                if (user?.Brand != null)
+                var brand = await UnitOfWork.Repository<Brand>().FindSingleAsync(x => x.Id == _authenticatedUserService.BrandId);
+                if (brand != null)
                 {
-                    var brandView = Mapper.Map<BrandViewModel>(user.Brand);
+                    var brandView = Mapper.Map<BrandViewModel>(brand);
                     return new Response<BrandViewModel>(brandView);
                 }
                 throw new KeyNotFoundException(message: "Không tồn tại.");

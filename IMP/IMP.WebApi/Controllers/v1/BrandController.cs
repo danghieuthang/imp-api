@@ -12,13 +12,10 @@ namespace IMP.WebApi.Controllers.v1
 {
     [ApiVersion("1.0")]
     [Route(RouterConstants.Brand)]
-    [Authorize]
     public class BrandController : BaseApiController
     {
-        private IAuthenticatedUserService _authenticatedUserService;
-        public BrandController(IAuthenticatedUserService authenticatedUser)
+        public BrandController()
         {
-            _authenticatedUserService = authenticatedUser;
         }
         /// <summary>
         /// Get brand of user who authenticated
@@ -26,9 +23,10 @@ namespace IMP.WebApi.Controllers.v1
         /// <returns></returns>
         [HttpGet("me")]
         [ProducesResponseType(typeof(Response<BrandViewModel>), 200)]
+        [Authorize(Roles = "Brand")]
         public async Task<IActionResult> Get()
         {
-            return Ok(await Mediator.Send(new GetBrandByApplicationUserIdQuery { ApplicationUserId = _authenticatedUserService.ApplicationUserId }));
+            return Ok(await Mediator.Send(new GetBrandByApplicationUserIdQuery { }));
         }
 
         /// <summary>
@@ -39,7 +37,7 @@ namespace IMP.WebApi.Controllers.v1
         [HttpGet]
         [ProducesResponseType(typeof(Response<PagedList<BrandViewModel>>), 200)]
         [AllowAnonymous]
-        public async Task<IActionResult> GetAll([FromQuery]SearchBrandsQuery query)
+        public async Task<IActionResult> GetAll([FromQuery] SearchBrandsQuery query)
         {
             return Ok(await Mediator.Send(query));
         }
@@ -51,13 +49,13 @@ namespace IMP.WebApi.Controllers.v1
         /// <returns></returns>
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(Response<BrandViewModel>), 200)]
+        [Authorize(Roles = "Brand")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateBrandCommand command)
         {
             if (id != command.Id)
             {
                 return BadRequest();
             }
-            command.ApplicationUserId = _authenticatedUserService.ApplicationUserId;
             return Ok(await Mediator.Send(command));
         }
     }
