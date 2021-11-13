@@ -30,6 +30,7 @@ namespace IMP.Application.Features.Vouchers.Commands.DeleteVoucher
                     {
                         Repository.Delete(voucher);
                         await UnitOfWork.CommitAsync();
+                        return new Response<int>(request.Id);
                     }
                     else
                         throw new ValidationException(new ValidationError("id", $"Không có quyền xoá."));
