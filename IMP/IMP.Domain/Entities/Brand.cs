@@ -17,7 +17,8 @@ namespace IMP.Domain.Entities
         [StringLength(256)]
         public string CompanyName { get; set; }
         public bool IsCampany { get; set; }
-
+        [StringLength(256)]
+        public string Image { get; set; }
         [StringLength(256)]
         public string Website { get; set; }
         [StringLength(256)]

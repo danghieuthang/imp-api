@@ -17,6 +17,7 @@ namespace IMP.Application.Features.Brands.Commands.UpdateBrand
             var brandRepository = unitOfWork.Repository<Brand>();
             RuleFor(x => x.Code).MustMaxLength(256);
             RuleFor(x => x.CompanyName).MustMaxLength(256);
+            RuleFor(x => x.Image).MustValidUrl(allowNull: true);
             RuleFor(x => x.Address).MustMaxLength(256);
             RuleFor(x => x.Fanpage).MustMaxLength(256);
             RuleFor(x => x.Website).MustValidUrl(allowNull: true);

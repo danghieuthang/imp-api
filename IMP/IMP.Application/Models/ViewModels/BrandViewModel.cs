@@ -11,6 +11,7 @@ namespace IMP.Application.Models.ViewModels
     {
         public string Code { get; set; }
         public string CompanyName { get; set; }
+        public string Image { get; set; }
         public string Website { get; set; }
         public string Representative { get; set; }
         public string Fanpage { get; set; }

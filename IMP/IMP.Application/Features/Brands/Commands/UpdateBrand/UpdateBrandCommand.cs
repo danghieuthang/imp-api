@@ -17,6 +17,7 @@ namespace IMP.Application.Features.Brands.Commands.UpdateBrand
     {
         public string Code { get; set; }
         public string CompanyName { get; set; }
+        public string Image { get; set; }
         public bool IsCampany { get; set; }
         public string Website { get; set; }
         public string Representative { get; set; }
