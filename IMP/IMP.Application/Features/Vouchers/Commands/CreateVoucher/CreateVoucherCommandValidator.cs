@@ -14,7 +14,7 @@ namespace IMP.Application.Features.Vouchers.Commands.CreateVoucher
             RuleFor(x => x.VoucherName).MustRequired(256);
             RuleFor(x => x.Image).MustValidUrl(allowNull: true);
             RuleFor(x => x.Target).MustMaxLength(256);
-            RuleFor(x => x.FromDate).MustGreaterThan(DateTime.Now);
+            //RuleFor(x => x.FromDate).MustGreaterThan(DateTime.Now);
             RuleFor(x => x.ToDate).Must((voucher, toDate) =>
             {
                 if (!toDate.HasValue) return false;
