@@ -16,6 +16,8 @@ namespace IMP.Application.Features.Vouchers.Queries.GetAllVoucher
 {
     public class GetAllVoucherQuery : PageRequest, IListQuery<VoucherViewModel>
     {
+        [FromQuery(Name = "name")]
+        public string Name { get; set; }
         [FromQuery(Name = "campaign_id")]
         public int? CampaignId { get; set; }
         [FromQuery(Name = "from_date")]
@@ -33,11 +35,13 @@ namespace IMP.Application.Features.Vouchers.Queries.GetAllVoucher
 
             public override async Task<Response<IPagedList<VoucherViewModel>>> Handle(GetAllVoucherQuery request, CancellationToken cancellationToken)
             {
+                string name = string.IsNullOrEmpty(request.Name)?"" : request.Name.ToLower().Trim();
                 var page = await UnitOfWork.Repository<Voucher>().GetPagedList(
                    predicate: x => x.BrandId == _authenticatedUserService.BrandId
                         && (request.FromDate == null || (request.FromDate != null && x.FromDate >= request.FromDate.Value))
                         && (request.ToDate == null || (request.ToDate != null && x.FromDate >= request.ToDate.Value))
-                        && (request.CampaignId == null || (request.CampaignId != null && x.CampaignVouchers.Any(y => y.CampaignId == request.CampaignId.Value))),
+                        && (request.CampaignId == null || (request.CampaignId != null && x.CampaignVouchers.Any(y => y.CampaignId == request.CampaignId.Value)))
+                        && (string.IsNullOrEmpty(name) || x.VoucherName.ToLower().Contains(name)),
                    pageIndex: request.PageIndex,
                    pageSize: request.PageSize,
                    orderBy: request.OrderField,
