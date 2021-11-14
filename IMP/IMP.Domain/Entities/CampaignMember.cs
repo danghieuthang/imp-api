@@ -16,7 +16,7 @@ namespace IMP.Domain.Entities
         [ForeignKey("ApplicationUser")]
         public int InfluencerId { get; set; }
         public ApplicationUser Influencer { get; set; }
-        public int Status { get; set; }
+        public int Status { get; set; } 
 
         public ICollection<ApplicantHistory> ApplicantHistories { get; set; }
         public ICollection<MemberActivity> MemberActivities { get; set; }
