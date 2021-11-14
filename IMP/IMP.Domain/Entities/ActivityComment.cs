@@ -9,13 +9,15 @@ using System.Threading.Tasks;
 
 namespace IMP.Domain.Entities
 {
-    public class ActivityResult : BaseEntity
+    public class ActivityComment : BaseEntity
     {
+        [ForeignKey("MemberActivity")]
+        public int MemberActivityId { get; set; }
+
+        [ForeignKey("ApplicationUser")]
+        public int ApplicationUserId { get; set; }
+
         [StringLength(256)]
-        public string Name { get; set; }
-        public int Type { get; set; }
-        [ForeignKey("CampaignActivity")]
-        public int CampaignActivityId { get; set; }
-        public CampaignActivity CampaignActivity { get; set; }
+        public string Comment { get; set; }
     }
 }

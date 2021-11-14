@@ -22,7 +22,12 @@ namespace IMP.Domain.Entities
         [StringLength(256)]
         public string Description { get; set; }
         public string HowToDo { get; set; }
+        [StringLength(256)]
+        public string ResultName { get; set; }
+        [ForeignKey("EvidenceType")]
+        public int? EvidenceTypeId { get; set; }
+        public EvidenceType EvidenceType { get; set; }
+
         public ICollection<MemberActivity> MemberActivities { get; set; }
-        public ICollection<ActivityResult> ActivityResults { get; set; }
     }
 }

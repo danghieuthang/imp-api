@@ -25,6 +25,7 @@ namespace IMP.Infrastructure.Persistence.Seeds
             await SeedBankAsync(unitOfWork);
             await SeedBlockTypeAsync(unitOfWork);
             await SeedRankLevelAsync(unitOfWork);
+            await SeedEvidenceTypeAsync(unitOfWork);
             await DefaultLocation.SeedLocationAsync(unitOfWork);
             await DefaultMileStone.SeedMilestonesAsync(unitOfWork);
         }
@@ -120,8 +121,30 @@ namespace IMP.Infrastructure.Persistence.Seeds
                 };
                 await rankLevelRepository.AddManyAsync(rankLevelDefault);
                 await unitOfWork.CommitAsync();
+            }
+        }
 
+        public static async Task SeedEvidenceTypeAsync(IUnitOfWork unitOfWork)
+        {
+            var evidenceTypeRepository = unitOfWork.Repository<EvidenceType>();
+            var evidences = await evidenceTypeRepository.GetAllAsync();
+            if (evidences.Count == 0)
+            {
+                var evidenceTypeDefaul = new List<EvidenceType>
+                    {
+                        new EvidenceType
+                        {
+                            Name="Video"
+                        },
+                        new EvidenceType
+                        {
+                            Name="Hình ảnh"
+                        },
+                    };
+                await evidenceTypeRepository.AddManyAsync(evidenceTypeDefaul);
+                await unitOfWork.CommitAsync();
             }
         }
     }
+
 }

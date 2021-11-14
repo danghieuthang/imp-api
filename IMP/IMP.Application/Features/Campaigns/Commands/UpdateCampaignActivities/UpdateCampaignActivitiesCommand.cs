@@ -28,19 +28,17 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaignActivities
         {
             private readonly IGenericRepository<Campaign> _campaignRepository;
             private readonly IGenericRepository<CampaignActivity> _campaignActivityRepository;
-            private readonly IGenericRepository<ActivityResult> _activityResultRepository;
             public UpdateCampaignActivitiesCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
             {
                 _campaignRepository = unitOfWork.Repository<Campaign>();
                 _campaignActivityRepository = unitOfWork.Repository<CampaignActivity>();
-                _activityResultRepository = unitOfWork.Repository<ActivityResult>();
             }
 
             public override async Task<Response<CampaignViewModel>> Handle(UpdateCampaignActivitiesCommand request, CancellationToken cancellationToken)
             {
                 var campaign = await _campaignRepository.FindSingleAsync(
                         predicate: campaigns => campaigns.Id == request.CampaignId,
-                        include: x => x.Include(y => y.CampaignActivities).ThenInclude(z => z.ActivityResults));
+                        include: x => x.Include(y => y.CampaignActivities));
 
                 if (campaign != null)
                 {
@@ -54,14 +52,7 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaignActivities
                         {
                             _campaignActivityRepository.Delete(activity);
                         }
-                        else
-                        {
-                            foreach (var result in activity.ActivityResults) // domain activity
-                            {
-
-                                _activityResultRepository.DeleteCompletely(result);
-                            }
-                        }
+             
                     }
 
                     var campaignActivities = Mapper.Map<List<CampaignActivity>>(request.CampaignActivities);

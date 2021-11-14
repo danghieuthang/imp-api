@@ -62,7 +62,7 @@ namespace IMP.Application.Features.Campaigns.Commands.ApplyToCampaign
                 {
                     InfluencerId = _authenticatedUserService.ApplicationUserId,
                     CampaignId = campaign.Id,
-                    Status = (int)CampaignMemberStatus.Pending
+                    Status = (int)CampaignMemberStatus.Pending,
                 };
 
                 UnitOfWork.Repository<CampaignMember>().Add(member);

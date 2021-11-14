@@ -16,7 +16,16 @@ namespace IMP.Domain.Entities
         [ForeignKey("ApplicationUser")]
         public int InfluencerId { get; set; }
         public ApplicationUser Influencer { get; set; }
-        public int Status { get; set; } 
+        public int Status { get; set; }
+        public DateTime ApprovedDate { get; set; }
+
+        [ForeignKey("ApplicationUser")]
+        public int? ApproveById { get; set; }
+        public ApplicationUser ApprovedBy { get; set; }
+
+        public bool ActivityProgess { get; set; }
+        public DateTime CompletedDate { get; set; }
+        public decimal Money { get; set; }
 
         public ICollection<ApplicantHistory> ApplicantHistories { get; set; }
         public ICollection<MemberActivity> MemberActivities { get; set; }

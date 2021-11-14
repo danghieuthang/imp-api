@@ -9,15 +9,15 @@ namespace IMP.Domain.Entities
 {
     public class Evidence : BaseEntity
     {
+        [ForeignKey("EvidenceType")]
+        public int EvidenceTypeId { get; set; }
+        public EvidenceType EvidenceType { get; set; }
+
         [ForeignKey("MemberActivity")]
         public int MemberActivityId { get; set; }
         public MemberActivity MemberActivity { get; set; }
 
-        [StringLength(256)]
-        public string ImageUrl { get; set; }
-        [StringLength(256)]
-        public string VideoUrl { get; set; }
-        [StringLength(256)]
-        public string LinkUrl { get; set; }
+        [StringLength(2000)]
+        public string Url { get; set; }
     }
 }

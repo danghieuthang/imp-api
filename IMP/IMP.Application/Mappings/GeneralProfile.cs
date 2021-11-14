@@ -178,9 +178,7 @@ namespace IMP.Application.Mappings
 
             // Campaign activity
             CreateMap<CampaignActivity, CampaignActivityViewModel>();
-            CreateMap<ActivityResult, ActivityResultViewModel>();
             CreateMap<CampaignActivityUpdateModel, CampaignActivity>();
-            CreateMap<ActivityResultUpdateModel, ActivityResult>();
             CreateMap<ActivityType, ActivityTypeViewModel>();
             CreateMap<CreateActivityTypeCommand, ActivityType>();
             #endregion
@@ -319,10 +317,10 @@ namespace IMP.Application.Mappings
                       opt.MapFrom(x => JsonConvert.DeserializeObject<List<DiscountProductViewModel>>(x.DiscountProducts));
                   });
             CreateMap<CreateVoucherCommand, Voucher>()
-                .ForMember(x=>x.DiscountProducts, opt =>
-                {
-                    opt.MapFrom(x => JsonConvert.SerializeObject(x.DiscountProducts));
-                });
+                .ForMember(x => x.DiscountProducts, opt =>
+                  {
+                      opt.MapFrom(x => JsonConvert.SerializeObject(x.DiscountProducts));
+                  });
             CreateMap<UpdateVoucherCommand, Voucher>()
                .ForMember(x => x.DiscountProducts, opt =>
                {
@@ -352,6 +350,14 @@ namespace IMP.Application.Mappings
 
             #region campaign member
             CreateMap<CampaignMember, CampaignMemberViewModel>();
+            #endregion
+
+            #region evidence type
+            CreateMap<EvidenceType, EvidenceTypeViewModel>();
+            #endregion
+
+            #region member activity
+            CreateMap<MemberActivity, MemberActivityViewModel>();
             #endregion
         }
 

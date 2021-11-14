@@ -58,7 +58,6 @@ namespace IMP.Infrastructure.Persistence.Contexts
         public DbSet<Platform> Platforms { get; set; }
         public DbSet<Ranking> Rankings { get; set; }
         public DbSet<RankLevel> RankLevels { get; set; }
-        public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<Voucher> Voucher { get; set; }
         public DbSet<VoucherCode> VoucherCodes { get; set; }
         public DbSet<VoucherTransaction> VoucherTransactions { get; set; }
@@ -68,8 +67,9 @@ namespace IMP.Infrastructure.Persistence.Contexts
         public DbSet<CampaignMilestone> CampaignMilestones { get; set; }
         public DbSet<Otp> Otps { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<ActivityResult> ActivityResults { get; set; }
         public DbSet<VoucherCodeApplicationUser> VoucherCodeApplicationUsers { get; set; }
+        public DbSet<ActivityComment> ActivityComments { get; set; }
+        public DbSet<EvidenceType> EvidenceTypes { get; set; }
 
 
         #endregion  Dbsets

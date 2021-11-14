@@ -34,7 +34,7 @@ namespace IMP.Application.Features.Campaigns.Queries.GetCampaignById
                             .Include(x => x.TargetConfiguration).ThenInclude(x => x.Locations)
                             .Include(x => x.InfluencerConfiguration).ThenInclude(x => x.Locations)
                             .Include(x => x.InfluencerConfiguration).ThenInclude(x => x.Platform)
-                            .Include(x => x.CampaignActivities).ThenInclude(y => y.ActivityResults)
+                            .Include(x => x.CampaignActivities)
                             .Include(x => x.CampaignType)
                             .Include(x => x.Brand));
 

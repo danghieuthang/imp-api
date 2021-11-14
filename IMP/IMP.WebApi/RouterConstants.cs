@@ -36,5 +36,8 @@ namespace IMP.WebApi
         public const string CampaignVoucher = Common + "campaign-vouchers";
         public const string Influencer = Common + "influencers";
         public const string CampaignMember = Common + "campaign-members";
+        public const string MemberActivity = Common + "member-activities";
+        public const string Evidence = Common + "evidences";
+        public const string EvidenceType = Common + "evidence-types";
     }
 }

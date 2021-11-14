@@ -12,5 +12,11 @@ namespace IMP.Application.Models.ViewModels
         public int CampaignId { get; set; }
         public InfluencerViewModel Influencer { get; set; }
         public int Status { get; set; }
+        public DateTime ApprovedDate { get; set; }
+
+        public int? ApproveById { get; set; }
+        public bool ActivityProgess { get; set; }
+        public DateTime CompletedDate { get; set; }
+        public decimal Money { get; set; }
     }
 }

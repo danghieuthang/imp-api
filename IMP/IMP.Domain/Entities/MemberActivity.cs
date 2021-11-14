@@ -1,5 +1,6 @@
 ﻿using IMP.Domain.Common;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -17,15 +18,10 @@ namespace IMP.Domain.Entities
         public int CampaignMemberId { get; set; }
         public CampaignMember CampaignMember { get; set; }
 
-        [ForeignKey("ActivityType")]
-        public int ActivityTypeId { get; set; }
-        public ActivityType ActivityType { get; set; }
+        public bool Status { get; set; }
 
-        public ApplicationUser Influencer { get; set; }
-        [Range(0, 100)]
-        public float Progress { get; set; }
-        public int Position { get; set; }
+        public Evidence Evidence { get; set; }
 
-        public ICollection<Evidence> Evidences { get; set; }
+        public ICollection<ActivityComment> ActivityComments { get; set; }
     }
 }

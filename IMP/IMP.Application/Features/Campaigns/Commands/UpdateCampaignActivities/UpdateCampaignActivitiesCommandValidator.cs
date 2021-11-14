@@ -36,9 +36,10 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaignActivities
                 return await unitOfWork.Repository<ActivityType>().IsExistAsync(id);
             });
 
-            RuleForEach(x => x.ActivityResults).ChildRules(results =>
+            RuleFor(x => x.ResultName).MustMaxLength(256);
+            RuleFor(x => x.EvidenceTypeId).MustExistEntityId(async (id, c) =>
             {
-                results.RuleFor(x => x.Name).MustMaxLength(256);
+                return await unitOfWork.Repository<EvidenceType>().IsExistAsync(id);
             });
         }
     }
