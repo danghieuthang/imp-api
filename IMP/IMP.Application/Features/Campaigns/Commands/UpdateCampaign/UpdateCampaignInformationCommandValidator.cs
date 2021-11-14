@@ -20,7 +20,7 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
             RuleFor(x => x.AdditionalInformation).MustMaxLength(2000);
 
             //timeline
-            RuleFor(x => x.OpeningDate.Value).MustGreaterThanNow().When(x => x.OpeningDate.HasValue);
+            //RuleFor(x => x.OpeningDate.Value).MustGreaterThanNow().When(x => x.OpeningDate.HasValue);
 
             RuleFor(x => x.ApplyingDate.Value).Must((x, y) =>
             {
