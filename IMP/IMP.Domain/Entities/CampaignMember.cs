@@ -20,7 +20,7 @@ namespace IMP.Domain.Entities
         public DateTime ApprovedDate { get; set; }
 
         [ForeignKey("ApplicationUser")]
-        public int? ApproveById { get; set; }
+        public int? ApprovedById { get; set; }
         public ApplicationUser ApprovedBy { get; set; }
 
         public bool ActivityProgess { get; set; }

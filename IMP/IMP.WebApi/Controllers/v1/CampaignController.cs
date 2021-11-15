@@ -187,7 +187,7 @@ namespace IMP.WebApi.Controllers.v1
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> ApprovalCampaign([FromRoute] int id)
         {
-                return Ok(await Mediator.Send(new ApprovalCampaignCommand { Id = id }));
+            return Ok(await Mediator.Send(new ApprovalCampaignCommand { Id = id }));
         }
 
         /// <summary>
@@ -201,6 +201,14 @@ namespace IMP.WebApi.Controllers.v1
         public async Task<IActionResult> CancelCampaign([FromRoute] int id)
         {
             return Ok(await Mediator.Send(new CancelCampaignCommand { Id = id }));
+        }
+
+        [HttpPut("{id}/waiting")]
+        [ProducesResponseType(typeof(Response<CampaignViewModel>), 200)]
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> WaitingCampaign([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new WaitingCampaignCommand { Id = id }));
         }
 
 
@@ -230,7 +238,7 @@ namespace IMP.WebApi.Controllers.v1
             if (response.Succeeded)
             {
                 return Ok(response);
-            } 
+            }
             return BadRequest(response);
         }
 

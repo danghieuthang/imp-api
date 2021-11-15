@@ -53,7 +53,7 @@ namespace IMP.Application.Features.Campaigns.Commands.ProcessCampaignMember
                 }
 
                 campaignMember.Status = (int)request.Status;
-                campaignMember.ApproveById = _authenticatedUserService.ApplicationUserId;
+                campaignMember.ApprovedById = _authenticatedUserService.ApplicationUserId;
                 _campaignMemberRepository.Update(campaignMember);
                 await UnitOfWork.CommitAsync();
                 return new Response<bool>(true);

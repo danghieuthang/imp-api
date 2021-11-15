@@ -18,27 +18,38 @@ namespace IMP.Application.Features.Campaigns.Commands.CancelCampaign
     public class CancelCampaignCommand : ICommand<CampaignViewModel>
     {
         public int Id { get; set; }
+        public string Note { get; set; }
+
         public class CancelCampaignCommandHandler : CommandHandler<CancelCampaignCommand, CampaignViewModel>
         {
             private readonly IGenericRepository<Campaign> _campaignRepository;
-            public CancelCampaignCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IGenericRepository<Campaign> campaignRepository) : base(unitOfWork, mapper)
+            private readonly IAuthenticatedUserService _authenticatedUserService;
+            public CancelCampaignCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticatedUserService authenticatedUserService) : base(unitOfWork, mapper)
             {
-                _campaignRepository = campaignRepository;
+                _campaignRepository = unitOfWork.Repository<Campaign>();
+                _authenticatedUserService = authenticatedUserService;
             }
 
             public override async Task<Response<CampaignViewModel>> Handle(CancelCampaignCommand request, CancellationToken cancellationToken)
             {
                 var campaign = await _campaignRepository.GetByIdAsync(request.Id);
-                if (campaign != null && campaign.Status == (int)CampaignStatus.Pending)
+                if (campaign == null)
                 {
-                    campaign.Status = (int)CampaignStatus.Cancelled;
-                    _campaignRepository.Update(campaign);
-                    await UnitOfWork.CommitAsync();
-                    var campaignViewModel = Mapper.Map<CampaignViewModel>(campaign);
-                    return new Response<CampaignViewModel>(campaignViewModel);
+                    throw new ValidationException(new ValidationError("id", "Chiến dịch không tồn tại."));
                 }
-                throw new ValidationException(new ValidationError("id", "Chiến dịch không tồn tại."));
+                if (campaign.Status != (int)CampaignStatus.Pending && campaign.Status != (int)CampaignStatus.Approved)
+                {
+                    throw new ValidationException(new ValidationError("id", "Chỉ có thể đóng chiến dịch đang 'chờ duyệt' hoặc 'đã duyệt'."));
+                }
 
+                campaign.Status = (int)CampaignStatus.Cancelled;
+                campaign.Note = request.Note;
+                campaign.ApprovedById = _authenticatedUserService.ApplicationUserId;
+
+                _campaignRepository.Update(campaign);
+                await UnitOfWork.CommitAsync();
+                var campaignViewModel = Mapper.Map<CampaignViewModel>(campaign);
+                return new Response<CampaignViewModel>(campaignViewModel);
             }
         }
     }

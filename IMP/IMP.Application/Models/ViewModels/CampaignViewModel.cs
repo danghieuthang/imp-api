@@ -68,7 +68,8 @@ namespace IMP.Application.Models.Compaign
         #region Reward configuration
 
         #endregion
-
+        public int? ApprovedById { get; set; }
+        public string Note { get; set; }
         public int Status { get; set; }
         public bool IsActived { get; set; }
 

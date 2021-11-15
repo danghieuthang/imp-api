@@ -15,38 +15,39 @@ using System.Threading.Tasks;
 
 namespace IMP.Application.Features.Campaigns.Commands.ApprovalCampaign
 {
-    public class ApprovalCampaignCommand : ICommand<CampaignViewModel>
+    public class WaitingCampaignCommand : ICommand<CampaignViewModel>
     {
         public int Id { get; set; }
-        public class ApprovalCampaignCommandHandler : CommandHandler<ApprovalCampaignCommand, CampaignViewModel>
+        public class WaitingCampaignCommandHandler : CommandHandler<WaitingCampaignCommand, CampaignViewModel>
         {
             private readonly IGenericRepository<Campaign> _campaignRepository;
             private readonly IAuthenticatedUserService _authenticatedUserService;
-            public ApprovalCampaignCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticatedUserService authenticatedUserService) : base(unitOfWork, mapper)
+            public WaitingCampaignCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticatedUserService authenticatedUserService) : base(unitOfWork, mapper)
             {
                 _campaignRepository = unitOfWork.Repository<Campaign>();
                 _authenticatedUserService = authenticatedUserService;
             }
 
-            public override async Task<Response<CampaignViewModel>> Handle(ApprovalCampaignCommand request, CancellationToken cancellationToken)
+            public override async Task<Response<CampaignViewModel>> Handle(WaitingCampaignCommand request, CancellationToken cancellationToken)
             {
                 var campaign = await _campaignRepository.GetByIdAsync(request.Id);
                 if (campaign == null)
                 {
                     throw new ValidationException(new ValidationError("id", "Chiến dịch không tồn tại."));
                 }
-                if (campaign.Status != (int)CampaignStatus.Pending)
+                if (campaign.Status != (int)CampaignStatus.Approved)
                 {
-                    throw new ValidationException(new ValidationError("id", "Chiến dịch không trong trạng thái chờ duyệt."));
+                    throw new ValidationException(new ValidationError("id", "Chỉ có thể chuyển chiến từ trạng thái 'đã duyệt' sang 'chờ duyệt'."));
                 }
 
-                campaign.Status = (int)CampaignStatus.Approved;
+                campaign.Status = (int)CampaignStatus.Pending;
                 campaign.ApprovedById = _authenticatedUserService.ApplicationUserId;
 
                 _campaignRepository.Update(campaign);
                 await UnitOfWork.CommitAsync();
                 var campaignViewModel = Mapper.Map<CampaignViewModel>(campaign);
                 return new Response<CampaignViewModel>(campaignViewModel);
+
             }
         }
     }

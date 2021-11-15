@@ -86,6 +86,10 @@ namespace IMP.Domain.Entities
         [StringLength(50)]
         #endregion
 
+        [ForeignKey("AppplicationUserId")]
+        public int? ApprovedById { get; set; }
+        [StringLength(256)]
+        public string Note { get; set; }
         public int Status { get; set; }
         public bool IsActived { get; set; }
 
