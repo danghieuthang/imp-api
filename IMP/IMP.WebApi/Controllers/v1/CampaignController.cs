@@ -187,7 +187,7 @@ namespace IMP.WebApi.Controllers.v1
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> ApprovalCampaign([FromRoute] int id)
         {
-            return Ok(await Mediator.Send(new ApprovalCampaignCommand { Id = id }));
+                return Ok(await Mediator.Send(new ApprovalCampaignCommand { Id = id }));
         }
 
         /// <summary>
@@ -226,7 +226,12 @@ namespace IMP.WebApi.Controllers.v1
         [Authorize(Roles = "Influencer")]
         public async Task<IActionResult> ApplyToCampaign([FromRoute] int id)
         {
-            return Ok(await Mediator.Send(new ApplyToCampaignCommand { CampaignId = id }));
+            var response = await Mediator.Send(new ApplyToCampaignCommand { CampaignId = id });
+            if (response.Succeeded)
+            {
+                return Ok(response);
+            } 
+            return BadRequest(response);
         }
 
         /// <summary>

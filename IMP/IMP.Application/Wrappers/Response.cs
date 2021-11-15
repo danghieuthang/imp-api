@@ -30,6 +30,14 @@ namespace IMP.Application.Wrappers
             Errors = new List<ValidationError> { error };
             Code = code;
         }
+
+        public Response(List<ValidationError> errors, string message = null, int code = 0)
+        {
+            Succeeded = false;
+            Message = message;
+            Errors = errors;
+            Code = code;
+        }
         public bool Succeeded { get; set; }
         public string Message { get; set; }
         public List<ValidationError> Errors { get; set; }

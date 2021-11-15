@@ -21,9 +21,9 @@ namespace IMP.Application.Features.Campaigns.Commands.ApprovalCampaign
         public class ApprovalCampaignCommandHandler : CommandHandler<ApprovalCampaignCommand, CampaignViewModel>
         {
             private readonly IGenericRepository<Campaign> _campaignRepository;
-            public ApprovalCampaignCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IGenericRepository<Campaign> campaignRepository) : base(unitOfWork, mapper)
+            public ApprovalCampaignCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
             {
-                _campaignRepository = campaignRepository;
+                _campaignRepository = unitOfWork.Repository<Campaign>();
             }
 
             public override async Task<Response<CampaignViewModel>> Handle(ApprovalCampaignCommand request, CancellationToken cancellationToken)
