@@ -16,6 +16,7 @@ using System.Text;
 using System.IO;
 using System;
 using IMP.Application.Features.Vouchers.Queries.GetAllVoucher;
+using IMP.Application.Features.Vouchers.Commands.ImportVouchers;
 
 namespace IMP.WebApi.Controllers.v1
 {
@@ -115,6 +116,20 @@ namespace IMP.WebApi.Controllers.v1
         }
 
         /// <summary>
+        /// Import vouchers
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<bool>), 200)]
+        [HttpPost("import-voucher")]
+        [Authorize(Roles = "Brand")]
+        public async Task<IActionResult> ImportVouchers([FromRoute] int id, [FromForm] ImportVoucherCommand command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
+
+        /// <summary>
         /// Download import codes template
         /// </summary>
         /// <returns></returns>
@@ -131,6 +146,24 @@ namespace IMP.WebApi.Controllers.v1
 
             return File(stream, "application/octet-stream", "import_voucher_code_template.xlsx");
 
+        }
+
+        /// <summary>
+        /// Download import voucher template
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("download-import-voucher-template")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetImportVocucherTemplate()
+        {
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "App_Datas", "ExcelTemplates", "import_voucher_template.xlsx");
+            if (!System.IO.File.Exists(path))
+            {
+                return NotFound();
+            }
+            var stream = await System.IO.File.ReadAllBytesAsync(path);
+
+            return File(stream, "application/octet-stream", "import_voucher_template.xlsx");
         }
 
         /// <summary>
