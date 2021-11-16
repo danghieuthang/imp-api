@@ -356,6 +356,10 @@ namespace IMP.Application.Mappings
             CreateMap<EvidenceType, EvidenceTypeViewModel>();
             #endregion
 
+            #region evidence
+            CreateMap<Evidence, EvidenceViewModel>();
+            #endregion
+
             #region member activity
             CreateMap<MemberActivity, MemberActivityViewModel>();
             #endregion

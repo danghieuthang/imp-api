@@ -52,14 +52,30 @@ namespace IMP.Application.Features.Campaigns.Commands.ProcessCampaignMember
                     throw new ValidationException(new ValidationError("campaign_member_id", $"Yêu cầu này đã được {requestStatus}."));
                 }
 
+
+                if (request.Status == CampaignMemberStatus.Approved)
+                {
+                    var campaignActivities = UnitOfWork.Repository<CampaignActivity>().GetAll(predicate: x => x.CampaignId == campaignMember.CampaignId).ToList();
+                    var memberActivityRepository = UnitOfWork.Repository<MemberActivity>();
+
+                    foreach (var campaignActivity in campaignActivities)
+                    {
+                        memberActivityRepository.Add(new MemberActivity
+                        {
+                            CampaignActivityId = campaignActivity.Id,
+                            CampaignMemberId = campaignMember.Id,
+                            Status = false,
+                        });
+                    }
+                }
+
                 campaignMember.Status = (int)request.Status;
                 campaignMember.ApprovedById = _authenticatedUserService.ApplicationUserId;
                 _campaignMemberRepository.Update(campaignMember);
                 await UnitOfWork.CommitAsync();
                 return new Response<bool>(true);
-
-
             }
+
         }
     }
 }
