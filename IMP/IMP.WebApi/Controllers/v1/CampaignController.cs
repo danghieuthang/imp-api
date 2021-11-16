@@ -194,21 +194,36 @@ namespace IMP.WebApi.Controllers.v1
         /// Cancel campaign(change status Pending => Canceled)
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="command"></param>
         /// <returns></returns>
         [HttpPut("{id}/cancel")]
         [ProducesResponseType(typeof(Response<CampaignViewModel>), 200)]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> CancelCampaign([FromRoute] int id)
+        public async Task<IActionResult> CancelCampaign([FromRoute] int id, [FromBody] CancelCampaignCommand command)
         {
-            return Ok(await Mediator.Send(new CancelCampaignCommand { Id = id }));
+            if (id != command.Id)
+            {
+                return BadRequest();
+            }
+            return Ok(await Mediator.Send(command));
         }
 
+        /// <summary>
+        /// Change status cancel/approved to pending
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="command"></param>
+        /// <returns></returns>
         [HttpPut("{id}/waiting")]
         [ProducesResponseType(typeof(Response<CampaignViewModel>), 200)]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> WaitingCampaign([FromRoute] int id)
+        public async Task<IActionResult> WaitingCampaign([FromRoute] int id, [FromBody] WaitingCampaignCommand command)
         {
-            return Ok(await Mediator.Send(new WaitingCampaignCommand { Id = id }));
+            if (id != command.Id)
+            {
+                return BadRequest();
+            }
+            return Ok(await Mediator.Send(command));
         }
 
 

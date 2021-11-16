@@ -18,6 +18,8 @@ namespace IMP.Application.Features.Campaigns.Commands.ApprovalCampaign
     public class WaitingCampaignCommand : ICommand<CampaignViewModel>
     {
         public int Id { get; set; }
+        public string Note { get; set; }
+
         public class WaitingCampaignCommandHandler : CommandHandler<WaitingCampaignCommand, CampaignViewModel>
         {
             private readonly IGenericRepository<Campaign> _campaignRepository;
@@ -41,6 +43,7 @@ namespace IMP.Application.Features.Campaigns.Commands.ApprovalCampaign
                 }
 
                 campaign.Status = (int)CampaignStatus.Pending;
+                campaign.Note = request.Note;
                 campaign.ApprovedById = _authenticatedUserService.ApplicationUserId;
 
                 _campaignRepository.Update(campaign);
