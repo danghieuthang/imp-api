@@ -126,7 +126,7 @@ namespace IMP.Application.Features.Campaigns.Commands.ApplyToCampaign
                             gender = (int)Genders.None;
                             break;
                     }
-                    if (gender != campaign.InfluencerConfiguration.Gender.Value)
+                    if (gender != (int)Genders.None && gender != campaign.InfluencerConfiguration.Gender.Value)
                     {
                         errors.Add(new ValidationError("", $"Giới tính không hợp lệ."));
                     }
