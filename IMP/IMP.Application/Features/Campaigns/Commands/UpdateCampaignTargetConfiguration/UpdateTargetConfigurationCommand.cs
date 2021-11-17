@@ -52,6 +52,11 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaignTargetConfig
             var campaign = await _campaignRepository.FindSingleAsync(x => x.Id == request.CampaignId, x => x.TargetConfiguration, x => x.TargetConfiguration.Locations);
             if (campaign != null && campaign.BrandId == applicationUser.BrandId)
             {
+                if (campaign.Status != (int)CampaignStatus.Draft && campaign.Status != (int)CampaignStatus.Pending && campaign.Status != (int)CampaignStatus.Approved)
+                {
+                    throw new ValidationException(new ValidationError("id", "Không thể chỉnh sửa chiến dịch này."));
+                }
+
                 TargetConfiguration targetConfiguration = new();
                 // if campaign already has target configuration
                 if (campaign.TargetConfiguration != null)

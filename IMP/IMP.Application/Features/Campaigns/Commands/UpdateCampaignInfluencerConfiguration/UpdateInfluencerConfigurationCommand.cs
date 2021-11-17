@@ -55,6 +55,11 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaignInfluencerCo
             var campaign = await _campaignRepository.FindSingleAsync(x => x.Id == request.CampaignId, x => x.InfluencerConfiguration, x => x.InfluencerConfiguration.Locations);
             if (campaign != null && campaign.BrandId == applicationUser.BrandId)
             {
+                if (campaign.Status != (int)CampaignStatus.Draft && campaign.Status != (int)CampaignStatus.Pending && campaign.Status != (int)CampaignStatus.Approved)
+                {
+                    throw new ValidationException(new ValidationError("id", "Không thể chỉnh sửa chiến dịch này."));
+                }
+
                 InfluencerConfiguration influencerConfiguration = new();
                 // if campaign already has influencer configuration
                 if (campaign.InfluencerConfiguration != null)

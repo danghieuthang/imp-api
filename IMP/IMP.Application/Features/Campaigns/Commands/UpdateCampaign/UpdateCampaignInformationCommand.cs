@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using IMP.Application.Enums;
 using IMP.Application.Exceptions;
 using IMP.Application.Interfaces;
 using IMP.Application.Models;
@@ -80,9 +81,18 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
                                         .Include(x => x.Products)
                                         .Include(x => x.CampaignRewards)
                                         .Include(x => x.Vouchers));
+
+          
+
             if (campaign != null)
             {
-               await DeleteBeforeUpdate(campaign, request);
+
+                if (campaign.Status != (int)CampaignStatus.Draft && campaign.Status != (int)CampaignStatus.Pending && campaign.Status != (int)CampaignStatus.Approved)
+                {
+                    throw new ValidationException(new ValidationError("id", "Không thể chỉnh sửa chiến dịch này."));
+                }
+
+                await DeleteBeforeUpdate(campaign, request);
                 Mapper.Map(request, campaign);
 
                 // Process Campaign Rewards

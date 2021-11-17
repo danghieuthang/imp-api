@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using IMP.Application.Enums;
 using IMP.Application.Exceptions;
 using IMP.Application.Interfaces;
 using IMP.Application.Models;
@@ -42,6 +43,10 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaignActivities
 
                 if (campaign != null)
                 {
+                    if (campaign.Status != (int)CampaignStatus.Draft && campaign.Status != (int)CampaignStatus.Pending && campaign.Status != (int)CampaignStatus.Approved)
+                    {
+                        throw new ValidationException(new ValidationError("id", "Không thể chỉnh sửa chiến dịch này."));
+                    }
 
                     // process activities
                     List<int> requestActivitiesIds = request.CampaignActivities.Select(x => x.Id).ToList();
