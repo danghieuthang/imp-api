@@ -92,7 +92,7 @@ namespace IMP.Application.Features.Campaigns.Commands.ApplyToCampaign
                 // check child status
                 if (campaign.InfluencerConfiguration.ChildStatus.HasValue && campaign.InfluencerConfiguration.ChildStatus != user.ChildStatus)
                 {
-                    errors.Add(new ValidationError("", "Tình trạng hôn nhân không hợp lệ."));
+                    errors.Add(new ValidationError("", "Tình trạng con cái không hợp lệ."));
                 }
 
                 // check pregnant
