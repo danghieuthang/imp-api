@@ -22,7 +22,7 @@ namespace IMP.Application.Features.InfluencerPlatforms.Commands.CreateInfluencer
             _applicationUserRepository = unitOfWork.Repository<ApplicationUser>();
             _platformRepository = unitOfWork.Repository<Platform>();
 
-            RuleFor(x => x.Url).MustValidUrl();
+            RuleFor(x => x.Url).MustValidUrl(allowNull: false);
             RuleFor(x => x.InfluencerId).MustExistEntityId(IsValidInfluencerId);
             RuleFor(x => x.PlatformId).MustExistEntityId(IsValidPlatform);
             RuleFor(x => x.PlatformId).MustAsync(async (x, y, z) =>

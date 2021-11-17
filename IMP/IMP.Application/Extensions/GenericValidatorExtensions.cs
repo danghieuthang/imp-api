@@ -236,10 +236,6 @@ namespace IMP.Application.Extensions
                 .NotNull().WithMessage("Url chưa có.")
                 .Must(x =>
                 {
-                    if (string.IsNullOrEmpty(x))
-                    {
-                        return true;
-                    }
                     return regex.IsMatch(x);
                 })
                 .WithMessage($"Url không hợp lệ.");
