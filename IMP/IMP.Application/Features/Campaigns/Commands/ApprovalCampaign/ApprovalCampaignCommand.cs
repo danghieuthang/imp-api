@@ -35,9 +35,9 @@ namespace IMP.Application.Features.Campaigns.Commands.ApprovalCampaign
                 {
                     throw new ValidationException(new ValidationError("id", "Chiến dịch không tồn tại."));
                 }
-                if (campaign.Status != (int)CampaignStatus.Pending)
+                if (campaign.Status != (int)CampaignStatus.Pending && campaign.Status != (int)CampaignStatus.Cancelled)
                 {
-                    throw new ValidationException(new ValidationError("id", "Chiến dịch không trong trạng thái chờ duyệt."));
+                    throw new ValidationException(new ValidationError("id", "Không thể duyệt chiến dịch này."));
                 }
 
                 campaign.Status = (int)CampaignStatus.Approved;
