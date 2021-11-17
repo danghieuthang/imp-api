@@ -74,6 +74,8 @@ namespace IMP.Application.Features.Campaigns.Commands.ProcessCampaignMember
                     campaignMember.Note = request.Note;
                 }
 
+                campaignMember.ApprovedDate = DateTime.Now;
+
                 campaignMember.Status = (int)request.Status;
                 campaignMember.ApprovedById = _authenticatedUserService.ApplicationUserId;
                 _campaignMemberRepository.Update(campaignMember);
