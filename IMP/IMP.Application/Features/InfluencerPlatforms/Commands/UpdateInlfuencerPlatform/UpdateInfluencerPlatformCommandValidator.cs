@@ -24,6 +24,7 @@ namespace IMP.Application.Features.InfluencerPlatforms.Commands.UpdateInlfuencer
             {
                 return await IsExistInfluencerPlatform(x.PlatformId, x.InfluencerId, z);
             }).WithMessage("'{PropertyValue}' Influencer Platform không tồn tại.");
+            RuleFor(x => x.Interests).NotNull().WithMessage("Danh sách sở thích chưa có.").Must(x => x.Count() > 0).WithMessage("Danh sách sở thích chưa có.");
         }
 
 

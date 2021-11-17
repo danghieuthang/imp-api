@@ -29,6 +29,8 @@ namespace IMP.Application.Features.InfluencerPlatforms.Commands.CreateInfluencer
               {
                   return await IsDuplicatePlatform(y, x.InfluencerId, z);
               }).WithMessage("'{PropertyValue}' đã có trên tài khoản(Mỗi tài khoản chỉ có 1 url platform).");
+
+            RuleFor(x => x.Interests).NotNull().WithMessage("Danh sách sở thích chưa có.").Must(x => x.Count() > 0).WithMessage("Danh sách sở thích chưa có.");
         }
 
         public async Task<bool> IsValidInfluencerId(int id, CancellationToken cancellationToken)
