@@ -96,10 +96,10 @@ namespace IMP.Application.Features.Campaigns.Commands.ApplyToCampaign
                 }
 
                 // check pregnant
-                if (campaign.InfluencerConfiguration.Pregnant.HasValue && campaign.InfluencerConfiguration.Pregnant != user.Pregnant)
-                {
-                    errors.Add(new ValidationError("", $"Tình trạng có thai không hợp lệ."));
-                }
+                //if (campaign.InfluencerConfiguration.Pregnant.HasValue && campaign.InfluencerConfiguration.Pregnant != user.Pregnant.Value)
+                //{
+                //    errors.Add(new ValidationError("", $"Tình trạng mang thai không hợp lệ."));
+                //}
 
                 if (campaign.InfluencerConfiguration.PlatformId.HasValue
                     && !user.InfluencerPlatforms.Select(x => x.PlatformId).Contains(campaign.InfluencerConfiguration.PlatformId.Value))
