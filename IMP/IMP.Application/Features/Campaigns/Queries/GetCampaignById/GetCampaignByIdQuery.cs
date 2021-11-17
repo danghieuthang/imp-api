@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using IMP.Application.Interfaces;
 using IMP.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using IMP.Application.Enums;
 
 namespace IMP.Application.Features.Campaigns.Queries.GetCampaignById
 {
@@ -44,7 +45,12 @@ namespace IMP.Application.Features.Campaigns.Queries.GetCampaignById
                     throw new KeyNotFoundException();
                 }
 
+                int countMemberApplyToCampaign = await UnitOfWork.Repository<CampaignMember>().CountAsync(x =>
+                       x.CampaignId == request.Id
+                       && x.Status == (int)CampaignMemberStatus.Approved);
+
                 var data = Mapper.Map<CampaignViewModel>(entity);
+                data.InfluencerConfiguration.NumberOfJoinedInfluencer = countMemberApplyToCampaign;
                 return new Response<CampaignViewModel>(data);
             }
         }

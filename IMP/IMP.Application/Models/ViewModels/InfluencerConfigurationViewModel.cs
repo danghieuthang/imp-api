@@ -8,6 +8,7 @@ namespace IMP.Application.Models.Compaign
         public int PlatformId { get; set; }
         public PlatformViewModel Platform { get; set; }
         public int NumberOfInfluencer { get; set; }
+        public int NumberOfJoinedInfluencer { get; set; }
         public int LevelId { get; set; }
         public int? AgeFrom { get; set; }
         public int? AgeTo { get; set; }

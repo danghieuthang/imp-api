@@ -206,8 +206,10 @@ namespace IMP.Application.Interfaces
     {
         private readonly IGenericRepository<TEntity> _repository;
         private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
         public GetByIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
+            _unitOfWork = unitOfWork;
             _repository = unitOfWork.Repository<TEntity>();
             _mapper = mapper;
         }
@@ -227,6 +229,7 @@ namespace IMP.Application.Interfaces
 
         public IGenericRepository<TEntity> Repository => _repository;
         public IMapper Mapper => _mapper;
+        public IUnitOfWork UnitOfWork => _unitOfWork;
 
 
     }

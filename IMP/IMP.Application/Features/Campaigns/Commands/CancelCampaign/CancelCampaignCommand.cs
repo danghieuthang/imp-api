@@ -49,7 +49,7 @@ namespace IMP.Application.Features.Campaigns.Commands.CancelCampaign
                 _campaignRepository.Update(campaign);
                 await UnitOfWork.CommitAsync();
                 var campaignViewModel = Mapper.Map<CampaignViewModel>(campaign);
-                return new Response<CampaignViewModel>(campaignViewModel);
+                return new Response<CampaignViewModel>(data: campaignViewModel);
             }
         }
     }
