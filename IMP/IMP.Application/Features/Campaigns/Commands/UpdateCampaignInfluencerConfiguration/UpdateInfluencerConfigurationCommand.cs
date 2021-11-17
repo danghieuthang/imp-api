@@ -100,6 +100,11 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaignInfluencerCo
 
                 campaign.InfluencerConfiguration = influencerConfiguration;
 
+                // If approved campaign then change status to pending
+                if (campaign.Status == (int)CampaignStatus.Approved)
+                {
+                    campaign.Status = (int)CampaignStatus.Pending;
+                }
                 _campaignRepository.Update(campaign);
                 await UnitOfWork.CommitAsync();
 

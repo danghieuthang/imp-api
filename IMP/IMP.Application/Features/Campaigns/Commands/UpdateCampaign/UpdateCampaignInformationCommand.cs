@@ -124,6 +124,12 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
                     campaign.Vouchers = campaign.Vouchers.Select(x => { x.CampaignId = campaign.Id; return x; }).ToList();
                 }
 
+                // If approved campaign then change status to pending
+                if (campaign.Status == (int)CampaignStatus.Approved)
+                {
+                    campaign.Status = (int)CampaignStatus.Pending;
+                }
+
                 _campaignRepository.Update(campaign);
                 await UnitOfWork.CommitAsync();
                 var campaignView = Mapper.Map<CampaignViewModel>(campaign);
