@@ -264,7 +264,7 @@ namespace IMP.WebApi.Controllers.v1
         /// <returns></returns>
         [ProducesResponseType(typeof(Response<PagedList<CampaignMemberViewModel>>), 200)]
         [HttpGet("{id}/members")]
-        [Authorize(Roles = "Brand")]
+        //[Authorize(Roles = "Brand")]
         public async Task<IActionResult> SearchMember([FromQuery] GetAllCampaignMemberByCampaignIdQuery query)
         {
             return Ok(await Mediator.Send(query));

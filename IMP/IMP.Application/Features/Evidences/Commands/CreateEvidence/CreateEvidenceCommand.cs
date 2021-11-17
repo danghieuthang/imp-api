@@ -41,7 +41,7 @@ namespace IMP.Application.Features.Evidences.Commands.CreateEvidence
             {
                 var memberActivity = await UnitOfWork.Repository<MemberActivity>().FindSingleAsync(x => x.Id == request.MemberActivityId, x => x.CampaignMember, x => x.CampaignActivity);
 
-                if (memberActivity?.CampaignMember == null)
+                 if (memberActivity?.CampaignMember == null)
                 {
                     throw new IMP.Application.Exceptions.ValidationException(new ValidationError("member_activity_id", "Không tồn tại."));
                 }

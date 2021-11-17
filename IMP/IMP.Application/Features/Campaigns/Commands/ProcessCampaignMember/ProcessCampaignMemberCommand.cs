@@ -18,6 +18,7 @@ namespace IMP.Application.Features.Campaigns.Commands.ProcessCampaignMember
     {
         public int CampaignMemberId { get; set; }
         public CampaignMemberStatus Status { get; set; }
+        public string Note { get; set; }
 
         public class ProcessCampaignMemberCommandHandler : CommandHandler<ProcessCampaignMemberCommand, bool>
         {
@@ -67,6 +68,10 @@ namespace IMP.Application.Features.Campaigns.Commands.ProcessCampaignMember
                             Status = false,
                         });
                     }
+                }
+                else if (request.Status == CampaignMemberStatus.Cancelled)
+                {
+                    campaignMember.Note = request.Note;
                 }
 
                 campaignMember.Status = (int)request.Status;

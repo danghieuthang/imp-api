@@ -31,7 +31,6 @@
     <Folder Include="Features\ApplicationUsers\Queries\GetListUser\" />
     <Folder Include="Features\Banks\Commands\" />
     <Folder Include="Features\Campaigns\Commands\CreateCampaignTarget\" />
-    <Folder Include="Features\Evidences\Commands\CommentEvidence\" />
     <Folder Include="Features\EvidenceTypes\Commands\" />
     <Folder Include="Features\MemberActivities\Commands\UpdateMemberActivity\" />
     <Folder Include="Features\VoucherCodes\Queries\NewFolder\" />

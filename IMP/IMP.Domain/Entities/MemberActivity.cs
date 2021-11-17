@@ -20,7 +20,7 @@ namespace IMP.Domain.Entities
 
         public bool Status { get; set; }
 
-        public Evidence Evidence { get; set; }
+        public ICollection<Evidence> Evidences { get; set; }
 
         public ICollection<ActivityComment> ActivityComments { get; set; }
     }

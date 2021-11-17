@@ -27,6 +27,9 @@ namespace IMP.Domain.Entities
         public DateTime CompletedDate { get; set; }
         public decimal Money { get; set; }
 
+        [StringLength(256)]
+        public string Note { get; set; }
+
         public ICollection<ApplicantHistory> ApplicantHistories { get; set; }
         public ICollection<MemberActivity> MemberActivities { get; set; }
     }

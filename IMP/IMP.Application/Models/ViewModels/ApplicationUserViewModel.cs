@@ -38,6 +38,15 @@ namespace IMP.Application.Models.ViewModels
         public PaymentInforViewModel PaymentInfor { get; set; }
         public RankingViewModel Ranking { get; set; }
     }
+    public class AdminViewModel : BaseViewModel<int>
+    {
+        public string Email { get; set; }
+        public string Avatar { get; set; }
+        public string Nickname { get; set; }
+        public string PhoneNumber { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+    }
 
     public class InfluencerViewModel : BaseViewModel<int>
     {

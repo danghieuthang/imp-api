@@ -34,7 +34,7 @@ namespace IMP.Application.Features.CampaignMembers.Queries.GetAllCampaignMemberO
                 var page = await UnitOfWork.Repository<CampaignMember>().GetPagedList(
                  predicate: x => x.CampaignId == request.CampaignId
                      && (request.Status == null || (request.Status != null && (int)request.Status == x.Status)),
-                     include: x => x.Include(y => y.Influencer).Include(y => y.MemberActivities).ThenInclude(z => z.Evidence),
+                     include: x => x.Include(y => y.Influencer).Include(y => y.MemberActivities).Include(y => y.ApprovedBy),
                      pageIndex: request.PageIndex,
                      pageSize: request.PageSize,
                      orderBy: request.OrderField,

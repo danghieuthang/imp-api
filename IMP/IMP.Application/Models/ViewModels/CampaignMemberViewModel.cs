@@ -14,9 +14,17 @@ namespace IMP.Application.Models.ViewModels
         public int Status { get; set; }
         public DateTime ApprovedDate { get; set; }
 
-        public int? ApproveById { get; set; }
+        public AdminViewModel ApproveBy { get; set; }
+
         public bool ActivityProgess { get; set; }
         public DateTime CompletedDate { get; set; }
         public decimal Money { get; set; }
+        public string Note { get; set; }
+        public List<MemberActivityViewModel> MemberActivities { get; set; }
+    }
+
+    public class CampaignMemberCancelRequest
+    {
+        public string Note { get; set; }
     }
 }

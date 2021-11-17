@@ -39,5 +39,6 @@ namespace IMP.WebApi
         public const string MemberActivity = Common + "member-activities";
         public const string Evidence = Common + "evidences";
         public const string EvidenceType = Common + "evidence-types";
+        public const string ActivityComment = Common + "activity-comments";
     }
 }

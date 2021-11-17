@@ -240,6 +240,7 @@ namespace IMP.Application.Mappings
             CreateMap<UpdateUserInformationCommand, ApplicationUser>();
             CreateMap<PaymentInfor, PaymentInforViewModel>();
             CreateMap<Bank, BankViewModel>();
+            CreateMap<ApplicationUser, AdminViewModel>();
             #endregion
 
             #region brand
@@ -362,6 +363,7 @@ namespace IMP.Application.Mappings
 
             #region member activity
             CreateMap<MemberActivity, MemberActivityViewModel>();
+            CreateMap<ActivityComment, ActivityCommentViewModel>();
             #endregion
         }
 
