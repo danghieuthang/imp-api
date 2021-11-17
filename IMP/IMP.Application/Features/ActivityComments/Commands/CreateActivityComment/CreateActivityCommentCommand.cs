@@ -53,7 +53,7 @@ namespace IMP.Application.Features.ActivityComments.Commands.CreateActivityComme
                 };
 
                 UnitOfWork.Repository<ActivityComment>().Add(activityComment);
-
+                await UnitOfWork.CommitAsync();
                 var activityCommentView = Mapper.Map<ActivityCommentViewModel>(activityComment);
                 return new Response<ActivityCommentViewModel>(activityCommentView);
             }
