@@ -36,21 +36,6 @@ namespace IMP.Application.Features.Campaigns.Commands.ApplyToCampaign
                     return new Response<bool>(new ValidationError("campaign_id", "Chiến dịch không tồn tại."), code: ErrorConstants.Application.Campaign.NotFound);
                 }
 
-                if (campaign.Status != (int)CampaignStatus.Applying)
-                {
-                    return new Response<bool>(new ValidationError("campaign_id", "Chiến dịch không trong thời gian nhận influencer."), code: ErrorConstants.Application.Campaign.NotInTimeApply);
-                }
-
-                // Check Number of influencer of campaign
-                int countMemberApplyToCampaign = await _campaignMemberRepository.CountAsync(x =>
-                    x.CampaignId == request.CampaignId
-                    && x.Status == (int)CampaignMemberStatus.Approved);
-
-                if (campaign.InfluencerConfiguration.NumberOfInfluencer <= countMemberApplyToCampaign)
-                {
-                    return new Response<bool>(new ValidationError("campaign_id", "Chiến dịch đã đủ người."), code: ErrorConstants.Application.Campaign.FullInfluencer);
-                }
-
                 // Check Influencer is already apply to this campaign
 
                 if (await _campaignMemberRepository.IsExistAsync(x => x.InfluencerId == _authenticatedUserService.ApplicationUserId && x.CampaignId == request.CampaignId))
