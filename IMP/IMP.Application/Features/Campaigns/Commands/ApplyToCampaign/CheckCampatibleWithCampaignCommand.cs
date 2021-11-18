@@ -37,13 +37,6 @@ namespace IMP.Application.Features.Campaigns.Commands.ApplyToCampaign
                     return new Response<bool>(new ValidationError("campaign_id", "Chiến dịch không tồn tại."), code: ErrorConstants.Application.Campaign.NotFound);
                 }
 
-                // Check Influencer is already apply to this campaign
-
-                if (await _campaignMemberRepository.IsExistAsync(x => x.InfluencerId == _authenticatedUserService.ApplicationUserId && x.CampaignId == request.CampaignId))
-                {
-                    return new Response<bool>(new ValidationError("campaign_id", "Đã thăm gia trong chiến dịch."), code: ErrorConstants.Application.Campaign.AlreadyJoined);
-                }
-
                 if (request.IsCheckSuitable)
                 {
                     // Check suitability
@@ -52,6 +45,15 @@ namespace IMP.Application.Features.Campaigns.Commands.ApplyToCampaign
                     if (errors.Count > 0)
                     {
                         return new Response<bool>(errors: errors, message: "Không phù hợp với chiến dịch.", code: ErrorConstants.Application.Campaign.NotSuitable);
+                    }
+                }
+                else
+                {
+                    // Check Influencer is already apply to this campaign
+
+                    if (await _campaignMemberRepository.IsExistAsync(x => x.InfluencerId == _authenticatedUserService.ApplicationUserId && x.CampaignId == request.CampaignId))
+                    {
+                        return new Response<bool>(message:"Đã có trong chiến dịch.", code: ErrorConstants.Application.Campaign.AlreadyJoined);
                     }
                 }
 
