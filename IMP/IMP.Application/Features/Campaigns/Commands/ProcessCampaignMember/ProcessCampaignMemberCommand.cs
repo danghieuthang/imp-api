@@ -47,11 +47,11 @@ namespace IMP.Application.Features.Campaigns.Commands.ProcessCampaignMember
                     throw new ValidationException(new ValidationError("campaign_member_id", "Chiến dịch này đã qua thời gian duyệt."));
                 }
 
-                if (campaignMember.Status != (int)CampaignMemberStatus.Pending)
-                {
-                    string requestStatus = campaignMember.Status == (int)CampaignMemberStatus.Approved ? "chấp nhận" : "từ chối";
-                    throw new ValidationException(new ValidationError("campaign_member_id", $"Yêu cầu này đã được {requestStatus}."));
-                }
+                //if (campaignMember.Status != (int)CampaignMemberStatus.Pending)
+                //{
+                //    string requestStatus = campaignMember.Status == (int)CampaignMemberStatus.Approved ? "chấp nhận" : "từ chối";
+                //    throw new ValidationException(new ValidationError("campaign_member_id", $"Yêu cầu này đã được {requestStatus}."));
+                //}
 
 
                 if (request.Status == CampaignMemberStatus.Approved)
