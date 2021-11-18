@@ -18,6 +18,7 @@ namespace IMP.Application.Features.Campaigns.Commands.ApplyToCampaign
     public class CheckCampatibleWithCampaignCommand : ICommand<bool>
     {
         public int CampaignId { get; set; }
+        public bool IsCheckSuitable { get; set; }
         public class CheckCampatibleWithCampaignCommandHandler : CommandHandler<CheckCampatibleWithCampaignCommand, bool>
         {
             private readonly IAuthenticatedUserService _authenticatedUserService;
@@ -43,13 +44,17 @@ namespace IMP.Application.Features.Campaigns.Commands.ApplyToCampaign
                     return new Response<bool>(new ValidationError("campaign_id", "Đã thăm gia trong chiến dịch."), code: ErrorConstants.Application.Campaign.AlreadyJoined);
                 }
 
-                // Check suitability
-                var user = await UnitOfWork.Repository<ApplicationUser>().FindSingleAsync(x => x.Id == _authenticatedUserService.ApplicationUserId, x => x.InfluencerPlatforms);
-                var errors = CampaignUtils.CheckSuitability(campaign, user);
-                if (errors.Count > 0)
+                if (request.IsCheckSuitable)
                 {
-                    return new Response<bool>(errors: errors, message: "Không phù hợp với chiến dịch.", code: ErrorConstants.Application.Campaign.NotSuitable);
+                    // Check suitability
+                    var user = await UnitOfWork.Repository<ApplicationUser>().FindSingleAsync(x => x.Id == _authenticatedUserService.ApplicationUserId, x => x.InfluencerPlatforms);
+                    var errors = CampaignUtils.CheckSuitability(campaign, user);
+                    if (errors.Count > 0)
+                    {
+                        return new Response<bool>(errors: errors, message: "Không phù hợp với chiến dịch.", code: ErrorConstants.Application.Campaign.NotSuitable);
+                    }
                 }
+
                 return new Response<bool>(data: true, message: "Có thể thăm gia chiến dịch.");
             }
         }

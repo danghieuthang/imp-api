@@ -288,13 +288,14 @@ namespace IMP.WebApi.Controllers.v1
         /// Check the logged in user is suitable for the campaign
         /// </summary>
         /// <param name="id">The id of campaign</param>
+        /// <param name="checkSuitable">Is check suitable influencer</param>
         /// <returns></returns>
         [ProducesResponseType(typeof(Response<bool>), 200)]
         [HttpGet("{id}/check-suitable")]
         [Authorize(Roles = "Influencer")]
-        public async Task<IActionResult> CheckIsSuitableWithCampaign([FromRoute] int id)
+        public async Task<IActionResult> CheckIsSuitableWithCampaign([FromRoute] int id, [FromQuery(Name = "check_suitable")] bool checkSuitable = true)
         {
-            return Ok(await Mediator.Send(new CheckCampatibleWithCampaignCommand { CampaignId = id }));
+            return Ok(await Mediator.Send(new CheckCampatibleWithCampaignCommand { CampaignId = id, IsCheckSuitable = checkSuitable }));
         }
 
         /// <summary>
