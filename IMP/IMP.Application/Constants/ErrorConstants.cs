@@ -13,7 +13,7 @@ namespace IMP.Application.Constants
             public const int EmailNotFound = 1;
             public const int EmailNotConfirm = 2;
             public const int PasswordIncorrect = 3;
-            
+
         }
 
         public static class RefreshToken
@@ -37,6 +37,15 @@ namespace IMP.Application.Constants
                 public const int BioLinkDuplicate = 2;
                 public const int BioLinkNotValid = 3;
             }
+            public static class Campaign
+            {
+                public const int NotFound = 1;
+                public const int NotInTimeApply = 2;
+                public const int FullInfluencer = 3;
+                public const int AlreadyJoined = 4;
+                public const int NotSuitable = 5;
+            }
+
         }
     }
 }

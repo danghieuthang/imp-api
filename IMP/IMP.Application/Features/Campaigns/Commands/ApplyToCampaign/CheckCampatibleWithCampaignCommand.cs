@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using IMP.Application.Constants;
 using IMP.Application.Enums;
 using IMP.Application.Exceptions;
 using IMP.Application.Interfaces;
@@ -14,31 +15,30 @@ using System.Threading.Tasks;
 
 namespace IMP.Application.Features.Campaigns.Commands.ApplyToCampaign
 {
-    public class ApplyToCampaignCommand : ICommand<bool>
+    public class CheckCampatibleWithCampaignCommand : ICommand<bool>
     {
         public int CampaignId { get; set; }
-
-        public class ApplyToCampaignCommandHandler : CommandHandler<ApplyToCampaignCommand, bool>
+        public class CheckCampatibleWithCampaignCommandHandler : CommandHandler<CheckCampatibleWithCampaignCommand, bool>
         {
             private readonly IAuthenticatedUserService _authenticatedUserService;
             private readonly IGenericRepository<CampaignMember> _campaignMemberRepository;
-            public ApplyToCampaignCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticatedUserService authenticatedUserService) : base(unitOfWork, mapper)
+            public CheckCampatibleWithCampaignCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticatedUserService authenticatedUserService) : base(unitOfWork, mapper)
             {
                 _authenticatedUserService = authenticatedUserService;
                 _campaignMemberRepository = unitOfWork.Repository<CampaignMember>();
             }
 
-            public override async Task<Response<bool>> Handle(ApplyToCampaignCommand request, CancellationToken cancellationToken)
+            public override async Task<Response<bool>> Handle(CheckCampatibleWithCampaignCommand request, CancellationToken cancellationToken)
             {
                 var campaign = await UnitOfWork.Repository<Campaign>().FindSingleAsync(x => x.Id == request.CampaignId, x => x.InfluencerConfiguration);
                 if (campaign == null)
                 {
-                    throw new ValidationException(new ValidationError("campaign_id", "Chiến dịch không tồn tại."));
+                    return new Response<bool>(new ValidationError("campaign_id", "Chiến dịch không tồn tại."), code: ErrorConstants.Application.Campaign.NotFound);
                 }
 
                 if (campaign.Status != (int)CampaignStatus.Applying)
                 {
-                    throw new ValidationException(new ValidationError("campaign_id", "Chiến dịch không trong thời gian nhận influencer."));
+                    return new Response<bool>(new ValidationError("campaign_id", "Chiến dịch không trong thời gian nhận influencer."), code: ErrorConstants.Application.Campaign.NotInTimeApply);
                 }
 
                 // Check Number of influencer of campaign
@@ -48,14 +48,14 @@ namespace IMP.Application.Features.Campaigns.Commands.ApplyToCampaign
 
                 if (campaign.InfluencerConfiguration.NumberOfInfluencer <= countMemberApplyToCampaign)
                 {
-                    throw new ValidationException(new ValidationError("campaign_id", "Chiến dịch đã đủ người."));
+                    return new Response<bool>(new ValidationError("campaign_id", "Chiến dịch đã đủ người."), code: ErrorConstants.Application.Campaign.FullInfluencer);
                 }
 
                 // Check Influencer is already apply to this campaign
 
                 if (await _campaignMemberRepository.IsExistAsync(x => x.InfluencerId == _authenticatedUserService.ApplicationUserId && x.CampaignId == request.CampaignId))
                 {
-                    throw new ValidationException(new ValidationError("campaign_id", "Đã thăm gia trong chiến dịch."));
+                    return new Response<bool>(new ValidationError("campaign_id", "Đã thăm gia trong chiến dịch."), code: ErrorConstants.Application.Campaign.AlreadyJoined);
                 }
 
                 // Check suitability
@@ -63,23 +63,10 @@ namespace IMP.Application.Features.Campaigns.Commands.ApplyToCampaign
                 var errors = CampaignUtils.CheckSuitability(campaign, user);
                 if (errors.Count > 0)
                 {
-                    return new Response<bool>(errors: errors, message: "Không phù hợp với chiến dịch.");
+                    return new Response<bool>(errors: errors, message: "Không phù hợp với chiến dịch.", code: ErrorConstants.Application.Campaign.NotSuitable);
                 }
-
-                CampaignMember member = new CampaignMember
-                {
-                    InfluencerId = _authenticatedUserService.ApplicationUserId,
-                    CampaignId = campaign.Id,
-                    Status = (int)CampaignMemberStatus.Pending,
-                };
-
-                UnitOfWork.Repository<CampaignMember>().Add(member);
-                await UnitOfWork.CommitAsync();
-
-                return new Response<bool>(true);
+                return new Response<bool>(data: true, message: "Có thể thăm gia chiến dịch.");
             }
-
-        
         }
     }
 }
