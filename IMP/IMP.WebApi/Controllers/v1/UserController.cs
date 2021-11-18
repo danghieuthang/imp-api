@@ -40,7 +40,6 @@ namespace IMP.WebApi.Controllers.v1
             int id = 0;
             int.TryParse(_authenticatedUserService.AppId, out id);
             command.Id = id;
-
             return Ok(await Mediator.Send(command));
         }
         /// <summary>
@@ -80,7 +79,9 @@ namespace IMP.WebApi.Controllers.v1
         {
             int id = 0;
             int.TryParse(_authenticatedUserService.AppId, out id);
-            return Ok(await Mediator.Send(new GetUserByIdQuery { Id = id }));
+            var response = await Mediator.Send(new GetUserByIdQuery { Id = id});
+            response.Data.Role = _authenticatedUserService.Role;
+            return Ok(response);
         }
 
         /// <summary>

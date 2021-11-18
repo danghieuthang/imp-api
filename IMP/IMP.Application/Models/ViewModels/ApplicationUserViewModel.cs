@@ -37,6 +37,7 @@ namespace IMP.Application.Models.ViewModels
 
         public PaymentInforViewModel PaymentInfor { get; set; }
         public RankingViewModel Ranking { get; set; }
+        public string Role { get; set; }
     }
     public class AdminViewModel : BaseViewModel<int>
     {
