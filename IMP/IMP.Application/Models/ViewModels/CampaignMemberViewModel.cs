@@ -28,7 +28,7 @@ namespace IMP.Application.Models.ViewModels
         public string Note { get; set; }
     }
 
-    public class SumaryCampaignMemberViewModel
+    public class SummaryCampaignMemberViewModel
     {
         public int NumberOfApplying { get; set; }
         public int NumberOfPending { get; set; }

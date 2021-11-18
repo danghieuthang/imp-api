@@ -302,8 +302,8 @@ namespace IMP.WebApi.Controllers.v1
         /// </summary>
         /// <param name="id">The campaign id</param>
         /// <returns></returns>
-        [ProducesResponseType(typeof(Response<SumaryCampaignMemberViewModel>), 200)]
-        [HttpGet("{id}/sumary-members")]
+        [ProducesResponseType(typeof(Response<SummaryCampaignMemberViewModel>), 200)]
+        [HttpGet("{id}/summary-members")]
         [AllowAnonymous]
         public async Task<IActionResult> SumaryMember([FromRoute] int id)
         {
