@@ -69,7 +69,7 @@ namespace IMP.Application.Features.Campaigns.Queries.GetAllCampaigns
                             || x.Description.ToLower().Contains(request.Name.ToLower())
                             || x.AdditionalInformation.ToLower().Contains(request.Name.ToLower()))
                         && x.LastModified != null,
-                    include: x => x.Include(y=>y.Brand).Include(y=>y.CampaignImages).Include(campaign => campaign.InfluencerConfiguration).Include(campaing => campaing.TargetConfiguration),
+                    include: x => x.Include(y=>y.Brand).Include(campaing => campaing.TargetConfiguration).Include(y => y.CampaignImages).Include(campaign => campaign.InfluencerConfiguration).ThenInclude(x=>x.Platform),
                     pageIndex: request.PageIndex,
                     pageSize: request.PageSize,
                     orderBy: request.OrderField,
