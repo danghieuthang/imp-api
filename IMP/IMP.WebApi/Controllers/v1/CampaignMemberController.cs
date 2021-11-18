@@ -1,4 +1,5 @@
 ﻿using IMP.Application.Enums;
+using IMP.Application.Features.CampaignMembers.Queries.GetCampaignMemberById;
 using IMP.Application.Features.Campaigns.Commands.ProcessCampaignMember;
 using IMP.Application.Features.MemberActivities.Queries.GetAllMemberActivitesOfUser;
 using IMP.Application.Models.ViewModels;
@@ -50,6 +51,19 @@ namespace IMP.WebApi.Controllers.v1
         public async Task<IActionResult> GetMemberActivityOfCampaignMember([FromRoute] int id)
         {
             return Ok(await Mediator.Send(new GetAllMemberAcitivitiesOfUserQuery { CampaignMemberId = id }));
+        }
+
+        /// <summary>
+        /// Get campaign member by id
+        /// </summary>
+        /// <param name="id">The id of campaign member</param>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(Response<CampaignMemberViewModel>), 200)]
+        [Authorize()]
+        public async Task<IActionResult> Get([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new GetCampaignMemberByIdQuery { Id = id }));
         }
 
     }
