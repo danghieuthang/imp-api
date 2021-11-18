@@ -27,4 +27,12 @@ namespace IMP.Application.Models.ViewModels
     {
         public string Note { get; set; }
     }
+
+    public class SumaryCampaignMemberViewModel
+    {
+        public int NumberOfApplying { get; set; }
+        public int NumberOfPending { get; set; }
+        public int NumberOfApproved { get; set; }
+        public int NumberOfCanceled { get; set; }
+    }
 }

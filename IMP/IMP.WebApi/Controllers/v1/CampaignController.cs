@@ -12,6 +12,7 @@ using IMP.Application.Features.Campaigns.Commands.UpdateCampaignTargetConfigurat
 using IMP.Application.Features.Campaigns.Queries.GetAllCampaignMemberByCampaignId;
 using IMP.Application.Features.Campaigns.Queries.GetAllCampaigns;
 using IMP.Application.Features.Campaigns.Queries.GetCampaignById;
+using IMP.Application.Features.Campaigns.Queries.GetSumaryMemberByCampaignId;
 using IMP.Application.Features.Vouchers.Queries;
 using IMP.Application.Interfaces;
 using IMP.Application.Models.Compaign;
@@ -294,6 +295,19 @@ namespace IMP.WebApi.Controllers.v1
         public async Task<IActionResult> CheckIsSuitableWithCampaign([FromRoute] int id)
         {
             return Ok(await Mediator.Send(new CheckCampatibleWithCampaignCommand { CampaignId = id }));
+        }
+
+        /// <summary>
+        /// Get sumary data about campaign members of a campaign
+        /// </summary>
+        /// <param name="id">The campaign id</param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<SumaryCampaignMemberViewModel>), 200)]
+        [HttpGet("{id}/sumary-members")]
+        [AllowAnonymous]
+        public async Task<IActionResult> SumaryMember([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new GetSumaryMemberByCampaignIdQuery { CampaignId = id }));
         }
     }
 }
