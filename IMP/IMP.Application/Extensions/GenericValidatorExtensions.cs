@@ -198,14 +198,15 @@ namespace IMP.Application.Extensions
                  (x) =>
                 {
                     if (string.IsNullOrEmpty(x)) return true;
-                    foreach (var prop in type.GetProperties())
+                    var types = type.GetProperties();
+                    foreach (string field in x.Split(","))
                     {
-                        if (prop.Name.Equals(x, StringComparison.CurrentCultureIgnoreCase))
+                        if (!types.Any(t => t.Name.Equals(field.Trim(), StringComparison.CurrentCultureIgnoreCase)))
                         {
-                            return true;
+                            return false;
                         }
                     }
-                    return false;
+                    return true;
                 }).WithMessage("'{PropertyValue}' không tồn tại");
         }
 
