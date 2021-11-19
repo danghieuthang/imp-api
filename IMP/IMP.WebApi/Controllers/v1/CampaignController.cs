@@ -273,6 +273,22 @@ namespace IMP.WebApi.Controllers.v1
         }
 
         /// <summary>
+        /// Change pending campaign to draft campaign
+        /// </summary>
+        /// <param name="id">The id of campaign</param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<CampaignViewModel>), 200)]
+        [HttpPut("{id}/draft")]
+        [Authorize(Roles = "Brand")]
+        public async Task<IActionResult> DraftCampaign([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new DraftCampagnPendingCommand
+            {
+                Id = id
+            }));
+        }
+
+        /// <summary>
         /// Search influencer in campaign
         /// </summary>
         /// <param name="query"></param>
