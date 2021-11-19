@@ -34,7 +34,7 @@ namespace IMP.WebApi.Hangfire
             services.AddHangfireServer();
 
             var manager = new RecurringJobManager();
-            manager.AddOrUpdate("Update campaign status: Runs Every Day", Job.FromExpression(() => jobSchedule.CampaignJobsAsync()), Cron.Daily());
+            manager.AddOrUpdate("Update campaign status: Runs Every Day", Job.FromExpression(() => jobSchedule.CampaignJobsAsync()), Cron.Hourly());
 
         }
         public static void UseHangfireDashboardExtension(this IApplicationBuilder app, IConfiguration configuration)

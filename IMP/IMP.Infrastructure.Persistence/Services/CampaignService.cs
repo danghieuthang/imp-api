@@ -33,7 +33,8 @@ namespace IMP.Infrastructure.Persistence.Services
             foreach (var campaign in campaigns)
             {
                 // get Indochina time
-                DateTime now = DateTime.UtcNow.AddHours(7);
+                //DateTime now = DateTime.UtcNow.AddHours(7);
+                DateTime now = DateTime.Now;
                 if (now >= campaign.OpeningDate && now < campaign.ApplyingDate)
                 {
                     campaign.Status = (int)CampaignStatus.Openning;
