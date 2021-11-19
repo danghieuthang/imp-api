@@ -12,6 +12,7 @@ using IMP.Application.Features.Campaigns.Commands.UpdateCampaignTargetConfigurat
 using IMP.Application.Features.Campaigns.Queries.GetAllCampaignMemberByCampaignId;
 using IMP.Application.Features.Campaigns.Queries.GetAllCampaigns;
 using IMP.Application.Features.Campaigns.Queries.GetCampaignById;
+using IMP.Application.Features.Campaigns.Queries.GetCampaignByInfluencerId;
 using IMP.Application.Features.Campaigns.Queries.GetSumaryMemberByCampaignId;
 using IMP.Application.Features.Vouchers.Queries;
 using IMP.Application.Interfaces;
@@ -51,6 +52,19 @@ namespace IMP.WebApi.Controllers.v1
         [ProducesResponseType(typeof(Response<IPagedList<CampaignViewModel>>), 200)]
         [HttpGet]
         public async Task<IActionResult> GetCampaigns([FromQuery] GetAllCampaignQuery query)
+        {
+            return Ok(await Mediator.Send(query));
+        }
+
+        /// <summary>
+        /// Query list campaign of influencer logged
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<IPagedList<CampaignViewModel>>), 200)]
+        [HttpGet("me")]
+        [Authorize(Roles = "Influencer")]
+        public async Task<IActionResult> GetCampaignOfInfluencer([FromQuery] GetCampaignByInfluencerIdQuery query)
         {
             return Ok(await Mediator.Send(query));
         }
