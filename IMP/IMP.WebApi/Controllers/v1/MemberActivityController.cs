@@ -1,4 +1,5 @@
 ﻿using IMP.Application.Enums;
+using IMP.Application.Features.MemberActivities.Commands.ChangeMemberActivityStatus;
 using IMP.Application.Features.MemberActivities.Queries.GetMemberActivityById;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
@@ -24,6 +25,33 @@ namespace IMP.WebApi.Controllers.v1
         public async Task<IActionResult> GetMemberActivityById([FromRoute] int id)
         {
             return Ok(await Mediator.Send(new GetMemberActivityByIdQuery { Id = id }));
+        }
+
+        /// <summary>
+        /// Accept a member activity
+        /// </summary>
+        /// <param name="id">The id of member activity</param>
+        /// <returns></returns>
+        [HttpPut("id/accept")]
+        [Authorize(Roles = "Brand")]
+        [ProducesResponseType(typeof(MemberActivityViewModel), 200)]
+        public async Task<IActionResult> Accept([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new ChangeMemberActivityStatusCommand { Id = id, Status = true }));
+        }
+
+
+        /// <summary>
+        /// Reject a member activity
+        /// </summary>
+        /// <param name="id">The id of member activity</param>
+        /// <returns></returns>
+        [HttpPut("id/reject")]
+        [Authorize(Roles = "Brand")]
+        [ProducesResponseType(typeof(MemberActivityViewModel), 200)]
+        public async Task<IActionResult> Reject([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new ChangeMemberActivityStatusCommand { Id = id, Status = false }));
         }
     }
 }
