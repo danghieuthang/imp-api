@@ -20,6 +20,8 @@ namespace IMP.Application.Models.ViewModels
         public string Phone { get; set; }
         public string Address { get; set; }
         public string Email { get; set; }
+        public string Introduction { get; set; }
+        public bool IsCompany { get; set; }
         public int? WalletId { get; set; }
     }
 }

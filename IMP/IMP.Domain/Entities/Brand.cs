@@ -16,11 +16,13 @@ namespace IMP.Domain.Entities
         public string Code { get; set; }
         [StringLength(256)]
         public string CompanyName { get; set; }
-        public bool IsCampany { get; set; }
+        public bool IsCompany { get; set; }
         [StringLength(256)]
         public string Image { get; set; }
         [StringLength(256)]
         public string Website { get; set; }
+        [StringLength(2000)]
+        public string Introduction { get; set; }
         [StringLength(256)]
         public string Representative { get; set; }
         [StringLength(256)]
