@@ -23,11 +23,10 @@ namespace IMP.Application.Features.Campaigns.Queries.GetCampaignByInfluencerId
     {
         public GetCampaignByInfluencerIdQuery()
         {
-            Status = new List<int>();
             TypeIds = new List<int>();
         }
         [FromQuery(Name = "status")]
-        public List<int> Status { get; set; }
+        public CampaignMemberStatus? Status { get; set; }
         [FromQuery(Name = "brand_id")]
         public int? BrandId { get; set; }
         [FromQuery(Name = "from_date")]
@@ -41,7 +40,10 @@ namespace IMP.Application.Features.Campaigns.Queries.GetCampaignByInfluencerId
 
         public class GetCampaignByInfluencerIdQueryValidator : PageRequestValidator<GetCampaignByInfluencerIdQuery, CampaignViewModel>
         {
-
+            public GetCampaignByInfluencerIdQueryValidator()
+            {
+                RuleFor(x => x.Status).IsInEnum();
+            }
         }
 
         public class GetCampaignByInfluencerIdQueryHandler : ListQueryHandler<GetCampaignByInfluencerIdQuery, CampaignViewModel>
@@ -59,7 +61,8 @@ namespace IMP.Application.Features.Campaigns.Queries.GetCampaignByInfluencerId
                 var page = await _campaignRepository.GetPagedList(
                     predicate: x =>
                         (x.CampaignMembers.Any(cm => cm.InfluencerId == _authenticatedUserService.ApplicationUserId))
-                        && (request.Status.Count == 0 || (request.Status.Count > 0 && request.Status.Contains(x.Status)))
+                        && (request.Status == null 
+                            || (request.Status.HasValue && x.CampaignMembers.Any(cm => cm.InfluencerId == _authenticatedUserService.ApplicationUserId && cm.Status == (int)request.Status.Value)))
                         && (request.BrandId == null || (request.BrandId != null && x.BrandId == request.BrandId))
                         && (request.FromDate == null || (request.FromDate != null && x.Created.Date >= request.FromDate))
                         && (request.ToDate == null || (request.ToDate != null && x.Created.Date <= request.ToDate))
