@@ -24,6 +24,7 @@ namespace IMP.Application.Features.Brands.Commands.UpdateBrand
             RuleFor(x => x.Representative).MustMaxLength(256);
             RuleFor(x => x.Phone).MustValidPhoneNumber(allowNull: true);
             RuleFor(x => x.JobB).ListMustContainFewerThan(10);
+            RuleFor(x => x.Introduction).MustMaxLength(2000);
 
             RuleFor(x => x.Email).MustValidEmail().MustAsync(async (x, y, z) =>
             {
