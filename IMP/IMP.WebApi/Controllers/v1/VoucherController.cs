@@ -17,6 +17,7 @@ using System.IO;
 using System;
 using IMP.Application.Features.Vouchers.Queries.GetAllVoucher;
 using IMP.Application.Features.Vouchers.Commands.ImportVouchers;
+using IMP.Application.Features.Vouchers.Queries.GetVoucherCanAvailableForCampaign;
 
 namespace IMP.WebApi.Controllers.v1
 {
@@ -167,7 +168,7 @@ namespace IMP.WebApi.Controllers.v1
         }
 
         /// <summary>
-        /// Search voucher code of authencated user
+        /// Search voucher code of authenticated user
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
@@ -189,5 +190,20 @@ namespace IMP.WebApi.Controllers.v1
         {
             return Ok(await Mediator.Send(query));
         }
+
+        /// <summary>
+        /// Get list voucher of brand that is available for campaign
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<IPagedList<VoucherViewModel>>), 200)]
+        [HttpGet("available-for-campaign")]
+        [Authorize(Roles = "Brand")]
+        public async Task<IActionResult> GetVoucherAvailableForCampaign([FromQuery] GetVoucherCanAvailableForCampaignQuery query)
+        {
+            return Ok(await Mediator.Send(query));
+        }
+
+
     }
 }
