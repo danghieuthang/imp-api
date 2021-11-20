@@ -4,6 +4,7 @@ using IMP.Application.Enums;
 using IMP.Application.Interfaces;
 using IMP.Application.Models;
 using IMP.Application.Models.ViewModels;
+using IMP.Application.Validations;
 using IMP.Application.Wrappers;
 using IMP.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +25,13 @@ namespace IMP.Application.Features.Vouchers.Queries.GetAllVoucherByApplicationUs
         [FromQuery(Name = "to_date")]
         public DateTime? ToDate { get; set; }
 
+    }
+    public class GetAllVoucherByApplicationUserQueryValidator : PageRequestValidator<GetAllVoucherByApplicationUserQuery, UserVoucherViewModel>
+    {
+        public GetAllVoucherByApplicationUserQueryValidator()
+        {
+
+        }
     }
     public class GetAllVoucherByApplicationUserQueryHandler : ListQueryHandler<GetAllVoucherByApplicationUserQuery, UserVoucherViewModel>
     {

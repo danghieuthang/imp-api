@@ -12,6 +12,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using IMP.Application.Enums;
 using Microsoft.AspNetCore.Mvc;
+using FluentValidation;
+using IMP.Application.Validations;
 
 namespace IMP.Application.Features.Vouchers.Queries.GetVoucherCanAvailableForCampaign
 {
@@ -19,7 +21,13 @@ namespace IMP.Application.Features.Vouchers.Queries.GetVoucherCanAvailableForCam
     {
         [FromQuery(Name = "campaign_id")]
         public int CampaignId { get; set; }
+        public class GetVoucherCanAvailableForCampaignQueryValidator : PageRequestValidator<GetVoucherCanAvailableForCampaignQuery, VoucherViewModel>
+        {
+            public GetVoucherCanAvailableForCampaignQueryValidator()
+            {
 
+            }
+        }
         public class GetVoucherCanAvailableForCampaignQueryHandler : ListQueryHandler<GetVoucherCanAvailableForCampaignQuery, VoucherViewModel>
         {
             private readonly IAuthenticatedUserService _authenticatedUserService;

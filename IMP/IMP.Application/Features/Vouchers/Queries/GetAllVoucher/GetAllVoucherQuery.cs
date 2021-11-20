@@ -12,6 +12,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using IMP.Application.Enums;
+using IMP.Application.Validations;
+
 namespace IMP.Application.Features.Vouchers.Queries.GetAllVoucher
 {
     public class GetAllVoucherQuery : PageRequest, IListQuery<VoucherViewModel>
@@ -24,7 +26,13 @@ namespace IMP.Application.Features.Vouchers.Queries.GetAllVoucher
         public DateTime? FromDate { get; set; }
         [FromQuery(Name = "to_date")]
         public DateTime? ToDate { get; set; }
+        public class GetAllVoucherQueryValidator : PageRequestValidator<GetAllVoucherQuery, VoucherViewModel>
+        {
+            public GetAllVoucherQueryValidator()
+            {
 
+            }
+        }
         public class GetAllVoucherQueryHandler : ListQueryHandler<GetAllVoucherQuery, VoucherViewModel>
         {
             private readonly IAuthenticatedUserService _authenticatedUserService;
