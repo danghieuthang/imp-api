@@ -151,7 +151,7 @@ namespace IMP.WebApi.Controllers.v1
         }
 
         /// <summary>
-        /// Update campaign acvitity
+        /// Update campaign activity
         /// </summary>
         /// <param name="id"></param>
         /// <param name="command"></param>
@@ -329,7 +329,7 @@ namespace IMP.WebApi.Controllers.v1
         }
 
         /// <summary>
-        /// Get sumary data about campaign members of a campaign
+        /// Get summary data about campaign members of a campaign
         /// </summary>
         /// <param name="id">The campaign id</param>
         /// <returns></returns>

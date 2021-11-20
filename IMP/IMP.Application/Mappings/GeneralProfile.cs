@@ -28,6 +28,7 @@ using IMP.Application.Features.Campaigns.Commands.UpdateCampaign;
 using IMP.Application.Features.Campaigns.Commands.UpdateCampaignActivities;
 using IMP.Application.Features.ActivityTypes.Commands.CreateActivityType;
 using IMP.Application.Features.Vouchers.Commands.UpdateVoucher;
+using System;
 
 namespace IMP.Application.Mappings
 {
@@ -86,7 +87,31 @@ namespace IMP.Application.Mappings
                         Price = x.Price,
                         Currency = x.Currency
                     }));
-                });
+                })
+                .ForMember(dest => dest.OpeningDate, opt =>
+                  {
+                      opt.MapFrom(x => DateTime.SpecifyKind(x.OpeningDate.Value, DateTimeKind.Utc));
+                  })
+                 .ForMember(dest => dest.ApplyingDate, opt =>
+                 {
+                     opt.MapFrom(x => DateTime.SpecifyKind(x.ApplyingDate.Value, DateTimeKind.Utc));
+                 })
+                  .ForMember(dest => dest.AdvertisingDate, opt =>
+                  {
+                      opt.MapFrom(x => DateTime.SpecifyKind(x.AdvertisingDate.Value, DateTimeKind.Utc));
+                  })
+                   .ForMember(dest => dest.EvaluatingDate, opt =>
+                   {
+                       opt.MapFrom(x => DateTime.SpecifyKind(x.EvaluatingDate.Value, DateTimeKind.Utc));
+                   })
+                    .ForMember(dest => dest.AnnouncingDate, opt =>
+                    {
+                        opt.MapFrom(x => DateTime.SpecifyKind(x.AnnouncingDate.Value, DateTimeKind.Utc));
+                    })
+                     .ForMember(dest => dest.ClosedDate, opt =>
+                     {
+                         opt.MapFrom(x => DateTime.SpecifyKind(x.ClosedDate.Value, DateTimeKind.Utc));
+                     });
 
             CreateMap<CampaignImage, CampaignImageViewModel>();
             CreateMap<CampaignImageRequest, CampaignImage>();

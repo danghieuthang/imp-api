@@ -22,7 +22,7 @@ namespace IMP.Application.Models.Compaign
 
         #endregion
 
-        #region Timeline
+        #region Time line
         /// <summary>
         /// Ngày mở chiến dịch trên web
         /// </summary>
