@@ -17,7 +17,9 @@ namespace IMP.Domain.Entities
         public int MemberActivityId { get; set; }
         public MemberActivity MemberActivity { get; set; }
 
-        [StringLength(2000)]
+        [StringLength(256)]
         public string Url { get; set; }
+        [StringLength(256)]
+        public string Description { get; set; }
     }
 }

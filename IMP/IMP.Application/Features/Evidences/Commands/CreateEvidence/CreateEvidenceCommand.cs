@@ -20,12 +20,14 @@ namespace IMP.Application.Features.Evidences.Commands.CreateEvidence
         public int MemberActivityId { get; set; }
         public int EvidenceTypeId { get; set; }
         public string Url { get; set; }
+        public string Description { get; set; }
 
         public class CreateEvidenceCommandValidator : AbstractValidator<CreateEvidenceCommand>
         {
             public CreateEvidenceCommandValidator()
             {
                 RuleFor(x => x.Url).MustValidUrl();
+                RuleFor(x => x.Description).MustMaxLength(256);
             }
         }
 
@@ -41,7 +43,7 @@ namespace IMP.Application.Features.Evidences.Commands.CreateEvidence
             {
                 var memberActivity = await UnitOfWork.Repository<MemberActivity>().FindSingleAsync(x => x.Id == request.MemberActivityId, x => x.CampaignMember, x => x.CampaignActivity);
 
-                 if (memberActivity?.CampaignMember == null)
+                if (memberActivity?.CampaignMember == null)
                 {
                     throw new IMP.Application.Exceptions.ValidationException(new ValidationError("member_activity_id", "Không tồn tại."));
                 }
@@ -60,7 +62,8 @@ namespace IMP.Application.Features.Evidences.Commands.CreateEvidence
                 {
                     EvidenceTypeId = request.EvidenceTypeId,
                     MemberActivityId = request.MemberActivityId,
-                    Url = request.Url
+                    Url = request.Url,
+                    Description = request.Description
                 };
 
                 UnitOfWork.Repository<Evidence>().Add(evidence);
