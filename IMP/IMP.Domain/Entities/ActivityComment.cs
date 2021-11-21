@@ -16,6 +16,7 @@ namespace IMP.Domain.Entities
 
         [ForeignKey("ApplicationUser")]
         public int ApplicationUserId { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
 
         [StringLength(256)]
         public string Comment { get; set; }

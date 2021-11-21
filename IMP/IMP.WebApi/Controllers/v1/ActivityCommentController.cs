@@ -10,7 +10,7 @@ namespace IMP.WebApi.Controllers.v1
 {
     [Route(RouterConstants.ActivityComment)]
     [ApiVersion("1.0")]
-    [Authorize(Roles = "Brand")]
+    [Authorize(Roles = "Brand,Influencer")]
     public class ActivityCommentController : BaseApiController
     {
         /// <summary>

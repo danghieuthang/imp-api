@@ -3,6 +3,7 @@ using IMP.Application.Interfaces;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
 using IMP.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace IMP.Application.Features.MemberActivities.Queries.GetMemberActivityByI
 
             public override async Task<Response<MemberActivityViewModel>> Handle(GetMemberActivityByIdQuery request, CancellationToken cancellationToken)
             {
-                var memberActivity = await Repository.FindSingleAsync(x => x.Id == request.Id, x => x.Evidences, x => x.ActivityComments);
+                var memberActivity = await Repository.FindSingleAsync(x => x.Id == request.Id, include: x => x.Include(y => y.Evidences).Include(y => y.ActivityComments).ThenInclude(z => z.ApplicationUser));
                 if (memberActivity == null)
                 {
                     throw new KeyNotFoundException();

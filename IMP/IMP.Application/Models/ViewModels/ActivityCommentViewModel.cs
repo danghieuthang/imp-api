@@ -1,10 +1,13 @@
-﻿namespace IMP.Application.Models.ViewModels
+﻿using Newtonsoft.Json;
+
+namespace IMP.Application.Models.ViewModels
 {
     public class ActivityCommentViewModel : BaseViewModel<int>
     {
         public int MemberActivityId { get; set; }
 
-        public int ApplicationUserId { get; set; }
+        [JsonProperty("created_by")]
+        public UserCommentViewModel ApplicationUser { get; set; }
 
         public string Comment { get; set; }
     }
