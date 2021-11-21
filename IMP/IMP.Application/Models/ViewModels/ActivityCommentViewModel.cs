@@ -7,7 +7,7 @@ namespace IMP.Application.Models.ViewModels
         public int MemberActivityId { get; set; }
 
         [JsonProperty("created_by")]
-        public UserCommentViewModel ApplicationUser { get; set; }
+        public UserBasicViewModel ApplicationUser { get; set; }
 
         public string Comment { get; set; }
     }

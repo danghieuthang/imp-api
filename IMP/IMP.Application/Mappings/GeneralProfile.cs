@@ -214,7 +214,7 @@ namespace IMP.Application.Mappings
             #endregion
 
             #region application user
-            CreateMap<ApplicationUser, UserCommentViewModel>();
+            CreateMap<ApplicationUser, UserBasicViewModel>();
             CreateMap<ApplicationUser, ApplicationUserViewModel>()
                 .ForMember(dest => dest.InterestsR, opt =>
                   {

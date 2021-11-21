@@ -49,7 +49,7 @@ namespace IMP.Application.Models.ViewModels
         public string LastName { get; set; }
     }
 
-    public class UserCommentViewModel : BaseViewModel<int>
+    public class UserBasicViewModel : BaseViewModel<int>
     {
         public string Email { get; set; }
         public string Avatar { get; set; }
