@@ -1,4 +1,5 @@
 ﻿using IMP.Application.Features.ApplicationUsers.Commands.CreateEmailVerify;
+using IMP.Application.Features.ApplicationUsers.Commands.UpdateStatus;
 using IMP.Application.Features.ApplicationUsers.Commands.UpdateUserInfomation;
 using IMP.Application.Features.ApplicationUsers.Commands.UpdateUserPaymentInfo;
 using IMP.Application.Features.ApplicationUsers.Commands.VerifyEmail;
@@ -140,5 +141,32 @@ namespace IMP.WebApi.Controllers.v1
             query.SetIsInfluencer(false);
             return Ok(await Mediator.Send(query));
         }
+
+        /// <summary>
+        /// Activate a user
+        /// </summary>
+        /// <param name="id">The id of user.</param>
+        /// <returns></returns>
+        [HttpPut("{id}/activate")]
+        [ProducesResponseType(typeof(Response<ApplicationUserViewModel>), 200)]
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> Activate([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new UpdateUserStatusCommand { Id = id, Status = Application.Enums.UserStatus.Activated }));
+        }
+
+        /// <summary>
+        /// Disable a user
+        /// </summary>
+        /// <param name="id">The id of user.</param>
+        /// <returns></returns>
+        [HttpPut("{id}/disable")]
+        [ProducesResponseType(typeof(Response<ApplicationUserViewModel>), 200)]
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> Disable([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new UpdateUserStatusCommand { Id = id, Status = Application.Enums.UserStatus.Disabled }));
+        }
+
     }
 }
