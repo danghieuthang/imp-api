@@ -58,16 +58,19 @@ namespace IMP.Application.Features.Campaigns.Commands.ProcessCampaignMember
                 {
                     var campaignActivities = UnitOfWork.Repository<CampaignActivity>().GetAll(predicate: x => x.CampaignId == campaignMember.CampaignId).ToList();
                     var memberActivityRepository = UnitOfWork.Repository<MemberActivity>();
-
-                    foreach (var campaignActivity in campaignActivities)
+                    if (!await UnitOfWork.Repository<MemberActivity>().IsExistAsync(x => x.CampaignMemberId == campaignMember.Id))
                     {
-                        memberActivityRepository.Add(new MemberActivity
+                        foreach (var campaignActivity in campaignActivities)
                         {
-                            CampaignActivityId = campaignActivity.Id,
-                            CampaignMemberId = campaignMember.Id,
-                            Status = (int)MemberActivityStatus.NotYet,
-                        });
+                            memberActivityRepository.Add(new MemberActivity
+                            {
+                                CampaignActivityId = campaignActivity.Id,
+                                CampaignMemberId = campaignMember.Id,
+                                Status = (int)MemberActivityStatus.NotYet,
+                            });
+                        }
                     }
+
                 }
                 else if (request.Status == CampaignMemberStatus.Cancelled)
                 {
