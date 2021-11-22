@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using IMP.Application.Exceptions;
 using IMP.Application.Interfaces;
+using IMP.Application.Models;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
 using IMP.Domain.Entities;
@@ -27,7 +29,26 @@ namespace IMP.Application.Features.Vouchers.Commands.AssignVoucherForCampaign
 
             public override async Task<Response<CampaignVoucherViewModel>> Handle(AssignVoucherToCampaignCommand request, CancellationToken cancellationToken)
             {
-                var campaignVoucher = Mapper.Map<CampaignVoucher>(request);
+                var campaign = await UnitOfWork.Repository<Campaign>().GetByIdAsync(request.CampaignId);
+                if (campaign != null && campaign.BrandId != _authenticatedUserService.BrandId)
+                {
+                    throw new ValidationException(new ValidationError("campaign_id", "Không có quyền thêm voucher cho chiến dịch này."));
+                }
+
+                var voucher = await UnitOfWork.Repository<Voucher>().GetByIdAsync(request.VoucherId);
+                if (voucher != null && voucher.BrandId != _authenticatedUserService.BrandId)
+                {
+                    throw new ValidationException(new ValidationError("voucher_id", "Không có quyền assign voucher này."));
+                }
+
+
+                var campaignVoucher = await UnitOfWork.Repository<CampaignVoucher>().FindSingleAsync(x => x.CampaignId == request.CampaignId && x.VoucherId == request.VoucherId);
+                if (campaignVoucher != null)
+                {
+                    throw new ValidationException(new ValidationError("voucher_id", "Voucher này đã được assign cho chiến dịch"));
+                }
+
+                campaignVoucher = Mapper.Map<CampaignVoucher>(request);
                 await UnitOfWork.Repository<CampaignVoucher>().AddAsync(campaignVoucher);
                 await UnitOfWork.CommitAsync();
                 var campaignVoucherView = Mapper.Map<CampaignVoucherViewModel>(campaignVoucher);
