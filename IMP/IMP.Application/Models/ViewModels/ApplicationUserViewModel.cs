@@ -38,6 +38,7 @@ namespace IMP.Application.Models.ViewModels
         public PaymentInforViewModel PaymentInfor { get; set; }
         public RankingViewModel Ranking { get; set; }
         public string Role { get; set; }
+        public int Status { get; set; }
     }
     public class AdminViewModel : BaseViewModel<int>
     {
@@ -57,6 +58,8 @@ namespace IMP.Application.Models.ViewModels
         public string PhoneNumber { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public int Status { get; set; }
+
     }
 
     public class InfluencerViewModel : BaseViewModel<int>
@@ -89,6 +92,7 @@ namespace IMP.Application.Models.ViewModels
         public RankingViewModel Ranking { get; set; }
         public List<InfluencerPlatformViewModel> InfluencerPlatforms { get; set; }
         public LocationViewModel Location { get; set; }
+        public int Status { get; set; }
 
     }
     public class PaymentInforViewModel : BaseViewModel<int>
