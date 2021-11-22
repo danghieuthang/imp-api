@@ -1,4 +1,5 @@
-﻿using IMP.Application.Features.Campaigns.Commands.ApplyToCampaign;
+﻿using IMP.Application.Features.CampaignMembers.Queries.GetCampaignMemberOfCampaignByInfluencerId;
+using IMP.Application.Features.Campaigns.Commands.ApplyToCampaign;
 using IMP.Application.Features.Campaigns.Commands.ApprovalCampaign;
 using IMP.Application.Features.Campaigns.Commands.CancelCampaign;
 using IMP.Application.Features.Campaigns.Commands.CompletedCreateCampaign;
@@ -300,6 +301,19 @@ namespace IMP.WebApi.Controllers.v1
         {
             return Ok(await Mediator.Send(query));
         }
+        /// <summary>
+        /// Get campaign member in campaign of authenticated user
+        /// </summary>
+        /// <param name="id">The id of campaign</param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<PagedList<CampaignMemberViewModel>>), 200)]
+        [HttpGet("{id}/members/me")]
+        [Authorize(Roles = "Influencer")]
+        public async Task<IActionResult> SearchMember([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new GetCampaignMemberOfCampaignByInfluencerIdQuery { CampaignId = id }));
+        }
+
 
         /// <summary>
         /// Delete campaign

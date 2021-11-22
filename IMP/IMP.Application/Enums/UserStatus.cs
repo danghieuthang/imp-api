@@ -8,7 +8,7 @@ namespace IMP.Application.Enums
 {
     public enum UserStatus
     {
-        New,
+        InActived,
         Activated,
         Disabled
     }
