@@ -102,7 +102,7 @@ namespace IMP.Domain.Entities
 
             }
         }
-        public bool IsApproved { get; set; }
+        public int Status { get; set; }
 
         public virtual ICollection<InfluencerPlatform> InfluencerPlatforms { get; set; }
         public virtual ICollection<WalletTransaction> TransactionsSent { get; set; }

@@ -19,5 +19,6 @@ namespace IMP.Domain.Entities
         public string Url { get; set; }
         [StringLength(256)]
         public string Message { get; set; }
+        public int RedirectId { get; set; }
     }
 }

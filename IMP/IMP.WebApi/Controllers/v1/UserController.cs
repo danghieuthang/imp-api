@@ -2,6 +2,7 @@
 using IMP.Application.Features.ApplicationUsers.Commands.UpdateUserInfomation;
 using IMP.Application.Features.ApplicationUsers.Commands.UpdateUserPaymentInfo;
 using IMP.Application.Features.ApplicationUsers.Commands.VerifyEmail;
+using IMP.Application.Features.ApplicationUsers.Queries.GetAllUser;
 using IMP.Application.Features.ApplicationUsers.Queries.GetUserById;
 using IMP.Application.Interfaces;
 using IMP.Application.Models.ViewModels;
@@ -43,7 +44,7 @@ namespace IMP.WebApi.Controllers.v1
             return Ok(await Mediator.Send(command));
         }
         /// <summary>
-        /// Update payment info for autheticated user
+        /// Update payment info for authenticated user
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
@@ -79,7 +80,7 @@ namespace IMP.WebApi.Controllers.v1
         {
             int id = 0;
             int.TryParse(_authenticatedUserService.AppId, out id);
-            var response = await Mediator.Send(new GetUserByIdQuery { Id = id});
+            var response = await Mediator.Send(new GetUserByIdQuery { Id = id });
             response.Data.Role = _authenticatedUserService.Role;
             return Ok(response);
         }
@@ -110,6 +111,34 @@ namespace IMP.WebApi.Controllers.v1
             int.TryParse(_authenticatedUserService.AppId, out id);
             command.InfluencerId = id;
             return StatusCode(201, await Mediator.Send(command));
+        }
+
+        /// <summary>
+        /// Search influencer
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<PagedList<ApplicationUserViewModel>>), 200)]
+        [Authorize(Roles = "Administrator")]
+        [HttpGet("search-influencer")]
+        public async Task<IActionResult> SearchInfluecner([FromQuery] GetAllUserQuery query)
+        {
+            query.SetIsInfluencer(true);
+            return Ok(await Mediator.Send(query));
+        }
+
+        /// <summary>
+        /// Search brand
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<PagedList<ApplicationUserViewModel>>), 200)]
+        [Authorize(Roles = "Administrator")]
+        [HttpGet("search-brand")]
+        public async Task<IActionResult> SearchBrand([FromQuery] GetAllUserQuery query)
+        {
+            query.SetIsInfluencer(false);
+            return Ok(await Mediator.Send(query));
         }
     }
 }

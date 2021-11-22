@@ -33,7 +33,6 @@
     <Folder Include="Features\Campaigns\Commands\CreateCampaignTarget\" />
     <Folder Include="Features\EvidenceTypes\Commands\" />
     <Folder Include="Features\MemberActivities\Commands\UpdateMemberActivity\" />
-    <Folder Include="Features\VoucherCodes\NewFolder\" />
     <Folder Include="Features\VoucherCodes\Queries\NewFolder\" />
   </ItemGroup>
 

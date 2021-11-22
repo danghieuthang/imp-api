@@ -1,4 +1,5 @@
-﻿using IMP.Application.Features.VoucherCodes.Commands.CreateVoucherCode;
+﻿using IMP.Application.Features.VoucherCodes.Commands.AssignVoucherCodeForCampaignMember;
+using IMP.Application.Features.VoucherCodes.Commands.CreateVoucherCode;
 using IMP.Application.Features.VoucherCodes.DeleteVoucherCode;
 using IMP.Application.Features.Vouchers.Queries.GetAllVoucherByApplicationUser;
 using IMP.Application.Interfaces;
@@ -47,6 +48,25 @@ namespace IMP.WebApi.Controllers.v1
         {
             return Ok(await Mediator.Send(new DeleteVoucherCodeCommand { Id = id, ApplicationUserId = _authenticatedUserService.ApplicationUserId }));
         }
-       
+
+        /// <summary>
+        /// Assign a voucher code for campaign member
+        /// </summary>
+        /// <param name="id">The id of voucher code</param>
+        /// <param name="command">The command</param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<bool>), 200)]
+        [HttpPut("{id}/assign-for-member")]
+        [Authorize(Roles = "Brand")]
+        public async Task<IActionResult> AssignVoucherCodeForCampaignMember([FromRoute] int id, [FromBody] AssignVoucherCodeForCampaignMemberCommand command)
+        {
+            if (id != command.VoucherCodeId)
+            {
+                return BadRequest();
+            }
+            return Ok(await Mediator.Send(command));
+        }
+
+
     }
 }

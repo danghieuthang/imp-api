@@ -1,6 +1,7 @@
 ﻿using Firebase.Auth;
 using Firebase.Storage;
 using IMP.Application.Interfaces;
+using IMP.Domain.Entities;
 using IMP.Domain.Settings;
 using Microsoft.Extensions.Options;
 using System;
@@ -59,6 +60,11 @@ namespace IMP.Infrastructure.Shared.Services
             var task = firebaseStorageRef.PutAsync(stream);
             string url = await task;
             return url;
+        }
+
+        public async Task<bool> PushTotification(Notification notification)
+        {
+            return true;
         }
     }
 }
