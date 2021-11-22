@@ -24,7 +24,7 @@ namespace IMP.Domain.Entities
 
         public bool IsEmailVerified
         {
-            get;set;
+            get; set;
         }
         [MaxLength(256)]
         public string Nickname { get; set; }
@@ -60,7 +60,7 @@ namespace IMP.Domain.Entities
         public Location Location { get; set; }
         #endregion 
 
-        #region additional infomation
+        #region additional information
         [StringLength(256)]
         public string Job { get; set; }
         [StringLength(256)]
@@ -102,10 +102,12 @@ namespace IMP.Domain.Entities
 
             }
         }
+        public bool IsApproved { get; set; }
 
         public virtual ICollection<InfluencerPlatform> InfluencerPlatforms { get; set; }
         public virtual ICollection<WalletTransaction> TransactionsSent { get; set; }
         public virtual ICollection<WalletTransaction> TransactionsReceived { get; set; }
         public virtual ICollection<VoucherCodeApplicationUser> VoucherCodeApplicationUsers { get; set; }
+        public virtual ICollection<Notification> Notifications { get; set; }
     }
 }

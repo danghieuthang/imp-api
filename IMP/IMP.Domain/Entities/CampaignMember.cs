@@ -32,5 +32,6 @@ namespace IMP.Domain.Entities
 
         public ICollection<ApplicantHistory> ApplicantHistories { get; set; }
         public ICollection<MemberActivity> MemberActivities { get; set; }
+        public ICollection<VoucherCode> VoucherCodes { get; set; }
     }
 }

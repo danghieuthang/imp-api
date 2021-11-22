@@ -26,7 +26,7 @@ namespace IMP.Infrastructure.Persistence.Contexts
             _dateTime = dateTime;
             _authenticatedUser = authenticatedUser;
         }
-        #region  Dbsets
+        #region  db sets
 
         public DbSet<ActivityType> ActivityTypes { get; set; }
         public DbSet<Location> Locations { get; set; }
@@ -71,9 +71,9 @@ namespace IMP.Infrastructure.Persistence.Contexts
         public DbSet<VoucherCodeApplicationUser> VoucherCodeApplicationUsers { get; set; }
         public DbSet<ActivityComment> ActivityComments { get; set; }
         public DbSet<EvidenceType> EvidenceTypes { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
 
-
-        #endregion  Dbsets
+        #endregion
 
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

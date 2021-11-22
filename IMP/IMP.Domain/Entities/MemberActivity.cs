@@ -18,7 +18,7 @@ namespace IMP.Domain.Entities
         public int CampaignMemberId { get; set; }
         public CampaignMember CampaignMember { get; set; }
 
-        public bool Status { get; set; }
+        public int Status { get; set; }
 
         public ICollection<Evidence> Evidences { get; set; }
 

@@ -65,7 +65,7 @@ namespace IMP.Application.Features.Campaigns.Commands.ProcessCampaignMember
                         {
                             CampaignActivityId = campaignActivity.Id,
                             CampaignMemberId = campaignMember.Id,
-                            Status = false,
+                            Status = (int)MemberActivityStatus.NotYet,
                         });
                     }
                 }

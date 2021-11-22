@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using FluentValidation;
+using IMP.Application.Enums;
 using IMP.Application.Exceptions;
 using IMP.Application.Interfaces;
 using IMP.Application.Models;
@@ -17,7 +19,14 @@ namespace IMP.Application.Features.MemberActivities.Commands.ChangeMemberActivit
     public class ChangeMemberActivityStatusCommand : ICommand<MemberActivityViewModel>
     {
         public int Id { get; set; }
-        public bool Status { get; set; }
+        public MemberActivityStatus Status { get; set; }
+        public class ChangeMemberAcitivytStatusCommandValidator : AbstractValidator<ChangeMemberActivityStatusCommand>
+        {
+            public ChangeMemberAcitivytStatusCommandValidator()
+            {
+                RuleFor(x => x.Status).IsInEnum().WithMessage("Trạng thái không hợp lệ.");
+            }
+        }
 
         public class ChangeMemberActivityStatusCommandHandler : CommandHandler<ChangeMemberActivityStatusCommand, MemberActivityViewModel>
         {
@@ -34,15 +43,15 @@ namespace IMP.Application.Features.MemberActivities.Commands.ChangeMemberActivit
                 var memberActivity = await _memberActivityRepository.FindSingleAsync(x => x.Id == request.Id, x => x.CampaignActivity, x => x.CampaignActivity.Campaign);
                 if (memberActivity == null)
                 {
-                    throw new ValidationException(new ValidationError("id", "Không tồn tại."));
+                    throw new IMP.Application.Exceptions.ValidationException(new ValidationError("id", "Không tồn tại."));
                 }
 
                 if (memberActivity.CampaignActivity.Campaign.BrandId != _authenticatedUserService.BrandId)
                 {
-                    throw new ValidationException(new ValidationError("id", "Không có quyền."));
+                    throw new IMP.Application.Exceptions.ValidationException(new ValidationError("id", "Không có quyền."));
                 }
 
-                memberActivity.Status = request.Status;
+                memberActivity.Status = (int)request.Status;
                 _memberActivityRepository.Update(memberActivity);
                 await UnitOfWork.CommitAsync();
 

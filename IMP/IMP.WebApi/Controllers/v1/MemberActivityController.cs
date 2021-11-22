@@ -37,7 +37,7 @@ namespace IMP.WebApi.Controllers.v1
         [ProducesResponseType(typeof(MemberActivityViewModel), 200)]
         public async Task<IActionResult> Accept([FromRoute] int id)
         {
-            return Ok(await Mediator.Send(new ChangeMemberActivityStatusCommand { Id = id, Status = true }));
+            return Ok(await Mediator.Send(new ChangeMemberActivityStatusCommand { Id = id, Status = MemberActivityStatus.Completed }));
         }
 
 
@@ -51,7 +51,15 @@ namespace IMP.WebApi.Controllers.v1
         [ProducesResponseType(typeof(MemberActivityViewModel), 200)]
         public async Task<IActionResult> Reject([FromRoute] int id)
         {
-            return Ok(await Mediator.Send(new ChangeMemberActivityStatusCommand { Id = id, Status = false }));
+            return Ok(await Mediator.Send(new ChangeMemberActivityStatusCommand { Id = id, Status = MemberActivityStatus.UnComleted }));
+        }
+
+        [HttpPut("id/pending")]
+        [Authorize(Roles = "Influencer")]
+        [ProducesResponseType(typeof(MemberActivityViewModel), 200)]
+        public async Task<IActionResult> Pending([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new ChangeMemberActivityStatusCommand { Id = id, Status = MemberActivityStatus.Pending }));
         }
     }
 }

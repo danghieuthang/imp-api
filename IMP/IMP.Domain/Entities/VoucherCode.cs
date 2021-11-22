@@ -19,9 +19,12 @@ namespace IMP.Domain.Entities
         public int Quantity { get; set; }
         public int QuantityUsed { get; set; }
 
-        public ApplicationUser Influencer { get; set; }
+        [ForeignKey("CampaignMember")]
+        public int? CampaignMemberId { get; set; }
+        public CampaignMember CampaignMember { get; set; }
         public Voucher Voucher { get; set; }
         public Campaign Campaign { get; set; }
+
         public ICollection<VoucherTransaction> VoucherTransactions { get; set; }
         public ICollection<VoucherCodeApplicationUser> VoucherCodeApplicationUsers { get; set; }
 
