@@ -80,6 +80,8 @@ namespace IMP.Application.Models.Compaign
         public List<CampaignRewardViewModel> BestInfluencerRewards { get; set; }
         public List<CampaignActivityViewModel> CampaignActivities { get; set; }
         public List<CampaignVoucherViewModel> Vouchers { get; set; }
+        public List<CampaignVoucherViewModel> DefaultVoucherRewards { get; set; }
+        public List<CampaignVoucherViewModel> BestInfluencerVoucherRewards { get; set; }
         [JsonProperty("images")]
         public List<CampaignImageViewModel> CampaignImages { get; set; }
     }

@@ -89,7 +89,19 @@ namespace IMP.Application.Mappings
                         Price = x.Price,
                         Currency = x.Currency
                     }));
-                });
+                })
+                 .ForMember(dest => dest.DefaultVoucherRewards, opt =>
+                 {
+                     opt.MapFrom(x => x.Vouchers.Where(c => c.IsDefaultReward == true));
+                 })
+                 .ForMember(dest => dest.BestInfluencerVoucherRewards, opt =>
+                  {
+                      opt.MapFrom(x => x.Vouchers.Where(c => c.IsBestInfluencerReward == true));
+                  })
+                 .ForMember(dest => dest.Vouchers, opt =>
+                 {
+                     opt.MapFrom(x => x.Vouchers.Where(c => c.IsDefaultReward == false && c.IsBestInfluencerReward == false));
+                 });
 
             CreateMap<CampaignImage, CampaignImageViewModel>();
             CreateMap<CampaignImageRequest, CampaignImage>();

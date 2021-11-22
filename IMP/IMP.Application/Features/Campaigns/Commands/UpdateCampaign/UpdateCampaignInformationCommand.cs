@@ -54,7 +54,8 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
         #region Reward configuration
         public List<CampaignRewardRequest> DefaultRewards { get; set; }
         public List<CampaignRewardRequest> BestInfluencerRewards { get; set; }
-        public List<CampaignVoucherRequest> Vouchers { get; set; }
+        public List<CampaignVoucherRequest> DefaultVoucherRewards { get; set; }
+        public List<CampaignVoucherRequest> BestInfluencerVoucherRewards { get; set; }
         #endregion
     }
 
@@ -82,7 +83,7 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
                                         .Include(x => x.CampaignRewards)
                                         .Include(x => x.Vouchers));
 
-          
+
 
             if (campaign != null)
             {
@@ -119,9 +120,36 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
                          })).ToList();
                 }
 
-                if (request.Vouchers != null)
+                if (request.DefaultVoucherRewards != null)
                 {
-                    campaign.Vouchers = campaign.Vouchers.Select(x => { x.CampaignId = campaign.Id; return x; }).ToList();
+                    campaign.Vouchers = request.DefaultVoucherRewards.Select(x => new CampaignVoucher
+                    {
+                        CampaignId = campaign.Id,
+                        VoucherId = x.VoucherId,
+                        IsDefaultReward = true,
+                        IsBestInfluencerReward = false,
+                        QuantityForInfluencer = x.QuantityForInfluencer,
+                        PercentForInfluencer = x.PercentForInfluencer,
+                        Quantity = x.Quantity,
+                    }).ToList();
+                    //campaign.Vouchers = campaign.Vouchers.Select(x => { x.CampaignId = campaign.Id; return x; }).ToList();
+                }
+
+
+                if (request.BestInfluencerVoucherRewards != null)
+                {
+                    var vouchers = request.BestInfluencerVoucherRewards.Select(x => new CampaignVoucher
+                    {
+                        CampaignId = campaign.Id,
+                        VoucherId = x.VoucherId,
+                        IsDefaultReward = false,
+                        IsBestInfluencerReward = true,
+                        QuantityForInfluencer = x.QuantityForInfluencer,
+                        PercentForInfluencer = x.PercentForInfluencer,
+                        Quantity = x.Quantity,
+                    }).ToList();
+                    campaign.Vouchers = campaign.Vouchers.ToList().Union(vouchers).ToList();
+                    //campaign.Vouchers = campaign.Vouchers.Select(x => { x.CampaignId = campaign.Id; return x; }).ToList();
                 }
 
                 // If approved campaign then change status to pending
@@ -169,7 +197,7 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
             }
 
             // Delete vouchers
-            if (request.Vouchers != null)
+            if (request.DefaultVoucherRewards != null)
             {
                 foreach (var voucher in campaign.Vouchers)
                 {
