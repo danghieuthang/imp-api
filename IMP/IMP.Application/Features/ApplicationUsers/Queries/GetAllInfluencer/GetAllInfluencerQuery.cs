@@ -33,7 +33,7 @@ namespace IMP.Application.Features.ApplicationUsers.Queries.GetAllInfluencer
                 var page = await UnitOfWork.Repository<ApplicationUser>().GetPagedList(
                         predicate: x => x.BrandId == null
                             && (x.FirstName.ToLower().Contains(name) || x.LastName.ToLower().Contains(name) || x.Nickname.ToLower().Contains(name)),
-                        include: x => x.Include(y => y.Ranking).Include(y => y.InfluencerPlatforms),
+                        include: x => x.Include(y => y.Ranking).Include(y => y.InfluencerPlatforms).ThenInclude(y => y.Platform),
                         pageIndex: request.PageIndex,
                         pageSize: request.PageSize,
                         orderBy: request.OrderField,
