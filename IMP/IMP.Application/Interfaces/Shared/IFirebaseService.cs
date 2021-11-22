@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IMP.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -17,5 +18,14 @@ namespace IMP.Application.Interfaces
         /// <param name="subfolders">Subfoders</param>
         /// <returns>The file url</returns>
         Task<string> UploadFile(Stream stream, string fileName, params string[] subfolders);
+
+        /// <summary>
+        /// Push nofication to fireabase
+        /// </summary>
+        /// <param name="data">The data put</param>
+        /// <param name="subfoders">List subforders</param>
+        /// <returns></returns>
+        Task PushTotification(string data, params string[] subfoders);
+
     }
 }

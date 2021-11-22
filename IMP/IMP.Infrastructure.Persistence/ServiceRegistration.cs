@@ -39,6 +39,7 @@ namespace IMP.Infrastructure.Persistence
             #region services
             services.AddScoped<IApplicationUserService, ApplicationUserService>();
             services.AddScoped<ICampaignService, CampaignService>();
+            services.AddScoped<INotificationService, NotificationService>();
             #endregion
         }
     }

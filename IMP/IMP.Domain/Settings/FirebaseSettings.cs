@@ -13,5 +13,6 @@ namespace IMP.Domain.Settings
         public string StorageBucket { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+        public string RealtimeDatabase { get; set; }
     }
 }
