@@ -3,6 +3,7 @@ using IMP.Application.Interfaces;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
 using IMP.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,15 +28,13 @@ namespace IMP.Application.Features.ApplicationUsers.Queries.GetInfluencerById
         public override async Task<Response<InfluencerViewModel>> Handle(GetInfluencerByIdCommand request, CancellationToken cancellationToken)
         {
 
-            var user = await UnitOfWork.Repository<ApplicationUser>().FindSingleAsync(x => 
-                (request.Nickname == null && x.Id == request.Id) 
+            var user = await UnitOfWork.Repository<ApplicationUser>().FindSingleAsync(x =>
+                (request.Nickname == null && x.Id == request.Id)
                 || (request.Nickname != null && x.Nickname.ToLower().Equals(request.Nickname.ToLower())),
-                    x => x.PaymentInfor,
-                    x => x.PaymentInfor.Bank,
-                    x => x.Ranking,
-                    x => x.Ranking.RankLevel,
-                    x => x.Location,
-                    x => x.InfluencerPlatforms);
+                include: x => x.Include(y => y.PaymentInfor).ThenInclude(y => y.Bank)
+                    .Include(y => y.Ranking).ThenInclude(y => y.RankLevel)
+                    .Include(y => y.InfluencerPlatforms).ThenInclude(y => y.Platform)
+            );
             if (user == null)
             {
                 //var error = new ValidationError("id", $"'{request.Id}' không tồn tại");
