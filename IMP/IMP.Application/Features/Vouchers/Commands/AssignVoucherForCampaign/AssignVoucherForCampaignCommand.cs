@@ -43,13 +43,16 @@ namespace IMP.Application.Features.Vouchers.Commands.AssignVoucherForCampaign
 
 
                 var campaignVoucher = await UnitOfWork.Repository<CampaignVoucher>().FindSingleAsync(x => x.CampaignId == request.CampaignId && x.VoucherId == request.VoucherId);
-                if (campaignVoucher != null)
+                if (campaignVoucher != null && (campaignVoucher.IsBestInfluencerReward || campaignVoucher.IsDefaultReward))
                 {
                     throw new ValidationException(new ValidationError("voucher_id", "Voucher này đã được assign cho chiến dịch"));
                 }
 
                 campaignVoucher = Mapper.Map<CampaignVoucher>(request);
-                await UnitOfWork.Repository<CampaignVoucher>().AddAsync(campaignVoucher);
+                campaignVoucher.IsDefaultReward = false;
+                campaignVoucher.IsBestInfluencerReward = false;
+
+                await UnitOfWork.Repository<CampaignVoucher>().Add(campaignVoucher);
                 await UnitOfWork.CommitAsync();
                 var campaignVoucherView = Mapper.Map<CampaignVoucherViewModel>(campaignVoucher);
                 return new Response<CampaignVoucherViewModel>(campaignVoucherView);
