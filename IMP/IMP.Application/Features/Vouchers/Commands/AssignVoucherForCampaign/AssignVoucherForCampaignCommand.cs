@@ -52,7 +52,7 @@ namespace IMP.Application.Features.Vouchers.Commands.AssignVoucherForCampaign
                 campaignVoucher.IsDefaultReward = false;
                 campaignVoucher.IsBestInfluencerReward = false;
 
-                await UnitOfWork.Repository<CampaignVoucher>().Add(campaignVoucher);
+                 UnitOfWork.Repository<CampaignVoucher>().Add(campaignVoucher);
                 await UnitOfWork.CommitAsync();
                 var campaignVoucherView = Mapper.Map<CampaignVoucherViewModel>(campaignVoucher);
                 return new Response<CampaignVoucherViewModel>(campaignVoucherView);
