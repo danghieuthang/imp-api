@@ -346,6 +346,7 @@ namespace IMP.Application.Mappings
             CreateMap<AssignVoucherToCampaignCommand, CampaignVoucher>();
             CreateMap<CampaignVoucher, CampaignVoucherViewModel>();
             CreateMap<CampaignVoucher, UserCampaignVoucherViewModel>();
+            CreateMap<CampaignVoucher, CampaignVoucherOnlyIdViewModel>();
             CreateMap<VoucherCode, VoucherCodeViewModel>();
             CreateMap<VoucherCode, UserVoucherCodeViewModel>();
 

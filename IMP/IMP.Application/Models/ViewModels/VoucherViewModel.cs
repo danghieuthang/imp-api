@@ -28,7 +28,7 @@ namespace IMP.Application.Models.ViewModels
         public bool IsCanUse => QuantityUsed > Quantity;
 
         public List<VoucherCodeViewModel> VoucherCodes { get; set; }
-        public List<CampaignVoucherViewModel> CampaignVouchers { get; set; }
+        public List<CampaignVoucherOnlyIdViewModel> CampaignVouchers { get; set; }
         public List<DiscountProductViewModel> DiscountProducts { get; set; }
     }
 

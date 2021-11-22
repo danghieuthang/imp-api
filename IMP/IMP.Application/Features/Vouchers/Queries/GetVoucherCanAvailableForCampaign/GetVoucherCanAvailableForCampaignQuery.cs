@@ -14,6 +14,7 @@ using IMP.Application.Enums;
 using Microsoft.AspNetCore.Mvc;
 using FluentValidation;
 using IMP.Application.Validations;
+using Microsoft.EntityFrameworkCore;
 
 namespace IMP.Application.Features.Vouchers.Queries.GetVoucherCanAvailableForCampaign
 {
@@ -48,6 +49,7 @@ namespace IMP.Application.Features.Vouchers.Queries.GetVoucherCanAvailableForCam
                  predicate: x => (x.ToDate == null || (x.ToDate != null && x.ToDate.Value.CompareTo(campaign.AdvertisingDate.Value) > 0))
                     && (x.QuantityUsed < x.Quantity)
                     && x.BrandId == _authenticatedUserService.BrandId,
+                 include: x => x.Include(y => y.CampaignVouchers),
                  pageIndex: request.PageIndex,
                  pageSize: request.PageSize,
                  orderBy: request.OrderField,

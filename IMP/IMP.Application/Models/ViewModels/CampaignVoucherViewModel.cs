@@ -18,6 +18,10 @@ namespace IMP.Application.Models.ViewModels
         public bool IsBestInfluencerReward { get; set; }
     }
 
+    public class CampaignVoucherOnlyIdViewModel : BaseViewModel<int>
+    {
+        public int CampaignId { get; set; }
+    }
     public class CampaignVoucherRequest
     {
         public int VoucherId { get; set; }
