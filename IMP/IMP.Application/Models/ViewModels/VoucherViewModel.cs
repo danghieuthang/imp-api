@@ -105,4 +105,10 @@ namespace IMP.Application.Models.ViewModels
         public string Name { get; set; }
         public decimal Price { get; set; }
     }
+
+    public class RangeVoucherDateViewModel
+    {
+        public DateTime? MinDate { get; set; }
+        public DateTime? MaxDate { get; set; }
+    }
 }

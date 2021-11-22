@@ -18,6 +18,7 @@ using System;
 using IMP.Application.Features.Vouchers.Queries.GetAllVoucher;
 using IMP.Application.Features.Vouchers.Commands.ImportVouchers;
 using IMP.Application.Features.Vouchers.Queries.GetVoucherCanAvailableForCampaign;
+using IMP.Application.Features.Vouchers.Queries.GetRangeOfVoucher;
 
 namespace IMP.WebApi.Controllers.v1
 {
@@ -204,6 +205,17 @@ namespace IMP.WebApi.Controllers.v1
             return Ok(await Mediator.Send(query));
         }
 
+        /// <summary>
+        /// Get range date for search
+        /// </summary>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<RangeVoucherDateViewModel>), 200)]
+        [HttpGet("range-date")]
+        [Authorize(Roles = "Brand")]
+        public async Task<IActionResult> GetRangeVoucherDate()
+        {
+            return Ok(await Mediator.Send(new GetRangeOfVoucherQuery()));
+        }
 
     }
 }

@@ -20,8 +20,16 @@ namespace IMP.Application.Features.Vouchers.Queries.GetVoucherCanAvailableForCam
 {
     public class GetVoucherCanAvailableForCampaignQuery : PageRequest, IListQuery<VoucherViewModel>
     {
+        [FromQuery(Name = "name")]
+        public string Name { get; set; }
+
         [FromQuery(Name = "campaign_id")]
         public int CampaignId { get; set; }
+
+        [FromQuery(Name = "from_date")]
+        public DateTime? FromDate { get; set; }
+        [FromQuery(Name = "to_date")]
+        public DateTime? ToDate { get; set; }
         public class GetVoucherCanAvailableForCampaignQueryValidator : PageRequestValidator<GetVoucherCanAvailableForCampaignQuery, VoucherViewModel>
         {
             public GetVoucherCanAvailableForCampaignQueryValidator()
@@ -45,10 +53,18 @@ namespace IMP.Application.Features.Vouchers.Queries.GetVoucherCanAvailableForCam
                     return new Response<IPagedList<VoucherViewModel>>(new PagedList<VoucherViewModel>());
                 }
 
+                string name = string.IsNullOrEmpty(request.Name) ? "" : request.Name.ToLower().Trim();
+
+
                 var page = await UnitOfWork.Repository<Voucher>().GetPagedList(
-                 predicate: x => (x.ToDate == null || (x.ToDate != null && x.ToDate.Value.CompareTo(campaign.AdvertisingDate.Value) > 0))
+                 predicate: x => (x.ToDate == null
+                        || (x.ToDate != null && x.ToDate.Value.CompareTo(DateTime.Now.Date) >= 0))
                     && (x.QuantityUsed < x.Quantity)
-                    && x.BrandId == _authenticatedUserService.BrandId,
+                    && x.BrandId == _authenticatedUserService.BrandId
+                    && (request.FromDate == null || (request.FromDate != null && x.FromDate >= request.FromDate.Value))
+                    && (request.ToDate == null || (request.ToDate != null && x.FromDate >= request.ToDate.Value))
+                    && (string.IsNullOrEmpty(name) || x.VoucherName.ToLower().Contains(name)),
+
                  include: x => x.Include(y => y.CampaignVouchers),
                  pageIndex: request.PageIndex,
                  pageSize: request.PageSize,
