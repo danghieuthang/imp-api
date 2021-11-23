@@ -40,6 +40,7 @@ namespace IMP.Domain.Entities
 
         public int? WalletToId { get; set; }
         public int? WalletFromId { get; set; }
+        [StringLength(2000)]
         public string Evidences { get; set; }
 
         public virtual Wallet WalletTo { get; set; }

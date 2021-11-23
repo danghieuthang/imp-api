@@ -29,7 +29,7 @@ namespace IMP.Domain.Entities
         public string Fanpage { get; set; }
         [StringLength(256)]
         public string Job { get; set; }
-        [StringLength(256)]
+        [StringLength(15)]
         public string Phone { get; set; }
         [StringLength(256)]
         public string Address { get; set; }

@@ -106,7 +106,6 @@ namespace IMP.Application.Mappings
             CreateMap<CampaignImage, CampaignImageViewModel>();
             CreateMap<CampaignImageRequest, CampaignImage>();
             CreateMap<CreateCampaignCommand, Campaign>();
-            CreateMap<CampaignMilestone, CampaignMilestoneViewModel>();
 
             CreateMap<UpdateCampaignInformationCommand, Campaign>()
                 .ForMember(dest => dest.Website, opt =>
@@ -199,7 +198,7 @@ namespace IMP.Application.Mappings
             #endregion
 
             #region milestone
-            CreateMap<Milestone, MilestoneViewModel>();
+            //CreateMap<Milestone, MilestoneViewModel>();
             #endregion
             #region block type
             CreateMap<BlockType, BlockTypeViewModel>();

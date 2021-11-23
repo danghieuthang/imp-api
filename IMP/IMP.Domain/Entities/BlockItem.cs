@@ -11,6 +11,7 @@ namespace IMP.Domain.Entities
         [StringLength(256)]
         public string Key { get; set; }
 
+        [StringLength(256)]
         public string Value { get; set; }
 
         [ForeignKey("Block")]

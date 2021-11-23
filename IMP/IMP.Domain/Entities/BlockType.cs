@@ -14,8 +14,6 @@ namespace IMP.Domain.Entities
         public string Image { get; set; }
         [MaxLength(256)]
         public string Description { get; set; }
-        public bool IsActived { get; set; }
-
         public ICollection<Block> Blocks { get; set; }
     }
 }

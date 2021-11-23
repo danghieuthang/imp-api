@@ -26,9 +26,6 @@ namespace IMP.Domain.Entities
         [MaxLength(2000)]
         public string Content { get; set; }
         public int ProcessingStatus { get; set; }
-        [MaxLength(2000)]
-        public string FeedbackContent { get; set; }
-        public DateTime? FeedbackTime { get; set; }
         [NotMapped]
         public DateTime Time { get { return Created; } }
     }

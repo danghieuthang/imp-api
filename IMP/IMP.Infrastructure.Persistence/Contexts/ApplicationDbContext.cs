@@ -33,7 +33,6 @@ namespace IMP.Infrastructure.Persistence.Contexts
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Brand> Brands { get; set; }
-        public DbSet<ApplicantHistory> ApplicantHistories { get; set; }
         public DbSet<Block> Blocks { get; set; }
         public DbSet<BlockItem> BlockItems { get; set; }
         public DbSet<BlockType> BlockTypes { get; set; }

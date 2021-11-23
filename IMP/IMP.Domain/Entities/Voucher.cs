@@ -22,6 +22,7 @@ namespace IMP.Domain.Entities
         public bool OnlyforCustomer { get; set; }
         public decimal DiscountValue { get; set; }
         public int DiscountValueType { get; set; }
+        [StringLength(2000)]
         public string DiscountProducts { get; set; }
         [StringLength(256)]
         public string Image { get; set; }

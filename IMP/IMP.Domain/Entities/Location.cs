@@ -18,7 +18,7 @@ namespace IMP.Domain.Entities
             ApplicationUsers = new HashSet<ApplicationUser>();
             Locations = new HashSet<Location>();
         }
-        [StringLength(50)]
+        [StringLength(256)]
         public string Code { get; set; }
         [StringLength(256)]
         public string Name { get; set; }

@@ -22,6 +22,7 @@ namespace IMP.Domain.Entities
 
         [ForeignKey("Block")]
         public int? ParentId { get; set; }
+        [StringLength(256)]
         public string Variant { get; set; }
         public int Position { get; set; }
         public bool Enable { get; set; }

@@ -103,17 +103,17 @@ namespace IMP.Application.Features.Campaigns.Commands.CreateCampaign
             await UnitOfWork.Repository<CampaignImage>().AddManyAsync(campaignImages);
         }
 
-        private async Task CreateCampaignMilestones(List<CampaignMilestoneRequest> campaignMilestoneRequests, int campaignId)
-        {
-            var campaignMilestones = campaignMilestoneRequests.Select(x => new CampaignMilestone
-            {
-                CampaignId = campaignId,
-                FromDate = x.FromDate,
-                ToDate = x.ToDate,
-                MilestoneId = x.MilestoneId
-            }).ToList();
-            await UnitOfWork.Repository<CampaignMilestone>().AddManyAsync(campaignMilestones);
-        }
+        //private async Task CreateCampaignMilestones(List<CampaignMilestoneRequest> campaignMilestoneRequests, int campaignId)
+        //{
+        //    var campaignMilestones = campaignMilestoneRequests.Select(x => new CampaignMilestone
+        //    {
+        //        CampaignId = campaignId,
+        //        FromDate = x.FromDate,
+        //        ToDate = x.ToDate,
+        //        MilestoneId = x.MilestoneId
+        //    }).ToList();
+        //    await UnitOfWork.Repository<CampaignMilestone>().AddManyAsync(campaignMilestones);
+        //}
 
     }
 }
