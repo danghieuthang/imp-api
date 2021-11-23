@@ -67,7 +67,7 @@ namespace IMP.Application.Features.Evidences.Commands.CreateEvidence
                     Description = request.Description
                 };
 
-                memberActivity.Status = (int)MemberActivityStatus.Pending;
+                memberActivity.Status = (int)MemberActivityStatus.Waiting;
 
                 UnitOfWork.Repository<Evidence>().Add(evidence);
                 UnitOfWork.Repository<MemberActivity>().Update(memberActivity);

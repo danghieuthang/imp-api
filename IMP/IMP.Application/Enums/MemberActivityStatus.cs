@@ -9,7 +9,7 @@ namespace IMP.Application.Enums
     public enum MemberActivityStatus
     {
         NotYet,
-        Pending,
+        Waiting,
         UnComleted,
         Completed
     }
