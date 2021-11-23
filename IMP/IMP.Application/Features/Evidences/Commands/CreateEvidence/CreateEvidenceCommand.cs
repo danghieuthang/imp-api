@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FluentValidation;
+using IMP.Application.Enums;
 using IMP.Application.Extensions;
 using IMP.Application.Interfaces;
 using IMP.Application.Models;
@@ -66,7 +67,10 @@ namespace IMP.Application.Features.Evidences.Commands.CreateEvidence
                     Description = request.Description
                 };
 
+                memberActivity.Status = (int)MemberActivityStatus.Pending;
+
                 UnitOfWork.Repository<Evidence>().Add(evidence);
+                UnitOfWork.Repository<MemberActivity>().Update(memberActivity);
                 await UnitOfWork.CommitAsync();
 
                 var evidenceVIew = Mapper.Map<EvidenceViewModel>(evidence);
