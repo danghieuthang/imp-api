@@ -30,6 +30,9 @@ namespace IMP.Application.Features.Vouchers.Queries.GetVoucherCanAvailableForCam
         public DateTime? FromDate { get; set; }
         [FromQuery(Name = "to_date")]
         public DateTime? ToDate { get; set; }
+
+        [FromQuery(Name = "existed_in_campaign")]
+        public bool ExistedInCampaign { get; set; }
         public class GetVoucherCanAvailableForCampaignQueryValidator : PageRequestValidator<GetVoucherCanAvailableForCampaignQuery, VoucherViewModel>
         {
             public GetVoucherCanAvailableForCampaignQueryValidator()
@@ -63,7 +66,8 @@ namespace IMP.Application.Features.Vouchers.Queries.GetVoucherCanAvailableForCam
                     && x.BrandId == _authenticatedUserService.BrandId
                     && (request.FromDate == null || (request.FromDate != null && x.FromDate >= request.FromDate.Value))
                     && (request.ToDate == null || (request.ToDate != null && x.FromDate >= request.ToDate.Value))
-                    && (string.IsNullOrEmpty(name) || x.VoucherName.ToLower().Contains(name)),
+                    && (string.IsNullOrEmpty(name) || x.VoucherName.ToLower().Contains(name))
+                    && (request.ExistedInCampaign == false || x.CampaignVouchers.Any(y => y.CampaignId == request.CampaignId)),
 
                  include: x => x.Include(y => y.CampaignVouchers),
                  pageIndex: request.PageIndex,

@@ -28,8 +28,8 @@ namespace IMP.Application.Features.Vouchers.Commands.RemoveVoucherFromCampaign
 
             public override async Task<Response<bool>> Handle(RemoveVoucherFromCampaignCommand request, CancellationToken cancellationToken)
             {
-                var campaignVoucher = await UnitOfWork.Repository<CampaignVoucher>().FindSingleAsync(x => x.CampaignId == request.CampaignId && x.VoucherId == request.VoucherId);
-                if (campaignVoucher != null && (campaignVoucher.IsBestInfluencerReward || campaignVoucher.IsDefaultReward))
+                var campaignVoucher = await UnitOfWork.Repository<CampaignVoucher>().FindSingleAsync(x => x.CampaignId == request.CampaignId && x.VoucherId == request.VoucherId && x.IsDefaultReward == false && x.IsBestInfluencerReward == false);
+                if (campaignVoucher != null)
                 {
                     UnitOfWork.Repository<CampaignVoucher>().DeleteCompletely(campaignVoucher);
                     await UnitOfWork.CommitAsync();

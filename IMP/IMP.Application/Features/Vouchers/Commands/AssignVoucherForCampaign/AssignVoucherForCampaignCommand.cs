@@ -42,8 +42,8 @@ namespace IMP.Application.Features.Vouchers.Commands.AssignVoucherForCampaign
                 }
 
 
-                var campaignVoucher = await UnitOfWork.Repository<CampaignVoucher>().FindSingleAsync(x => x.CampaignId == request.CampaignId && x.VoucherId == request.VoucherId);
-                if (campaignVoucher != null && (campaignVoucher.IsBestInfluencerReward || campaignVoucher.IsDefaultReward))
+                var campaignVoucher = await UnitOfWork.Repository<CampaignVoucher>().FindSingleAsync(x => x.CampaignId == request.CampaignId && x.VoucherId == request.VoucherId && x.IsDefaultReward == false && x.IsBestInfluencerReward == false);
+                if (campaignVoucher != null)
                 {
                     throw new ValidationException(new ValidationError("voucher_id", "Voucher này đã được assign cho chiến dịch"));
                 }
@@ -52,7 +52,7 @@ namespace IMP.Application.Features.Vouchers.Commands.AssignVoucherForCampaign
                 campaignVoucher.IsDefaultReward = false;
                 campaignVoucher.IsBestInfluencerReward = false;
 
-                 UnitOfWork.Repository<CampaignVoucher>().Add(campaignVoucher);
+                UnitOfWork.Repository<CampaignVoucher>().Add(campaignVoucher);
                 await UnitOfWork.CommitAsync();
                 var campaignVoucherView = Mapper.Map<CampaignVoucherViewModel>(campaignVoucher);
                 return new Response<CampaignVoucherViewModel>(campaignVoucherView);
