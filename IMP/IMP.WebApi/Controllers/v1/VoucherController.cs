@@ -19,6 +19,7 @@ using IMP.Application.Features.Vouchers.Queries.GetAllVoucher;
 using IMP.Application.Features.Vouchers.Commands.ImportVouchers;
 using IMP.Application.Features.Vouchers.Queries.GetVoucherCanAvailableForCampaign;
 using IMP.Application.Features.Vouchers.Queries.GetRangeOfVoucher;
+using IMP.Application.Features.Vouchers.Commands.RemoveVoucherFromCampaign;
 
 namespace IMP.WebApi.Controllers.v1
 {
@@ -87,10 +88,34 @@ namespace IMP.WebApi.Controllers.v1
             return Ok(await Mediator.Send(new GetVoucherByIdQuery { Id = id }));
         }
 
+        /// <summary>
+        /// Assign a voucher for campaign
+        /// </summary>
+        /// <param name="id">The id of voucher</param>
+        /// <param name="command"></param>
+        /// <returns></returns>
         [ProducesResponseType(typeof(Response<CampaignVoucherViewModel>), 200)]
         [HttpPost("{id}/assign-to-campaign")]
         [Authorize(Roles = "Brand")]
         public async Task<IActionResult> AssignVoucherForCampaign([FromRoute] int id, [FromBody] AssignVoucherToCampaignCommand command)
+        {
+            if (id != command.VoucherId)
+            {
+                return BadRequest();
+            }
+            return Ok(await Mediator.Send(command));
+        }
+
+        /// <summary>
+        /// Un assign voucher from campaign
+        /// </summary>
+        /// <param name="id">The id of voucher</param>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<bool>), 200)]
+        [HttpDelete("{id}/unassign-from-campaign")]
+        [Authorize(Roles = "Brand")]
+        public async Task<IActionResult> UnAssignVoucherForCampaign([FromRoute] int id, [FromBody] RemoveVoucherFromCampaignCommand command)
         {
             if (id != command.VoucherId)
             {
