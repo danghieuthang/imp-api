@@ -21,12 +21,12 @@ namespace IMP.Infrastructure.Identity.Contexts
             builder.HasDefaultSchema("Identity");
             builder.Entity<User>(entity =>
             {
-                entity.ToTable(name: "User");
+                entity.ToTable(name: "Users");
             });
 
             builder.Entity<IdentityRole>(entity =>
             {
-                entity.ToTable(name: "Role");
+                entity.ToTable(name: "Roles");
             });
             builder.Entity<IdentityUserRole<string>>(entity =>
             {
