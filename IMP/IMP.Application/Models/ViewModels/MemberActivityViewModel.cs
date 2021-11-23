@@ -10,7 +10,7 @@ namespace IMP.Application.Models.ViewModels
     {
         public int CampaignActivityId { get; set; }
         public int CampaignMemberId { get; set; }
-        public bool Status { get; set; }
+        public int Status { get; set; }
         public List<ActivityCommentViewModel> ActivityComments { get; set; }
         public List<EvidenceViewModel> Evidences { get; set; }
     }
