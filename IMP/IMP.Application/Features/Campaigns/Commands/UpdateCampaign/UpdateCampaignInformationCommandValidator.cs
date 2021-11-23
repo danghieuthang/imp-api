@@ -24,7 +24,7 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
 
             RuleFor(x => x.ApplyingDate.Value).Must((x, y) =>
             {
-                return y.CompareTo(x.OpeningDate) > 0;
+                return y.CompareTo(x.OpeningDate) >= 0;
             }).WithMessage("Ngày nộp đơn phải lớn hơn ngày bắt đầu chiến dịch.")
                 .When(x => x.ApplyingDate.HasValue);
 
