@@ -44,6 +44,7 @@ namespace IMP.Domain.Entities
         public string Condition { get; set; }
         [MaxLength(256)]
         public string Target { get; set; }
+        public bool UseForReward { get; set; }
 
         public ICollection<VoucherCode> VoucherCodes { get; set; }
         public ICollection<CampaignVoucher> CampaignVouchers { get; set; }

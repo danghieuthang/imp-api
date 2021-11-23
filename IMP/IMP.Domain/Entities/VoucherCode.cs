@@ -11,9 +11,6 @@ namespace IMP.Domain.Entities
     {
         [ForeignKey("Voucher")]
         public int VoucherId { get; set; }
-        [ForeignKey("Campaign")]
-        public int? CampaignId { get; set; }
-
         [MaxLength(256)]
         public string Code { get; set; }
         public int Quantity { get; set; }

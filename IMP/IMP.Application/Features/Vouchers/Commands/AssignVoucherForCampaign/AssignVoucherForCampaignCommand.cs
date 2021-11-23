@@ -18,7 +18,8 @@ namespace IMP.Application.Features.Vouchers.Commands.AssignVoucherForCampaign
     {
         public int VoucherId { get; set; }
         public int CampaignId { get; set; }
-        public int Quantity { get; set; }
+        public int? QuantityForInfluencer { get; set; }
+        public int PercentForInfluencer { get; set; }
         public class AssignVoucherForCampaignCommandHandler : CommandHandler<AssignVoucherToCampaignCommand, CampaignVoucherViewModel>
         {
             private readonly IAuthenticatedUserService _authenticatedUserService;

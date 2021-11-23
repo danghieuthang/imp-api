@@ -27,7 +27,7 @@ namespace IMP.Infrastructure.Persistence.Seeds
             await SeedRankLevelAsync(unitOfWork);
             await SeedEvidenceTypeAsync(unitOfWork);
             await DefaultLocation.SeedLocationAsync(unitOfWork);
-            await DefaultMileStone.SeedMilestonesAsync(unitOfWork);
+            //await DefaultMileStone.SeedMilestonesAsync(unitOfWork);
         }
         public static async Task SeedBlockTypeAsync(IUnitOfWork unitOfWork)
         {

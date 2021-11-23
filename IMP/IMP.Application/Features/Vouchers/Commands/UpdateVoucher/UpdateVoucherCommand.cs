@@ -36,6 +36,8 @@ namespace IMP.Application.Features.Vouchers.Commands.UpdateVoucher
         public string Action { get; set; }
         public string Condition { get; set; }
         public string Target { get; set; }
+        public bool UseForReward { get; set; }
+
 
         public class UpdateVoucherCommandHandler : CommandHandler<UpdateVoucherCommand, VoucherViewModel>
         {
