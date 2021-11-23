@@ -10,5 +10,6 @@ namespace IMP.Domain.Settings
     {
         public int MaximumSize { get; set; }
         public IEnumerable<string> AllowTypes { get; set; }
+        public int MaximumVideoSize { get; set; }
     }
 }

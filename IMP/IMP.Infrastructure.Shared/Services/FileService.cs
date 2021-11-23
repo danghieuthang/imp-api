@@ -23,7 +23,7 @@ namespace IMP.Infrastructure.Shared.Services
             _imageSettings = options.Value;
         }
 
-        private List<ValidationError> ValidateFile(IFormFile formFile)
+        private List<ValidationError> ValidateImageFile(IFormFile formFile)
         {
             List<ValidationError> errors = new();
             if (!_imageSettings.AllowTypes.Contains(formFile.ContentType))
@@ -36,9 +36,18 @@ namespace IMP.Infrastructure.Shared.Services
             };
             return errors;
         }
+        private List<ValidationError> ValidateVideoFile(IFormFile formFile)
+        {
+            List<ValidationError> errors = new();
+            if (formFile.Length > _imageSettings.MaximumVideoSize * 1024 * 1024)
+            {
+                errors.Add(new ValidationError(field: "file", message: $"Dung lượng video không được quá {_imageSettings.MaximumVideoSize}MB."));
+            };
+            return errors;
+        }
         public async Task<Response<UploadFileResponse>> UploadImage(string user, UploadFileRequest request)
         {
-            var errors = ValidateFile(request.File);
+            var errors = ValidateImageFile(request.File);
             if (errors.Count > 0)
             {
                 throw new ValidationException(errors);
@@ -48,9 +57,16 @@ namespace IMP.Infrastructure.Shared.Services
             return new Response<UploadFileResponse>(new UploadFileResponse(url));
         }
 
-        public Task<Response<UploadFileResponse>> UploadVideo(string user, UploadFileRequest request)
+        public async Task<Response<UploadFileResponse>> UploadVideo(string user, UploadFileRequest request)
         {
-            throw new System.NotImplementedException();
+            var errors = ValidateVideoFile(request.File);
+            if (errors.Count > 0)
+            {
+                throw new ValidationException(errors);
+            }
+            request.Subfolders.Insert(0, user);
+            string url = await _firebaseService.UploadFile(request.File.OpenReadStream(), request.File.FileName, request.Subfolders.ToArray());
+            return new Response<UploadFileResponse>(new UploadFileResponse(url));
         }
     }
 }

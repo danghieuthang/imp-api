@@ -59,7 +59,7 @@ namespace IMP.WebApi.Controllers.v1
         [ProducesResponseType(typeof(MemberActivityViewModel), 200)]
         public async Task<IActionResult> Pending([FromRoute] int id)
         {
-            return Ok(await Mediator.Send(new ChangeMemberActivityStatusCommand { Id = id, Status = MemberActivityStatus.Pending }));
+            return Ok(await Mediator.Send(new ChangeMemberActivityStatusCommand { Id = id, Status = MemberActivityStatus.Waiting }));
         }
     }
 }
