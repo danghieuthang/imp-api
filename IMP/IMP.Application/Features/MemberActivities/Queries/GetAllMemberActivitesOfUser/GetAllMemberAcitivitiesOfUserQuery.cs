@@ -25,8 +25,8 @@ namespace IMP.Application.Features.MemberActivities.Queries.GetAllMemberActivite
             public override async Task<Response<List<MemberActivityViewModel>>> Handle(GetAllMemberAcitivitiesOfUserQuery request, CancellationToken cancellationToken)
             {
                 var memberActivities = UnitOfWork.Repository<MemberActivity>().GetAll(
-                        predicate: x => (request.ApplicationUserId == null || (request.ApplicationUserId != null && request.ApplicationUserId.Value == x.CampaignMember.InfluencerId))
-                            || (request.CampaignMemberId == null || (request.CampaignMemberId != null && request.CampaignMemberId.Value == x.CampaignMemberId))
+                        predicate: x => (request.ApplicationUserId != null && request.ApplicationUserId.Value == x.CampaignMember.InfluencerId)
+                            || (request.CampaignMemberId != null && request.CampaignMemberId.Value == x.CampaignMemberId)
                             ).ToList();
 
                 var memberActivityViews = Mapper.Map<List<MemberActivityViewModel>>(memberActivities);
