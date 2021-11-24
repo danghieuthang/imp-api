@@ -3,6 +3,7 @@ using IMP.Application.Interfaces;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
 using IMP.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,10 @@ namespace IMP.Application.Features.CampaignMembers.Queries.GetCampaignMemberById
 
             public override async Task<Response<CampaignMemberViewModel>> Handle(GetCampaignMemberByIdQuery request, CancellationToken cancellationToken)
             {
-                var entity = await Repository.FindSingleAsync(x => x.Id == request.Id, x => x.Influencer, x => x.ApprovedBy, x => x.MemberActivities);
+                var entity = await Repository.FindSingleAsync(x => x.Id == request.Id,
+                     include: x => x.Include(y => y.Influencer).Include(y => y.ApprovedBy)
+                       .Include(y => y.MemberActivities).ThenInclude(z => z.ActivityComments)
+                       .Include(y => y.MemberActivities).ThenInclude(z => z.Evidences));
                 if (entity == null)
                 {
                     throw new KeyNotFoundException();
