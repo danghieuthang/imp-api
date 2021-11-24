@@ -32,7 +32,7 @@ namespace IMP.WebApi.Controllers.v1
         /// </summary>
         /// <param name="id">The id of member activity</param>
         /// <returns></returns>
-        [HttpPut("id/accept")]
+        [HttpPut("{id}/accept")]
         [Authorize(Roles = "Brand")]
         [ProducesResponseType(typeof(MemberActivityViewModel), 200)]
         public async Task<IActionResult> Accept([FromRoute] int id)
@@ -46,7 +46,7 @@ namespace IMP.WebApi.Controllers.v1
         /// </summary>
         /// <param name="id">The id of member activity</param>
         /// <returns></returns>
-        [HttpPut("id/reject")]
+        [HttpPut("{id}/reject")]
         [Authorize(Roles = "Brand")]
         [ProducesResponseType(typeof(MemberActivityViewModel), 200)]
         public async Task<IActionResult> Reject([FromRoute] int id)
@@ -54,7 +54,7 @@ namespace IMP.WebApi.Controllers.v1
             return Ok(await Mediator.Send(new ChangeMemberActivityStatusCommand { Id = id, Status = MemberActivityStatus.UnComleted }));
         }
 
-        [HttpPut("id/pending")]
+        [HttpPut("{id}/pending")]
         [Authorize(Roles = "Influencer")]
         [ProducesResponseType(typeof(MemberActivityViewModel), 200)]
         public async Task<IActionResult> Pending([FromRoute] int id)
