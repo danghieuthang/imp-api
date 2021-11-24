@@ -28,7 +28,7 @@ namespace IMP.Application.Features.CampaignMembers.Queries.GetCampaignMemberOfCa
             {
                 var campaignMember = await UnitOfWork.Repository<CampaignMember>().FindSingleAsync(
                         predicate: x => x.CampaignId == request.CampaignId && x.InfluencerId == _authenticatedUserService.ApplicationUserId,
-                        include: x => x.Include(y => y.MemberActivities));
+                        include: x => x.Include(y => y.MemberActivities).ThenInclude(z => z.CampaignActivity));
                 if (campaignMember == null)
                 {
                     throw new KeyNotFoundException();

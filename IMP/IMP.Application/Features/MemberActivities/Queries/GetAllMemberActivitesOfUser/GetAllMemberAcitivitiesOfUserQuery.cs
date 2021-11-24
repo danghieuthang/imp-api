@@ -28,7 +28,8 @@ namespace IMP.Application.Features.MemberActivities.Queries.GetAllMemberActivite
                 var memberActivities = UnitOfWork.Repository<MemberActivity>().GetAll(
                         predicate: x => (request.ApplicationUserId != null && request.ApplicationUserId.Value == x.CampaignMember.InfluencerId)
                             || (request.CampaignMemberId != null && request.CampaignMemberId.Value == x.CampaignMemberId),
-                        include: x => x.Include(y => y.CampaignActivity)
+                        include: x => x.Include(y => y.CampaignActivity).Include(z => z.Evidences)
+                            .Include(y => y.ActivityComments).ThenInclude(y => y.ApplicationUser)
                             ).ToList();
 
                 var memberActivityViews = Mapper.Map<List<MemberActivityViewModel>>(memberActivities);
