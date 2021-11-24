@@ -381,6 +381,8 @@ namespace IMP.Application.Mappings
             CreateMap<MemberActivity, MemberActivityViewModel>();
             CreateMap<ActivityComment, ActivityCommentViewModel>();
             #endregion
+
+            CreateMap<Notification, NotificationViewModel>();
         }
 
         public IDictionary<string, string> CreateDynamicObjectFromItems(ICollection<BlockItem> items)
