@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace IMP.Application.Features.MemberActivities.Queries.GetAllMemberActivitesOfUser
 {
@@ -26,7 +27,8 @@ namespace IMP.Application.Features.MemberActivities.Queries.GetAllMemberActivite
             {
                 var memberActivities = UnitOfWork.Repository<MemberActivity>().GetAll(
                         predicate: x => (request.ApplicationUserId != null && request.ApplicationUserId.Value == x.CampaignMember.InfluencerId)
-                            || (request.CampaignMemberId != null && request.CampaignMemberId.Value == x.CampaignMemberId)
+                            || (request.CampaignMemberId != null && request.CampaignMemberId.Value == x.CampaignMemberId),
+                        include: x => x.Include(y => y.CampaignActivity)
                             ).ToList();
 
                 var memberActivityViews = Mapper.Map<List<MemberActivityViewModel>>(memberActivities);
