@@ -6,6 +6,7 @@ using IMP.Application.Models;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
 using IMP.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,11 +50,17 @@ namespace IMP.Application.Features.ActivityComments.Commands.CreateActivityComme
                 var activityComment = new ActivityComment
                 {
                     MemberActivityId = memberACtivity.Id,
-                    ApplicationUserId = _authenticatedUserService.ApplicationUserId
+                    ApplicationUserId = _authenticatedUserService.ApplicationUserId,
+                    Comment = request.Comment
                 };
 
                 UnitOfWork.Repository<ActivityComment>().Add(activityComment);
                 await UnitOfWork.CommitAsync();
+
+
+                activityComment = await UnitOfWork.Repository<ActivityComment>().FindSingleAsync(x => x.Id == activityComment.Id,
+                    include: x => x.Include(y => y.ApplicationUser));
+
                 var activityCommentView = Mapper.Map<ActivityCommentViewModel>(activityComment);
                 return new Response<ActivityCommentViewModel>(activityCommentView);
             }
