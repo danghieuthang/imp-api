@@ -164,14 +164,14 @@ namespace IMP.WebApi.Controllers.v1
         [AllowAnonymous]
         public async Task<IActionResult> GetImportCodesTemplate()
         {
-            string path = Path.Combine(Directory.GetCurrentDirectory(), "App_Datas", "ExcelTemplates", "import_voucher_code_template.xlsx");
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "App_Datas", "ExcelTemplates", "import-voucher-template_new.xlsx");
             if (!System.IO.File.Exists(path))
             {
                 return NotFound();
             }
             var stream = await System.IO.File.ReadAllBytesAsync(path);
 
-            return File(stream, "application/octet-stream", "import_voucher_code_template.xlsx");
+            return File(stream, "application/octet-stream", "import-voucher-template_new.xlsx");
 
         }
 
