@@ -59,7 +59,7 @@ namespace IMP.Application.Features.VoucherCodes.Commands.UpdateVoucherCode
 
                 codes.ForEach(x =>
                 {
-                    var requestCode = requestVoucherCodes.Where(x => x.Id == x.Id).FirstOrDefault();
+                    var requestCode = requestVoucherCodes.Where(y => y.Id == x.Id).FirstOrDefault();
                     if (requestCode != null)
                     {
                         x.Code = requestCode.Code.ToUpper();
