@@ -44,6 +44,12 @@ namespace IMP.Infrastructure.Persistence.Services
                 case NotificationType.AdminPendingCampaign:
                     notification.Message = "Chiến dịch đang được xem xét lại.";
                     break;
+                case NotificationType.BrandApprovedJoinCampaign:
+                    notification.Message = "Bạn đã được nhãn hàng đồng ý thăm gia chiến dịch.";
+                    break;
+                case NotificationType.BrandCancelJoinCampaign:
+                    notification.Message = "Bạn đã bị nhãn hàng từ chối thăm gia chiến dịch.";
+                    break;
                 default:
                     notification.Message = "";
                     break;

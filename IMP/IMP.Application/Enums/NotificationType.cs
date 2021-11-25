@@ -29,9 +29,10 @@ namespace IMP.Application.Enums
 
         #region Influencer
         // Brand đồng ý cho influencer thăm gia chiến dịch
-        BrandApprovedJoinCampaigns = 21,
+        BrandApprovedJoinCampaign = 21,
+        BrandCancelJoinCampaign = 22,
         // Brand đồng ý với member activity
-        BrandApprovedMemberActivity = 22,
+        BrandApprovedMemberActivity = 23,
         #endregion
     }
 }

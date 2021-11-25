@@ -2,6 +2,7 @@
 using IMP.Application.Enums;
 using IMP.Application.Exceptions;
 using IMP.Application.Interfaces;
+using IMP.Application.Interfaces.Services;
 using IMP.Application.Models;
 using IMP.Application.Wrappers;
 using IMP.Domain.Entities;
@@ -24,10 +25,13 @@ namespace IMP.Application.Features.Campaigns.Commands.ProcessCampaignMember
         {
             private readonly IGenericRepository<CampaignMember> _campaignMemberRepository;
             private readonly IAuthenticatedUserService _authenticatedUserService;
-            public ProcessCampaignMemberCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticatedUserService authenticatedUserService) : base(unitOfWork, mapper)
+            private readonly INotificationService _notificationService;
+
+            public ProcessCampaignMemberCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticatedUserService authenticatedUserService, INotificationService notificationService) : base(unitOfWork, mapper)
             {
                 _campaignMemberRepository = unitOfWork.Repository<CampaignMember>();
                 _authenticatedUserService = authenticatedUserService;
+                _notificationService = notificationService;
             }
 
             public override async Task<Response<bool>> Handle(ProcessCampaignMemberCommand request, CancellationToken cancellationToken)
@@ -83,7 +87,34 @@ namespace IMP.Application.Features.Campaigns.Commands.ProcessCampaignMember
                 campaignMember.ApprovedById = _authenticatedUserService.ApplicationUserId;
                 _campaignMemberRepository.Update(campaignMember);
                 await UnitOfWork.CommitAsync();
+
+                if (campaignMember.Status == (int)CampaignMemberStatus.Cancelled)
+                {
+                    await _notificationService.PutNotication(campaignMember.InfluencerId, campaignMember.Id, NotificationType.BrandCancelJoinCampaign);
+                }
+                else
+                {
+                    await _notificationService.PutNotication(campaignMember.InfluencerId, campaignMember.Id, NotificationType.BrandApprovedJoinCampaign);
+                }
+
                 return new Response<bool>(true);
+            }
+
+
+            private Task SendNotification(int applicationUserId, int redirectId, CampaignMemberStatus status)
+            {
+                _ = Task.Run(() =>
+                {
+                    if (status == CampaignMemberStatus.Cancelled)
+                    {
+                        _notificationService.PutNotication(applicationUserId, redirectId, NotificationType.BrandCancelJoinCampaign);
+                    }
+                    else
+                    {
+                        _notificationService.PutNotication(applicationUserId, redirectId, NotificationType.BrandApprovedJoinCampaign);
+                    }
+                });
+                return Task.CompletedTask;
             }
 
         }
