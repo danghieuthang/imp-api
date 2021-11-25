@@ -2,6 +2,7 @@
 using IMP.Application.Enums;
 using IMP.Application.Exceptions;
 using IMP.Application.Interfaces;
+using IMP.Application.Interfaces.Services;
 using IMP.Application.Models;
 using IMP.Application.Models.Compaign;
 using IMP.Application.Wrappers;
@@ -22,10 +23,12 @@ namespace IMP.Application.Features.Campaigns.Commands.ApprovalCampaign
         {
             private readonly IGenericRepository<Campaign> _campaignRepository;
             private readonly IAuthenticatedUserService _authenticatedUserService;
-            public ApprovalCampaignCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticatedUserService authenticatedUserService) : base(unitOfWork, mapper)
+            private readonly INotificationService _notificationService;
+            public ApprovalCampaignCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticatedUserService authenticatedUserService, INotificationService notificationService) : base(unitOfWork, mapper)
             {
                 _campaignRepository = unitOfWork.Repository<Campaign>();
                 _authenticatedUserService = authenticatedUserService;
+                _notificationService = notificationService;
             }
 
             public override async Task<Response<CampaignViewModel>> Handle(ApprovalCampaignCommand request, CancellationToken cancellationToken)
@@ -42,12 +45,15 @@ namespace IMP.Application.Features.Campaigns.Commands.ApprovalCampaign
 
                 campaign.Status = (int)CampaignStatus.Approved;
                 campaign.ApprovedById = _authenticatedUserService.ApplicationUserId;
-
                 _campaignRepository.Update(campaign);
                 await UnitOfWork.CommitAsync();
+
+                await _notificationService.PutNotication(campaign.CreatedById, campaign.Id, NotificationType.AdminApprovedCampaign);
+
                 var campaignViewModel = Mapper.Map<CampaignViewModel>(campaign);
                 return new Response<CampaignViewModel>(campaignViewModel);
             }
+
         }
     }
 }

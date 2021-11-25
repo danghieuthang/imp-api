@@ -2,6 +2,7 @@
 using IMP.Application.Enums;
 using IMP.Application.Exceptions;
 using IMP.Application.Interfaces;
+using IMP.Application.Interfaces.Services;
 using IMP.Application.Models;
 using IMP.Application.Models.Compaign;
 using IMP.Application.Wrappers;
@@ -24,10 +25,12 @@ namespace IMP.Application.Features.Campaigns.Commands.CancelCampaign
         {
             private readonly IGenericRepository<Campaign> _campaignRepository;
             private readonly IAuthenticatedUserService _authenticatedUserService;
-            public CancelCampaignCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticatedUserService authenticatedUserService) : base(unitOfWork, mapper)
+            private readonly INotificationService _notificationService;
+            public CancelCampaignCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticatedUserService authenticatedUserService, INotificationService notificationService) : base(unitOfWork, mapper)
             {
                 _campaignRepository = unitOfWork.Repository<Campaign>();
                 _authenticatedUserService = authenticatedUserService;
+                _notificationService = notificationService;
             }
 
             public override async Task<Response<CampaignViewModel>> Handle(CancelCampaignCommand request, CancellationToken cancellationToken)
@@ -48,6 +51,9 @@ namespace IMP.Application.Features.Campaigns.Commands.CancelCampaign
 
                 _campaignRepository.Update(campaign);
                 await UnitOfWork.CommitAsync();
+
+                await _notificationService.PutNotication(campaign.CreatedById, campaign.Id, NotificationType.AdminRejectCampaign);
+
                 var campaignViewModel = Mapper.Map<CampaignViewModel>(campaign);
                 return new Response<CampaignViewModel>(data: campaignViewModel);
             }
