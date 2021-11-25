@@ -11,6 +11,7 @@ using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -21,9 +22,9 @@ namespace IMP.Application.Features.Vouchers.Commands.ImportVoucherCodes
 {
     public class ImportVoucherCodesCommand : ICommand<bool>
     {
-        [FromForm(Name ="voucher_id")]
+        [FromForm(Name = "voucher_id")]
         public int VoucherId { get; set; }
-        [FromForm(Name ="file")]
+        [FromForm(Name = "file")]
         public IFormFile File { get; set; }
 
     }
@@ -101,12 +102,41 @@ namespace IMP.Application.Features.Vouchers.Commands.ImportVoucherCodes
 
             }
 
+            var newVoucherCodes = new List<VoucherCode>();
 
-            voucher.VoucherCodes = voucher.VoucherCodes.Union(codes).ToList();
+            foreach (var code in voucher.VoucherCodes)
+            {
+                var codeExist = codes.Where(x => x.Code.ToUpper() == code.Code.ToUpper()).FirstOrDefault();
+                if (codeExist != null)
+                {
+                    code.Quantity = codeExist.Quantity;
+                    codes.Remove(codeExist);
+                }
+
+                newVoucherCodes.Add(code);
+            }
+            voucher.VoucherCodes = newVoucherCodes.Union(codes).ToList();
             _voucherRepository.Update(voucher);
             await UnitOfWork.CommitAsync();
 
             return new Response<bool>(true, message: "Import thành công.");
+        }
+
+        internal class VoucherCodeComparer : IEqualityComparer<VoucherCode>
+        {
+            public bool Equals(VoucherCode code1, VoucherCode code2)
+            {
+                if (code1.Code.ToString().ToUpper() == code2.Code.ToString().ToUpper())
+                {
+                    return true;
+                }
+                return false;
+            }
+
+            public int GetHashCode([DisallowNull] VoucherCode obj)
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }
