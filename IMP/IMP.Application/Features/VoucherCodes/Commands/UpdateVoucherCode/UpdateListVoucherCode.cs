@@ -8,6 +8,7 @@ using IMP.Domain.Entities;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -52,11 +53,13 @@ namespace IMP.Application.Features.VoucherCodes.Commands.UpdateVoucherCode
                     throw new ValidationException(new ValidationError("voucher_id", "Không có quyền."));
                 }
 
+                var requestVoucherCodes = request.VoucherCodes.Distinct(new VoucherCodeComparer()).ToList();
+
                 var codes = voucher.VoucherCodes.ToList();
 
                 codes.ForEach(x =>
                 {
-                    var requestCode = request.VoucherCodes.Where(x => x.Id == x.Id).FirstOrDefault();
+                    var requestCode = requestVoucherCodes.Where(x => x.Id == x.Id).FirstOrDefault();
                     if (requestCode != null)
                     {
                         x.Code = requestCode.Code.ToUpper();
@@ -74,6 +77,23 @@ namespace IMP.Application.Features.VoucherCodes.Commands.UpdateVoucherCode
                 return new Response<VoucherViewModel>(views);
 
 
+            }
+
+            internal class VoucherCodeComparer : IEqualityComparer<VoucherCodeRequest>
+            {
+                public bool Equals(VoucherCodeRequest code1, VoucherCodeRequest code2)
+                {
+                    if (code1.Code.ToString().ToUpper() == code2.Code.ToString().ToUpper())
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+
+                public int GetHashCode([DisallowNull] VoucherCodeRequest obj)
+                {
+                    return obj.Code.ToUpper().GetHashCode();
+                }
             }
         }
     }
