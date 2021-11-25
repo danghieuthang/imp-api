@@ -65,8 +65,5 @@
     <None Update="App_Datas\ExcelTemplates\import_voucher_template.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="App_Datas\ExcelTemplates\import_voucher_code_template.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 </Project>
