@@ -89,7 +89,7 @@ namespace IMP.Application.Features.Vouchers.Commands.ImportVoucherCodes
                         int.TryParse(row.GetCell(row.FirstCellNum + 1).ToString(), out quantity);
                         codes.Add(new VoucherCode
                         {
-                            Code = row.GetCell(row.FirstCellNum).ToString(),
+                            Code = row.GetCell(row.FirstCellNum).ToString().ToUpper(),
                             Quantity = quantity,
                             VoucherId = request.VoucherId,
                         });
@@ -115,7 +115,7 @@ namespace IMP.Application.Features.Vouchers.Commands.ImportVoucherCodes
 
                 newVoucherCodes.Add(code);
             }
-            voucher.VoucherCodes = newVoucherCodes.Union(codes).ToList();
+            voucher.VoucherCodes = newVoucherCodes.Union(codes.Distinct(new VoucherCodeComparer())).ToList();
             _voucherRepository.Update(voucher);
             await UnitOfWork.CommitAsync();
 
@@ -135,7 +135,7 @@ namespace IMP.Application.Features.Vouchers.Commands.ImportVoucherCodes
 
             public int GetHashCode([DisallowNull] VoucherCode obj)
             {
-                throw new NotImplementedException();
+                return obj.Code.ToUpper().GetHashCode();
             }
         }
     }
