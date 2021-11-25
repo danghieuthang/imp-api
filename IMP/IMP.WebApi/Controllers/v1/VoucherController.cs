@@ -20,6 +20,8 @@ using IMP.Application.Features.Vouchers.Commands.ImportVouchers;
 using IMP.Application.Features.Vouchers.Queries.GetVoucherCanAvailableForCampaign;
 using IMP.Application.Features.Vouchers.Queries.GetRangeOfVoucher;
 using IMP.Application.Features.Vouchers.Commands.RemoveVoucherFromCampaign;
+using System.Collections.Generic;
+using IMP.Application.Features.VoucherCodes.Commands.UpdateVoucherCode;
 
 namespace IMP.WebApi.Controllers.v1
 {
@@ -151,11 +153,28 @@ namespace IMP.WebApi.Controllers.v1
         [ProducesResponseType(typeof(Response<bool>), 200)]
         [HttpPost("import-voucher")]
         [Authorize(Roles = "Brand")]
-        public async Task<IActionResult> ImportVouchers([FromRoute] int id, [FromForm] ImportVoucherCommand command)
+        public async Task<IActionResult> ImportVouchers([FromForm] ImportVoucherCommand command)
         {
             return Ok(await Mediator.Send(command));
         }
 
+        /// <summary>
+        ///  Update list voucher code of voucher
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<VoucherViewModel>), 200)]
+        [HttpPut("{id}/update-voucher-codes")]
+        [Authorize(Roles = "Brand")]
+        public async Task<IActionResult> UpdateVoucherCodes([FromRoute] int id, [FromBody] UpdateListVoucherCodeCommand command)
+        {
+            if (id != command.VoucherId)
+            {
+                return BadRequest();
+            }
+            return Ok(await Mediator.Send(command));
+        }
         /// <summary>
         /// Download import codes template
         /// </summary>
