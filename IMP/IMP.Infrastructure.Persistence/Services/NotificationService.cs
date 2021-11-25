@@ -35,6 +35,15 @@ namespace IMP.Infrastructure.Persistence.Services
                 case NotificationType.BrandCreatedCampaign:
                     notification.Message = "Chiến dịch chờ duyệt.";
                     break;
+                case NotificationType.AdminApprovedCampaign:
+                    notification.Message = "Chiến dịch đã được duyệt.";
+                    break;
+                case NotificationType.AdminRejectCampaign:
+                    notification.Message = "Chiến dịch bị từ chối.";
+                    break;
+                case NotificationType.AdminPendingCampaign:
+                    notification.Message = "Chiến dịch đang được xem xét lại.";
+                    break;
                 default:
                     notification.Message = "";
                     break;
