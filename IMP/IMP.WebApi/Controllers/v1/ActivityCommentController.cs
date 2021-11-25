@@ -1,4 +1,5 @@
 ﻿using IMP.Application.Features.ActivityComments.Commands.CreateActivityComment;
+using IMP.Application.Features.ActivityComments.Commands.DeleteAcitivityComment;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
 using Microsoft.AspNetCore.Authorization;
@@ -23,6 +24,17 @@ namespace IMP.WebApi.Controllers.v1
         public async Task<IActionResult> Create([FromBody] CreateActivityCommentCommand command)
         {
             return StatusCode(201, await Mediator.Send(command));
+        }
+        /// <summary>
+        /// Delete activity comment
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(Response<bool>), 200)]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new DeleteActivityCommentByIdCommand { Id = id }));
         }
     }
 }
