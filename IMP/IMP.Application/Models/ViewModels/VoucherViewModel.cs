@@ -38,6 +38,7 @@ namespace IMP.Application.Models.ViewModels
         public string Code { get; set; }
         public int Quantity { get; set; }
         public int QuantityUsed { get; set; }
+        public int? CampaignMemberId { get; set; }
     }
 
     public class UserVoucherViewModel : BaseViewModel<int>
