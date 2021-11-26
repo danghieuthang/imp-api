@@ -17,7 +17,7 @@ namespace IMP.Application.Interfaces
         /// <param name="ipAddress"></param>
         /// <param name="locale">vn|en</param>
         /// <returns></returns>
-        string CreatePaymentUrl(int amount, int walletId, string paymentInfo, string locale = "vn");
+        string CreatePaymentUrl(int amount, int walletId, string paymentInfo, string locale = "vn", string returnUrl = "");
 
         /// <summary>
         /// Verify payment tranasction

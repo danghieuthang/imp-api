@@ -89,7 +89,6 @@ namespace IMP.WebApi.Controllers.v1
         [HttpPost("me/request-charge")]
         public async Task<IActionResult> RequestCharge([FromBody] RequestChargeWalletCommand command)
         {
-            command.ApplicationUserId = _appId;
             return Ok(await Mediator.Send(command));
         }
 

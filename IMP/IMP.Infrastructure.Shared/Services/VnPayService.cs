@@ -55,7 +55,7 @@ namespace IMP.Infrastructure.Shared.Services
         }
 
 
-        public string CreatePaymentUrl(int amount, int walletId, string paymentInfo, string locale)
+        public string CreatePaymentUrl(int amount, int walletId, string paymentInfo, string locale, string returnUrl = null)
         {
             VnPayLibrary vnPay = new();
 
@@ -77,7 +77,7 @@ namespace IMP.Infrastructure.Shared.Services
             }
             vnPay.AddRequestData("vnp_OrderInfo", paymentInfo);
             vnPay.AddRequestData("vnp_OrderType", "other"); //default value: other
-            vnPay.AddRequestData("vnp_ReturnUrl", _returnUrl);
+            vnPay.AddRequestData("vnp_ReturnUrl", returnUrl);
             vnPay.AddRequestData("vnp_TxnRef", DateTime.Now.Ticks.ToString() + "_" + walletId); // Mã tham chiếu của giao dịch tại hệ thống của merchant. Mã này là duy nhất dùng để phân biệt các đơn hàng gửi sang VNPAY. Không được trùng lặp trong ngày
 
             //Add Params of 2.1.0 Version
@@ -95,17 +95,18 @@ namespace IMP.Infrastructure.Shared.Services
             var isValidateSignature = vnPay.ValidateSignature(sercureHash, secretKey: _vnPaySettings.Vnp_HashSecret);
             if (isValidateSignature)
             {
-                var responseTranactionData = await QueryTransacion(requestTransactionData);
+                //var responseTranactionData = await QueryTransacion(requestTransactionData);
 
-                if (responseTranactionData != null
-                    && responseTranactionData["vnp_Amount"] == requestTransactionData["vnp_Amount"]
-                    && responseTranactionData["vnp_TxnRef"] == requestTransactionData["vnp_TxnRef"]
-                    && responseTranactionData["vnp_PayDate"] == requestTransactionData["vnp_PayDate"]
-                    // vnp_TransactionStatus: Success - 00
-                    && responseTranactionData["vnp_TransactionStatus"] == "00")
-                {
-                    return true;
-                }
+                //if (responseTranactionData != null
+                //    && responseTranactionData["vnp_Amount"] == requestTransactionData["vnp_Amount"]
+                //    && responseTranactionData["vnp_TxnRef"] == requestTransactionData["vnp_TxnRef"]
+                //    && responseTranactionData["vnp_PayDate"] == requestTransactionData["vnp_PayDate"]
+                //    // vnp_TransactionStatus: Success - 00
+                //    && responseTranactionData["vnp_TransactionStatus"] == "00")
+                //{
+                //    return true;
+                //}
+                return true;
             }
 
             return false;
