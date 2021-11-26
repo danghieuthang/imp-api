@@ -32,15 +32,27 @@ namespace IMP.Application.Features.Wallets.Commands.RequestCharge
         public class RequestChargeWalletCommandHandler : CommandHandler<RequestChargeWalletCommand, ChargeWalletResponse>
         {
             private readonly IVnPayService _vnPayService;
+            private readonly IAuthenticatedUserService _authenticatedUserService;
 
-            public RequestChargeWalletCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IVnPayService vnPayService) : base(unitOfWork, mapper)
+            public RequestChargeWalletCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IVnPayService vnPayService, IAuthenticatedUserService authenticatedUserService) : base(unitOfWork, mapper)
             {
                 _vnPayService = vnPayService;
+                _authenticatedUserService = authenticatedUserService;
             }
 
             public override async Task<Response<ChargeWalletResponse>> Handle(RequestChargeWalletCommand request, CancellationToken cancellationToken)
             {
-                var wallet = await UnitOfWork.Repository<Wallet>().FindSingleAsync(x => x.ApplicationUserId == request.ApplicationUserId);
+                Wallet wallet;
+                if (_authenticatedUserService.BrandId.HasValue)
+                {
+                    var brand = await UnitOfWork.Repository<Brand>().FindSingleAsync(x => x.Id == _authenticatedUserService.BrandId.Value, x => x.Wallet);
+                    wallet = brand.Wallet;
+                }
+                else
+                {
+                    wallet = await UnitOfWork.Repository<Wallet>().FindSingleAsync(x => x.ApplicationUserId == request.ApplicationUserId);
+                }
+
                 if (wallet != null)
                 {
                     string paymentInfo = "Request Charge Wallet " + wallet.Id;

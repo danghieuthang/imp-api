@@ -119,7 +119,7 @@ namespace IMP.Application.Features.WalletTransactions.Commands.ConfirmVnpWalletT
                             await UnitOfWork.CommitAsync();
 
                             // Recharge to wallet
-                            await RechargeWalletAfterTransactionVerified(request.Vnp_Amount / 100, walletId);
+                            //await RechargeWalletAfterTransactionVerified(request.Vnp_Amount / 100, walletId);
 
                             var walletTransactionView = Mapper.Map<WalletTransactionViewModel>(walletTransaction);
                             return new Response<WalletTransactionViewModel>(walletTransactionView);
