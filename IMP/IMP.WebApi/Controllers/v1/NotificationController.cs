@@ -39,7 +39,20 @@ namespace IMP.WebApi.Controllers.v1
         [Authorize]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            return Ok(await Mediator.Send(new DeleteNotificationByIdCommand { Id=id}));
+            return Ok(await Mediator.Send(new DeleteNotificationByIdCommand { Id = id }));
+        }
+
+        /// <summary>
+        /// Get notification by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(Response<NotificationViewModel>), 200)]
+        [Authorize]
+        public async Task<IActionResult> GetById([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new GetNotificationByIdQuery { Id = id }));
         }
 
     }

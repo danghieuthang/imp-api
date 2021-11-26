@@ -62,9 +62,13 @@ namespace IMP.Infrastructure.Persistence.Services
 
         public async Task PutNotication(int applicationUserid, int redirectId, NotificationType notificationType)
         {
-            await AddNotification(applicationUserid, redirectId, notificationType);
+            var notification = await AddNotification(applicationUserid, redirectId, notificationType);
             int totalNotification = await _unitOfWork.Repository<Notification>().CountAsync();
-            string data = JsonConvert.SerializeObject(new { TotalNotification = totalNotification });
+            string data = JsonConvert.SerializeObject(new
+            {
+                TotalNotification = totalNotification,
+                LastNotificationId = notification.Id
+            });
             _ = Task.Run(() =>
             {
                 _firebaseService.PushTotification(data, applicationUserid.ToString());
