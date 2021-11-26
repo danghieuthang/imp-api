@@ -24,26 +24,26 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
 
             RuleFor(x => x.ApplyingDate.Value).Must((x, y) =>
             {
-                return y.CompareTo(x.OpeningDate) >= 0;
-            }).WithMessage("Ngày nộp đơn phải lớn hơn ngày bắt đầu chiến dịch.")
+                return y.CompareTo(x.OpeningDate.Value) >= 0;
+            }).WithMessage("Ngày nộp đơn phải lớn hơn hoặc bằng ngày bắt đầu chiến dịch.")
                 .When(x => x.ApplyingDate.HasValue);
 
             RuleFor(x => x.AdvertisingDate.Value).Must((x, y) =>
             {
-                return y.CompareTo(x.ApplyingDate) > 0;
+                return y.CompareTo(x.ApplyingDate.Value) > 0;
             }).WithMessage("Ngày quảng cáo phải lớn hơn ngày nộp đơn.")
                 .When(x => x.AdvertisingDate.HasValue);
 
 
             RuleFor(x => x.EvaluatingDate.Value).Must((x, y) =>
             {
-                return y.CompareTo(x.AdvertisingDate) > 0;
+                return y.CompareTo(x.AdvertisingDate.Value) > 0;
             }).WithMessage("Ngày đánh giá chiến dịch phải lơn hơn ngày quảng cáo.")
                 .When(x => x.EvaluatingDate.HasValue);
 
             RuleFor(x => x.AnnouncingDate.Value).Must((x, y) =>
             {
-                return y.CompareTo(x.EvaluatingDate) > 0;
+                return y.CompareTo(x.EvaluatingDate.Value) > 0;
             }).WithMessage("Ngày thông báo phải lớn hơn ngày đánh giá.")
                 .When(x => x.AnnouncingDate.HasValue);
 
