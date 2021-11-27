@@ -17,8 +17,8 @@ namespace IMP.Application.Features.CampaignVouchers.Commands.UpdateCampaignVouch
     public class UpdateCampaignVoucherCommand : ICommand<CampaignVoucherViewModel>
     {
         public int Id { get; set; }
-        public int QuantityForInfluencer { get; set; }
-        public int PercentForInfluencer { get; set; }
+        public int? QuantityForInfluencer { get; set; }
+        public int? PercentForInfluencer { get; set; }
         public class UpdateCampaignVoucherCommandHandler : CommandHandler<UpdateCampaignVoucherCommand, CampaignVoucherViewModel>
         {
             private readonly IAuthenticatedUserService _authenticatedUserService;
@@ -39,9 +39,8 @@ namespace IMP.Application.Features.CampaignVouchers.Commands.UpdateCampaignVouch
                 {
                     throw new ValidationException(new ValidationError("id", "Không có quyền chỉnh sửa."));
                 }
-
-                campaignVoucher.QuantityForInfluencer = request.QuantityForInfluencer;
-                campaignVoucher.PercentForInfluencer = request.PercentForInfluencer;
+                campaignVoucher.QuantityForInfluencer = request.QuantityForInfluencer ?? campaignVoucher.QuantityForInfluencer;
+                campaignVoucher.PercentForInfluencer = request.PercentForInfluencer ?? campaignVoucher.PercentForInfluencer;
 
                 UnitOfWork.Repository<CampaignVoucher>().Update(campaignVoucher);
                 await UnitOfWork.CommitAsync();
