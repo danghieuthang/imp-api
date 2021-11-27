@@ -16,6 +16,7 @@ using IMP.Application.Features.Campaigns.Queries.GetCampaignById;
 using IMP.Application.Features.Campaigns.Queries.GetCampaignByInfluencerId;
 using IMP.Application.Features.Campaigns.Queries.GetSumaryMemberByCampaignId;
 using IMP.Application.Features.Vouchers.Queries;
+using IMP.Application.Features.Vouchers.Queries.GetAllVoucherAssignedByCampaign;
 using IMP.Application.Interfaces;
 using IMP.Application.Models.Compaign;
 using IMP.Application.Models.ViewModels;
@@ -254,6 +255,19 @@ namespace IMP.WebApi.Controllers.v1
         {
             return Ok(await Mediator.Send(new GetAllVoucherByCampaignIdQuery { CampaignId = id }));
         }
+
+        /// <summary>
+        /// Get all voucher that have voucher code was assigned for campaign member
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<IEnumerable<VoucherViewModel>>), 200)]
+        [HttpGet("{id}/vouchers-assigned-for-member")]
+        public async Task<IActionResult> GetVoucherAssignedForMember([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new GetAllVoucherAssignedByCampaignQuery { CampaignId = id }));
+        }
+
 
         /// <summary>
         /// Influencer apply to campaign
