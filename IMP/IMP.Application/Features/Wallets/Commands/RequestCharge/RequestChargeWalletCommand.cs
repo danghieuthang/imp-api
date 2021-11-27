@@ -26,7 +26,7 @@ namespace IMP.Application.Features.Wallets.Commands.RequestCharge
             public RequestChargeWalletCommandValidator()
             {
                 RuleFor(x => x.Amount).GreaterThan(50000).WithMessage("Tiền nạp phải lớn hơn 50000 VND.").WithErrorCode(ErrorConstants.Application.WalletTransaction.AmountNotValid.ToString());
-                RuleFor(x => x.ReturnUrl).MustValidUrl();
+                //RuleFor(x => x.ReturnUrl).MustValidUrl();
             }
         }
 
