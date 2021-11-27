@@ -57,6 +57,16 @@ namespace IMP.Application.Features.VoucherCodes.Commands.UpdateVoucherCode
 
                 var codes = voucher.VoucherCodes.ToList();
 
+                // Remove code
+                foreach (var code in codes)
+                {
+                    if (requestVoucherCodes.Any(x => x.Id == code.Id))
+                    {
+                        _voucherCodeRepository.Delete(code);
+                    }
+                }
+
+                // Update exist code
                 codes.ForEach(x =>
                 {
                     var requestCode = requestVoucherCodes.Where(y => y.Id == x.Id).FirstOrDefault();
@@ -66,6 +76,22 @@ namespace IMP.Application.Features.VoucherCodes.Commands.UpdateVoucherCode
                         x.Quantity = requestCode.Quantity;
                     }
                 });
+
+                // Add new code
+                foreach (var requestCode in requestVoucherCodes)
+                {
+                    if (requestCode.Id == 0)
+                    {
+                        codes.Add(new VoucherCode
+                        {
+                            Code = requestCode.Code,
+                            Quantity = requestCode.Quantity,
+                            VoucherId = request.VoucherId
+                        });
+                    }
+                }
+
+
 
                 voucher.VoucherCodes = codes;
 

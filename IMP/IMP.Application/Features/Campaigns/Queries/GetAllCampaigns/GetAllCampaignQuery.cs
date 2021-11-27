@@ -57,6 +57,7 @@ namespace IMP.Application.Features.Campaigns.Queries.GetAllCampaigns
             }
             public override async Task<Response<IPagedList<CampaignViewModel>>> Handle(GetAllCampaignQuery request, CancellationToken cancellationToken)
             {
+                request.Name = string.IsNullOrEmpty(request.Name) ? "" : request.Name;
 
                 var page = await _campaignRepository.GetPagedList(
                     predicate: x => (request.Status.Count == 0 || (request.Status.Count > 0 && request.Status.Contains(x.Status)))
