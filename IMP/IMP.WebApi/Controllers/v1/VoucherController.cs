@@ -22,6 +22,7 @@ using IMP.Application.Features.Vouchers.Queries.GetRangeOfVoucher;
 using IMP.Application.Features.Vouchers.Commands.RemoveVoucherFromCampaign;
 using System.Collections.Generic;
 using IMP.Application.Features.VoucherCodes.Commands.UpdateVoucherCode;
+using IMP.Application.Features.Vouchers.Queries.GetAvailableVoucherForCampaignMember;
 
 namespace IMP.WebApi.Controllers.v1
 {
@@ -235,12 +236,20 @@ namespace IMP.WebApi.Controllers.v1
         {
             return Ok(await Mediator.Send(query));
         }
-
         /// <summary>
-        /// Get list voucher of brand that is available for campaign
+        /// Get list available voucher for campaign member of campaign
         /// </summary>
-        /// <param name="query"></param>
+        /// <param name="campaignId">The campaign id</param>
         /// <returns></returns>
+        [ProducesResponseType(typeof(Response<IEnumerable<VoucherViewModel>>), 200)]
+        [HttpGet("available-for-campaign-member")]
+        [HttpGet("available-for-campaign-member")]
+        [Authorize(Roles = "Brand")]
+        public async Task<IActionResult> GetVoucherAvailableForCampaign([FromQuery(Name = "campaign_id")] int campaignId)
+        {
+            return Ok(await Mediator.Send(new GetAvailableVoucherForCampaignMemberQuery { CampaignId = campaignId }));
+        }
+
         [ProducesResponseType(typeof(Response<IPagedList<VoucherViewModel>>), 200)]
         [HttpGet("available-for-campaign")]
         [Authorize(Roles = "Brand")]
