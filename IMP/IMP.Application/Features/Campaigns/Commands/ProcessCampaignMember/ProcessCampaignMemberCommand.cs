@@ -90,11 +90,11 @@ namespace IMP.Application.Features.Campaigns.Commands.ProcessCampaignMember
 
                 if (campaignMember.Status == (int)CampaignMemberStatus.Cancelled)
                 {
-                    await _notificationService.PutNotication(campaignMember.InfluencerId, campaignMember.Id, NotificationType.BrandCancelJoinCampaign);
+                    await _notificationService.PutNotication(campaignMember.InfluencerId, campaignMember.CampaignId, NotificationType.BrandCancelJoinCampaign);
                 }
                 else
                 {
-                    await _notificationService.PutNotication(campaignMember.InfluencerId, campaignMember.Id, NotificationType.BrandApprovedJoinCampaign);
+                    await _notificationService.PutNotication(campaignMember.InfluencerId, campaignMember.CampaignId, NotificationType.BrandApprovedJoinCampaign);
                 }
 
                 return new Response<bool>(true);
