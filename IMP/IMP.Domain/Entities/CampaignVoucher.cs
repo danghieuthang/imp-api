@@ -18,7 +18,6 @@ namespace IMP.Domain.Entities
         public int QuantityUsed { get; set; }
         public int? QuantityForInfluencer { get; set; }
         public int PercentForInfluencer { get; set; }
-        public int PercentForIMP { get; set; }
         public bool IsDefaultReward { get; set; }
         public bool IsBestInfluencerReward { get; set; }
         public ICollection<CampaignReward> RewardVouchers { get; set; }

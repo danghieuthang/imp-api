@@ -13,5 +13,6 @@ namespace IMP.Application.Models.ViewModels
         public string Url { get; set; }
         public string Message { get; set; }
         public int RedirectId { get; set; }
+        public bool IsRead { get; set; }
     }
 }

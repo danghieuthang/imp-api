@@ -19,7 +19,6 @@ namespace IMP.Application.Features.CampaignVouchers.Commands.UpdateCampaignVouch
         public int Id { get; set; }
         public int QuantityForInfluencer { get; set; }
         public int PercentForInfluencer { get; set; }
-        public int PercentForIMP { get; set; }
         public class UpdateCampaignVoucherCommandHandler : CommandHandler<UpdateCampaignVoucherCommand, CampaignVoucherViewModel>
         {
             private readonly IAuthenticatedUserService _authenticatedUserService;
@@ -43,7 +42,6 @@ namespace IMP.Application.Features.CampaignVouchers.Commands.UpdateCampaignVouch
 
                 campaignVoucher.QuantityForInfluencer = request.QuantityForInfluencer;
                 campaignVoucher.PercentForInfluencer = request.PercentForInfluencer;
-                campaignVoucher.PercentForIMP = request.PercentForIMP;
 
                 UnitOfWork.Repository<CampaignVoucher>().Update(campaignVoucher);
                 await UnitOfWork.CommitAsync();

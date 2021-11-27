@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using IMP.Application.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using IMP.Application.Features.Notifications.Commands.DeleteNotification;
+using IMP.Application.Features.Notifications.Commands.MakeNotificationRead;
 
 namespace IMP.WebApi.Controllers.v1
 {
@@ -54,6 +55,20 @@ namespace IMP.WebApi.Controllers.v1
         {
             return Ok(await Mediator.Send(new GetNotificationByIdQuery { Id = id }));
         }
+
+        /// <summary>
+        /// Make a notification as read
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPut("{id}/read")]
+        [ProducesResponseType(typeof(Response<NotificationViewModel>), 200)]
+        [Authorize]
+        public async Task<IActionResult> Read([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new MakeNotificationIsReadCommand { Id = id }));
+        }
+
 
     }
 }

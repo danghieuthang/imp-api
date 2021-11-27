@@ -20,5 +20,6 @@ namespace IMP.Domain.Entities
         [StringLength(256)]
         public string Message { get; set; }
         public int RedirectId { get; set; }
+        public bool IsRead { get; set; }
     }
 }
