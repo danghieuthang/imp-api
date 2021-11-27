@@ -43,7 +43,12 @@ namespace IMP.Application.Features.Notifications.Commands.DeleteNotification
 
                 int count = await Repository.CountAsync(x => x.ApplicationUserId == _authenticatedUserService.ApplicationUserId);
 
-                string message = JsonConvert.SerializeObject(new { TotalNotification = count });
+                string message = JsonConvert.SerializeObject(
+                    new
+                    {
+                        TotalNotification = count,
+                        LastNotificationId = -1
+                    });
                 await _firebaseService.PushTotification(data: message, _authenticatedUserService.ApplicationUserId.ToString());
 
                 return new Response<int>(entity.Id);
