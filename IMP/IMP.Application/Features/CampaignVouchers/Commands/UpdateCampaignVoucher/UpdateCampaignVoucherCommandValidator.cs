@@ -11,8 +11,10 @@ namespace IMP.Application.Features.CampaignVouchers.Commands.UpdateCampaignVouch
     {
         public UpdateCampaignVoucherCommandValidator()
         {
-            RuleFor(x => x.PercentForInfluencer).GreaterThan(0).WithMessage("Tỉ lệ phải lớn hơn không");
-            RuleFor(x => x.QuantityForInfluencer).GreaterThan(0).WithMessage("Số lượng phải lớn hơn không");
+            RuleFor(x => x.PercentForInfluencer).GreaterThan(0).WithMessage("Tỉ lệ phải lớn hơn 0.").LessThan(100).WithMessage("Tỉ lệ phải nhỏ hơn 100.");
+            RuleFor(x => x.QuantityForInfluencer).GreaterThan(0).WithMessage("Số lượng phải lớn hơn không.");
+            RuleFor(x => x.PercentForIMP).GreaterThan(0).WithMessage("Tỉ lệ phải lớn hơn 0.").LessThan(100).WithMessage("Tỉ lệ phải nhỏ hơn 100.");
+
         }
     }
 }
