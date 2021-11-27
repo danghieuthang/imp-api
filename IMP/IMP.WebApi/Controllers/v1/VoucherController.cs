@@ -243,13 +243,17 @@ namespace IMP.WebApi.Controllers.v1
         /// <returns></returns>
         [ProducesResponseType(typeof(Response<IEnumerable<VoucherViewModel>>), 200)]
         [HttpGet("available-for-campaign-member")]
-        [HttpGet("available-for-campaign-member")]
-        [Authorize(Roles = "Brand")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetVoucherAvailableForCampaign([FromQuery(Name = "campaign_id")] int campaignId)
         {
             return Ok(await Mediator.Send(new GetAvailableVoucherForCampaignMemberQuery { CampaignId = campaignId }));
         }
 
+        /// <summary>
+        /// Get list available voucher for campaign
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
         [ProducesResponseType(typeof(Response<IPagedList<VoucherViewModel>>), 200)]
         [HttpGet("available-for-campaign")]
         [Authorize(Roles = "Brand")]
