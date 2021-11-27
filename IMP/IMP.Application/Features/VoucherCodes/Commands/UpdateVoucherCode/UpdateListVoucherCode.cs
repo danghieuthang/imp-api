@@ -58,12 +58,18 @@ namespace IMP.Application.Features.VoucherCodes.Commands.UpdateVoucherCode
                 var codes = voucher.VoucherCodes.ToList();
 
                 // Remove code
+                for (int i = 0; i < codes.Count; i++)
+                {
+                    if (!requestVoucherCodes.Any(x => x.Id == codes[i].Id))
+                    {
+                        _voucherCodeRepository.Delete(codes[i]);
+                        codes.RemoveAt(i);
+                        i--;
+                    }
+                }
                 foreach (var code in codes)
                 {
-                    if (requestVoucherCodes.Any(x => x.Id == code.Id))
-                    {
-                        _voucherCodeRepository.Delete(code);
-                    }
+
                 }
 
                 // Update exist code
