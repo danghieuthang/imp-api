@@ -22,10 +22,17 @@ namespace IMP.Application.Features.Vouchers.Queries
 
             public override async Task<Response<IEnumerable<VoucherViewModel>>> Handle(GetAllVoucherByCampaignIdQuery request, CancellationToken cancellationToken)
             {
-                List<Voucher> vouchers = await Repository.GetAll(
-                        selector: x => x.Voucher,
-                        predicate: x => x.CampaignId == request.CampaignId,
-                        include: x => x.Include(y => y.Voucher)).ToListAsync();
+                var campaignVouchers = await Repository.GetAll(
+                         predicate: x => x.CampaignId == request.CampaignId && x.IsDefaultReward == false && x.IsBestInfluencerReward == false,
+                         include: x => x.Include(y => y.Voucher)).ToListAsync();
+
+                var vouchers = campaignVouchers.GroupBy(x => x.Voucher).Select(x =>
+                {
+                    var voucher = x.Key;
+                    voucher.CampaignVouchers = x.ToList();
+                    return voucher;
+                }).ToList();
+
                 var voucherViews = Mapper.Map<IEnumerable<VoucherViewModel>>(vouchers);
                 return new Response<IEnumerable<VoucherViewModel>>(voucherViews);
             }
