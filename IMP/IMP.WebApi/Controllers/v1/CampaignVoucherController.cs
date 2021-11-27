@@ -1,4 +1,5 @@
-﻿using IMP.Application.Features.Vouchers.Commands.ReceiverVoucher;
+﻿using IMP.Application.Features.CampaignVouchers.Commands.UpdateCampaignVoucher;
+using IMP.Application.Features.Vouchers.Commands.ReceiverVoucher;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
 using Microsoft.AspNetCore.Authorization;
@@ -23,6 +24,24 @@ namespace IMP.WebApi.Controllers.v1
         public async Task<IActionResult> RequestVoucher([FromRoute] int id)
         {
             return Ok(await Mediator.Send(new ReceiverVoucherCommand { CampaignVoucherId = id }));
+        }
+
+        /// <summary>
+        /// Update a campaign voucher
+        /// </summary>
+        /// <param name="id">The id of campaign voucher</param>
+        /// <param name="command">The UpdateCampaignVoucherCommand</param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<CampaignVoucherViewModel>), 200)]
+        [HttpPut("{id}")]
+        [Authorize(Roles = "Brand")]
+        public async Task<IActionResult> UpdateVoucher([FromRoute] int id, [FromBody] UpdateCampaignVoucherCommand command)
+        {
+            if (id != command.Id)
+            {
+                return BadRequest();
+            }
+            return Ok(await Mediator.Send(command));
         }
     }
 }
