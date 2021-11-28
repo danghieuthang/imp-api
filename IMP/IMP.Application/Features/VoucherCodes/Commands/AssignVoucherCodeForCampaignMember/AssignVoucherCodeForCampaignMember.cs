@@ -37,6 +37,7 @@ namespace IMP.Application.Features.VoucherCodes.Commands.AssignVoucherCodeForCam
                 {
                     throw new ValidationException(new ValidationError("campaign_member_id", "Không có quyền thêm voucher code trong chiến dịch này."));
                 };
+                var vouchers = campaignMember.Campaign.Vouchers.Where(x => x.IsDefaultReward == false && x.IsBestInfluencerReward == false).Select(x => x.VoucherId).ToList();
 
                 var voucherCode = await UnitOfWork.Repository<VoucherCode>().GetByIdAsync(request.VoucherCodeId);
 
@@ -45,7 +46,7 @@ namespace IMP.Application.Features.VoucherCodes.Commands.AssignVoucherCodeForCam
                     throw new ValidationException(new ValidationError("voucher_code_id", "Không tồn tại."));
                 }
 
-                if (!campaignMember.Campaign.Vouchers.Any(x => x.Id == voucherCode.VoucherId))
+                if (!vouchers.Contains(voucherCode.VoucherId))
                 {
                     throw new ValidationException(new ValidationError("voucher_code_id", "Voucher code này không nằm trong các voucher được cài đặt cho chiến dịch."));
                 }
