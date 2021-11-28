@@ -86,6 +86,19 @@ namespace IMP.WebApi.Controllers.v1
             return Ok(await Mediator.Send(command));
         }
 
+        /// <summary>
+        /// Asssign multiple voucher code for all campaign member of campaign
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+
+        [ProducesResponseType(typeof(Response<bool>), 200)]
+        [HttpPut("assign-for-members")]
+        [Authorize(Roles = "Brand")]
+        public async Task<IActionResult> AssignVoucherCodeForCampaignMember([FromBody] AssignVoucherCodesForCampaignCommand command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
 
     }
 }
