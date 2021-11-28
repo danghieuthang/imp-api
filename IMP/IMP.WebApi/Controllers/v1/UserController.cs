@@ -92,11 +92,9 @@ namespace IMP.WebApi.Controllers.v1
         /// <returns></returns>
         [ProducesResponseType(typeof(Response<string>), 200)]
         [HttpPost("me/otps")]
-        public async Task<IActionResult> CreateVerifyEmail()
+        public async Task<IActionResult> CreateVerifyEmail([FromBody] CreateEmailVerifyCommand command)
         {
-            int id = 0;
-            int.TryParse(_authenticatedUserService.AppId, out id);
-            return StatusCode(201, await Mediator.Send(new CreateEmailVerifyCommand { InfluencerId = id }));
+            return StatusCode(201, await Mediator.Send(command));
         }
 
         /// <summary>
