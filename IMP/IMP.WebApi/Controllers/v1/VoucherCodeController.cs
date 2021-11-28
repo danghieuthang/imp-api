@@ -1,5 +1,6 @@
 ﻿using IMP.Application.Features.VoucherCodes.Commands.AssignVoucherCodeForCampaignMember;
 using IMP.Application.Features.VoucherCodes.Commands.CreateVoucherCode;
+using IMP.Application.Features.VoucherCodes.Commands.UnAssignVoucherCodeForMember;
 using IMP.Application.Features.VoucherCodes.Commands.UpdateVoucherCode;
 using IMP.Application.Features.VoucherCodes.DeleteVoucherCode;
 using IMP.Application.Features.Vouchers.Queries.GetAllVoucherByApplicationUser;
@@ -84,6 +85,19 @@ namespace IMP.WebApi.Controllers.v1
                 return BadRequest();
             }
             return Ok(await Mediator.Send(command));
+        }
+
+        /// <summary>
+        /// Un assign voucher code for campaign member
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<bool>), 200)]
+        [HttpPut("{id}/unassign-for-member")]
+        [Authorize(Roles = "Brand")]
+        public async Task<IActionResult> AssignVoucherCodeForCampaignMember([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new UnassignVoucherCodeForMemberCommand { Id = id }));
         }
 
         /// <summary>
