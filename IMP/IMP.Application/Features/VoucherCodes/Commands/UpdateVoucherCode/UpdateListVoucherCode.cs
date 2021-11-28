@@ -56,30 +56,30 @@ namespace IMP.Application.Features.VoucherCodes.Commands.UpdateVoucherCode
                 var requestVoucherCodes = request.VoucherCodes.Distinct(new VoucherCodeComparer()).ToList();
 
                 var codes = voucher.VoucherCodes.ToList();
-
+                var codeAfterRemove = new List<VoucherCode>();
                 // Remove code
-                for (int i = 0; i < codes.Count; i++)
-                {
-                    if (!requestVoucherCodes.Any(x => x.Id == codes[i].Id))
-                    {
-                        _voucherCodeRepository.Delete(codes[i]);
-                        codes.RemoveAt(i);
-                        i--;
-                    }
-                }
                 foreach (var code in codes)
                 {
-
+                    if (!requestVoucherCodes.Any(x => x.Id == code.Id))
+                    {
+                        _voucherCodeRepository.Delete(code);
+                        await UnitOfWork.CommitAsync();
+                    }
+                    else
+                        codeAfterRemove.Add(code);
                 }
 
+
+                //await UnitOfWork.CommitAsync();
                 // Update exist code
-                codes.ForEach(x =>
+                codeAfterRemove.ForEach(x =>
                 {
                     var requestCode = requestVoucherCodes.Where(y => y.Id == x.Id).FirstOrDefault();
                     if (requestCode != null)
                     {
                         x.Code = requestCode.Code.ToUpper();
                         x.Quantity = requestCode.Quantity;
+                        _voucherCodeRepository.Update(x);
                     }
                 });
 
@@ -88,20 +88,18 @@ namespace IMP.Application.Features.VoucherCodes.Commands.UpdateVoucherCode
                 {
                     if (requestCode.Id == 0)
                     {
-                        codes.Add(new VoucherCode
+                        var newCode = new VoucherCode
                         {
                             Code = requestCode.Code,
                             Quantity = requestCode.Quantity,
                             VoucherId = request.VoucherId
-                        });
+                        };
+                        codeAfterRemove.Add(newCode);
+                        _voucherCodeRepository.Add(newCode);
                     }
                 }
 
-
-
-                voucher.VoucherCodes = codes;
-
-                _voucherRepository.Update(voucher);
+                voucher.VoucherCodes = codeAfterRemove;
 
                 await UnitOfWork.CommitAsync();
 
