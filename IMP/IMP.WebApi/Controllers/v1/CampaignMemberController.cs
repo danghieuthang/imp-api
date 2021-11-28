@@ -2,6 +2,7 @@
 using IMP.Application.Features.CampaignMembers.Queries.GetCampaignMemberById;
 using IMP.Application.Features.Campaigns.Commands.ProcessCampaignMember;
 using IMP.Application.Features.MemberActivities.Queries.GetAllMemberActivitesOfUser;
+using IMP.Application.Features.Vouchers.Queries.GetAllVoucherOfCampaignMember;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
 using Microsoft.AspNetCore.Authorization;
@@ -64,6 +65,19 @@ namespace IMP.WebApi.Controllers.v1
         public async Task<IActionResult> Get([FromRoute] int id)
         {
             return Ok(await Mediator.Send(new GetCampaignMemberByIdQuery { Id = id }));
+        }
+
+        /// <summary>
+        /// Get all voucher of campaign member
+        /// </summary>
+        /// <param name="id">The campaign member id</param>
+        /// <returns></returns>
+        [HttpGet("{id}/vouchers")]
+        [ProducesResponseType(typeof(Response<List<VoucherViewModel>>), 200)]
+        [Authorize(Roles = "Brand,Influencer")]
+        public async Task<IActionResult> GetVoucherMember([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new GetAllVoucherOfCampaignMemberQuery { CampaignMemberId = id }));
         }
 
     }
