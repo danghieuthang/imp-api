@@ -26,7 +26,7 @@ namespace IMP.Application.Features.Vouchers.Queries.GetAvailableVoucherForCampai
             {
                 var vouchers = await UnitOfWork.Repository<CampaignVoucher>().GetAll(
                     selector: x => x.Voucher,
-                    predicate: x => x.CampaignId == request.CampaignId
+                    predicate: x => x.CampaignId == request.CampaignId && x.IsDefaultReward == false && x.IsBestInfluencerReward == false
                         && x.Voucher.QuantityUsed < x.Voucher.Quantity,
                     include: x => x.Include(y => y.Voucher).ThenInclude(z => z.VoucherCodes)).ToListAsync();
 
