@@ -34,7 +34,7 @@ namespace IMP.Infrastructure.Persistence.Services
             {
                 // get Indochina time
                 //DateTime now = DateTime.UtcNow.AddHours(7);
-                DateTime now = DateTime.Now;
+                DateTime now = DateTime.UtcNow;
                 if (now >= campaign.OpeningDate && now < campaign.ApplyingDate)
                 {
                     campaign.Status = (int)CampaignStatus.Openning;
