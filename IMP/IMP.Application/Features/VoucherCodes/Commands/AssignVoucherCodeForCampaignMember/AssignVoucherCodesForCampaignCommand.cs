@@ -92,6 +92,10 @@ namespace IMP.Application.Features.VoucherCodes.Commands.AssignVoucherCodeForCam
                         voucherCodes[voucherCodeIndex].CampaignMemberId = member.Id;
                         _voucherCodeRepository.Update(voucherCodes[voucherCodeIndex]);
                         voucherCodeIndex++;
+                        if (voucherCodes.Count >= voucherCodeIndex)
+                        {
+                            break;
+                        }
                     }
                 }
 
