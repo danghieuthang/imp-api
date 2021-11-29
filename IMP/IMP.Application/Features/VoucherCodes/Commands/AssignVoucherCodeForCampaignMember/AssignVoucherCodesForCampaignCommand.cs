@@ -97,6 +97,11 @@ namespace IMP.Application.Features.VoucherCodes.Commands.AssignVoucherCodeForCam
                             break;
                         }
                     }
+
+                    if (voucherCodes.Count <= voucherCodeIndex)
+                    {
+                        break;
+                    }
                 }
 
                 await UnitOfWork.CommitAsync();
