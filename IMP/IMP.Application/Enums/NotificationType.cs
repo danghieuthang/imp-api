@@ -22,9 +22,9 @@ namespace IMP.Application.Enums
         InfluencerJoinCampaign = 11,
         // Influencer vừa submit xong evidence(trạng thái của member actitivy là Pending), chờ brand duyệt
         InfluencerSubmitMemberActivity = 12,
-        AdminApprovedCampaign=13,
-        AdminRejectCampaign=14,
-        AdminPendingCampaign=15,
+        AdminApprovedCampaign = 13,
+        AdminRejectCampaign = 14,
+        AdminPendingCampaign = 15,
         #endregion
 
         #region Influencer
@@ -33,6 +33,9 @@ namespace IMP.Application.Enums
         BrandCancelJoinCampaign = 22,
         // Brand đồng ý với member activity
         BrandApprovedMemberActivity = 23,
+        ReceivedMoney = 24,
+        BrandAcceptMemberActivity = 25,
+        BrandRejectMemberActivity = 26,
         #endregion
     }
 }

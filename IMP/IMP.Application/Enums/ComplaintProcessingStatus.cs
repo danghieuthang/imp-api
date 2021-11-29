@@ -9,5 +9,6 @@ namespace IMP.Application.Enums
         Approval,
         Reject,
         Processing,
+        Done,
     }
 }
