@@ -79,6 +79,13 @@ namespace IMP.Application.Features.Campaigns.Commands.ProcessCampaignMember
                 else if (request.Status == CampaignMemberStatus.Cancelled)
                 {
                     campaignMember.Note = request.Note;
+                    var voucherCodeRepository = UnitOfWork.Repository<VoucherCode>();
+                    var voucherCodes = voucherCodeRepository.GetAll(predicate: x => x.CampaignMemberId == campaignMember.Id).ToList();
+                    foreach (var code in voucherCodes)
+                    {
+                        code.CampaignMemberId = null;
+                        voucherCodeRepository.Update(code);
+                    }
                 }
 
                 campaignMember.ApprovedDate = DateTime.Now;
