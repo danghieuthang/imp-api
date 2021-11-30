@@ -55,6 +55,18 @@ namespace IMP.WebApi.Controllers.v1
         }
 
         /// <summary>
+        /// Delete all notification of authenticated user
+        /// </summary>
+        /// <returns></returns>
+        [HttpDelete("delete-all")]
+        [ProducesResponseType(typeof(Response<bool>), 200)]
+        [Authorize]
+        public async Task<IActionResult> DeleteAll()
+        {
+            return Ok(await Mediator.Send(new DeleteAllNotificationCommand()));
+        }
+
+        /// <summary>
         /// Get notification by id
         /// </summary>
         /// <param name="id"></param>
