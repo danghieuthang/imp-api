@@ -30,5 +30,6 @@ namespace IMP.Application.Models.Compaign
     public class InfluencerConfigurationLocationViewModel
     {
         public int LocationId { get; set; }
+        public LocationViewModel Location { get; set; }
     }
 }
