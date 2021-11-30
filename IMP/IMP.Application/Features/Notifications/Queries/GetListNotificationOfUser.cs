@@ -16,7 +16,7 @@ namespace IMP.Application.Features.Notifications.Queries
 {
     public class GetListNotificationOfUserQuery : PageRequest, IListQuery<NotificationViewModel>
     {
-        [FromForm(Name = "is-read")]
+        [FromForm(Name = "is_read")]
         public bool? IsRead { get; set; }
         internal class GetListNotificationOfUserQueryHandler : ListQueryHandler<GetListNotificationOfUserQuery, NotificationViewModel>
         {
