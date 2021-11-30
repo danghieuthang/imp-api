@@ -50,7 +50,8 @@ namespace IMP.Application.Features.Campaigns.Queries.GetCampaignById
                        && x.Status == (int)CampaignMemberStatus.Approved);
 
                 var data = Mapper.Map<CampaignViewModel>(entity);
-                data.InfluencerConfiguration.NumberOfJoinedInfluencer = countMemberApplyToCampaign;
+                if (data.InfluencerConfiguration != null)
+                    data.InfluencerConfiguration.NumberOfJoinedInfluencer = countMemberApplyToCampaign;
                 return new Response<CampaignViewModel>(data);
             }
         }
