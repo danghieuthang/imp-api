@@ -25,7 +25,7 @@ namespace IMP.Application.Features.Notifications.Commands.DeleteNotification
             public override async Task<Response<bool>> Handle(DeleteAllNotificationCommand request, CancellationToken cancellationToken)
             {
                 var repository = UnitOfWork.Repository<Notification>();
-                var notifications = await repository.GetAll(predicate: x => x.ApplicationUserId == _authenticatedUserService.ApplicationUserId).ToListAsync();
+                var notifications = await repository.GetAll(predicate: x => x.ApplicationUserId == _authenticatedUserService.ApplicationUserId).ToListAsync(cancellationToken: cancellationToken);
                 foreach (var notification in notifications)
                 {
                     repository.DeleteCompletely(notification);
