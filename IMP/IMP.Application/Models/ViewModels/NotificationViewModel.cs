@@ -15,4 +15,9 @@ namespace IMP.Application.Models.ViewModels
         public int RedirectId { get; set; }
         public bool IsRead { get; set; }
     }
+
+    public class CountUnreadNotification
+    {
+        public int Number { get; set; }
+    }
 }

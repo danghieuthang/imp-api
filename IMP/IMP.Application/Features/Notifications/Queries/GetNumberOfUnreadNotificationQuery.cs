@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using IMP.Application.Interfaces;
+using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
 using IMP.Domain.Entities;
 using System;
@@ -11,9 +12,9 @@ using System.Threading.Tasks;
 
 namespace IMP.Application.Features.Notifications.Queries
 {
-    public class GetNumberOfUnreadNotificationQuery : IQuery<int>
+    public class GetNumberOfUnreadNotificationQuery : IQuery<CountUnreadNotification>
     {
-        public class GetNumBerOfUnreadNotificationQueryHandler : QueryHandler<GetNumberOfUnreadNotificationQuery, int>
+        public class GetNumBerOfUnreadNotificationQueryHandler : QueryHandler<GetNumberOfUnreadNotificationQuery, CountUnreadNotification>
         {
             private readonly IAuthenticatedUserService _authenticatedUserService;
             public GetNumBerOfUnreadNotificationQueryHandler(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticatedUserService authenticatedUserService) : base(unitOfWork, mapper)
@@ -21,10 +22,10 @@ namespace IMP.Application.Features.Notifications.Queries
                 _authenticatedUserService = authenticatedUserService;
             }
 
-            public override async Task<Response<int>> Handle(GetNumberOfUnreadNotificationQuery request, CancellationToken cancellationToken)
+            public override async Task<Response<CountUnreadNotification>> Handle(GetNumberOfUnreadNotificationQuery request, CancellationToken cancellationToken)
             {
                 int number = await UnitOfWork.Repository<Notification>().CountAsync(x => x.ApplicationUserId == _authenticatedUserService.ApplicationUserId && x.IsRead == false);
-                return new Response<int>(data: number);
+                return new Response<CountUnreadNotification>(new CountUnreadNotification { Number = number });
             }
         }
     }

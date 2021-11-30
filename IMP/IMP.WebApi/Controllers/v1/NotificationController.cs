@@ -33,7 +33,7 @@ namespace IMP.WebApi.Controllers.v1
         /// </summary>
         /// <returns></returns>
         [HttpGet("count-unread")]
-        [ProducesResponseType(typeof(Response<int>), 200)]
+        [ProducesResponseType(typeof(Response<CountUnreadNotification>), 200)]
         [Authorize]
         public async Task<IActionResult> CountUnreadNotification()
         {
