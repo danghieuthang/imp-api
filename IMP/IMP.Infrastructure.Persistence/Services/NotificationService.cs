@@ -53,6 +53,22 @@ namespace IMP.Infrastructure.Persistence.Services
                 case NotificationType.BrandCancelJoinCampaign:
                     notification.Message = "Bạn đã bị nhãn hàng từ chối thăm gia chiến dịch.";
                     break;
+                case NotificationType.InfluencerCommentMemberActivity:
+                    notification.Message = "Có bình luật mới từ thành viên chiến dịch.";
+
+                    var memberAcitity = await _unitOfWork.Repository<MemberActivity>().FindSingleAsync(x => x.Id == redirectId, x => x.CampaignActivity, x => x.CampaignActivity.Campaign);
+
+                    notification.Url = $"/campaign/{memberAcitity.CampaignActivity.CampaignId}/member/{memberAcitity.CampaignMemberId}";
+                    notification.ApplicationUserId = memberAcitity.CampaignActivity.Campaign.CreatedById;
+                    break;
+                case NotificationType.BrandCommentMemberActivity:
+                    notification.Message = "Nhãn hàng vừa bình luật.";
+
+                    memberAcitity = await _unitOfWork.Repository<MemberActivity>().FindSingleAsync(x => x.Id == redirectId, x => x.CampaignMember);
+
+                    notification.Url = $"/campaign/{memberAcitity.CampaignMember.CampaignId}/member/{memberAcitity.CampaignMemberId}";
+                    notification.ApplicationUserId = memberAcitity.CampaignMember.InfluencerId;
+                    break;
                 default:
                     notification.Message = "";
                     break;
@@ -66,7 +82,7 @@ namespace IMP.Infrastructure.Persistence.Services
         public async Task PutNotication(int applicationUserid, int redirectId, NotificationType notificationType)
         {
             var notification = await AddNotification(applicationUserid, redirectId, notificationType);
-            int totalNotification = await _unitOfWork.Repository<Notification>().CountAsync(x => x.ApplicationUserId == applicationUserid && x.IsRead == false);
+            int totalNotification = await _unitOfWork.Repository<Notification>().CountAsync(x => x.ApplicationUserId == notification.ApplicationUserId && x.IsRead == false);
             string data = JsonConvert.SerializeObject(new
             {
                 TotalNotification = totalNotification,
@@ -74,8 +90,24 @@ namespace IMP.Infrastructure.Persistence.Services
             });
             _ = Task.Run(() =>
             {
-                _firebaseService.PushTotification(data, applicationUserid.ToString());
+                _firebaseService.PushTotification(data, notification.ApplicationUserId.ToString());
             });
         }
+        public async Task PutNotication(Notification notification)
+        {
+            _unitOfWork.Repository<Notification>().Add(notification);
+            await _unitOfWork.CommitAsync();
+            int totalNotification = await _unitOfWork.Repository<Notification>().CountAsync(x => x.ApplicationUserId == notification.ApplicationUserId && x.IsRead == false);
+            string data = JsonConvert.SerializeObject(new
+            {
+                TotalNotification = totalNotification,
+                LastNotificationId = notification.Id
+            });
+            _ = Task.Run(() =>
+            {
+                _firebaseService.PushTotification(data, notification.ApplicationUserId.ToString());
+            });
+        }
+
     }
 }

@@ -25,6 +25,7 @@ namespace IMP.Application.Enums
         AdminApprovedCampaign = 13,
         AdminRejectCampaign = 14,
         AdminPendingCampaign = 15,
+        InfluencerCommentMemberActivity = 16,
         #endregion
 
         #region Influencer
@@ -36,6 +37,8 @@ namespace IMP.Application.Enums
         ReceivedMoney = 24,
         BrandAcceptMemberActivity = 25,
         BrandRejectMemberActivity = 26,
+        BrandCommentMemberActivity = 27,
+
         #endregion
     }
 }
