@@ -32,6 +32,9 @@ namespace IMP.Infrastructure.Persistence.Services
             };
             switch (notificationType)
             {
+                case NotificationType.InfluencerJoinCampaign:
+                    notification.Message = "Có thành viên mới thăm gia chiến dịch.";
+                    break;
                 case NotificationType.BrandCreatedCampaign:
                     notification.Message = "Chiến dịch chờ duyệt.";
                     break;

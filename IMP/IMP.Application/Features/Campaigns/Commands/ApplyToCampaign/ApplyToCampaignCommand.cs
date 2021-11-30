@@ -2,6 +2,7 @@
 using IMP.Application.Enums;
 using IMP.Application.Exceptions;
 using IMP.Application.Interfaces;
+using IMP.Application.Interfaces.Services;
 using IMP.Application.Models;
 using IMP.Application.Wrappers;
 using IMP.Domain.Entities;
@@ -22,10 +23,12 @@ namespace IMP.Application.Features.Campaigns.Commands.ApplyToCampaign
         {
             private readonly IAuthenticatedUserService _authenticatedUserService;
             private readonly IGenericRepository<CampaignMember> _campaignMemberRepository;
-            public ApplyToCampaignCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticatedUserService authenticatedUserService) : base(unitOfWork, mapper)
+            private readonly INotificationService _notificationService;
+            public ApplyToCampaignCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticatedUserService authenticatedUserService, INotificationService notificationService) : base(unitOfWork, mapper)
             {
                 _authenticatedUserService = authenticatedUserService;
                 _campaignMemberRepository = unitOfWork.Repository<CampaignMember>();
+                _notificationService = notificationService;
             }
 
             public override async Task<Response<bool>> Handle(ApplyToCampaignCommand request, CancellationToken cancellationToken)
@@ -73,13 +76,17 @@ namespace IMP.Application.Features.Campaigns.Commands.ApplyToCampaign
                     Status = (int)CampaignMemberStatus.Pending,
                 };
 
+
+
                 UnitOfWork.Repository<CampaignMember>().Add(member);
                 await UnitOfWork.CommitAsync();
+
+                await _notificationService.PutNotication(campaign.CreatedById, member.Id, NotificationType.InfluencerJoinCampaign);
 
                 return new Response<bool>(true);
             }
 
-        
+
         }
     }
 }
