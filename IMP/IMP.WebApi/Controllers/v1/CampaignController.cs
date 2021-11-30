@@ -332,7 +332,7 @@ namespace IMP.WebApi.Controllers.v1
         /// </summary>
         /// <param name="id">The id of campaign</param>
         /// <returns></returns>
-        [ProducesResponseType(typeof(Response<PagedList<CampaignMemberViewModel>>), 200)]
+        [ProducesResponseType(typeof(Response<CampaignMemberViewModel>), 200)]
         [HttpGet("{id}/members/me")]
         [Authorize(Roles = "Influencer")]
         public async Task<IActionResult> SearchMember([FromRoute] int id)
