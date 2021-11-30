@@ -84,6 +84,18 @@ namespace IMP.WebApi.Controllers.v1
         }
 
         /// <summary>
+        /// Get a campaign to notification
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<CampaignNotificationViewModel>), 200)]
+        [HttpGet("{id}/notification-info")]
+        public async Task<IActionResult> GetCampaignNotificationById([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new GetCampaignNotificationByIdQuery { Id = id }));
+        }
+
+        /// <summary>
         /// Create a campaign
         /// </summary>
         /// <param name="command">The Create Campaign Command</param>

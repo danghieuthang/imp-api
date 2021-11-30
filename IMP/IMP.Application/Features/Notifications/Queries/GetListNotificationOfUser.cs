@@ -14,12 +14,11 @@ using System.Threading.Tasks;
 
 namespace IMP.Application.Features.Notifications.Queries
 {
-    public class GetListNotificationOfUserQuery : IGetAllQuery<NotificationViewModel>
+    public class GetListNotificationOfUserQuery : PageRequest, IListQuery<NotificationViewModel>
     {
-        [FromQuery(Name = "number")]
-        public int Number { get; set; }
-
-        internal class GetListNotificationOfUserQueryHandler : GetAllQueryHandler<GetListNotificationOfUserQuery, Notification, NotificationViewModel>
+        [FromForm(Name = "is-read")]
+        public bool? IsRead { get; set; }
+        internal class GetListNotificationOfUserQueryHandler : ListQueryHandler<GetListNotificationOfUserQuery, NotificationViewModel>
         {
             private readonly IAuthenticatedUserService _authenticatedUserService;
             public GetListNotificationOfUserQueryHandler(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticatedUserService authenticatedUserService) : base(unitOfWork, mapper)
@@ -27,14 +26,17 @@ namespace IMP.Application.Features.Notifications.Queries
                 _authenticatedUserService = authenticatedUserService;
             }
 
-            public override async Task<Response<IEnumerable<NotificationViewModel>>> Handle(GetListNotificationOfUserQuery request, CancellationToken cancellationToken)
+            public override async Task<Response<IPagedList<NotificationViewModel>>> Handle(GetListNotificationOfUserQuery request, CancellationToken cancellationToken)
             {
-                var notifications = Repository.GetAll(
-                 predicate: x => x.ApplicationUserId == _authenticatedUserService.ApplicationUserId,
-                 orderBy: x => x.OrderByDescending(y => y.Created)).Take(request.Number).ToList();
+                var notifications = await UnitOfWork.Repository<Notification>().GetPagedList(
+                        predicate: x => x.ApplicationUserId == _authenticatedUserService.ApplicationUserId
+                            && (request.IsRead == null || (request.IsRead.HasValue && x.IsRead == request.IsRead.Value)),
+                        orderBy: request.OrderField,
+                        orderByDecensing: request.OrderBy == Enums.OrderBy.DESC
+                        );
 
-                var notificationViews = Mapper.Map<IEnumerable<NotificationViewModel>>(notifications);
-                return new Response<IEnumerable<NotificationViewModel>>(notificationViews);
+                var view = notifications.ToResponsePagedList<NotificationViewModel>(Mapper);
+                return new Response<IPagedList<NotificationViewModel>>(view);
             }
         }
     }

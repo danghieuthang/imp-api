@@ -28,6 +28,17 @@ namespace IMP.WebApi.Controllers.v1
         {
             return Ok(await Mediator.Send(query));
         }
+        /// <summary>
+        /// Count number notification of authenticate user
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("count-unread")]
+        [ProducesResponseType(typeof(Response<int>), 200)]
+        [Authorize]
+        public async Task<IActionResult> CountUnreadNotification()
+        {
+            return Ok(await Mediator.Send(new GetNumberOfUnreadNotificationQuery()));
+        }
 
 
         /// <summary>
@@ -69,6 +80,17 @@ namespace IMP.WebApi.Controllers.v1
             return Ok(await Mediator.Send(new MakeNotificationIsReadCommand { Id = id }));
         }
 
+        /// <summary>
+        /// Make all notification of authenticated user as read
+        /// </summary>
+        /// <returns></returns>
+        [HttpPut("make-all-read")]
+        [ProducesResponseType(typeof(Response<bool>), 200)]
+        [Authorize]
+        public async Task<IActionResult> MakeAllkRead()
+        {
+            return Ok(await Mediator.Send(new MakeAllNotificationAsReadCommand()));
+        }
 
     }
 }

@@ -63,7 +63,7 @@ namespace IMP.Infrastructure.Persistence.Services
         public async Task PutNotication(int applicationUserid, int redirectId, NotificationType notificationType)
         {
             var notification = await AddNotification(applicationUserid, redirectId, notificationType);
-            int totalNotification = await _unitOfWork.Repository<Notification>().CountAsync();
+            int totalNotification = await _unitOfWork.Repository<Notification>().CountAsync(x => x.ApplicationUserId == applicationUserid && x.IsRead == false);
             string data = JsonConvert.SerializeObject(new
             {
                 TotalNotification = totalNotification,

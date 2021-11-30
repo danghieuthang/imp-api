@@ -85,7 +85,12 @@ namespace IMP.Application.Models.Compaign
         [JsonProperty("images")]
         public List<CampaignImageViewModel> CampaignImages { get; set; }
     }
-
+    public class CampaignNotificationViewModel : BaseViewModel<int>
+    {
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public string Image { get; set; }
+    }
     public class CampaignImageViewModel : BaseViewModel<int>
     {
         public int Position { get; set; }
