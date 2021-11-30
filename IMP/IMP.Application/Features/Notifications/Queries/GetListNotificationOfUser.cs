@@ -32,7 +32,10 @@ namespace IMP.Application.Features.Notifications.Queries
                         predicate: x => x.ApplicationUserId == _authenticatedUserService.ApplicationUserId
                             && (request.IsRead == null || (request.IsRead.HasValue && x.IsRead == request.IsRead.Value)),
                         orderBy: request.OrderField,
-                        orderByDecensing: request.OrderBy == Enums.OrderBy.DESC
+                        orderByDecensing: request.OrderBy == Enums.OrderBy.DESC,
+                        pageIndex: request.PageIndex,
+                        pageSize: request.PageSize,
+                        cancellationToken: cancellationToken
                         );
 
                 var view = notifications.ToResponsePagedList<NotificationViewModel>(Mapper);
