@@ -43,6 +43,8 @@ namespace IMP.Application.Features.Campaigns.Queries.GetAllCampaigns
         public List<int> PlatformIds { get; set; }
         [FromQuery(Name = "name")]
         public string Name { get; set; }
+        [FromQuery(Name = "job")]
+        public string Job { get; set; }
         public class GetAllCampaignQueryValidator : PageRequestValidator<GetAllCampaignQuery, CampaignViewModel>
         {
         }
