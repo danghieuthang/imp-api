@@ -18,13 +18,13 @@ namespace IMP.Application.Features.Campaigns
             // check marital
             if (campaign.InfluencerConfiguration.MaritalStatus.HasValue && campaign.InfluencerConfiguration.MaritalStatus != user.MaritalStatus)
             {
-                errors.Add(new ValidationError("", "Tình trạng hôn nhân không hợp lệ."));
+                errors.Add(new ValidationError("marital_status", "Tình trạng hôn nhân không hợp lệ."));
             }
 
             // check child status
             if (campaign.InfluencerConfiguration.ChildStatus.HasValue && campaign.InfluencerConfiguration.ChildStatus != user.ChildStatus)
             {
-                errors.Add(new ValidationError("", "Tình trạng con cái không hợp lệ."));
+                errors.Add(new ValidationError("child_status", "Tình trạng con cái không hợp lệ."));
             }
 
             // check pregnant
@@ -36,7 +36,7 @@ namespace IMP.Application.Features.Campaigns
             if (campaign.InfluencerConfiguration.PlatformId.HasValue
                 && !user.InfluencerPlatforms.Select(x => x.PlatformId).Contains(campaign.InfluencerConfiguration.PlatformId.Value))
             {
-                errors.Add(new ValidationError("", $"Influencer chưa có hợp lệ."));
+                errors.Add(new ValidationError("platform_id", $"Influencer chưa có hợp lệ."));
             }
 
             // check gender
@@ -61,7 +61,7 @@ namespace IMP.Application.Features.Campaigns
 
                 if (gender != campaign.InfluencerConfiguration.Gender.Value)
                 {
-                    errors.Add(new ValidationError("", $"Giới tính không hợp lệ."));
+                    errors.Add(new ValidationError("gender", $"Giới tính không hợp lệ."));
                 }
             }
 
