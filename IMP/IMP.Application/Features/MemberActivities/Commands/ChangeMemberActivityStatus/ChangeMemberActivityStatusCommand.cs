@@ -3,6 +3,7 @@ using FluentValidation;
 using IMP.Application.Enums;
 using IMP.Application.Exceptions;
 using IMP.Application.Interfaces;
+using IMP.Application.Interfaces.Services;
 using IMP.Application.Models;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
@@ -32,21 +33,23 @@ namespace IMP.Application.Features.MemberActivities.Commands.ChangeMemberActivit
         {
             private readonly IAuthenticatedUserService _authenticatedUserService;
             private readonly IGenericRepository<MemberActivity> _memberActivityRepository;
-            public ChangeMemberActivityStatusCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticatedUserService authenticatedUserService) : base(unitOfWork, mapper)
+            private readonly INotificationService _notificationService;
+            public ChangeMemberActivityStatusCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticatedUserService authenticatedUserService, INotificationService notificationService) : base(unitOfWork, mapper)
             {
                 _memberActivityRepository = unitOfWork.Repository<MemberActivity>();
                 _authenticatedUserService = authenticatedUserService;
+                _notificationService = notificationService;
             }
 
             public override async Task<Response<MemberActivityViewModel>> Handle(ChangeMemberActivityStatusCommand request, CancellationToken cancellationToken)
             {
-                var memberActivity = await _memberActivityRepository.FindSingleAsync(x => x.Id == request.Id, x => x.CampaignActivity, x => x.CampaignActivity.Campaign);
+                var memberActivity = await _memberActivityRepository.FindSingleAsync(x => x.Id == request.Id, x => x.CampaignMember, x => x.CampaignMember.Campaign);
                 if (memberActivity == null)
                 {
                     throw new IMP.Application.Exceptions.ValidationException(new ValidationError("id", "Không tồn tại."));
                 }
 
-                if (memberActivity.CampaignActivity.Campaign.BrandId != _authenticatedUserService.BrandId)
+                if (memberActivity.CampaignMember.Campaign.BrandId != _authenticatedUserService.BrandId)
                 {
                     throw new IMP.Application.Exceptions.ValidationException(new ValidationError("id", "Không có quyền."));
                 }
@@ -54,7 +57,14 @@ namespace IMP.Application.Features.MemberActivities.Commands.ChangeMemberActivit
                 memberActivity.Status = (int)request.Status;
                 _memberActivityRepository.Update(memberActivity);
                 await UnitOfWork.CommitAsync();
-
+                if (request.Status == MemberActivityStatus.Completed)
+                {
+                    await _notificationService.PutNotication(memberActivity.CampaignMember.InfluencerId, memberActivity.Id, NotificationType.BrandApprovedMemberActivity);
+                }
+                else
+                {
+                    await _notificationService.PutNotication(memberActivity.CampaignMember.InfluencerId, memberActivity.Id, NotificationType.BrandRejectMemberActivity);
+                }
                 var memberActivityView = Mapper.Map<MemberActivityViewModel>(memberActivity);
                 return new Response<MemberActivityViewModel>(memberActivityView);
             }

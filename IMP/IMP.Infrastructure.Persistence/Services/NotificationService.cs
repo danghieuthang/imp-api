@@ -69,6 +69,18 @@ namespace IMP.Infrastructure.Persistence.Services
                     notification.Url = $"/campaign/{memberAcitity.CampaignMember.CampaignId}/member/{memberAcitity.CampaignMemberId}";
                     notification.ApplicationUserId = memberAcitity.CampaignMember.InfluencerId;
                     break;
+
+                case NotificationType.BrandApprovedMemberActivity:
+                    notification.Message = "Nhãn hàng vừa đánh giá bạn hoàn thành hoạt động.";
+                    memberAcitity = await _unitOfWork.Repository<MemberActivity>().FindSingleAsync(x => x.Id == redirectId, x => x.CampaignMember);
+                    notification.Url = $"/campaign/{memberAcitity.CampaignMember.CampaignId}/member/{memberAcitity.CampaignMemberId}";
+                    break;
+
+                case NotificationType.BrandRejectMemberActivity:
+                    notification.Message = "Nhãn hàng vừa đánh giá bạn chưa hoàn thành hoạt động.";
+                    memberAcitity = await _unitOfWork.Repository<MemberActivity>().FindSingleAsync(x => x.Id == redirectId, x => x.CampaignMember);
+                    notification.Url = $"/campaign/{memberAcitity.CampaignMember.CampaignId}/member/{memberAcitity.CampaignMemberId}";
+                    break;
                 default:
                     notification.Message = "";
                     break;
