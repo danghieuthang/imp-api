@@ -43,7 +43,8 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaignActivities
 
                 if (campaign != null)
                 {
-                    if (campaign.Status != (int)CampaignStatus.Draft && campaign.Status != (int)CampaignStatus.Pending && campaign.Status != (int)CampaignStatus.Approved)
+                if (campaign.Status != (int)CampaignStatus.Draft && campaign.Status != (int)CampaignStatus.Pending && campaign.Status != (int)CampaignStatus.Approved && campaign.Status != (int)CampaignStatus.Cancelled)
+
                     {
                         throw new ValidationException(new ValidationError("id", "Không thể chỉnh sửa chiến dịch này."));
                     }
