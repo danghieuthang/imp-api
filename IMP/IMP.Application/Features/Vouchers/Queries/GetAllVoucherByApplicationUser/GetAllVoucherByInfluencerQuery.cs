@@ -71,7 +71,8 @@ namespace IMP.Application.Features.Vouchers.Queries.GetAllVoucherByApplicationUs
                         && (request.CampaignId == null
                             || (request.CampaignId.HasValue
                                 && x.CampaignVouchers.Any(y => y.CampaignId == request.CampaignId.Value))),
-                    include: x => x.Include(y => y.VoucherCodes.Where(z => z.CampaignMember.InfluencerId == _authenticatedUserService.ApplicationUserId)),
+                    include: x => x.Include(y => y.Brand)
+                            .Include(y => y.VoucherCodes.Where(z => z.CampaignMember.InfluencerId == _authenticatedUserService.ApplicationUserId)),
                     pageIndex: request.PageIndex,
                     pageSize: request.PageSize,
                     orderBy: request.OrderField,

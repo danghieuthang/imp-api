@@ -43,7 +43,6 @@ namespace IMP.Application.Models.ViewModels
 
     public class UserVoucherViewModel : BaseViewModel<int>
     {
-        public int BrandId { get; set; }
         public int VoucherType { get; set; }
         public string VoucherName { get; set; }
         public string Code { get; set; }
@@ -66,7 +65,7 @@ namespace IMP.Application.Models.ViewModels
         public string Target { get; set; }
 
         public bool IsCanUse => QuantityUsed > Quantity;
-
+        public BrandViewModel Brand { get; set; }
         public List<UserVoucherCodeViewModel> VoucherCodes { get; set; }
         public List<CampaignVoucherViewModel> CampaignVouchers { get; set; }
         public List<DiscountProductViewModel> DiscountProducts { get; set; }
