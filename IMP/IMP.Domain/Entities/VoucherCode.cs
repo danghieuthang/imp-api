@@ -20,7 +20,6 @@ namespace IMP.Domain.Entities
         public int? CampaignMemberId { get; set; }
         public CampaignMember CampaignMember { get; set; }
         public Voucher Voucher { get; set; }
-        public Campaign Campaign { get; set; }
 
         public ICollection<VoucherTransaction> VoucherTransactions { get; set; }
         public ICollection<VoucherCodeApplicationUser> VoucherCodeApplicationUsers { get; set; }

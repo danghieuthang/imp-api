@@ -214,17 +214,31 @@ namespace IMP.WebApi.Controllers.v1
         }
 
         /// <summary>
-        /// Search voucher code of authenticated user
+        /// Search voucher of authenticated user(customer)
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
         [ProducesResponseType(typeof(Response<IPagedList<UserVoucherViewModel>>), 200)]
-        [HttpGet("me")]
+        [HttpGet("search-for-customer")]
         [Authorize(Roles = "Influencer")]
-        public async Task<IActionResult> GetAll([FromQuery] GetAllVoucherByApplicationUserQuery query)
+        public async Task<IActionResult> GetAllVoucherOfCustomer([FromQuery] GetAllVoucherByCustomerQuery query)
         {
             return Ok(await Mediator.Send(query));
         }
+
+        /// <summary>
+        /// Search voucher for authenticate user(influencer)
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<IPagedList<UserVoucherViewModel>>), 200)]
+        [HttpGet("search-for-influencer")]
+        [Authorize(Roles = "Influencer")]
+        public async Task<IActionResult> GetAllVoucherOfInluencer([FromQuery] GetAllVoucherByInfluencerQuery query)
+        {
+            return Ok(await Mediator.Send(query));
+        }
+
         /// <summary>
         /// Search vouchers of brand
         /// </summary>
