@@ -44,5 +44,6 @@ namespace IMP.Domain.Entities
         public int TargetConfigurationId { get; set; }
         [ForeignKey("Location")]
         public int LocationId { get; set; }
+        public Location Location { get; set; }
     }
 }

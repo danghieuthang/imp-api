@@ -74,6 +74,7 @@ namespace IMP.Application.Features.Campaigns.Queries.GetAllCampaigns
                         && x.LastModified != null,
                     include: x => x.Include(y => y.Brand)
                         .Include(campaing => campaing.TargetConfiguration)
+                        .Include(campaign => campaign.TargetConfiguration).ThenInclude(y => y.Locations).ThenInclude(z => z.Location)
                         .Include(y => y.CampaignImages)
                         .Include(campaign => campaign.InfluencerConfiguration).ThenInclude(y => y.Platform)
                         .Include(campaign => campaign.InfluencerConfiguration).ThenInclude(y => y.Locations).ThenInclude(z => z.Location)

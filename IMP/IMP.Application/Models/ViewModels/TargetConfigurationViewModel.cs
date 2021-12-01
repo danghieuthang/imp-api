@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using IMP.Application.Models.ViewModels;
+using System.Collections.Generic;
 
 namespace IMP.Application.Models.Compaign
 {
@@ -22,6 +23,5 @@ namespace IMP.Application.Models.Compaign
 
     public class TargetConfigurationLocationViewModel : InfluencerConfigurationLocationViewModel
     {
-
     }
 }
