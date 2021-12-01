@@ -33,7 +33,7 @@ namespace IMP.Application.Features.Campaigns.Queries.GetCampaignById
                             .Include(x => x.CampaignRewards)
                             .Include(x => x.Vouchers)
                             .Include(x => x.TargetConfiguration).ThenInclude(x => x.Locations)
-                            .Include(x => x.InfluencerConfiguration).ThenInclude(x => x.Locations)
+                            .Include(x => x.InfluencerConfiguration).ThenInclude(x => x.Locations).ThenInclude(y => y.Location)
                             .Include(x => x.InfluencerConfiguration).ThenInclude(x => x.Platform)
                             .Include(x => x.CampaignActivities)
                             .Include(x => x.CampaignType)

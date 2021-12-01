@@ -51,5 +51,6 @@ namespace IMP.Domain.Entities
         public int InfluencerConfigurationId { get; set; }
         [ForeignKey("Location")]
         public int LocationId { get; set; }
+        public Location Location { get; set; }
     }
 }

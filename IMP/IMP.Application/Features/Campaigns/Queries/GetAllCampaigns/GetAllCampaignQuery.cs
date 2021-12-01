@@ -76,7 +76,7 @@ namespace IMP.Application.Features.Campaigns.Queries.GetAllCampaigns
                         .Include(campaing => campaing.TargetConfiguration)
                         .Include(y => y.CampaignImages)
                         .Include(campaign => campaign.InfluencerConfiguration).ThenInclude(y => y.Platform)
-                        .Include(campaign => campaign.InfluencerConfiguration).ThenInclude(y => y.Locations)
+                        .Include(campaign => campaign.InfluencerConfiguration).ThenInclude(y => y.Locations).ThenInclude(z => z.Location)
                         .Include(campaign => campaign.CampaignType),
                     pageIndex: request.PageIndex,
                     pageSize: request.PageSize,
