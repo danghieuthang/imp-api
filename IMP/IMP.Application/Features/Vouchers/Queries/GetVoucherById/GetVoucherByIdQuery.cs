@@ -26,7 +26,7 @@ namespace IMP.Application.Features.Vouchers.Queries.GetVoucherById
             {
                 var voucher = await Repository.FindSingleAsync(
                         predicate: x => x.Id == request.Id,
-                        include: vouchers => vouchers.Include(voucher => voucher.CampaignVouchers).Include(voucher => voucher.VoucherCodes));
+                        include: vouchers => vouchers.Include(voucher => voucher.CampaignVouchers).ThenInclude(cv => cv.Campaign).Include(voucher => voucher.VoucherCodes));
                 if (voucher == null)
                 {
                     throw new KeyNotFoundException();
