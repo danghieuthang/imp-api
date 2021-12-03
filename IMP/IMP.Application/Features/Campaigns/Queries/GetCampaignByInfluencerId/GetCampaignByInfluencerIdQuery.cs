@@ -61,7 +61,7 @@ namespace IMP.Application.Features.Campaigns.Queries.GetCampaignByInfluencerId
                 var page = await _campaignRepository.GetPagedList(
                     predicate: x =>
                         (x.CampaignMembers.Any(cm => cm.InfluencerId == _authenticatedUserService.ApplicationUserId))
-                        && (request.Status == null 
+                        && (request.Status == null
                             || (request.Status.HasValue && x.CampaignMembers.Any(cm => cm.InfluencerId == _authenticatedUserService.ApplicationUserId && cm.Status == (int)request.Status.Value)))
                         && (request.BrandId == null || (request.BrandId != null && x.BrandId == request.BrandId))
                         && (request.FromDate == null || (request.FromDate != null && x.Created.Date >= request.FromDate))
@@ -71,7 +71,7 @@ namespace IMP.Application.Features.Campaigns.Queries.GetCampaignByInfluencerId
                             || x.Description.ToLower().Contains(request.Name.ToLower())
                             || x.AdditionalInformation.ToLower().Contains(request.Name.ToLower()))
                         && x.LastModified != null,
-                    include: x => x.Include(y => y.Brand).Include(campaing => campaing.TargetConfiguration).Include(y => y.CampaignImages).Include(campaign => campaign.InfluencerConfiguration).ThenInclude(x => x.Platform),
+                    include: x => x.Include(y => y.Brand).Include(campaing => campaing.TargetConfiguration).ThenInclude(t => t.Locations).ThenInclude(l => l.Location).Include(y => y.CampaignImages).Include(campaign => campaign.InfluencerConfiguration).ThenInclude(x => x.Platform),
                     pageIndex: request.PageIndex,
                     pageSize: request.PageSize,
                     orderBy: request.OrderField,
