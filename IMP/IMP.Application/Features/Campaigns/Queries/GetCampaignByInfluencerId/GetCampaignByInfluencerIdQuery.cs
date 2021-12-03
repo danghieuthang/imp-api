@@ -71,7 +71,15 @@ namespace IMP.Application.Features.Campaigns.Queries.GetCampaignByInfluencerId
                             || x.Description.ToLower().Contains(request.Name.ToLower())
                             || x.AdditionalInformation.ToLower().Contains(request.Name.ToLower()))
                         && x.LastModified != null,
-                    include: x => x.Include(y => y.Brand).Include(campaing => campaing.TargetConfiguration).ThenInclude(t => t.Locations).ThenInclude(l => l.Location).Include(y => y.CampaignImages).Include(campaign => campaign.InfluencerConfiguration).ThenInclude(x => x.Platform),
+                    include: x =>
+                        x.Include(y => y.Brand)
+                        .Include(campaing => campaing.InfluencerConfiguration)
+                            .ThenInclude(t => t.Locations)
+                                .ThenInclude(l => l.Location)
+                        .Include(c => c.InfluencerConfiguration)
+                            .ThenInclude(i => i.Platform)
+                        .Include(y => y.CampaignImages)
+                        .Include(campaign => campaign.TargetConfiguration),
                     pageIndex: request.PageIndex,
                     pageSize: request.PageSize,
                     orderBy: request.OrderField,
