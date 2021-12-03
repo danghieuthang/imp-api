@@ -15,6 +15,7 @@ using IMP.Application.Features.Campaigns.Queries.GetAllCampaigns;
 using IMP.Application.Features.Campaigns.Queries.GetCampaignById;
 using IMP.Application.Features.Campaigns.Queries.GetCampaignByInfluencerId;
 using IMP.Application.Features.Campaigns.Queries.GetSumaryMemberByCampaignId;
+using IMP.Application.Features.VoucherCodes.Queries.GetAllVoucherCodeOfCampaignMember;
 using IMP.Application.Features.Vouchers.Queries;
 using IMP.Application.Features.Vouchers.Queries.GetAllVoucherAssignedByCampaign;
 using IMP.Application.Interfaces;
@@ -338,6 +339,19 @@ namespace IMP.WebApi.Controllers.v1
         public async Task<IActionResult> SearchMember([FromRoute] int id)
         {
             return Ok(await Mediator.Send(new GetCampaignMemberOfCampaignByInfluencerIdQuery { CampaignId = id }));
+        }
+
+        /// <summary>
+        /// Get all voucher code in a campaign of authenticated user
+        /// </summary>
+        /// <param name="id">The campaign id</param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<IEnumerable<VoucherCodeViewModel>>), 200)]
+        [HttpGet("{id}/members/me/voucher-codes")]
+        [Authorize(Roles = "Influencer")]
+        public async Task<IActionResult> GetVoucherCodeOfMember([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new GetAllVoucherCodeOfCampaignMemberQuery { CampaignId = id }));
         }
 
 
