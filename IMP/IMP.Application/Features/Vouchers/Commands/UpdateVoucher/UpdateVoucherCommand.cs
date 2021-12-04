@@ -51,15 +51,24 @@ namespace IMP.Application.Features.Vouchers.Commands.UpdateVoucher
             {
                 var applicationUser = await UnitOfWork.Repository<ApplicationUser>().GetByIdAsync(_authenticatedUserService.ApplicationUserId);
                 var repository = UnitOfWork.Repository<Voucher>();
-                var voucher = await repository.GetByIdAsync(request.Id);
+                var voucher = await repository.FindSingleAsync(x => x.Id == request.Id, x => x.VoucherCodes);
                 if (voucher.BrandId != applicationUser.BrandId)
                 {
                     throw new ValidationException(new ValidationError("", $"Không có sửa thông tin."));
                 }
                 if (voucher != null)
                 {
+                    var voucherCodeRepository = UnitOfWork.Repository<VoucherCode>();
+
                     Mapper.Map(request, voucher);
                     repository.Update(voucher);
+
+                    // Update all voucher code
+                    foreach (var code in voucher.VoucherCodes)
+                    {
+                        code.Quantity = voucher.Quantity;
+                        voucherCodeRepository.Update(code);
+                    }
                     await UnitOfWork.CommitAsync();
 
                     var voucherView = Mapper.Map<VoucherViewModel>(voucher);

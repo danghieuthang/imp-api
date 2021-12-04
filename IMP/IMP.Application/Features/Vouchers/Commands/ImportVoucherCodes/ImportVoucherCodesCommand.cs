@@ -90,7 +90,7 @@ namespace IMP.Application.Features.Vouchers.Commands.ImportVoucherCodes
                         codes.Add(new VoucherCode
                         {
                             Code = row.GetCell(row.FirstCellNum).ToString().ToUpper(),
-                            Quantity = quantity,
+                            Quantity = voucher.Quantity,
                             VoucherId = request.VoucherId,
                         });
                     }
