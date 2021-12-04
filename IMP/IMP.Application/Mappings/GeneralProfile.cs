@@ -31,6 +31,7 @@ using IMP.Application.Features.Vouchers.Commands.UpdateVoucher;
 using System;
 using IMP.Domain.Common;
 using IMP.Application.Models;
+using IMP.Application.Features.VoucherTransactions.Commands.CreateVoucherTransaction;
 
 namespace IMP.Application.Mappings
 {
@@ -349,6 +350,8 @@ namespace IMP.Application.Mappings
             CreateMap<VoucherCode, VoucherCodeViewModel>();
             CreateMap<VoucherCode, UserVoucherCodeViewModel>();
 
+            CreateMap<VoucherTransaction, VoucherTransactionViewModel>();
+            CreateMap<CreateVoucherTransactionCommand, VoucherTransaction>();
             #endregion
 
             #region wallet

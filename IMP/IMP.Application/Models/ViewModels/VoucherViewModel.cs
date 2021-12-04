@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System;
 using Newtonsoft.Json;
 
@@ -89,7 +89,16 @@ namespace IMP.Application.Models.ViewModels
     }
     public class VoucherTransactionViewModel : BaseViewModel<int>
     {
+
         public int VoucherCodeId { get; set; }
+        public decimal TotalPrice { get; set; }
+        /// <summary>
+        /// Tổng tiền được hưởng giảm giá
+        /// </summary>
+        public decimal TotalDiscount { get; set; }
+        public string Order { get; set; }
+        public string OrderCode { get; set; }
+        public DateTime OrderCreated { get; set; }
     }
 
     public class DiscountProductViewModel
@@ -110,5 +119,19 @@ namespace IMP.Application.Models.ViewModels
     {
         public DateTime? MinDate { get; set; }
         public DateTime? MaxDate { get; set; }
+    }
+
+    public class VoucherTransactionRequest
+    {
+        public int VoucherId { get; set; }
+        public string Code { get; set; }
+        public decimal TotalPrice { get; set; }
+        /// <summary>
+        /// Tổng tiền được hưởng giảm giá
+        /// </summary>
+        public decimal TotalDiscount { get; set; }
+        public string Order { get; set; }
+        public string OrderCode { get; set; }
+        public DateTime OrderCreated { get; set; }
     }
 }

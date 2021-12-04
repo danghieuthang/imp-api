@@ -29,6 +29,7 @@ namespace IMP.Domain.Entities
 
         [StringLength(256)]
         public string Note { get; set; }
+        public bool IsPayReward { get; set; }
 
         public ICollection<MemberActivity> MemberActivities { get; set; }
         public ICollection<VoucherCode> VoucherCodes { get; set; }

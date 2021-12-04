@@ -20,6 +20,7 @@ namespace IMP.Application.Models.ViewModels
         public DateTime CompletedDate { get; set; }
         public decimal Money { get; set; }
         public string Note { get; set; }
+        public bool IsPayReward { get; set; }
         public List<MemberActivityViewModel> MemberActivities { get; set; }
     }
 

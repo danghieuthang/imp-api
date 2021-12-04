@@ -1,4 +1,5 @@
 ﻿using IMP.Application.Enums;
+using IMP.Application.Features.CampaignMembers.Commands.SendRewardToInfluencer;
 using IMP.Application.Features.CampaignMembers.Queries.GetCampaignMemberById;
 using IMP.Application.Features.Campaigns.Commands.ProcessCampaignMember;
 using IMP.Application.Features.MemberActivities.Queries.GetAllMemberActivitesOfUser;
@@ -78,6 +79,19 @@ namespace IMP.WebApi.Controllers.v1
         public async Task<IActionResult> GetVoucherMember([FromRoute] int id)
         {
             return Ok(await Mediator.Send(new GetAllVoucherOfCampaignMemberQuery { CampaignMemberId = id }));
+        }
+
+        /// <summary>
+        /// Send reward for member who completed all activity
+        /// </summary>
+        /// <param name="id">The campaign member id</param>
+        /// <returns></returns>
+        [HttpPost("{id}/send-reward")]
+        [ProducesResponseType(typeof(Response<bool>), 200)]
+        [Authorize(Roles = "Brand")]
+        public async Task<IActionResult> SendRewardToMember([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new SendRewardToInfluencerCommand { CampaignMemberId = id }));
         }
 
     }

@@ -12,8 +12,6 @@ namespace IMP.Application.Features.WalletTransactions.Commands.CreateWalletTrans
         {
             var walletRepository = unitOfWork.Repository<Wallet>();
 
-
-
             RuleFor(x => x.ApplicationUserFrom).MustExistEntityId(async (x, y) =>
             {
                 return await walletRepository.IsExistAsync(wallet => wallet.ApplicationUserId == x);

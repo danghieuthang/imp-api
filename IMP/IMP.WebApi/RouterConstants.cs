@@ -42,5 +42,6 @@ namespace IMP.WebApi
         public const string ActivityComment = Common + "activity-comments";
         public const string Admin = Common + "admin";
         public const string Notification = Common + "notifications";
+        public const string VoucherTranscation = Common + "voucher-transactions";
     }
 }

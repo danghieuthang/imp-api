@@ -50,7 +50,7 @@ namespace IMP.Application.Features.VoucherCodes.Commands.CreateVoucherCode
                     } while (voucherCodes.Contains(code));
                 }
 
-                var voucherCode = new VoucherCode { Code = code};
+                var voucherCode = new VoucherCode { Code = code, Quantity = voucher.Quantity };
                 await _voucherCodeRepository.AddAsync(voucherCode);
                 await UnitOfWork.CommitAsync();
 
