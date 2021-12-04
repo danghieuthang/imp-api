@@ -2,6 +2,7 @@
 using IMP.Application.Interfaces;
 using IMP.Application.Interfaces.Services;
 using IMP.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -48,10 +49,10 @@ namespace IMP.Infrastructure.Persistence.Services
                     notification.Message = "Chiến dịch đang được xem xét lại.";
                     break;
                 case NotificationType.BrandApprovedJoinCampaign:
-                    notification.Message = "Bạn đã được nhãn hàng đồng ý thăm gia chiến dịch.";
+                    notification.Message = "Bạn đã được nhãn hàng đồng ý tham gia chiến dịch.";
                     break;
                 case NotificationType.BrandCancelJoinCampaign:
-                    notification.Message = "Bạn đã bị nhãn hàng từ chối thăm gia chiến dịch.";
+                    notification.Message = "Bạn đã bị nhãn hàng từ chối tham gia chiến dịch.";
                     break;
                 case NotificationType.InfluencerCommentMemberActivity:
                     notification.Message = "Có bình luật mới từ thành viên chiến dịch.";
@@ -62,23 +63,31 @@ namespace IMP.Infrastructure.Persistence.Services
                     notification.ApplicationUserId = memberAcitity.CampaignActivity.Campaign.CreatedById;
                     break;
                 case NotificationType.BrandCommentMemberActivity:
-                    notification.Message = "Nhãn hàng vừa bình luật.";
 
-                    memberAcitity = await _unitOfWork.Repository<MemberActivity>().FindSingleAsync(x => x.Id == redirectId, x => x.CampaignMember);
+                    memberAcitity = await _unitOfWork.Repository<MemberActivity>().FindSingleAsync(x => x.Id == redirectId,
+                            include: x => x.Include(y => y.CampaignMember).ThenInclude(y => y.Campaign).ThenInclude(y => y.Brand));
+
+                    notification.Message = $"Nhãn hàng - {memberAcitity.CampaignMember.Campaign.Brand.CompanyName} vừa bình luận.";
 
                     notification.Url = $"/campaign/{memberAcitity.CampaignMember.CampaignId}/member/{memberAcitity.CampaignMemberId}";
                     notification.ApplicationUserId = memberAcitity.CampaignMember.InfluencerId;
                     break;
 
                 case NotificationType.BrandApprovedMemberActivity:
-                    notification.Message = "Nhãn hàng vừa đánh giá bạn hoàn thành hoạt động.";
-                    memberAcitity = await _unitOfWork.Repository<MemberActivity>().FindSingleAsync(x => x.Id == redirectId, x => x.CampaignMember);
+                    memberAcitity = await _unitOfWork.Repository<MemberActivity>().FindSingleAsync(x => x.Id == redirectId,
+                           include: x => x.Include(y => y.CampaignMember).ThenInclude(y => y.Campaign).ThenInclude(y => y.Brand));
+
+                    notification.Message = $"Nhãn hàng - {memberAcitity.CampaignMember.Campaign.Brand.CompanyName} vừa đánh giá bạn hoàn thành hoạt động.";
+
                     notification.Url = $"/campaign/{memberAcitity.CampaignMember.CampaignId}/member/{memberAcitity.CampaignMemberId}";
                     break;
 
                 case NotificationType.BrandRejectMemberActivity:
-                    notification.Message = "Nhãn hàng vừa đánh giá bạn chưa hoàn thành hoạt động.";
-                    memberAcitity = await _unitOfWork.Repository<MemberActivity>().FindSingleAsync(x => x.Id == redirectId, x => x.CampaignMember);
+                    memberAcitity = await _unitOfWork.Repository<MemberActivity>().FindSingleAsync(x => x.Id == redirectId,
+                        include: x => x.Include(y => y.CampaignMember).ThenInclude(y => y.Campaign).ThenInclude(y => y.Brand));
+
+                    notification.Message = "Nhãn hàng - {memberAcitity.CampaignMember.Campaign.Brand.CompanyName} vừa đánh giá bạn chưa hoàn thành hoạt động.";
+
                     notification.Url = $"/campaign/{memberAcitity.CampaignMember.CampaignId}/member/{memberAcitity.CampaignMemberId}";
                     break;
                 default:
