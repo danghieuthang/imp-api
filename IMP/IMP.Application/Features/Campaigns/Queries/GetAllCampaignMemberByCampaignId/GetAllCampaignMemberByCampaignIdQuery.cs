@@ -7,6 +7,7 @@ using IMP.Application.Wrappers;
 using IMP.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,8 @@ namespace IMP.Application.Features.Campaigns.Queries.GetAllCampaignMemberByCampa
         public CampaignMemberStatus? Status { get; set; }
         [FromRoute(Name = "id")]
         public int Id { get; set; }
+        [FromQuery(Name = "is_get_member_activities")]
+        public bool IsGetMemberActivities { get; set; }
 
         public class GetAllCampaignMemberCampaignIdQueryHandler : ListQueryHandler<GetAllCampaignMemberByCampaignIdQuery, CampaignMemberViewModel>
         {
@@ -32,10 +35,20 @@ namespace IMP.Application.Features.Campaigns.Queries.GetAllCampaignMemberByCampa
 
             public override async Task<Response<IPagedList<CampaignMemberViewModel>>> Handle(GetAllCampaignMemberByCampaignIdQuery request, CancellationToken cancellationToken)
             {
+                Func<IQueryable<CampaignMember>, IIncludableQueryable<CampaignMember, object>> include;
+                if (request.IsGetMemberActivities)
+                {
+                    include = campaignMembers => campaignMembers.Include(y => y.Influencer).Include(y => y.ApprovedBy).Include(x => x.MemberActivities);
+                }
+                else
+                {
+                    include = campaignMembers => campaignMembers.Include(y => y.Influencer).Include(y => y.ApprovedBy);
+                }
+
                 var page = await UnitOfWork.Repository<CampaignMember>().GetPagedList(
                     predicate: x => x.CampaignId == request.Id
                         && (request.Status == null || (request.Status != null && (int)request.Status == x.Status)),
-                    include: x => x.Include(y => y.Influencer).Include(y => y.ApprovedBy),
+                    include: include,
                     pageIndex: request.PageIndex,
                     pageSize: request.PageSize,
                     orderBy: request.OrderField,

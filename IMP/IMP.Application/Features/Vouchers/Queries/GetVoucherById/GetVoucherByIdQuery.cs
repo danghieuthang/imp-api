@@ -4,6 +4,7 @@ using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
 using IMP.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace IMP.Application.Features.Vouchers.Queries.GetVoucherById
     public class GetVoucherByIdQuery : IGetByIdQuery<Voucher, VoucherViewModel>
     {
         public int Id { get; set; }
+        public bool IsGetCampaignInfo { get; set; }
         public class GetVoucherByIdQueryHandler : GetByIdQueryHandler<GetVoucherByIdQuery, Voucher, VoucherViewModel>
         {
             public GetVoucherByIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
@@ -24,9 +26,18 @@ namespace IMP.Application.Features.Vouchers.Queries.GetVoucherById
 
             public override async Task<Response<VoucherViewModel>> Handle(GetVoucherByIdQuery request, CancellationToken cancellationToken)
             {
+                Func<IQueryable<Voucher>, IIncludableQueryable<Voucher, object>> include;
+                if (request.IsGetCampaignInfo)
+                {
+                    include = vouchers => vouchers.Include(voucher => voucher.CampaignVouchers).ThenInclude(cv => cv.Campaign).ThenInclude(y => y.CampaignImages).Include(voucher => voucher.VoucherCodes);
+                }
+                else
+                {
+                    include = vouchers => vouchers.Include(voucher => voucher.CampaignVouchers).Include(voucher => voucher.VoucherCodes);
+                }
                 var voucher = await Repository.FindSingleAsync(
                         predicate: x => x.Id == request.Id,
-                        include: vouchers => vouchers.Include(voucher => voucher.CampaignVouchers).ThenInclude(cv => cv.Campaign).ThenInclude(y=>y.CampaignImages).Include(voucher => voucher.VoucherCodes));
+                        include: include);
                 if (voucher == null)
                 {
                     throw new KeyNotFoundException();

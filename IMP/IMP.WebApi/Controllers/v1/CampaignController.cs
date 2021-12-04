@@ -261,12 +261,13 @@ namespace IMP.WebApi.Controllers.v1
         /// Get all voucher of a campaign
         /// </summary>
         /// <param name="id">The id of campaign</param>
+        /// <param name="isGetVoucherCodes">If true then include voucher code</param>
         /// <returns></returns>
         [ProducesResponseType(typeof(Response<IEnumerable<VoucherViewModel>>), 200)]
         [HttpGet("{id}/vouchers")]
-        public async Task<IActionResult> GetVoucherOfCampaign([FromRoute] int id)
+        public async Task<IActionResult> GetVoucherOfCampaign([FromRoute] int id, [FromQuery(Name = "is_get_voucher_codes")] bool isGetVoucherCodes)
         {
-            return Ok(await Mediator.Send(new GetAllVoucherByCampaignIdQuery { CampaignId = id }));
+            return Ok(await Mediator.Send(new GetAllVoucherByCampaignIdQuery { CampaignId = id, IsGetVoucherCodes = isGetVoucherCodes }));
         }
 
         /// <summary>

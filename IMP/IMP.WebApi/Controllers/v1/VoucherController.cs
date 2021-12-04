@@ -83,12 +83,18 @@ namespace IMP.WebApi.Controllers.v1
             return Ok(await Mediator.Send(command));
         }
 
+        /// <summary>
+        /// Get detail of a voucher
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="isGetCampaignInfo">If true then include campaign in campaign voucher</param>
+        /// <returns></returns>
         [ProducesResponseType(typeof(Response<VoucherViewModel>), 200)]
         [HttpGet("{id}")]
         [Authorize(Roles = "Brand")]
-        public async Task<IActionResult> Get([FromRoute] int id)
+        public async Task<IActionResult> Get([FromRoute] int id, [FromQuery(Name = "is_get_campaigninfo")] bool isGetCampaignInfo)
         {
-            return Ok(await Mediator.Send(new GetVoucherByIdQuery { Id = id }));
+            return Ok(await Mediator.Send(new GetVoucherByIdQuery { Id = id, IsGetCampaignInfo = isGetCampaignInfo }));
         }
 
         /// <summary>
