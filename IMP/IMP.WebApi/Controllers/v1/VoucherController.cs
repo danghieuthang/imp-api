@@ -294,5 +294,18 @@ namespace IMP.WebApi.Controllers.v1
             return Ok(await Mediator.Send(new GetRangeOfVoucherQuery()));
         }
 
+        /// <summary>
+        /// Search list voucher by biolink
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<IEnumerable<VoucherViewModel>>), 200)]
+        [HttpGet("search-voucher-by-biolink")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetVouchersByBioLink([FromQuery] GetVoucherForBioLinkOfCampaignQuery query)
+        {
+            return Ok(await Mediator.Send(query));
+        }
+
     }
 }
