@@ -74,6 +74,11 @@ namespace IMP.Application.Interfaces
            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null);
 
+        IQueryable<TEntity> GetAllWithOrderByStringField(Expression<Func<TEntity, bool>> predicate = null,
+         string orderBy = null,
+         bool orderByDecensing = false,
+         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null);
+
         /// <summary>
         /// Gets all entities
         /// </summary>

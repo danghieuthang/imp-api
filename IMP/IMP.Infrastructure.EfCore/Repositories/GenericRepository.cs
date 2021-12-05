@@ -280,6 +280,29 @@ namespace IMP.Infrastructure.EfCore.Repositories
             return query;
         }
 
+        public IQueryable<TEntity> GetAllWithOrderByStringField(Expression<Func<TEntity, bool>> predicate = null,
+         string orderBy = null,
+         bool orderByDecensing = false,
+         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null)
+        {
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderByFunc = null;
+
+            if (orderBy != null)
+            {
+                if (orderByDecensing == false)
+                {
+                    orderByFunc = x => x.OrderBy(orderBy);
+                }
+                else
+                {
+                    orderByFunc = x => x.OrderBy(orderBy + " DESC");
+                }
+            }
+
+            var query = GetAll(predicate: predicate, orderBy: orderByFunc, include: include);
+            return query;
+        }
+
         public IQueryable<TResult> GetAll<TResult>(Expression<Func<TEntity, TResult>> selector,
         Expression<Func<TEntity, bool>> predicate = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,

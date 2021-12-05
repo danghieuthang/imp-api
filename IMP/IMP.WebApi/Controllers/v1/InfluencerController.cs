@@ -39,6 +39,18 @@ namespace IMP.WebApi.Controllers.v1
         }
 
         /// <summary>
+        /// Search influencer suitable with campaign
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [HttpGet("search-influencer-suitable-with-campaign")]
+        [ProducesResponseType(typeof(Response<PagedList<InfluencerViewModel>>), 200)]
+        public async Task<IActionResult> SearchInfluencerSutableWithCampaign([FromQuery] GetAllInfluencerSuitableByCampaignQuery query)
+        {
+            return Ok(await Mediator.Send(query));
+        }
+
+        /// <summary>
         /// Get influencer by nickname
         /// </summary>
         /// <param name="nickname"></param>
