@@ -27,6 +27,7 @@ using Microsoft.AspNetCore.Http;
 using IMP.Application.Constants;
 using IMP.Infrastructure.Identity.Contexts;
 using IMP.Application.Interfaces.Shared;
+using System.IO;
 
 namespace IMP.Infrastructure.Identity.Services
 {
@@ -203,16 +204,31 @@ namespace IMP.Infrastructure.Identity.Services
                 {
                     user.ApplicationUserId = applicationUser.Id;
                     user.BrandId = applicationUser.BrandId;
-                    user.EmailConfirmed = true;
+                    user.EmailConfirmed = false;
                     await _userManager.UpdateAsync(user);
                 }
                 await _userManager.AddToRoleAsync(user, request.Role.ToString());
                 var verificationUri = await SendVerificationEmail(user, origin);
-                //TODO: Attach Email Service here and configure it via appsettings
-                //_ = Task.Run(() =>
-                //{
-                //    _emailService.SendAsync(new Application.Models.Email.EmailRequest() { To = user.Email, Body = $"Please confirm your account by click <a href='{verificationUri}'>Here</a>.", Subject = "Confirm Registration TMP Platform" });
-                //});
+                _ = Task.Run(() =>
+                {
+                    string path = Path.Combine(Directory.GetCurrentDirectory(), "App_Datas", "EmailTemplates", "verify_register_template.html");
+                    if (!System.IO.File.Exists(path))
+                    {
+                        throw new Exception("Email templates not found");
+                    }
+
+                    StringBuilder emailContent = new StringBuilder();
+                    emailContent.Append(File.ReadAllText(path));
+                    emailContent.Replace("@URL", verificationUri);
+                    string content = emailContent.ToString();
+                    _emailService.SendAsync(
+                        new EmailRequest
+                        {
+                            To = request.Email,
+                            Body = content,
+                            Subject = "Xác thực đăng ký tài khoản IMP"
+                        });
+                });
                 return new Response<string>(user.Email, message: $"User Registered.");
             }
             var errors = new List<ValidationError>();
