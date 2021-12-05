@@ -108,4 +108,10 @@ namespace IMP.Application.Models.Compaign
         public string Name { get; set; }
         public decimal Price { get; set; }
     }
+    public class CampaignBasicInfoViewModel
+    {
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public List<CampaignImageViewModel> CampaignImages { get; set; }
+    }
 }

@@ -9,10 +9,11 @@ namespace IMP.Application.Models.ViewModels
 {
     public class MemberActivityViewModel : BaseViewModel<int>
     {
-        public CampaignActivityViewModel CampaignActivity { get; set; }
         public int CampaignMemberId { get; set; }
         public int Status { get; set; }
         public List<ActivityCommentViewModel> ActivityComments { get; set; }
         public List<EvidenceViewModel> Evidences { get; set; }
+
+        public CampaignMemberBasicInfoViewModel CampaignMember { get; set; }
     }
 }

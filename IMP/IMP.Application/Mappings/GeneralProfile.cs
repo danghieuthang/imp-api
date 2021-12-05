@@ -196,6 +196,7 @@ namespace IMP.Application.Mappings
             CreateMap<CampaignActivityUpdateModel, CampaignActivity>();
             CreateMap<ActivityType, ActivityTypeViewModel>();
             CreateMap<CreateActivityTypeCommand, ActivityType>();
+            CreateMap<Campaign, CampaignBasicInfoViewModel>();
             #endregion
 
             #region milestone
@@ -370,6 +371,7 @@ namespace IMP.Application.Mappings
 
             #region campaign member
             CreateMap<CampaignMember, CampaignMemberViewModel>();
+            CreateMap<CampaignMember, CampaignMemberBasicInfoViewModel>();
             #endregion
 
             #region evidence type
