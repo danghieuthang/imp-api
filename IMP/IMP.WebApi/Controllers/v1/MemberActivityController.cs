@@ -1,5 +1,6 @@
 ﻿using IMP.Application.Enums;
 using IMP.Application.Features.MemberActivities.Commands.ChangeMemberActivityStatus;
+using IMP.Application.Features.MemberActivities.Queries.GetAllActivity;
 using IMP.Application.Features.MemberActivities.Queries.GetMemberActivityById;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
@@ -60,6 +61,19 @@ namespace IMP.WebApi.Controllers.v1
         public async Task<IActionResult> Pending([FromRoute] int id)
         {
             return Ok(await Mediator.Send(new ChangeMemberActivityStatusCommand { Id = id, Status = MemberActivityStatus.Waiting }));
+        }
+
+        /// <summary>
+        /// Search all member activity of brand who are logged in
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [HttpGet("search-all-activity-of-brand")]
+        [ProducesResponseType(typeof(IPagedList<MemberActivityViewModel>), 200)]
+        [Authorize(Roles = "Brand")]
+        public async Task<IActionResult> SearchAllMemberAcitivity([FromQuery] GetAllActivityOfBrandQuery query)
+        {
+            return Ok(await Mediator.Send(query));
         }
     }
 }
