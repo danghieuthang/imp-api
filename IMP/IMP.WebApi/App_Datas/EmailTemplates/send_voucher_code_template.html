@@ -49,6 +49,32 @@
                 display: block;
             }
         }
+
+        .coupon {
+            border: 5px dotted #bbb;
+            width: 80%;
+            border-radius: 15px;
+            margin: 0 auto;
+            max-width: 600px;
+        }
+
+        .container {
+            padding: 2px 16px;
+            background-color: #f1f1f1;
+        }
+
+        .promo {
+            background: #ccc;
+            padding: 3px;
+            font-size: 19px;
+            font-weight: bold;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        .expire {
+            color: red;
+        }
     </style>
 </head>
 
@@ -78,21 +104,20 @@
                                                            width="100%">
                                                         <tr>
                                                             <td>
-                                                                <div style="font-family: sans-serif">
-                                                                    <div style="font-size: 12px; mso-line-height-alt: 14.399999999999999px; color: #555555; line-height: 1.2; font-family: Arial, Helvetica Neue, Helvetica, sans-serif;">
-                                                                        <p style="margin: 0; font-size: 12px;">
-                                                                            Mã
-                                                                            voucher của bạn là:
+                                                                <div class="coupon">
+                                                                    <img src="@IMAGE"
+                                                                         alt="Avatar" style="width:100%;">
+                                                                    <div class="container"
+                                                                         style="background-color:white">
+                                                                        <h2><b>@NAME</b></h2>
+                                                                        <p>@DESCRIPTION
                                                                         </p>
-                                                                        <p style="margin: 0; font-size: 12px; text-align: center;">
-                                                                            <span style="font-size:20px;"><em><strong>@CODE</strong></em></span>
+                                                                    </div>
+                                                                    <div class="container">
+                                                                        <p>
+                                                                            Nhập mã: <span class="promo">@CODE</span>
                                                                         </p>
-                                                                        <p style="margin: 0; font-size: 12px; text-align: left;">
-                                                                            <span style="font-size:12px;">
-                                                                                Mã sử dụng có
-                                                                                thời hạn đến: @DATEEXPIRED
-                                                                            </span>
-                                                                        </p>
+                                                                        <p class="expire">Hạn sử dụng: @DATEEXPIRED</p>
                                                                     </div>
                                                                 </div>
                                                             </td>
@@ -151,7 +176,9 @@
                                                                                     </td>
                                                                                     <td style="font-family:Arial, Helvetica Neue, Helvetica, sans-serif;font-size:15px;color:#9d9d9d;vertical-align:middle;letter-spacing:undefined;text-align:center;">
                                                                                         <a href="http://kolbio.net/"
-                                                                                           style="color:#9d9d9d;text-decoration:none;">IMP Platform</a>
+                                                                                           style="color:#9d9d9d;text-decoration:none;">
+                                                                                            IMP
+                                                                                        </a>
                                                                                     </td>
                                                                                 </tr>
                                                                             </table>

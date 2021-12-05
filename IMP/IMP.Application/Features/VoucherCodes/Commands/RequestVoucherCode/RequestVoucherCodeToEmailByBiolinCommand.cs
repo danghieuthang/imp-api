@@ -80,13 +80,16 @@ namespace IMP.Application.Features.VoucherCodes.Commands.RequestVoucherCode
                     emailContent.Append(File.ReadAllText(path));
                     emailContent.Replace("@CODE", voucherCodes.FirstOrDefault().Code);
                     emailContent.Replace("@DATEEXPIRED", voucherCodes.FirstOrDefault().Voucher.ToDate?.ToString("dd-MM-yyyy"));
+                    emailContent.Replace("@IMAGE", voucherCodes.FirstOrDefault().Voucher.Image);
+                    emailContent.Replace("@NAME", voucherCodes.FirstOrDefault().Voucher.VoucherName);
+                    emailContent.Replace("@DESCRIPTION", voucherCodes.FirstOrDefault().Voucher.Description);
                     string content = emailContent.ToString();
                     _emailService.SendAsync(
                         new EmailRequest
                         {
                             To = request.Email,
                             Body = content,
-                            Subject = "Bạn vừa nhận được voucher code từ IMP Platform"
+                            Subject = "Bạn vừa nhận được mã giảm giá từ IMP"
                         });
                 });
 
