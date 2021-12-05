@@ -62,10 +62,16 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <None Update="App_Datas\EmailTemplates\send_voucher_code_template.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="App_Datas\ExcelTemplates\import-voucher-template_new.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="App_Datas\ExcelTemplates\import_voucher_template.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="App_Datas\Sqls\Update_Platform_For_Influencer.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

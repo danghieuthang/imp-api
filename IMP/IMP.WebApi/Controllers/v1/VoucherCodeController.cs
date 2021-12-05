@@ -1,5 +1,6 @@
 ﻿using IMP.Application.Features.VoucherCodes.Commands.AssignVoucherCodeForCampaignMember;
 using IMP.Application.Features.VoucherCodes.Commands.CreateVoucherCode;
+using IMP.Application.Features.VoucherCodes.Commands.RequestVoucherCode;
 using IMP.Application.Features.VoucherCodes.Commands.UnAssignVoucherCodeForMember;
 using IMP.Application.Features.VoucherCodes.Commands.UpdateVoucherCode;
 using IMP.Application.Features.VoucherCodes.DeleteVoucherCode;
@@ -110,6 +111,32 @@ namespace IMP.WebApi.Controllers.v1
         [HttpPut("assign-for-members")]
         [Authorize(Roles = "Brand")]
         public async Task<IActionResult> AssignVoucherCodeForCampaignMember([FromBody] AssignVoucherCodesForCampaignCommand command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
+
+        /// <summary>
+        /// Take voucher code from biolink and add to authenticated user
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<bool>), 200)]
+        [HttpPost("take-voucher-code-from-biolink")]
+        [Authorize(Roles = "Influencer")]
+        public async Task<IActionResult> RequestVoucherCodeFromBioLink([FromBody] RequestVoucherCodeByBiolinkAndCampaignCommand command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
+
+        /// <summary>
+        /// Get voucher code and send to email by biolink
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<bool>), 200)]
+        [HttpPost("take-voucher-code-to-email-from-biolink")]
+        [Authorize(Roles = "Influencer")]
+        public async Task<IActionResult> RequestVoucherCodeToEmailFrombioLink([FromBody] RequestVoucherCodeToEmailByBiolinkCommand command)
         {
             return Ok(await Mediator.Send(command));
         }
