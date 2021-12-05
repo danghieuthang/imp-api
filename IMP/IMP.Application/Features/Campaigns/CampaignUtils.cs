@@ -43,7 +43,9 @@ namespace IMP.Application.Features.Campaigns
             if (campaign.InfluencerConfiguration.Gender.HasValue && campaign.InfluencerConfiguration.Gender.Value != (int)Genders.None)
             {
                 int gender;
-                switch (user.Gender.ToLower())
+                string ge = user.Gender == null ? "" : user.Gender.ToLower();
+
+                switch (ge)
                 {
                     case "male":
                         gender = (int)Genders.Male;
@@ -59,7 +61,7 @@ namespace IMP.Application.Features.Campaigns
                         break;
                 }
 
-                if (gender != campaign.InfluencerConfiguration.Gender.Value)
+                if (gender != campaign.InfluencerConfiguration.Gender.Value && gender != (int)Genders.None)
                 {
                     errors.Add(new ValidationError("gender", $"Giới tính không hợp lệ."));
                 }

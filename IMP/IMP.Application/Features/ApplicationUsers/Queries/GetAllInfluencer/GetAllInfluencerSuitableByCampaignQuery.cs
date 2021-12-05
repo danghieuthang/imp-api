@@ -33,20 +33,20 @@ namespace IMP.Application.Features.ApplicationUsers.Queries.GetAllInfluencer
 
             public override async Task<Response<IPagedList<InfluencerViewModel>>> Handle(GetAllInfluencerSuitableByCampaignQuery request, CancellationToken cancellationToken)
             {
-                var campaign = await UnitOfWork.Repository<Campaign>().FindSingleAsync(x => x.Id == request.CampaignId, x => x.InfluencerConfiguration, x => x.InfluencerConfiguration.Locations);
+                var campaign = await UnitOfWork.Repository<Campaign>().FindSingleAsync(x => x.Id == request.CampaignId, x => x.InfluencerConfiguration, x => x.InfluencerConfiguration.Locations, x => x.CampaignMembers);
                 if (campaign == null)
                 {
                     return new Response<IPagedList<InfluencerViewModel>>();
                 }
-
+                var memberIds = campaign.CampaignMembers.Select(x => x.InfluencerId).ToList();
                 string name = request.Name != null ? request.Name.ToLower().Trim() : "";
 
                 var influencers = await UnitOfWork.Repository<ApplicationUser>().GetAllWithOrderByStringField(
                         predicate: x => x.BrandId == null
                                 && (x.FirstName.ToLower().Contains(name)
                                     || x.LastName.ToLower().Contains(name)
-                                    || x.Nickname.ToLower().Contains(name)),
-
+                                    || x.Nickname.ToLower().Contains(name))
+                                 && !memberIds.Contains(x.Id),
                         orderBy: request.OrderField,
                         orderByDecensing: request.OrderBy == OrderBy.DESC,
                         include: x => x.Include(y => y.Ranking).Include(y => y.InfluencerPlatforms).ThenInclude(y => y.Platform)).ToListAsync();
