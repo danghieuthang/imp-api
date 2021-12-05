@@ -1,7 +1,9 @@
 ﻿using IMP.Application.Features.ApplicationUsers.Queries.GetAllInfluencer;
 using IMP.Application.Features.ApplicationUsers.Queries.GetInfluencerById;
+using IMP.Application.Features.Influencers.Commands;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -46,6 +48,24 @@ namespace IMP.WebApi.Controllers.v1
         public async Task<IActionResult> SearchInfluencer([FromRoute] string nickname)
         {
             return Ok(await Mediator.Send(new GetInfluencerByIdCommand { Nickname = nickname }));
+        }
+
+        /// <summary>
+        /// Add invited a influencer join to campaign
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        [HttpPost("{id}/invite-join-campaign")]
+        [ProducesResponseType(typeof(Response<bool>), 200)]
+        [Authorize(Roles = "Brand")]
+        public async Task<IActionResult> InviteInfluencer([FromRoute] int id, [FromBody] InviteInfluencerToCampaignCommand command)
+        {
+            if (id != command.Id)
+            {
+                return BadRequest();
+            }
+            return Ok(await Mediator.Send(command));
         }
 
     }

@@ -22,7 +22,7 @@ namespace IMP.Infrastructure.Persistence.Services
             _unitOfWork = unitOfWork;
         }
 
-        private async Task<Notification> AddNotification(int applicationUserId, int redirectId, NotificationType notificationType)
+        private async Task<Notification> AddNotification(int applicationUserId, int redirectId, NotificationType notificationType, string message = null)
         {
             Notification notification = new Notification
             {
@@ -86,9 +86,15 @@ namespace IMP.Infrastructure.Persistence.Services
                     memberAcitity = await _unitOfWork.Repository<MemberActivity>().FindSingleAsync(x => x.Id == redirectId,
                         include: x => x.Include(y => y.CampaignMember).ThenInclude(y => y.Campaign).ThenInclude(y => y.Brand));
 
-                    notification.Message = "Nhãn hàng - {memberAcitity.CampaignMember.Campaign.Brand.CompanyName} vừa đánh giá bạn chưa hoàn thành hoạt động.";
+                    notification.Message = $"Nhãn hàng - {memberAcitity.CampaignMember.Campaign.Brand.CompanyName} vừa đánh giá bạn chưa hoàn thành hoạt động.";
 
                     notification.Url = $"/campaign/{memberAcitity.CampaignMember.CampaignId}/member/{memberAcitity.CampaignMemberId}";
+                    break;
+                case NotificationType.BrandInvitedToCampaign:
+                    notification.Message = message ?? "Nhãn hàng vừa mời bạn tham gia chiến dịch.";
+                    break;
+                case NotificationType.InfluencerAcceptedInvited:
+                    notification.Message = message ?? "Influencer đồng ý tham gia chiến dịch.";
                     break;
                 default:
                     notification.Message = "";
@@ -100,9 +106,9 @@ namespace IMP.Infrastructure.Persistence.Services
             return notification;
         }
 
-        public async Task PutNotication(int applicationUserid, int redirectId, NotificationType notificationType)
+        public async Task PutNotication(int applicationUserid, int redirectId, NotificationType notificationType, string message = null)
         {
-            var notification = await AddNotification(applicationUserid, redirectId, notificationType);
+            var notification = await AddNotification(applicationUserid, redirectId, notificationType, message);
             int totalNotification = await _unitOfWork.Repository<Notification>().CountAsync(x => x.ApplicationUserId == notification.ApplicationUserId && x.IsRead == false);
             string data = JsonConvert.SerializeObject(new
             {

@@ -10,7 +10,7 @@ namespace IMP.Application.Interfaces.Services
 {
     public interface INotificationService
     {
-        Task PutNotication(int applicationUserid, int redirectId, NotificationType notificationType);
+        Task PutNotication(int applicationUserid, int redirectId, NotificationType notificationType, string message = null);
         Task PutNotication(Notification notification);
     }
 }

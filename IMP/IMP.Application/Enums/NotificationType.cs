@@ -26,6 +26,8 @@ namespace IMP.Application.Enums
         AdminRejectCampaign = 14,
         AdminPendingCampaign = 15,
         InfluencerCommentMemberActivity = 16,
+        // Influencer đồng ý thăm gia chiến dịch\
+        InfluencerAcceptedInvited = 17,
         #endregion
 
         #region Influencer
@@ -38,7 +40,8 @@ namespace IMP.Application.Enums
         BrandAcceptMemberActivity = 25,
         BrandRejectMemberActivity = 26,
         BrandCommentMemberActivity = 27,
-
+        // Brand mời thăm gia campaign
+        BrandInvitedToCampaign = 28,
         #endregion
     }
 }

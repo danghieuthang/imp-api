@@ -34,7 +34,9 @@ namespace IMP.Application.Enums
     {
         Pending,
         Approved,
-        Cancelled
+        Cancelled,
+        Invited,
+        Completed
     }
 
 }
