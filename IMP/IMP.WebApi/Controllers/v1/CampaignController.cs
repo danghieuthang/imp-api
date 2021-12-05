@@ -73,6 +73,19 @@ namespace IMP.WebApi.Controllers.v1
         }
 
         /// <summary>
+        /// Get campaign by bio link
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<IPagedList<CampaignViewModel>>), 200)]
+        [HttpGet("search-campaign-by-biolink")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetCampaignOfInfluencer([FromQuery] GetCampaignByBioLinkQuery query)
+        {
+            return Ok(await Mediator.Send(query));
+        }
+
+        /// <summary>
         /// Get a campaign by id
         /// </summary>
         /// <param name="id">The campaign id</param>
