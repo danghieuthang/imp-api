@@ -1,4 +1,5 @@
 ﻿using IMP.Application.Enums;
+using IMP.Application.Features.CampaignMembers.Commands.AcceptInviteJoinCampaign;
 using IMP.Application.Features.CampaignMembers.Commands.SendRewardToInfluencer;
 using IMP.Application.Features.CampaignMembers.Queries.GetCampaignMemberById;
 using IMP.Application.Features.Campaigns.Commands.ProcessCampaignMember;
@@ -16,7 +17,7 @@ namespace IMP.WebApi.Controllers.v1
 {
     [Route(RouterConstants.CampaignMember)]
     [ApiVersion("1.0")]
-    [Authorize(Roles = "Brand")]
+    [Authorize()]
     public class CampaignMemberController : BaseApiController
     {
         /// <summary>
@@ -25,6 +26,7 @@ namespace IMP.WebApi.Controllers.v1
         /// <param name="id">The Campaign member id</param>
         /// <returns></returns>
         [HttpPost("{id}/approval")]
+        [Authorize(Roles = "Brand")]
         public async Task<IActionResult> Approval([FromRoute] int id)
         {
             return Ok(await Mediator.Send(new ProcessCampaignMemberCommand { CampaignMemberId = id, Status = CampaignMemberStatus.Approved }));
@@ -37,9 +39,34 @@ namespace IMP.WebApi.Controllers.v1
         /// <param name="request">The Cancel Request</param>
         /// <returns></returns>
         [HttpPost("{id}/cancel")]
+        [Authorize(Roles = "Brand")]
         public async Task<IActionResult> Cancel([FromRoute] int id, [FromBody] CampaignMemberCancelRequest request)
         {
             return Ok(await Mediator.Send(new ProcessCampaignMemberCommand { CampaignMemberId = id, Status = CampaignMemberStatus.Cancelled, Note = request.Note }));
+        }
+
+        /// <summary>
+        /// Influencer accept invited join to campaign
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost("{id}/accept-invited")]
+        [Authorize(Roles = "Influencer")]
+        public async Task<IActionResult> AcceptInvited([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new AcceptInviteJoinCampaignCommand { Id = id }));
+        }
+
+        /// <summary>
+        /// Reject invited join to campaign
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost("{id}/reject-invited")]
+        [Authorize(Roles = "Influencer")]
+        public async Task<IActionResult> RejectInvite([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new RejectInviteJoinCampaignCommand { Id = id }));
         }
 
         /// <summary>

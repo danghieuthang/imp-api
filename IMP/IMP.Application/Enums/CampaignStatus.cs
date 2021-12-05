@@ -36,6 +36,7 @@ namespace IMP.Application.Enums
         Approved,
         Cancelled,
         Invited,
+        RefuseInvitated,
         Completed
     }
 
