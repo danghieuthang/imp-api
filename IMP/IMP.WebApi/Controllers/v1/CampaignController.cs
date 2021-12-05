@@ -15,6 +15,7 @@ using IMP.Application.Features.Campaigns.Queries.GetAllCampaigns;
 using IMP.Application.Features.Campaigns.Queries.GetCampaignById;
 using IMP.Application.Features.Campaigns.Queries.GetCampaignByInfluencerId;
 using IMP.Application.Features.Campaigns.Queries.GetSumaryMemberByCampaignId;
+using IMP.Application.Features.Campaigns.Queries.Reports;
 using IMP.Application.Features.VoucherCodes.Queries.GetAllVoucherCodeOfCampaignMember;
 using IMP.Application.Features.Vouchers.Queries;
 using IMP.Application.Features.Vouchers.Queries.GetAllVoucherAssignedByCampaign;
@@ -407,6 +408,19 @@ namespace IMP.WebApi.Controllers.v1
         public async Task<IActionResult> SumaryMember([FromRoute] int id)
         {
             return Ok(await Mediator.Send(new GetSumaryMemberByCampaignIdQuery { CampaignId = id }));
+        }
+
+        /// <summary>
+        /// Get report of a campaign
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<CampaignReportViewModel>), 200)]
+        [HttpGet("{id}/report")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Report([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new GetReportOfCampaignQuery { CampaignId = id }));
         }
     }
 }

@@ -115,4 +115,16 @@ namespace IMP.Application.Models.Compaign
         [JsonProperty("images")]
         public List<CampaignImageViewModel> CampaignImages { get; set; }
     }
+
+    public class CampaignReportViewModel
+    {
+        public int NumberOfInfluencer { get; set; }
+        public int NumberOfInfluencerApply { get; set; }
+        public int NumberOfInfluencerCompleted { get; set; }
+        public int NumberOfVoucher { get; set; }
+        public int NumberOfVoucherCode { get; set; }
+        public int TotalNumberVoucherCodeUsed { get; set; }
+        public int NumberVoucherCodeUsedOfBestInfluencer { get; set; }
+        public UserBasicViewModel BestInfluencer { get; set; }
+    }
 }
