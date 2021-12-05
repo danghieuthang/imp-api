@@ -112,6 +112,7 @@ namespace IMP.Application.Models.Compaign
     {
         public string Title { get; set; }
         public string Description { get; set; }
+        [JsonProperty("images")]
         public List<CampaignImageViewModel> CampaignImages { get; set; }
     }
 }
