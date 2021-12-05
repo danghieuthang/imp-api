@@ -46,7 +46,8 @@ namespace IMP.Application.Features.MemberActivities.Queries.GetAllActivity
                         && (request.Status.Count == 0
                             || (status.Count > 0 && status.Contains(x.Status))),
                   include: x => x.Include(ma => ma.CampaignMember).ThenInclude(cm => cm.Campaign).Include(ma => ma.Evidences)
-                    .Include(ma => ma.CampaignMember).ThenInclude(cm => cm.Influencer),
+                    .Include(ma => ma.CampaignMember).ThenInclude(cm => cm.Influencer)
+                    .Include(ma => ma.CampaignActivity).ThenInclude(ca => ca.ActivityType),
                   pageIndex: request.PageIndex,
                   pageSize: request.PageSize,
                   orderBy: request.OrderField,

@@ -15,5 +15,6 @@ namespace IMP.Application.Models.ViewModels
         public List<EvidenceViewModel> Evidences { get; set; }
 
         public CampaignMemberBasicInfoViewModel CampaignMember { get; set; }
+        public CampaignActivityBasicViewModel CampaignActivity { get; set; }
     }
 }

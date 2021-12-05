@@ -10,4 +10,9 @@ namespace IMP.Application.Models.ViewModels
     {
         public string Name { get; set; }
     }
+
+    public class ActivityTypeBasicInfoViewModel
+    {
+        public string Name { get; set; }
+    }
 }

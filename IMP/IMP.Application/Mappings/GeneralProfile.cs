@@ -193,10 +193,13 @@ namespace IMP.Application.Mappings
 
             // Campaign activity
             CreateMap<CampaignActivity, CampaignActivityViewModel>();
+            CreateMap<CampaignActivity, CampaignActivityBasicViewModel>();
             CreateMap<CampaignActivityUpdateModel, CampaignActivity>();
             CreateMap<ActivityType, ActivityTypeViewModel>();
             CreateMap<CreateActivityTypeCommand, ActivityType>();
             CreateMap<Campaign, CampaignBasicInfoViewModel>();
+            CreateMap<ActivityType, ActivityTypeBasicInfoViewModel>();
+
             #endregion
 
             #region milestone

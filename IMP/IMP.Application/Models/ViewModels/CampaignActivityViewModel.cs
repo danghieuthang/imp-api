@@ -1,10 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using IMP.Application.Models.ViewModels;
+using System.Collections.Generic;
 
 namespace IMP.Application.Models.Compaign
 {
     public class CampaignActivityViewModel : BaseViewModel<int>
     {
         public int ActivityTypeId { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string HowToDo { get; set; }
+        public string ResultName { get; set; }
+        public int? EvidenceTypeId { get; set; }
+    }
+
+    public class CampaignActivityBasicViewModel
+    {
+        public ActivityTypeBasicInfoViewModel ActivityType { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string HowToDo { get; set; }
