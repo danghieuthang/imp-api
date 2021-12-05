@@ -47,7 +47,14 @@ namespace IMP.Application.Features.Campaigns.Queries.Reports
                     NumberOfVoucherCodeUsed = g.Sum(x => x.QuantityUsed)
                 }).MaxBy(x => x.NumberOfVoucherCodeUsed);
 
-                var bestCampaignMember = await UnitOfWork.Repository<CampaignMember>().FindSingleAsync(x => x.Id == bestInfluencerReport.CampaignMemberId, x => x.Influencer);
+                if (bestInfluencerReport != null)
+                {
+                    var bestCampaignMember = await UnitOfWork.Repository<CampaignMember>().FindSingleAsync(x => x.Id == bestInfluencerReport.CampaignMemberId, x => x.Influencer);
+                    if (bestCampaignMember != null)
+                    {
+                        report.BestInfluencer = Mapper.Map<UserBasicViewModel>(bestCampaignMember.Influencer);
+                    }
+                }
 
                 report.NumberOfInfluencer = influencers.Count;
                 report.NumberOfInfluencerCompleted = influencers.Where(x => x.Status == (int)CampaignMemberStatus.Completed).Count();
@@ -55,8 +62,8 @@ namespace IMP.Application.Features.Campaigns.Queries.Reports
                 report.NumberOfVoucherCode = voucherCodes.Count;
                 report.TotalNumberVoucherCodeUsed = voucherCodes.Sum(x => x.QuantityUsed);
 
-                report.NumberVoucherCodeUsedOfBestInfluencer = bestInfluencerReport.NumberOfVoucherCodeUsed;
-                report.BestInfluencer = Mapper.Map<UserBasicViewModel>(bestCampaignMember.Influencer);
+                report.NumberVoucherCodeUsedOfBestInfluencer = bestInfluencerReport?.NumberOfVoucherCodeUsed ?? 0;
+
 
                 return new Response<CampaignReportViewModel>(report);
 
