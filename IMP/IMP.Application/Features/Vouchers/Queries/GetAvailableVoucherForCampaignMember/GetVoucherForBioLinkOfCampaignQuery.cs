@@ -41,10 +41,23 @@ namespace IMP.Application.Features.Vouchers.Queries.GetAvailableVoucherForCampai
 
                 var vouchers = await UnitOfWork.Repository<VoucherCode>().GetAll(
                         predicate: x => x.CampaignMember.InfluencerId == user.Id && x.CampaignMember.CampaignId == request.CampaignId,
-                        selector: x => x.Voucher,
-                        include: x => x.Include(y => y.Voucher)).Distinct().ToListAsync();
+                        include: x => x.Include(y => y.Voucher)).ToListAsync();
 
-                var voucherViews = Mapper.Map<IEnumerable<VoucherViewModel>>(vouchers);
+                var gs = vouchers.GroupBy(x => x.VoucherId).Select(g =>
+                {
+                    var voucher = g.First().Voucher;
+                    voucher.VoucherCodes = g.ToList();
+                    return voucher;
+                }).ToList();
+
+                gs.ForEach(x =>
+                {
+                    x.QuantityUsed = x.VoucherCodes.Sum(y => y.QuantityUsed);
+                    x.VoucherCodes = null;
+                });
+
+
+                var voucherViews = Mapper.Map<IEnumerable<VoucherViewModel>>(gs);
                 return new Response<IEnumerable<VoucherViewModel>>(voucherViews);
             }
         }
