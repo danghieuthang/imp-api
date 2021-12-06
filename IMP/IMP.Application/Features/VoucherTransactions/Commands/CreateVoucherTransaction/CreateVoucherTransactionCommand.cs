@@ -27,6 +27,8 @@ namespace IMP.Application.Features.VoucherTransactions.Commands.CreateVoucherTra
             public override async Task<Response<VoucherTransactionViewModel>> Handle(CreateVoucherTransactionCommand request, CancellationToken cancellationToken)
             {
                 var voucherCodeRepository = UnitOfWork.Repository<VoucherCode>();
+                var voucherInfluencerRepository = UnitOfWork.Repository<VoucherInfluencer>();
+
                 var voucherCode = await voucherCodeRepository.FindSingleAsync(x => x.Code.ToLower() == request.Code.ToLower() && x.VoucherId == request.VoucherId, x => x.Voucher);
 
                 if (voucherCode == null)
@@ -51,6 +53,14 @@ namespace IMP.Application.Features.VoucherTransactions.Commands.CreateVoucherTra
                 voucherCode.QuantityUsed++;
                 voucherCodeRepository.Update(voucherCode);
 
+                #region update voucher influencer
+                var voucherInfluencer = await voucherInfluencerRepository.FindSingleAsync(x => x.VoucherId == request.VoucherId && x.InfluencerId == request.InfluencerId);
+                if (voucherInfluencer != null)
+                {
+                    voucherInfluencer.QuantityUsed++;
+                    voucherInfluencerRepository.Update(voucherInfluencer);
+                }
+                #endregion
                 await UnitOfWork.CommitAsync();
 
                 var voucherTransactionView = Mapper.Map<VoucherTransactionViewModel>(voucherTransaction);

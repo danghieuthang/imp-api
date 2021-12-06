@@ -139,6 +139,7 @@ namespace IMP.Application.Models.ViewModels
     public class VoucherTransactionRequest
     {
         public int VoucherId { get; set; }
+        public int InfluencerId { get; set; }
         public string Code { get; set; }
         public decimal TotalPrice { get; set; }
         /// <summary>
