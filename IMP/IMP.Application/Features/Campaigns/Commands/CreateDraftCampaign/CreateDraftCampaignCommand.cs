@@ -49,9 +49,9 @@ namespace IMP.Application.Features.Campaigns.Commands.CreateDraftCampaign
                     {
                         LevelId = 1,
                         Gender = (int)Genders.None,
-                        ChildStatus = false,
-                        MaritalStatus = false,
-                        Pregnant = false,
+                        ChildStatus = null,
+                        MaritalStatus = null,
+                        Pregnant = null,
                         UnlimitedAge = true,
                         AgeFrom = 18,
                         AgeTo = 25,
@@ -60,9 +60,9 @@ namespace IMP.Application.Features.Campaigns.Commands.CreateDraftCampaign
                     TargetConfiguration = new TargetConfiguration
                     {
                         Gender = (int)Genders.None,
-                        ChildStatus = false,
-                        MaritalStatus = false,
-                        Pregnant = false,
+                        ChildStatus = null,
+                        MaritalStatus = null,
+                        Pregnant = null,
                         UnlimitedAge = true,
                         AgeFrom = 18,
                         AgeTo = 25
