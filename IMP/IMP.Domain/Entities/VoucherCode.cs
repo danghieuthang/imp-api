@@ -18,8 +18,12 @@ namespace IMP.Domain.Entities
 
         [ForeignKey("CampaignMember")]
         public int? CampaignMemberId { get; set; }
+        public DateTime? HoldTime { get; set; }
+
+
         public CampaignMember CampaignMember { get; set; }
         public Voucher Voucher { get; set; }
+
 
         public ICollection<VoucherTransaction> VoucherTransactions { get; set; }
         public ICollection<VoucherCodeApplicationUser> VoucherCodeApplicationUsers { get; set; }

@@ -4,6 +4,7 @@ using IMP.Application.Features.VoucherCodes.Commands.RequestVoucherCode;
 using IMP.Application.Features.VoucherCodes.Commands.UnAssignVoucherCodeForMember;
 using IMP.Application.Features.VoucherCodes.Commands.UpdateVoucherCode;
 using IMP.Application.Features.VoucherCodes.DeleteVoucherCode;
+using IMP.Application.Features.VoucherCodes.Queries.GetVoucherCodeFromEncryptData;
 using IMP.Application.Features.Vouchers.Queries.GetAllVoucherByApplicationUser;
 using IMP.Application.Interfaces;
 using IMP.Application.Models.ViewModels;
@@ -139,6 +140,19 @@ namespace IMP.WebApi.Controllers.v1
         public async Task<IActionResult> RequestVoucherCodeToEmailFrombioLink([FromBody] RequestVoucherCodeToEmailByBiolinkCommand command)
         {
             return Ok(await Mediator.Send(command));
+        }
+
+        /// <summary>
+        /// Checking voucher code from encrypt data
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<CheckVoucherCodeViewModel>), 200)]
+        [HttpPost("checking-voucher-code")]
+        [AllowAnonymous]
+        public async Task<IActionResult> CheckingVoucherFromEncryptData([FromQuery] GetVoucherCodeFromEncryptDataQuery query)
+        {
+            return Ok(await Mediator.Send(query));
         }
 
 

@@ -42,6 +42,16 @@ namespace IMP.Application.Models.ViewModels
         public int? CampaignMemberId { get; set; }
     }
 
+    public class CheckVoucherCodeViewModel
+    {
+
+        public string Code { get; set; }
+        public int Quantity { get; set; }
+        public int QuantityUsed { get; set; }
+        public DateTime? HoldTime { get; set; }
+        public int InfluencerId { get; set; }
+    }
+
     public class UserVoucherViewModel : BaseViewModel<int>
     {
         public int VoucherType { get; set; }

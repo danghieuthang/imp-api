@@ -50,69 +50,137 @@ namespace IMP.Application.Features.VoucherCodes.Commands.RequestVoucherCode
                     return new Response<bool>(false);
                 }
 
-                var vouchers = await UnitOfWork.Repository<CampaignVoucher>().GetAll(
+                #region check voucher
+                var vouchers = await UnitOfWork.Repository<CampaignVoucher>().FindSingleAsync(
                         predicate: x => x.VoucherId == request.VoucherId
                             && x.CampaignId == request.CampaignId
                             && x.IsBestInfluencerReward == false
-                            && x.IsDefaultReward == false,
-                        selector: x => x.VoucherId).ToListAsync();
+                            && x.IsDefaultReward == false
+                            && (x.Voucher.ToDate == null
+                                || (x.Voucher.ToDate.HasValue && x.Voucher.ToDate.Value.CompareTo(DateTime.UtcNow) > 0) // Get a voucher that hasn't expired yet
+                                ),
+                        include: x => x.Include(y => y.Voucher));
 
-                var voucherCodes = await UnitOfWork.Repository<VoucherCode>().GetAll(
-                        predicate: x => x.CampaignMember.InfluencerId == user.Id
-                            && x.CampaignMember.CampaignId == request.CampaignId
-                            && x.VoucherId == request.VoucherId
-                            && x.QuantityUsed < x.Quantity
-                            && (x.Voucher.ToDate == null || x.Voucher.ToDate > DateTime.UtcNow),
-                        include: x => x.Include(y => y.Voucher)
-                            ).Take(1).ToListAsync();
-
-                if (!voucherCodes.Any())
+                var voucher = vouchers?.Voucher;
+                if (voucher == null)
                 {
-                    return new Response<bool>(message: "Đã hết voucher code.");
+                    return new Response<bool>(message: "Mã giảm giá không tồn tại hoặc đã hết hạn.");
+                }
+                #endregion
+
+                #region get voucher code
+                var voucherCode = await UnitOfWork.Repository<VoucherCode>().FindSingleAsync(
+                        predicate: x => x.VoucherId == voucher.Id
+                            && (
+                                (x.Quantity == 1 && x.QuantityUsed == 0 && (x.HoldTime == null || (x.HoldTime.HasValue && x.HoldTime.Value.CompareTo(DateTime.UtcNow) < 0)))  // Voucher 1 lần sài && chưa ai sài && không bị ai giữ
+                                || (x.Quantity > 1 && x.QuantityUsed < x.Quantity) // Voucher nhiều lần sài và còn sử dụng được
+                               )
+                    );
+
+                if (voucherCode == null)
+                {
+                    return new Response<bool>(message: "Đã hết mã giảm giá.");
+                }
+                #endregion
+
+                #region update quantity get for voucher influencer
+                if (voucher.Quantity == 1 && voucher.HoldTime.HasValue)
+                {
+                    voucherCode.HoldTime = DateTime.UtcNow.AddTicks(voucher.HoldTime.Value.Ticks);
+                    UnitOfWork.Repository<VoucherCode>().Update(voucherCode);
                 }
 
+                var voucherInfluencer = await UnitOfWork.Repository<VoucherInfluencer>().FindSingleAsync(
+                        x => x.InfluencerId == user.Id
+                            && x.VoucherId == voucher.Id);
+
+                if (voucherInfluencer == null)
+                {
+                    voucherInfluencer = new VoucherInfluencer
+                    {
+                        InfluencerId = user.Id,
+                        VoucherId = voucher.Id,
+                        QuantityGet = 1,
+                        QuantityUsed = 0,
+                    };
+                }
+                else
+                {
+                    voucherInfluencer.QuantityGet++;
+                }
+
+                UnitOfWork.Repository<VoucherInfluencer>().Update(voucherInfluencer);
+                await UnitOfWork.CommitAsync();
+
+                #endregion
+
+                #region send voucher to email
                 _ = Task.Run(async () =>
                 {
-                    string path = Path.Combine(Directory.GetCurrentDirectory(), "App_Datas", "EmailTemplates", EmailTemplate);
-                    if (!System.IO.File.Exists(path))
-                    {
-                        throw new Exception("Email templates not found");
-                    }
+                    string dataEncrypt = Utils.Utils.Encrypt($"{voucherCode.Code};{request.CampaignId};{user.Id};{voucher.Id}");
+                    // Create a file path of qr code file
+                    string filePath = await CreateQRCode(dataEncrypt);
 
-                    var image = await _qRCodeService.CreateQRCode("https://www.youtube.com/watch?v=LdyG3pzJ2cc");
-                    string filePath = $"Files/Images/QRcodes";
-                    string imageFile = $"{filePath}/{Guid.NewGuid()}.png";
-                    if (!Directory.Exists(filePath))
-                    {
-                        Directory.CreateDirectory(filePath);
-                    }
+                    var emailRequest = BuildEmailRequest(voucher, voucherCode, request.Email, filePath: filePath);
 
-                    File.WriteAllBytes(imageFile, image);
+                    await _emailService.SendAsync(emailRequest);
 
-                    StringBuilder emailContent = new StringBuilder();
-                    emailContent.Append(File.ReadAllText(path));
-                    emailContent.Replace("@CODE", voucherCodes.FirstOrDefault().Code);
-                    emailContent.Replace("@DATEEXPIRED", voucherCodes.FirstOrDefault().Voucher.ToDate?.ToString("dd-MM-yyyy"));
-                    emailContent.Replace("@IMAGE", voucherCodes.FirstOrDefault().Voucher.Image);
-                    emailContent.Replace("@QRCODE", "cid:{0}");
-                    emailContent.Replace("@NAME", voucherCodes.FirstOrDefault().Voucher.VoucherName);
-                    emailContent.Replace("@DESCRIPTION", voucherCodes.FirstOrDefault().Voucher.Description);
-
-                    string content = emailContent.ToString();
-
-                    await _emailService.SendAsync(
-                        new EmailRequest
-                        {
-                            To = request.Email,
-                            Body = content,
-                            Subject = "Bạn vừa nhận được mã giảm giá từ IMP",
-                            AttactmentFile = imageFile
-                        });
-
-                    File.Delete(imageFile);
+                    // Delete image after send email
+                    File.Delete(filePath);
                 });
+                #endregion
 
                 return new Response<bool>(true);
+            }
+
+            private EmailRequest BuildEmailRequest(Voucher voucher, VoucherCode voucherCode, string email, string filePath)
+            {
+                string templaePath = Path.Combine(Directory.GetCurrentDirectory(), "App_Datas", "EmailTemplates", EmailTemplate);
+                if (!System.IO.File.Exists(templaePath))
+                {
+                    throw new Exception("Email templates not found");
+                }
+
+                StringBuilder emailContent = new StringBuilder();
+                emailContent.Append(File.ReadAllText(templaePath));
+
+                if (voucher.Quantity == 1 && voucher.HoldTime.HasValue)
+                {
+                    emailContent.Replace("@DATEEXPIRED", voucherCode.HoldTime.Value.ToString("dd-MM-yyyy"));
+                }
+                else
+                {
+                    emailContent.Replace("@DATEEXPIRED", voucher.ToDate.Value.ToString("dd-MM-yyyy"));
+                }
+
+                emailContent.Replace("@IMAGE", voucher.Image);
+                emailContent.Replace("@QRCODE", "cid:{0}");
+                emailContent.Replace("@NAME", voucher.VoucherName);
+                emailContent.Replace("@DESCRIPTION", voucher.Description);
+
+                string content = emailContent.ToString();
+
+                return new EmailRequest
+                {
+                    To = email,
+                    Body = content,
+                    Subject = "Bạn vừa nhận được mã giảm giá từ IMP",
+                    AttactmentFile = filePath
+                };
+            }
+
+            private async Task<string> CreateQRCode(string data)
+            {
+                var image = await _qRCodeService.CreateQRCode($"https://api.influencermarketingplatform.nothleft.online/api/v1/voucher-codes/checking-voucher-code?data={data}");
+                string filePath = $"Files/Images/QRcodes";
+                string imageFile = $"{filePath}/{Guid.NewGuid()}.png";
+                if (!Directory.Exists(filePath))
+                {
+                    Directory.CreateDirectory(filePath);
+                }
+
+                File.WriteAllBytes(imageFile, image);
+                return imageFile;
             }
         }
     }
