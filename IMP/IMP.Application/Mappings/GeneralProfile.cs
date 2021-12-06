@@ -126,8 +126,8 @@ namespace IMP.Application.Mappings
                  })
                 .ForMember(dest => dest.Keywords, opt =>
                 {
-                    opt.PreCondition(src => src.Websites != null);
-                    opt.MapFrom(x => x.Websites == null ? "[]" : JsonConvert.SerializeObject(x.Keywords));
+                    opt.PreCondition(src => src.Keywords != null);
+                    opt.MapFrom(x => x.Keywords == null ? "[]" : JsonConvert.SerializeObject(x.Keywords));
                 })
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
