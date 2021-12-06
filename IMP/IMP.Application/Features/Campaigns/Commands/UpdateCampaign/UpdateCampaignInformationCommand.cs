@@ -18,6 +18,10 @@ using System.Threading.Tasks;
 
 namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
 {
+    public class InfluencerConfigurationRequest
+    {
+        public int PlatformId { get; set; }
+    }
     public class UpdateCampaignInformationCommand : ICommand<CampaignViewModel>
     {
         public int Id { get; set; }
@@ -57,6 +61,9 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
         public List<CampaignVoucherRequest> DefaultVoucherRewards { get; set; }
         public List<CampaignVoucherRequest> BestInfluencerVoucherRewards { get; set; }
         #endregion
+
+        [JsonProperty("influencer_configuration")]
+        public InfluencerConfiguration IFConfiguration { get; set; }
     }
 
     public class UpdateCampaignInformationCommandHandler : CommandHandler<UpdateCampaignInformationCommand, CampaignViewModel>
@@ -81,9 +88,8 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
                 include: campaigns => campaigns.Include(campaign => campaign.CampaignImages)
                                         .Include(x => x.Products)
                                         .Include(x => x.CampaignRewards)
-                                        .Include(x => x.Vouchers));
-
-
+                                        .Include(x => x.Vouchers)
+                                        .Include(x => x.InfluencerConfiguration));
 
             if (campaign != null)
             {
@@ -157,7 +163,10 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
                 {
                     campaign.Status = (int)CampaignStatus.Pending;
                 }
-
+                if (request.IFConfiguration != null)
+                {
+                    campaign.InfluencerConfiguration.PlatformId = request.IFConfiguration.PlatformId;
+                }
                 _campaignRepository.Update(campaign);
                 await UnitOfWork.CommitAsync();
                 var campaignView = Mapper.Map<CampaignViewModel>(campaign);

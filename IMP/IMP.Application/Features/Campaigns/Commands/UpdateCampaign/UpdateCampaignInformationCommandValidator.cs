@@ -80,5 +80,6 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
                 RuleFor(x => x.Price).GreaterThan(0).WithMessage("Giá phần thưởng phải lớn hơn 0.");
             }
         }
+
     }
 }
