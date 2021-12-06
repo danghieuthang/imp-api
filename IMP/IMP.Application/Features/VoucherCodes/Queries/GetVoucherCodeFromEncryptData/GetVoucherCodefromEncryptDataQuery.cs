@@ -42,14 +42,14 @@ namespace IMP.Application.Features.VoucherCodes.Queries.GetVoucherCodeFromEncryp
                 int.TryParse(data[2], out influencerId);
                 int.TryParse(data[3], out voucherId);
 
-                var voucherCode = await UnitOfWork.Repository<VoucherCode>().FindSingleAsync(x => x.Code.ToLower() == code.ToLower() && x.VoucherId == voucherId);
+                var voucherCode = await UnitOfWork.Repository<VoucherCode>().FindSingleAsync(x => x.Code.ToLower() == code.ToLower() && x.VoucherId == voucherId, x => x.Voucher);
 
                 if (voucherCode != null)
                 {
                     var view = new CheckVoucherCodeViewModel
                     {
                         Code = voucherCode.Code,
-                        HoldTime = voucherCode.HoldTime,
+                        Expired = voucherCode.Quantity == 1 ? voucherCode.Expired : voucherCode.Voucher.FromDate,
                         Quantity = voucherCode.Quantity,
                         QuantityUsed = voucherCode.QuantityUsed,
                         InfluencerId = influencerId,

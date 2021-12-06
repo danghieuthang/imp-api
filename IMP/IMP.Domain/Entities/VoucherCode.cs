@@ -18,7 +18,7 @@ namespace IMP.Domain.Entities
 
         [ForeignKey("CampaignMember")]
         public int? CampaignMemberId { get; set; }
-        public DateTime? HoldTime { get; set; }
+        public DateTime? Expired { get; set; }
 
 
         public CampaignMember CampaignMember { get; set; }

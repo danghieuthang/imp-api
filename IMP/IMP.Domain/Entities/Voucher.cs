@@ -46,7 +46,7 @@ namespace IMP.Domain.Entities
         [MaxLength(256)]
         public string Target { get; set; }
         public bool UseForReward { get; set; }
-        public DateTime? HoldTime { get; set; }
+        public TimeSpan? HoldTime { get; set; }
 
         public ICollection<VoucherCode> VoucherCodes { get; set; }
         public ICollection<CampaignVoucher> CampaignVouchers { get; set; }

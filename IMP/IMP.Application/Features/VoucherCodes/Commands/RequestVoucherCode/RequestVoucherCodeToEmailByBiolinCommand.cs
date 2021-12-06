@@ -72,7 +72,7 @@ namespace IMP.Application.Features.VoucherCodes.Commands.RequestVoucherCode
                 var voucherCode = await UnitOfWork.Repository<VoucherCode>().FindSingleAsync(
                         predicate: x => x.VoucherId == voucher.Id
                             && (
-                                (x.Quantity == 1 && x.QuantityUsed == 0 && (x.HoldTime == null || (x.HoldTime.HasValue && x.HoldTime.Value.CompareTo(DateTime.UtcNow) < 0)))  // Voucher 1 lần sài && chưa ai sài && không bị ai giữ
+                                (x.Quantity == 1 && x.QuantityUsed == 0 && (x.Expired == null || (x.Expired.HasValue && x.Expired.Value.CompareTo(DateTime.UtcNow) < 0)))  // Voucher 1 lần sài && chưa ai sài && không bị ai giữ
                                 || (x.Quantity > 1 && x.QuantityUsed < x.Quantity) // Voucher nhiều lần sài và còn sử dụng được
                                )
                     );
@@ -86,7 +86,7 @@ namespace IMP.Application.Features.VoucherCodes.Commands.RequestVoucherCode
                 #region update quantity get for voucher influencer
                 if (voucher.Quantity == 1 && voucher.HoldTime.HasValue)
                 {
-                    voucherCode.HoldTime = DateTime.UtcNow.AddTicks(voucher.HoldTime.Value.Ticks);
+                    voucherCode.Expired = DateTime.UtcNow.Add(voucher.HoldTime.Value);
                     UnitOfWork.Repository<VoucherCode>().Update(voucherCode);
                 }
 
@@ -146,7 +146,7 @@ namespace IMP.Application.Features.VoucherCodes.Commands.RequestVoucherCode
 
                 if (voucher.Quantity == 1 && voucher.HoldTime.HasValue)
                 {
-                    emailContent.Replace("@DATEEXPIRED", voucherCode.HoldTime.Value.ToString("dd-MM-yyyy"));
+                    emailContent.Replace("@DATEEXPIRED", voucherCode.Expired.Value.ToString("dd-MM-yyyy"));
                 }
                 else
                 {
