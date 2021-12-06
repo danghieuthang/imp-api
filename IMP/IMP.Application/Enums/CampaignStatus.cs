@@ -37,7 +37,9 @@ namespace IMP.Application.Enums
         Cancelled,
         Invited,
         RefuseInvitated,
-        Completed
+        Completed,
+        MakeMoney,
+        Closed,
     }
 
 }
