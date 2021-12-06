@@ -2,6 +2,7 @@
 using FluentValidation;
 using IMP.Application.Extensions;
 using IMP.Application.Interfaces;
+using IMP.Application.Interfaces.Services;
 using IMP.Application.Models.Email;
 using IMP.Application.Wrappers;
 using IMP.Domain.Entities;
@@ -32,11 +33,13 @@ namespace IMP.Application.Features.VoucherCodes.Commands.RequestVoucherCode
 
         public class RequetVoucherCodeByBioLinkAndCampaignCommand : CommandHandler<RequestVoucherCodeToEmailByBiolinkCommand, bool>
         {
-            private static string EmailTemplate = "send_voucher_code_template.html";
+            private static string EmailTemplate = "send_voucher_qrcode_template.html";
             private readonly IEmailService _emailService;
-            public RequetVoucherCodeByBioLinkAndCampaignCommand(IUnitOfWork unitOfWork, IMapper mapper, IEmailService emailService) : base(unitOfWork, mapper)
+            private readonly IQRCodeService _qRCodeService;
+            public RequetVoucherCodeByBioLinkAndCampaignCommand(IUnitOfWork unitOfWork, IMapper mapper, IEmailService emailService, IQRCodeService qRCodeService) : base(unitOfWork, mapper)
             {
                 _emailService = emailService;
+                _qRCodeService = qRCodeService;
             }
 
             public override async Task<Response<bool>> Handle(RequestVoucherCodeToEmailByBiolinkCommand request, CancellationToken cancellationToken)
@@ -68,7 +71,7 @@ namespace IMP.Application.Features.VoucherCodes.Commands.RequestVoucherCode
                     return new Response<bool>(message: "Đã hết voucher code.");
                 }
 
-                _ = Task.Run(() =>
+                _ = Task.Run(async () =>
                 {
                     string path = Path.Combine(Directory.GetCurrentDirectory(), "App_Datas", "EmailTemplates", EmailTemplate);
                     if (!System.IO.File.Exists(path))
@@ -76,21 +79,37 @@ namespace IMP.Application.Features.VoucherCodes.Commands.RequestVoucherCode
                         throw new Exception("Email templates not found");
                     }
 
+                    var image = await _qRCodeService.CreateQRCode("https://www.youtube.com/watch?v=LdyG3pzJ2cc");
+                    string filePath = $"Files/Images/QRcodes";
+                    string imageFile = $"{filePath}/{Guid.NewGuid()}.png";
+                    if (!Directory.Exists(filePath))
+                    {
+                        Directory.CreateDirectory(filePath);
+                    }
+
+                    File.WriteAllBytes(imageFile, image);
+
                     StringBuilder emailContent = new StringBuilder();
                     emailContent.Append(File.ReadAllText(path));
                     emailContent.Replace("@CODE", voucherCodes.FirstOrDefault().Code);
                     emailContent.Replace("@DATEEXPIRED", voucherCodes.FirstOrDefault().Voucher.ToDate?.ToString("dd-MM-yyyy"));
                     emailContent.Replace("@IMAGE", voucherCodes.FirstOrDefault().Voucher.Image);
+                    emailContent.Replace("@QRCODE", "cid:{0}");
                     emailContent.Replace("@NAME", voucherCodes.FirstOrDefault().Voucher.VoucherName);
                     emailContent.Replace("@DESCRIPTION", voucherCodes.FirstOrDefault().Voucher.Description);
+
                     string content = emailContent.ToString();
-                    _emailService.SendAsync(
+
+                    await _emailService.SendAsync(
                         new EmailRequest
                         {
                             To = request.Email,
                             Body = content,
-                            Subject = "Bạn vừa nhận được mã giảm giá từ IMP"
+                            Subject = "Bạn vừa nhận được mã giảm giá từ IMP",
+                            AttactmentFile = imageFile
                         });
+
+                    File.Delete(imageFile);
                 });
 
                 return new Response<bool>(true);

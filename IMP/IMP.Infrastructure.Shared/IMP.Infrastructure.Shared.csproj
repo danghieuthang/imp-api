@@ -16,6 +16,7 @@
 		<PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="5.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
 		<PackageReference Include="MimeKit" Version="2.15.1" />
+		<PackageReference Include="QRCoder" Version="1.4.2" />
 		<PackageReference Include="vng.zalo.ZaloDotNetSDK" Version="1.1.6" />
 	</ItemGroup>
 </Project>

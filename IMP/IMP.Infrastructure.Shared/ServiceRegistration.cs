@@ -1,4 +1,5 @@
 ﻿using IMP.Application.Interfaces;
+using IMP.Application.Interfaces.Services;
 using IMP.Application.Interfaces.Shared;
 using IMP.Domain.Settings;
 using IMP.Infrastructure.Shared.Caches;
@@ -34,6 +35,7 @@ namespace IMP.Infrastructure.Shared
             services.AddTransient<ITiktokService, TiktokService>();
             services.AddScoped<IVnPayService, VnPayService>();
             services.AddScoped<IZaloService, ZaloService>();
+            services.AddScoped<IQRCodeService, QRCodeService>();
 
             #region Register Caching service
             services.Configure<CacheSettings>(_config.GetSection("CacheSettings"));

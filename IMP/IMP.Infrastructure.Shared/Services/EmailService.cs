@@ -8,6 +8,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using System.Threading.Tasks;
+using System.IO;
+using MimeKit.Utils;
 
 namespace IMP.Infrastructure.Shared.Services
 {
@@ -32,11 +34,29 @@ namespace IMP.Infrastructure.Shared.Services
                 email.To.Add(MailboxAddress.Parse(request.To));
                 email.Subject = request.Subject;
                 var builder = new BodyBuilder();
-                builder.HtmlBody = request.Body;
+
+
+                if (request.AttactmentFile != null)
+                {
+                    var image = builder.LinkedResources.Add(request.AttactmentFile);
+
+                    image.ContentId = MimeUtils.GenerateMessageId();
+
+                    builder.HtmlBody = request.Body.Replace("{0}", image.ContentId);
+
+                    builder.Attachments.Add(request.AttactmentFile);
+                }
+                else
+                {
+                    builder.HtmlBody = request.Body;
+                }
+
                 email.Body = builder.ToMessageBody();
+
                 using var smtp = new SmtpClient();
                 smtp.Connect(_mailSettings.SmtpHost, _mailSettings.SmtpPort, SecureSocketOptions.StartTls);
                 smtp.Authenticate(_mailSettings.SmtpUser, _mailSettings.SmtpPass);
+
                 await smtp.SendAsync(email);
                 smtp.Disconnect(true);
 
