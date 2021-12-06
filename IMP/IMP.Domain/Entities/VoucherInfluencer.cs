@@ -17,5 +17,7 @@ namespace IMP.Domain.Entities
 
         public int QuantityGet { get; set; }
         public int QuantityUsed { get; set; }
+        public ApplicationUser Influencer { get; set; }
+        public Voucher Voucher { get; set; }
     }
 }

@@ -49,11 +49,12 @@ namespace IMP.Application.Features.VoucherCodes.Queries.GetVoucherCodeFromEncryp
                     var view = new CheckVoucherCodeViewModel
                     {
                         Code = voucherCode.Code,
-                        Expired = voucherCode.Quantity == 1 ? voucherCode.Expired : voucherCode.Voucher.FromDate,
+                        Expired = voucherCode.Quantity == 1 ? voucherCode.Expired : voucherCode.Voucher.ToDate,
                         Quantity = voucherCode.Quantity,
                         QuantityUsed = voucherCode.QuantityUsed,
                         InfluencerId = influencerId,
                         CampaignId = cammpaignId,
+                        VoucherId = voucherId,
                     };
                     return new Response<CheckVoucherCodeViewModel>(view);
                 }

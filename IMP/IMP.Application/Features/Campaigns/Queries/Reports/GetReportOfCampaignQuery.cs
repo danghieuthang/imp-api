@@ -41,19 +41,25 @@ namespace IMP.Application.Features.Campaigns.Queries.Reports
                         predicate: x => x.CampaignMember.CampaignId == request.CampaignId && voucherIds.Contains(x.VoucherId)
                         ).ToListAsync();
 
+                var campaignMembersA = await UnitOfWork.Repository<CampaignMember>().GetAll(
+                      predicate: x => x.CampaignId == request.CampaignId
+                          && x.Status != (int)CampaignMemberStatus.Cancelled
+                          && x.Status != (int)CampaignMemberStatus.RefuseInvitated,
+                      include: x => x.Include(y => y.Influencer).ThenInclude(z => z.VoucherInfluencers.Where(vi => voucherIds.Contains(vi.VoucherId)))).ToListAsync();
+
                 var campaignMembers = await UnitOfWork.Repository<CampaignMember>().GetAll(
-                        predicate: x => x.CampaignId == request.CampaignId
-                            && x.Status != (int)CampaignMemberStatus.Cancelled
-                            && x.Status != (int)CampaignMemberStatus.RefuseInvitated,
-                        include: x => x.Include(y => y.Influencer).ThenInclude(z => z.VoucherInfluencers),
-                        selector: x => new
-                        {
-                            Influencer = x.Influencer,
-                            Status = x.Status,
-                            QuantityVoucherGet = x.Influencer.VoucherInfluencers.Sum(y => y.QuantityGet),
-                            QuantityVoucherUsed = x.Influencer.VoucherInfluencers.Sum(y => y.QuantityUsed)
-                        })
-                    .ToListAsync();
+                          predicate: x => x.CampaignId == request.CampaignId
+                              && x.Status != (int)CampaignMemberStatus.Cancelled
+                              && x.Status != (int)CampaignMemberStatus.RefuseInvitated,
+                          include: x => x.Include(y => y.Influencer).ThenInclude(z => z.VoucherInfluencers.Where(vi => voucherIds.Contains(vi.VoucherId))),
+                          selector: x => new
+                          {
+                              Influencer = x.Influencer,
+                              Status = x.Status,
+                              QuantityVoucherGet = x.Influencer.VoucherInfluencers.Sum(y => y.QuantityGet),
+                              QuantityVoucherUsed = x.Influencer.VoucherInfluencers.Sum(y => y.QuantityUsed)
+                          })
+                      .ToListAsync();
 
                 int maxQuantityUsed = campaignMembers.Count == 0 ? 0 : campaignMembers.Max(x => x.QuantityVoucherUsed);
 

@@ -50,5 +50,6 @@ namespace IMP.Domain.Entities
 
         public ICollection<VoucherCode> VoucherCodes { get; set; }
         public ICollection<CampaignVoucher> CampaignVouchers { get; set; }
+        public ICollection<VoucherInfluencer> VoucherInfluencers { get; set; }
     }
 }
