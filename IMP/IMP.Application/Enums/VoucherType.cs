@@ -8,9 +8,8 @@ namespace IMP.Application.Enums
 {
     public enum VoucherType
     {
-        Shipping,
-        Entry_Order,
-        Specific_Product
+        Multiple = 0,
+        OnlyOnce = 1
     }
 
 }   

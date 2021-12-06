@@ -38,6 +38,7 @@ namespace IMP.Application.Features.Vouchers.Commands.UpdateVoucher
         public string Target { get; set; }
         public bool UseForReward { get; set; }
 
+        public DateTime? HoldTime { get; set; }
 
         public class UpdateVoucherCommandHandler : CommandHandler<UpdateVoucherCommand, VoucherViewModel>
         {

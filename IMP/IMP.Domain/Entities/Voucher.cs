@@ -10,7 +10,7 @@ namespace IMP.Domain.Entities
 {
     public class Voucher : BaseEntity
     {
-
+        public int VoucherType { get; set; }
         [ForeignKey("Brand")]
         public int BrandId { get; set; }
         public Brand Brand { get; set; }
@@ -46,6 +46,7 @@ namespace IMP.Domain.Entities
         [MaxLength(256)]
         public string Target { get; set; }
         public bool UseForReward { get; set; }
+        public DateTime? HoldTime { get; set; }
 
         public ICollection<VoucherCode> VoucherCodes { get; set; }
         public ICollection<CampaignVoucher> CampaignVouchers { get; set; }

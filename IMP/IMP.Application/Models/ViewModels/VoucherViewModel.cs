@@ -26,6 +26,7 @@ namespace IMP.Application.Models.ViewModels
         public string Condition { get; set; }
         public string Target { get; set; }
         public bool IsCanUse => QuantityUsed > Quantity;
+        public DateTime? HoldTime { get; set; }
 
         public List<VoucherCodeViewModel> VoucherCodes { get; set; }
         public List<CampaignVoucherOnlyIdViewModel> CampaignVouchers { get; set; }
@@ -65,6 +66,8 @@ namespace IMP.Application.Models.ViewModels
         public string Target { get; set; }
 
         public bool IsCanUse => QuantityUsed > Quantity;
+        public DateTime? HoldTime { get; set; }
+
         public BrandViewModel Brand { get; set; }
         public List<UserVoucherCodeViewModel> VoucherCodes { get; set; }
         public List<CampaignVoucherViewModel> CampaignVouchers { get; set; }
@@ -79,6 +82,8 @@ namespace IMP.Application.Models.ViewModels
         public int Quantity { get; set; }
         [JsonIgnore]
         public int QuantityUsed { get; set; }
+        public DateTime? HoldTime { get; set; }
+
         public bool IsCanUse => QuantityUsed < Quantity;
     }
 
