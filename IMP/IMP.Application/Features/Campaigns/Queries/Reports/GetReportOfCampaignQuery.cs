@@ -41,29 +41,38 @@ namespace IMP.Application.Features.Campaigns.Queries.Reports
                         predicate: x => x.CampaignMember.CampaignId == request.CampaignId && voucherIds.Contains(x.VoucherId)
                         ).ToListAsync();
 
-                var bestInfluencerReport = voucherCodes.GroupBy(g => g.CampaignMemberId).Select(g => new
-                {
-                    CampaignMemberId = g.Key,
-                    NumberOfVoucherCodeUsed = g.Sum(x => x.QuantityUsed)
-                }).MaxBy(x => x.NumberOfVoucherCodeUsed);
+                var campaignMembers = await UnitOfWork.Repository<CampaignMember>().GetAll(
+                        predicate: x => x.CampaignId == request.CampaignId
+                            && x.Status != (int)CampaignMemberStatus.Cancelled
+                            && x.Status != (int)CampaignMemberStatus.RefuseInvitated,
+                        include: x => x.Include(y => y.Influencer).ThenInclude(z => z.VoucherInfluencers),
+                        selector: x => new
+                        {
+                            Influencer = x.Influencer,
+                            Status = x.Status,
+                            QuantityVoucherGet = x.Influencer.VoucherInfluencers.Sum(y => y.QuantityGet),
+                            QuantityVoucherUsed = x.Influencer.VoucherInfluencers.Sum(y => y.QuantityUsed)
+                        })
+                    .ToListAsync();
 
-                if (bestInfluencerReport != null)
+                int maxQuantityUsed = campaignMembers.Count == 0 ? 0 : campaignMembers.Max(x => x.QuantityVoucherUsed);
+
+                report.CampaignMembers = campaignMembers.Select(x => new CampaignMemberReportViewModel
                 {
-                    var bestCampaignMember = await UnitOfWork.Repository<CampaignMember>().FindSingleAsync(x => x.Id == bestInfluencerReport.CampaignMemberId, x => x.Influencer);
-                    if (bestCampaignMember != null)
-                    {
-                        report.BestInfluencer = Mapper.Map<UserBasicViewModel>(bestCampaignMember.Influencer);
-                    }
-                }
+                    Influencer = Mapper.Map<UserBasicViewModel>(x.Influencer),
+                    Status = x.Status,
+                    QuantityVoucherGet = x.QuantityVoucherGet,
+                    QuantityVoucherUsed = x.QuantityVoucherUsed,
+                    IsBestInfluencer = (x.QuantityVoucherUsed == maxQuantityUsed) && maxQuantityUsed > 0
+                }).ToList();
+
 
                 report.NumberOfInfluencer = influencers.Count;
                 report.NumberOfInfluencerCompleted = influencers.Where(x => x.Status == (int)CampaignMemberStatus.Completed).Count();
                 report.NumberOfVoucher = vouchers.Count;
                 report.NumberOfVoucherCode = voucherCodes.Count;
                 report.TotalNumberVoucherCodeUsed = voucherCodes.Sum(x => x.QuantityUsed);
-
-                report.NumberVoucherCodeUsedOfBestInfluencer = bestInfluencerReport?.NumberOfVoucherCodeUsed ?? 0;
-
+                report.TotalNumberVoucherCodeGet = campaignMembers.Sum(x => x.QuantityVoucherGet);
 
                 return new Response<CampaignReportViewModel>(report);
 

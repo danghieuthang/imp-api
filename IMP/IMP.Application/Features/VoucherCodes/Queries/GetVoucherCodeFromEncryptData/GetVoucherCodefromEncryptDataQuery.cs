@@ -53,6 +53,7 @@ namespace IMP.Application.Features.VoucherCodes.Queries.GetVoucherCodeFromEncryp
                         Quantity = voucherCode.Quantity,
                         QuantityUsed = voucherCode.QuantityUsed,
                         InfluencerId = influencerId,
+                        CampaignId = cammpaignId,
                     };
                     return new Response<CheckVoucherCodeViewModel>(view);
                 }

@@ -12,7 +12,7 @@ namespace IMP.Domain.Entities
     {
         [ForeignKey("Voucher")]
         public int VoucherId { get; set; }
-        [ForeignKey("Influencer")]
+        [ForeignKey("ApplicationUser")]
         public int InfluencerId { get; set; }
 
         public int QuantityGet { get; set; }

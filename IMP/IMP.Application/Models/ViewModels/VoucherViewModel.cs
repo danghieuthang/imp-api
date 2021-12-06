@@ -50,6 +50,7 @@ namespace IMP.Application.Models.ViewModels
         public int QuantityUsed { get; set; }
         public DateTime? Expired { get; set; }
         public int InfluencerId { get; set; }
+        public int CampaignId { get; set; }
     }
 
     public class UserVoucherViewModel : BaseViewModel<int>

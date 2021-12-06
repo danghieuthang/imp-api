@@ -124,7 +124,16 @@ namespace IMP.Application.Models.Compaign
         public int NumberOfVoucher { get; set; }
         public int NumberOfVoucherCode { get; set; }
         public int TotalNumberVoucherCodeUsed { get; set; }
-        public int NumberVoucherCodeUsedOfBestInfluencer { get; set; }
-        public UserBasicViewModel BestInfluencer { get; set; }
+        public int TotalNumberVoucherCodeGet { get; set; }
+        public List<CampaignMemberReportViewModel> CampaignMembers { get; set; }
+    }
+
+    public class CampaignMemberReportViewModel
+    {
+        public UserBasicViewModel Influencer { get; set; }
+        public int QuantityVoucherGet { get; set; }
+        public int QuantityVoucherUsed { get; set; }
+        public int Status { get; set; }
+        public bool IsBestInfluencer { get; set; }
     }
 }

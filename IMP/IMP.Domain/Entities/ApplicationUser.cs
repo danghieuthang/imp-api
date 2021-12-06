@@ -15,6 +15,7 @@ namespace IMP.Domain.Entities
             Otps = new Collection<Otp>();
             TransactionsReceived = new Collection<WalletTransaction>();
             TransactionsSent = new Collection<WalletTransaction>();
+            VoucherInfluencers = new Collection<VoucherInfluencer>();
         }
         #region personal infomation
         [MaxLength(256)]
@@ -109,5 +110,6 @@ namespace IMP.Domain.Entities
         public virtual ICollection<WalletTransaction> TransactionsReceived { get; set; }
         public virtual ICollection<VoucherCodeApplicationUser> VoucherCodeApplicationUsers { get; set; }
         public virtual ICollection<Notification> Notifications { get; set; }
+        public virtual ICollection<VoucherInfluencer> VoucherInfluencers { get; set; }
     }
 }
