@@ -136,7 +136,7 @@ namespace IMP.WebApi.Controllers.v1
         /// <returns></returns>
         [ProducesResponseType(typeof(Response<bool>), 200)]
         [HttpPost("take-voucher-code-to-email-from-biolink")]
-        [Authorize(Roles = "Influencer")]
+        [AllowAnonymous]
         public async Task<IActionResult> RequestVoucherCodeToEmailFrombioLink([FromBody] RequestVoucherCodeToEmailByBiolinkCommand command)
         {
             return Ok(await Mediator.Send(command));
@@ -148,7 +148,7 @@ namespace IMP.WebApi.Controllers.v1
         /// <param name="query"></param>
         /// <returns></returns>
         [ProducesResponseType(typeof(Response<CheckVoucherCodeViewModel>), 200)]
-        [HttpPost("checking-voucher-code")]
+        [HttpGet("checking-voucher-code")]
         [AllowAnonymous]
         public async Task<IActionResult> CheckingVoucherFromEncryptData([FromQuery] GetVoucherCodeFromEncryptDataQuery query)
         {

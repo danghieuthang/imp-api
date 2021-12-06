@@ -69,6 +69,7 @@ namespace IMP.Infrastructure.Persistence.Contexts
         public DbSet<ActivityComment> ActivityComments { get; set; }
         public DbSet<EvidenceType> EvidenceTypes { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<VoucherInfluencer> VoucherInfluencers { get; set; }
 
         #endregion
 
