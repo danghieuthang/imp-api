@@ -13,6 +13,8 @@ namespace IMP.Domain.Entities
     {
         [StringLength(256)]
         public string Name { get; set; }
+        [StringLength(256)]
+        public string Code { get; set; }
         public decimal Price { get; set; }
         public bool? IsReward { get; set; }
         [StringLength(50)]
