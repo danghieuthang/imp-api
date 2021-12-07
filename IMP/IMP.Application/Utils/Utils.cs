@@ -47,12 +47,13 @@ namespace IMP.Application.Utils
                     encryptString = Convert.ToBase64String(ms.ToArray());
                 }
             }
-            return ConvertStringToHex(encryptString, Encoding.Unicode);
+            return encryptString;
+            //return ConvertStringToHex(encryptString, Encoding.Unicode);
         }
 
         public static string Decrypt(string cipherText)
         {
-            cipherText = ConvertHexToString(cipherText, Encoding.Unicode);
+            //cipherText = ConvertHexToString(cipherText, Encoding.Unicode);
             cipherText = cipherText.Replace(" ", "+");
             byte[] cipherBytes = Convert.FromBase64String(cipherText);
             using (Aes encryptor = Aes.Create())
