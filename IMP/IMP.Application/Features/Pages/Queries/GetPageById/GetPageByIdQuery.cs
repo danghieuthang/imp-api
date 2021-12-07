@@ -31,7 +31,8 @@ namespace IMP.Application.Features.Pages.Queries.GetPageById
                         pages.Include(page => page.Blocks)
                             .ThenInclude(block => block.Items)
                          .Include(y => y.Blocks)
-                            .ThenInclude(block => block.ChildBlocks).ThenInclude(x=>x.Items));
+                            .ThenInclude(block => block.ChildBlocks).ThenInclude(x => x.Items)
+                          .Include(x => x.Influencer));
                 if (page != null)
                 {
                     var pageView = Mapper.Map<PageViewModel>(page);

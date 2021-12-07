@@ -16,5 +16,6 @@ namespace IMP.Application.Models.ViewModels
         public string TextColor { get; set; }
         public List<BlockViewModel> Blocks { get; set; }
         public int Status { get; set; }
+        public UserBasicViewModel Influencer { get; set; }
     }
 }
