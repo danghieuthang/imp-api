@@ -135,5 +135,7 @@ namespace IMP.Application.Models.Compaign
         public int QuantityVoucherUsed { get; set; }
         public int Status { get; set; }
         public bool IsBestInfluencer { get; set; }
+        public decimal MoneyEarn { get; set; }
+
     }
 }

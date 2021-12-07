@@ -2,9 +2,11 @@
 using IMP.Application.Features.CampaignMembers.Commands.AcceptInviteJoinCampaign;
 using IMP.Application.Features.CampaignMembers.Commands.SendRewardToInfluencer;
 using IMP.Application.Features.CampaignMembers.Queries.GetCampaignMemberById;
+using IMP.Application.Features.CampaignMembers.Queries.Reports;
 using IMP.Application.Features.Campaigns.Commands.ProcessCampaignMember;
 using IMP.Application.Features.MemberActivities.Queries.GetAllMemberActivitesOfUser;
 using IMP.Application.Features.Vouchers.Queries.GetAllVoucherOfCampaignMember;
+using IMP.Application.Models.Compaign;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
 using Microsoft.AspNetCore.Authorization;
@@ -120,6 +122,20 @@ namespace IMP.WebApi.Controllers.v1
         {
             return Ok(await Mediator.Send(new SendRewardToInfluencerCommand { CampaignMemberId = id }));
         }
+
+        /// <summary>
+        /// Get report of a campaign member
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id}/report")]
+        [ProducesResponseType(typeof(Response<CampaignMemberReportViewModel>), 200)]
+        [Authorize(Roles = "Brand,Influencer")]
+        public async Task<IActionResult> Report([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new GetReportOfCampaignMemberQuery { Id = id }));
+        }
+
 
     }
 }

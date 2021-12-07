@@ -52,4 +52,12 @@ namespace IMP.Application.Models.ViewModels
         public int NumberOfApproved { get; set; }
         public int NumberOfCanceled { get; set; }
     }
+
+    //public class CampaignMemberReportViewModel
+    //{
+    //    public int AvailableVoucherCode { get; set; }
+    //    public int NumberVoucherCodeGet { get; set; }
+    //    public int NumberVoucherCodeUsed { get; set; }
+    //    public int MoneyEarn { get; set; }
+    //}
 }
