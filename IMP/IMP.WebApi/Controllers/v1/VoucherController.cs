@@ -23,6 +23,7 @@ using IMP.Application.Features.Vouchers.Commands.RemoveVoucherFromCampaign;
 using System.Collections.Generic;
 using IMP.Application.Features.VoucherCodes.Commands.UpdateVoucherCode;
 using IMP.Application.Features.Vouchers.Queries.GetAvailableVoucherForCampaignMember;
+using IMP.Application.Features.Vouchers.Queries.Reports;
 
 namespace IMP.WebApi.Controllers.v1
 {
@@ -303,6 +304,18 @@ namespace IMP.WebApi.Controllers.v1
         [HttpGet("search-voucher-by-biolink")]
         [AllowAnonymous]
         public async Task<IActionResult> GetVouchersByBioLink([FromQuery] GetVoucherForBioLinkOfCampaignQuery query)
+        {
+            return Ok(await Mediator.Send(query));
+        }
+        /// <summary>
+        /// Get report of voucher code by bio link
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<VoucherReportViewModel>), 200)]
+        [HttpGet("report")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ReportOfVoucherByBiolink([FromQuery] GetReportVoucherByBiolinkQuery query)
         {
             return Ok(await Mediator.Send(query));
         }

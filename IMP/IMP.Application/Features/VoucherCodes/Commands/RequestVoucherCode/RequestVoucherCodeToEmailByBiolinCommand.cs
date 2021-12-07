@@ -44,8 +44,14 @@ namespace IMP.Application.Features.VoucherCodes.Commands.RequestVoucherCode
 
             public override async Task<Response<bool>> Handle(RequestVoucherCodeToEmailByBiolinkCommand request, CancellationToken cancellationToken)
             {
-                var user = await UnitOfWork.Repository<ApplicationUser>().FindSingleAsync(x => x.Pages.Any(y => y.BioLink.ToLower() == request.Biolink.ToLower()), x => x.VoucherCodeApplicationUsers);
+                var user = await UnitOfWork.Repository<ApplicationUser>().FindSingleAsync(x => x.Pages.Any(y => y.BioLink.ToLower() == request.Biolink.ToLower()));
                 if (user == null)
+                {
+                    return new Response<bool>(false);
+                }
+
+                var campaignMember = await UnitOfWork.Repository<CampaignMember>().FindSingleAsync(x => x.CampaignId == request.CampaignId && x.InfluencerId == user.Id);
+                if (campaignMember == null)
                 {
                     return new Response<bool>(false);
                 }
@@ -69,13 +75,28 @@ namespace IMP.Application.Features.VoucherCodes.Commands.RequestVoucherCode
                 #endregion
 
                 #region get voucher code
-                var voucherCode = await UnitOfWork.Repository<VoucherCode>().FindSingleAsync(
+                var voucherCode = await UnitOfWork.Repository<VoucherCode>().FindSingleAsync( // get voucher code that assigned for influencer and can used
                         predicate: x => x.VoucherId == voucher.Id
+                            && ((x.CampaignMemberId.HasValue && x.CampaignMemberId.Value == campaignMember.Id))
                             && (
                                 (x.Quantity == 1 && x.QuantityUsed == 0 && (x.Expired == null || (x.Expired.HasValue && x.Expired.Value.CompareTo(DateTime.UtcNow) < 0)))  // Voucher 1 lần sài && chưa ai sài && không bị ai giữ
                                 || (x.Quantity > 1 && x.QuantityUsed < x.Quantity) // Voucher nhiều lần sài và còn sử dụng được
                                )
                     );
+
+                if (voucherCode == null)
+                {
+                    // get voucher that not assigned for influencer and can used
+                    voucherCode = await UnitOfWork.Repository<VoucherCode>().FindSingleAsync(
+                       predicate: x => x.VoucherId == voucher.Id
+                           && (x.CampaignMemberId == null)
+                           && (
+                               (x.Quantity == 1 && x.QuantityUsed == 0 && (x.Expired == null || (x.Expired.HasValue && x.Expired.Value.CompareTo(DateTime.UtcNow) < 0)))  // Voucher 1 lần sài && chưa ai sài && không bị ai giữ
+                               || (x.Quantity > 1 && x.QuantityUsed < x.Quantity) // Voucher nhiều lần sài và còn sử dụng được
+                              )
+                   );
+                }
+
 
                 if (voucherCode == null)
                 {
@@ -88,6 +109,11 @@ namespace IMP.Application.Features.VoucherCodes.Commands.RequestVoucherCode
                 {
                     voucherCode.Expired = DateTime.UtcNow.Add(voucher.HoldTime.Value);
                     UnitOfWork.Repository<VoucherCode>().Update(voucherCode);
+                }
+
+                if (voucherCode.CampaignMemberId == null)
+                {
+                    voucherCode.CampaignMemberId = campaignMember.Id;
                 }
 
                 var voucherInfluencer = await UnitOfWork.Repository<VoucherInfluencer>().FindSingleAsync(

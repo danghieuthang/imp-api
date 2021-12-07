@@ -347,6 +347,27 @@ namespace IMP.Application.Mappings
                {
                    opt.MapFrom(x => JsonConvert.SerializeObject(x.DiscountProducts));
                });
+
+            CreateMap<Voucher, VoucherReportViewModel>()
+                .ForMember(dest => dest.DiscountProducts, opt =>
+                {
+                    opt.MapFrom(x => JsonConvert.DeserializeObject<List<DiscountProductViewModel>>(x.DiscountProducts));
+                });
+            CreateMap<Voucher, UserVoucherViewModel>()
+                  .ForMember(dest => dest.DiscountProducts, opt =>
+                  {
+                      opt.MapFrom(x => JsonConvert.DeserializeObject<List<DiscountProductViewModel>>(x.DiscountProducts));
+                  });
+            CreateMap<CreateVoucherCommand, Voucher>()
+                .ForMember(x => x.DiscountProducts, opt =>
+                {
+                    opt.MapFrom(x => JsonConvert.SerializeObject(x.DiscountProducts));
+                });
+            CreateMap<UpdateVoucherCommand, Voucher>()
+               .ForMember(x => x.DiscountProducts, opt =>
+               {
+                   opt.MapFrom(x => JsonConvert.SerializeObject(x.DiscountProducts));
+               });
             CreateMap<AssignVoucherToCampaignCommand, CampaignVoucher>();
             CreateMap<CampaignVoucher, CampaignVoucherViewModel>();
             CreateMap<CampaignVoucher, UserCampaignVoucherViewModel>();

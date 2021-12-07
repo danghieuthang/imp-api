@@ -33,6 +33,11 @@ namespace IMP.Application.Models.ViewModels
         public List<DiscountProductViewModel> DiscountProducts { get; set; }
     }
 
+    public class VoucherReportViewModel : VoucherViewModel
+    {
+        public int QuantityGet { get; set; }
+    }
+
     public class VoucherCodeViewModel : BaseViewModel<int>
     {
 

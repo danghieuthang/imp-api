@@ -15,7 +15,7 @@ namespace IMP.Domain.Entities
         public string Code { get; set; }
         public int Quantity { get; set; }
         public int QuantityUsed { get; set; }
-
+        public int QuantityGet { get; set; }
         [ForeignKey("CampaignMember")]
         public int? CampaignMemberId { get; set; }
         public DateTime? Expired { get; set; }
@@ -23,7 +23,6 @@ namespace IMP.Domain.Entities
 
         public CampaignMember CampaignMember { get; set; }
         public Voucher Voucher { get; set; }
-
 
         public ICollection<VoucherTransaction> VoucherTransactions { get; set; }
         public ICollection<VoucherCodeApplicationUser> VoucherCodeApplicationUsers { get; set; }
