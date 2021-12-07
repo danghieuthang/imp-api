@@ -41,23 +41,17 @@ namespace IMP.Application.Features.Campaigns.Queries.Reports
                         predicate: x => x.CampaignMember.CampaignId == request.CampaignId && voucherIds.Contains(x.VoucherId)
                         ).ToListAsync();
 
-                var campaignMembersA = await UnitOfWork.Repository<CampaignMember>().GetAll(
-                      predicate: x => x.CampaignId == request.CampaignId
-                          && x.Status != (int)CampaignMemberStatus.Cancelled
-                          && x.Status != (int)CampaignMemberStatus.RefuseInvitated,
-                      include: x => x.Include(y => y.Influencer).ThenInclude(z => z.VoucherInfluencers.Where(vi => voucherIds.Contains(vi.VoucherId)))).ToListAsync();
-
                 var campaignMembers = await UnitOfWork.Repository<CampaignMember>().GetAll(
                           predicate: x => x.CampaignId == request.CampaignId
                               && x.Status != (int)CampaignMemberStatus.Cancelled
                               && x.Status != (int)CampaignMemberStatus.RefuseInvitated,
-                          include: x => x.Include(y => y.Influencer).ThenInclude(z => z.VoucherInfluencers.Where(vi => voucherIds.Contains(vi.VoucherId))),
+                          include: x => x.Include(y => y.Influencer).Include(y => y.VoucherCodes),
                           selector: x => new
                           {
                               Influencer = x.Influencer,
                               Status = x.Status,
-                              QuantityVoucherGet = x.Influencer.VoucherInfluencers.Sum(y => y.QuantityGet),
-                              QuantityVoucherUsed = x.Influencer.VoucherInfluencers.Sum(y => y.QuantityUsed)
+                              QuantityVoucherGet = x.VoucherCodes.Sum(y => y.QuantityGet),
+                              QuantityVoucherUsed = x.VoucherCodes.Sum(y => y.QuantityUsed)
                           })
                       .ToListAsync();
 
@@ -72,11 +66,10 @@ namespace IMP.Application.Features.Campaigns.Queries.Reports
                     IsBestInfluencer = (x.QuantityVoucherUsed == maxQuantityUsed) && maxQuantityUsed > 0
                 }).ToList();
 
-
                 report.NumberOfInfluencer = influencers.Count;
                 report.NumberOfInfluencerCompleted = influencers.Where(x => x.Status == (int)CampaignMemberStatus.Completed).Count();
                 report.NumberOfVoucher = vouchers.Count;
-                report.NumberOfVoucherCode = voucherCodes.Count;
+                report.NumberOfVoucherCode = voucherCodes.Sum(x => x.Quantity);
                 report.TotalNumberVoucherCodeUsed = voucherCodes.Sum(x => x.QuantityUsed);
                 report.TotalNumberVoucherCodeGet = campaignMembers.Sum(x => x.QuantityVoucherGet);
 

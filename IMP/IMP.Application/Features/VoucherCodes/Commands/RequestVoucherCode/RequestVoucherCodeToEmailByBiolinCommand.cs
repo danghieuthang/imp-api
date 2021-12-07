@@ -105,6 +105,8 @@ namespace IMP.Application.Features.VoucherCodes.Commands.RequestVoucherCode
                 #endregion
 
                 #region update quantity get for voucher influencer
+                voucherCode.QuantityGet++;
+
                 if (voucher.Quantity == 1 && voucher.HoldTime.HasValue)
                 {
                     voucherCode.Expired = DateTime.UtcNow.Add(voucher.HoldTime.Value);
