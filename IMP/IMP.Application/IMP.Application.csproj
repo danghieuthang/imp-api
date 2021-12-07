@@ -35,6 +35,7 @@
     <Folder Include="Features\MemberActivities\Commands\UpdateMemberActivity\" />
     <Folder Include="Features\Notifications\Queries\NewFolder\" />
     <Folder Include="Features\VoucherCodes\Queries\NewFolder\" />
+    <Folder Include="Features\Vouchers\Queries\Reports\" />
   </ItemGroup>
 
 </Project>

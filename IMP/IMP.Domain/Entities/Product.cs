@@ -19,6 +19,10 @@ namespace IMP.Domain.Entities
         public string Currency { get; set; }
         [ForeignKey("Campaign")]
         public int CampaignId { get; set; }
+        [StringLength(256)]
+        public string Image { get; set; }
+        [StringLength(2000)]
+        public string Description { get; set; }
 
     }
 }
