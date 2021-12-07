@@ -54,7 +54,9 @@ namespace IMP.Application.Features.VoucherTransactions.Queries.GetAllVoucherTran
                         orderByDecensing: request.OrderBy == Enums.OrderBy.DESC,
                         pageIndex: request.PageIndex,
                         pageSize: request.PageSize,
-                        cancellationToken: cancellationToken
+                        cancellationToken: cancellationToken,
+                        include: x => x.Include(y => y.VoucherCode)
+
                         );
 
                 var pageView = page.ToResponsePagedList<VoucherTransactionViewModel>(Mapper);

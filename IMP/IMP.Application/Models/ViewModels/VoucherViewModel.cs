@@ -121,6 +121,7 @@ namespace IMP.Application.Models.ViewModels
         public string Order { get; set; }
         public string OrderCode { get; set; }
         public DateTime OrderCreated { get; set; }
+        public VoucherCodeViewModel VoucherCode { get; set; }
     }
 
     public class DiscountProductViewModel
