@@ -50,14 +50,14 @@ namespace IMP.Application.Features.Vouchers.Queries.GetVoucherCanAvailableForCam
 
             public override async Task<Response<IPagedList<VoucherViewModel>>> Handle(GetVoucherCanAvailableForCampaignQuery request, CancellationToken cancellationToken)
             {
-                var campaign = await UnitOfWork.Repository<Campaign>().GetByIdAsync(request.CampaignId);
+                var campaign = await UnitOfWork.Repository<Campaign>().FindSingleAsync(x => x.Id == request.CampaignId, x => x.Products);
                 if (campaign == null)
                 {
                     return new Response<IPagedList<VoucherViewModel>>(new PagedList<VoucherViewModel>());
                 }
 
                 string name = string.IsNullOrEmpty(request.Name) ? "" : request.Name.ToLower().Trim();
-
+                var product = campaign.Products.FirstOrDefault();
 
                 var page = await UnitOfWork.Repository<Voucher>().GetPagedList(
                  predicate: x => (x.ToDate == null
@@ -67,7 +67,8 @@ namespace IMP.Application.Features.Vouchers.Queries.GetVoucherCanAvailableForCam
                     && (request.FromDate == null || (request.FromDate != null && x.FromDate >= request.FromDate.Value))
                     && (request.ToDate == null || (request.ToDate != null && x.FromDate >= request.ToDate.Value))
                     && (string.IsNullOrEmpty(name) || x.VoucherName.ToLower().Contains(name))
-                    && (request.IncludeExisedInCampaign == true 
+                    && (product == null || (product != null && x.DiscountProducts.ToLower().Contains(product.Code.ToLower()))) // filter by product code
+                    && (request.IncludeExisedInCampaign == true
                         || (request.IncludeExisedInCampaign == false && !x.CampaignVouchers.Any(y => y.CampaignId == request.CampaignId && y.IsBestInfluencerReward == false && y.IsDefaultReward == false))),
 
                  include: x => x.Include(y => y.CampaignVouchers),
