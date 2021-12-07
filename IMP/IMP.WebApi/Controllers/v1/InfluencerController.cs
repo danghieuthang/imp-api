@@ -1,6 +1,8 @@
 ﻿using IMP.Application.Features.ApplicationUsers.Queries.GetAllInfluencer;
 using IMP.Application.Features.ApplicationUsers.Queries.GetInfluencerById;
+using IMP.Application.Features.Campaigns.Queries.GetCampaignByInfluencerId;
 using IMP.Application.Features.Influencers.Commands;
+using IMP.Application.Models.Compaign;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
 using Microsoft.AspNetCore.Authorization;
@@ -79,6 +81,20 @@ namespace IMP.WebApi.Controllers.v1
             }
             return Ok(await Mediator.Send(command));
         }
+        /// <summary>
+        /// Search list campaign of a influencer
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [HttpGet("{id}/campaigns")]
+        [ProducesResponseType(typeof(Response<IPagedList<CampaignViewModel>>), 200)]
+        [Authorize(Roles = "Brand")]
+        public async Task<IActionResult> InviteInfluencer([FromQuery] GetCampaignByInfluencerIdForBrandQuery query)
+        {
+            return Ok(await Mediator.Send(query));
+        }
+
+
 
     }
 }
