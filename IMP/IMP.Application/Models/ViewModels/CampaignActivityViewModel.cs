@@ -13,7 +13,7 @@ namespace IMP.Application.Models.Compaign
         public int? EvidenceTypeId { get; set; }
     }
 
-    public class CampaignActivityBasicViewModel
+    public class CampaignActivityBasicViewModel : BaseViewModel<int>
     {
         public ActivityTypeBasicInfoViewModel ActivityType { get; set; }
         public string Name { get; set; }
