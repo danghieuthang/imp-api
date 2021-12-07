@@ -411,6 +411,8 @@ namespace IMP.Application.Mappings
             CreateMap<ActivityComment, ActivityCommentViewModel>();
             #endregion
 
+        
+
             CreateMap<Notification, NotificationViewModel>();
         }
 

@@ -1,4 +1,5 @@
 ﻿using IMP.Application.Features.VoucherTransactions.Commands.CreateVoucherTransaction;
+using IMP.Application.Features.VoucherTransactions.Queries.GetAllVoucherTransactionOfCampaign;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
 using Microsoft.AspNetCore.Authorization;
@@ -23,6 +24,17 @@ namespace IMP.WebApi.Controllers.v1
         public async Task<IActionResult> Create([FromBody] CreateVoucherTransactionCommand command)
         {
             return StatusCode(201, await Mediator.Send(command));
+        }
+        /// <summary>
+        /// Search transction of campaign
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [HttpGet("search-transaction-of-campaign")]
+        [ProducesResponseType(typeof(Response<IPagedList<VoucherTransactionViewModel>>), 200)]
+        public async Task<IActionResult> GetAllOfCampaign([FromQuery] GetAllVoucherTransactionOfCampaignQuery query)
+        {
+            return Ok(await Mediator.Send(query));
         }
     }
 }
