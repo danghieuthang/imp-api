@@ -34,6 +34,7 @@ namespace IMP.Application.Features.ApplicationUsers.Queries.GetInfluencerById
                 include: x => x.Include(y => y.PaymentInfor).ThenInclude(y => y.Bank)
                     .Include(y => y.Ranking).ThenInclude(y => y.RankLevel)
                     .Include(y => y.InfluencerPlatforms).ThenInclude(y => y.Platform)
+                    .Include(y => y.Pages)
             );
             if (user == null)
             {
@@ -42,6 +43,7 @@ namespace IMP.Application.Features.ApplicationUsers.Queries.GetInfluencerById
             }
 
             var view = Mapper.Map<InfluencerViewModel>(user);
+            view.BioLinks = user.Pages.Select(x => x.BioLink).ToList();
             return new Response<InfluencerViewModel>(view);
         }
     }

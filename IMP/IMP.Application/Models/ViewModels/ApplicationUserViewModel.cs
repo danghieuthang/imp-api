@@ -87,6 +87,7 @@ namespace IMP.Application.Models.ViewModels
         public List<string> PetsR { get; set; }
         public string Description { get; set; }
         public int WalletId { get; set; }
+        public List<string> BioLinks { get; set; }
 
         public PaymentInforViewModel PaymentInfor { get; set; }
         public RankingViewModel Ranking { get; set; }
