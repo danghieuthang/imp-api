@@ -72,6 +72,18 @@ namespace IMP.WebApi.Controllers.v1
         }
 
         /// <summary>
+        /// Cancel invite - for brand
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost("{id}/cancel-invited")]
+        [Authorize(Roles = "Brand")]
+        public async Task<IActionResult> CancelInvite([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new CancelInviteJoinCampaignCommand { Id = id }));
+        }
+
+        /// <summary>
         /// Get all member activies of campaign member
         /// </summary>
         /// <param name="id">The campaign member id</param>
