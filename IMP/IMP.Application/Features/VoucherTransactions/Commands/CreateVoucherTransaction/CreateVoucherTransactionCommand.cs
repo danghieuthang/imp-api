@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using IMP.Application.Enums;
 using IMP.Application.Exceptions;
 using IMP.Application.Interfaces;
 using IMP.Application.Models;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
 using IMP.Domain.Entities;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,8 +31,13 @@ namespace IMP.Application.Features.VoucherTransactions.Commands.CreateVoucherTra
                 var voucherCodeRepository = UnitOfWork.Repository<VoucherCode>();
                 var voucherInfluencerRepository = UnitOfWork.Repository<VoucherInfluencer>();
 
-                var voucherCode = await voucherCodeRepository.FindSingleAsync(x => x.Code.ToLower() == request.Code.ToLower() && x.VoucherId == request.VoucherId, x => x.Voucher);
+                var campaignVoucher = await UnitOfWork.Repository<CampaignVoucher>().FindSingleAsync(x => x.CampaignId == request.CampaignId && x.Voucher.VoucherCodes.Any(y => y.Code.ToUpper() == request.Code.ToUpper()), x => x.Campaign);
+                if (campaignVoucher == null)
+                {
+                    throw new ValidationException(new ValidationError("campaign_id", "Voucher code không tồn tại."));
+                }
 
+                var voucherCode = await voucherCodeRepository.FindSingleAsync(x => x.Code.ToLower() == request.Code.ToLower() && x.VoucherId == campaignVoucher.VoucherId, x => x.Voucher);
                 if (voucherCode == null)
                 {
                     throw new ValidationException(new ValidationError("code", "Voucher code không tồn tại."));
@@ -54,12 +61,43 @@ namespace IMP.Application.Features.VoucherTransactions.Commands.CreateVoucherTra
                 voucherCodeRepository.Update(voucherCode);
 
                 #region update voucher influencer
-                var voucherInfluencer = await voucherInfluencerRepository.FindSingleAsync(x => x.VoucherId == request.VoucherId && x.InfluencerId == request.InfluencerId);
+                var voucherInfluencer = await voucherInfluencerRepository.FindSingleAsync(x => x.VoucherId == campaignVoucher.VoucherId && x.InfluencerId == request.InfluencerId);
                 if (voucherInfluencer != null)
                 {
                     voucherInfluencer.QuantityUsed++;
                     voucherInfluencerRepository.Update(voucherInfluencer);
                 }
+
+                var campaignMember = await UnitOfWork.Repository<CampaignMember>().FindSingleAsync(x => x.CampaignId == campaignVoucher.CampaignId && x.InfluencerId == request.InfluencerId);
+                if (campaignVoucher.Campaign.VoucherCommissionMode == (int)VoucherCommissionType.Order) // if earning per oder
+                {
+                    List<VoucherCommissionPrices> prices = JsonConvert.DeserializeObject<List<VoucherCommissionPrices>>(campaignVoucher.Campaign.VoucherCommissionPrices);
+                    if (campaignVoucher.Campaign.IsPercentVoucherCommission) // if earn by percent of order
+                    {
+                        campaignMember.Money += prices.FirstOrDefault().Value * request.TotalPrice / (decimal)100.0;
+                    }
+                    else // earn by interval of order
+                    {
+                        foreach (var price in prices)
+                        {
+                            if (request.TotalPrice >= price.From && (request.TotalPrice <= price.To || price.To == null))
+                            {
+                                campaignMember.Money += price.Value;
+                                break;
+                            }
+                        }
+                    }
+                }
+                else if (campaignVoucher.Campaign.VoucherCommissionMode == (int)VoucherCommissionType.Product)// if earning by product
+                {
+                    List<VoucherCommissionPrices> prices = JsonConvert.DeserializeObject<List<VoucherCommissionPrices>>(campaignVoucher.Campaign.VoucherCommissionPrices);
+                    if (campaignVoucher.Campaign.IsPercentVoucherCommission) // if earn by percent
+                    {
+                        campaignMember.Money += prices.FirstOrDefault().Value * request.TotalDiscount / (decimal)100.0;
+                    }
+                }
+
+                UnitOfWork.Repository<CampaignMember>().Update(campaignMember);
                 #endregion
                 await UnitOfWork.CommitAsync();
 
