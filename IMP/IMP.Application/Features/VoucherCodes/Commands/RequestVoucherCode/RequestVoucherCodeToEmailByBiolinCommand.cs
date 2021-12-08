@@ -116,6 +116,8 @@ namespace IMP.Application.Features.VoucherCodes.Commands.RequestVoucherCode
                 if (voucherCode.CampaignMemberId == null)
                 {
                     voucherCode.CampaignMemberId = campaignMember.Id;
+                    UnitOfWork.Repository<VoucherCode>().Update(voucherCode);
+
                 }
 
                 var voucherInfluencer = await UnitOfWork.Repository<VoucherInfluencer>().FindSingleAsync(
