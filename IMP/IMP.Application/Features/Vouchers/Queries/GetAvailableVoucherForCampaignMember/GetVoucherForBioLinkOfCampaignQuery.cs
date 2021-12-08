@@ -39,25 +39,34 @@ namespace IMP.Application.Features.Vouchers.Queries.GetAvailableVoucherForCampai
                     throw new ValidationException(new ValidationError("bio_link", "Không tồn tại"));
                 }
 
-                var vouchers = await UnitOfWork.Repository<VoucherCode>().GetAll(
-                        predicate: x => x.CampaignMember.InfluencerId == user.Id && x.CampaignMember.CampaignId == request.CampaignId,
-                        include: x => x.Include(y => y.Voucher)).ToListAsync();
+                //var vouchers = await UnitOfWork.Repository<VoucherCode>().GetAll(
+                //        predicate: x => x.CampaignMember.InfluencerId == user.Id && x.CampaignMember.CampaignId == request.CampaignId,
+                //        include: x => x.Include(y => y.Voucher)).ToListAsync();
 
-                var gs = vouchers.GroupBy(x => x.VoucherId).Select(g =>
-                {
-                    var voucher = g.First().Voucher;
-                    voucher.VoucherCodes = g.ToList();
-                    return voucher;
-                }).ToList();
+                //var gs = vouchers.GroupBy(x => x.VoucherId).Select(g =>
+                //{
+                //    var voucher = g.First().Voucher;
+                //    voucher.VoucherCodes = g.ToList();
+                //    return voucher;
+                //}).ToList();
 
-                gs.ForEach(x =>
+                //gs.ForEach(x =>
+                //{
+                //    x.QuantityUsed = x.VoucherCodes.Sum(y => y.QuantityUsed);
+                //    x.VoucherCodes = null;
+                //});
+                var vouchers = await UnitOfWork.Repository<CampaignVoucher>().GetAll(
+                        predicate: x => x.CampaignId == request.CampaignId,
+                        selector: x => x.Voucher,
+                        include: x => x.Include(y => y.Voucher).ThenInclude(y => y.VoucherCodes)).ToListAsync();
+
+                vouchers.ForEach(x =>
                 {
-                    x.QuantityUsed = x.VoucherCodes.Sum(y => y.QuantityUsed);
-                    x.VoucherCodes = null;
+                    x.Quantity = x.VoucherCodes.Sum(x => x.Quantity);
+                    x.QuantityUsed = x.VoucherCodes.Sum(x => x.QuantityUsed);
                 });
 
-
-                var voucherViews = Mapper.Map<IEnumerable<VoucherViewModel>>(gs);
+                var voucherViews = Mapper.Map<IEnumerable<VoucherViewModel>>(vouchers);
                 return new Response<IEnumerable<VoucherViewModel>>(voucherViews);
             }
         }
