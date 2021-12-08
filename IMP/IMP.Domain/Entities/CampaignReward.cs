@@ -15,5 +15,8 @@ namespace IMP.Domain.Entities
         [ForeignKey("Campaign")]
         public int CampaignId { get; set; }
         public bool IsDefaultReward { get; set; }
+        public int RewardType { get; set; }
+        [StringLength(2000)]
+        public string IntervalReward { get; set; }
     }
 }

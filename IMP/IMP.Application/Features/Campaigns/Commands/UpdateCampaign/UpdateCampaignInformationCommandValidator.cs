@@ -77,7 +77,8 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
             public CampaignRewardValidator()
             {
                 RuleFor(x => x.Name).MustMaxLength(255);
-                RuleFor(x => x.Price).GreaterThan(0).WithMessage("Giá phần thưởng phải lớn hơn 0.");
+                RuleFor(x => x.Price).GreaterThanOrEqualTo(0).WithMessage("Giá phần thưởng phải lớn hơn 0.");
+                RuleFor(x => x.RewardType).IsInEnum().WithMessage("Không tồn tại loại phần thưởng này.");
             }
         }
 
