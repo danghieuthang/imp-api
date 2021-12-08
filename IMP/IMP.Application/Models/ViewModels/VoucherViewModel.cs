@@ -124,6 +124,15 @@ namespace IMP.Application.Models.ViewModels
         public VoucherCodeViewModel VoucherCode { get; set; }
     }
 
+    public class VoucherTransactionReportViewModel
+    {
+        public int TotalTransaction { get; set; }
+        public decimal TotalOrderPrice { get; set; }
+        public decimal TotalDiscount { get; set; }
+        public int TotalCode { get; set; }
+        public int TotalOrderAmount { get; set; }
+    }
+
     public class DiscountProductViewModel
     {
         public string Code { get; set; }

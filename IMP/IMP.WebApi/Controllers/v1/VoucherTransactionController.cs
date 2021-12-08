@@ -1,5 +1,6 @@
 ﻿using IMP.Application.Features.VoucherTransactions.Commands.CreateVoucherTransaction;
 using IMP.Application.Features.VoucherTransactions.Queries.GetAllVoucherTransactionOfCampaign;
+using IMP.Application.Features.VoucherTransactions.Queries.GetTransactionReportOfCampaign;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
 using Microsoft.AspNetCore.Authorization;
@@ -35,6 +36,15 @@ namespace IMP.WebApi.Controllers.v1
         public async Task<IActionResult> GetAllOfCampaign([FromQuery] GetAllVoucherTransactionOfCampaignQuery query)
         {
             return Ok(await Mediator.Send(query));
+        }
+
+
+        [HttpGet("report")]
+        [ProducesResponseType(typeof(Response<VoucherTransactionReportViewModel>), 200)]
+        [Authorize(Roles = "Brand")]
+        public async Task<IActionResult> GetAllOfCampaign([FromQuery(Name = "campaign_id")] int campaignId)
+        {
+            return Ok(await Mediator.Send(new GetTransactionReportOfCampaignQuery { CampaignId = campaignId }));
         }
     }
 }
