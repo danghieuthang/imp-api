@@ -51,11 +51,12 @@ namespace IMP.Application.Features.Campaigns.Queries.Reports
                               Influencer = x.Influencer,
                               Status = x.Status,
                               QuantityVoucherGet = x.VoucherCodes.Sum(y => y.QuantityGet),
-                              QuantityVoucherUsed = x.VoucherCodes.Sum(y => y.QuantityUsed)
+                              QuantityVoucherUsed = x.VoucherCodes.Sum(y => y.QuantityUsed),
+                              Money = x.Money,
                           })
                       .ToListAsync();
 
-                int maxQuantityUsed = campaignMembers.Count == 0 ? 0 : campaignMembers.Max(x => x.QuantityVoucherUsed);
+                decimal maxMoney = campaignMembers.Count == 0 ? 0 : campaignMembers.Max(x => x.Money);
 
                 report.CampaignMembers = campaignMembers.Select(x => new CampaignMemberReportViewModel
                 {
@@ -63,7 +64,8 @@ namespace IMP.Application.Features.Campaigns.Queries.Reports
                     Status = x.Status,
                     QuantityVoucherGet = x.QuantityVoucherGet,
                     QuantityVoucherUsed = x.QuantityVoucherUsed,
-                    IsBestInfluencer = (x.QuantityVoucherUsed == maxQuantityUsed) && maxQuantityUsed > 0
+                    IsBestInfluencer = (x.Money == maxMoney) && maxMoney > 0,
+                    MoneyEarn = x.Money
                 }).ToList();
 
                 report.NumberOfInfluencer = influencers.Count;
