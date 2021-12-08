@@ -103,37 +103,28 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
                 Mapper.Map(request, campaign);
 
                 // Process Campaign Rewards
-
-                if (request.DefaultRewards != null)
+                if (request.DefaultRewards != null && request.BestInfluencerRewards != null)
                 {
-                    campaign.CampaignRewards = request.DefaultRewards.Select(x =>
-                        new CampaignReward
-                        {
-                            Name = x.Name,
-                            Price = x.Price,
-                            Currency = "VND",
-                            IsDefaultReward = true,
-                            CampaignId = campaign.Id,
-                            RewardType = (int)x.RewardType,
-                            IntervalReward = JsonConvert.SerializeObject(x.IntervalRewards)
-                        }).ToList();
-                }
+                    var defaultRewards = request.DefaultRewards.Select(x =>
+                   new CampaignReward
+                   {
+                       Name = x.Name,
+                       Price = x.Price,
+                       Currency = "VND",
+                       IsDefaultReward = true,
+                       CampaignId = campaign.Id
+                   }).ToList();
 
-                if (request.BestInfluencerRewards != null)
-                {
-                    campaign.CampaignRewards = campaign.CampaignRewards.ToList().Union(request.BestInfluencerRewards.Select(x =>
-                        new CampaignReward
-                        {
-                            Name = x.Name,
-                            Price = x.Price,
-                            Currency = "VND",
-                            IsDefaultReward = false,
-                            CampaignId = campaign.Id,
-                            RewardType = (int)x.RewardType,
-                            IntervalReward = JsonConvert.SerializeObject(x.IntervalRewards)
-                        })).ToList();
+                    campaign.CampaignRewards = defaultRewards.Union(request.BestInfluencerRewards.Select(x =>
+                         new CampaignReward
+                         {
+                             Name = x.Name,
+                             Price = x.Price,
+                             Currency = "VND",
+                             IsDefaultReward = false,
+                             CampaignId = campaign.Id
+                         })).ToList();
                 }
-
 
                 if (request.DefaultVoucherRewards != null)
                 {

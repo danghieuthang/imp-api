@@ -664,10 +664,6 @@ namespace IMP.Infrastructure.Persistence.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("IntervalReward")
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
-
                     b.Property<bool>("IsDefaultReward")
                         .HasColumnType("bit");
 
@@ -683,9 +679,6 @@ namespace IMP.Infrastructure.Persistence.Migrations
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,6)");
-
-                    b.Property<int>("RewardType")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

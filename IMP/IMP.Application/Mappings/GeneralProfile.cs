@@ -79,9 +79,7 @@ namespace IMP.Application.Mappings
                       {
                           Name = x.Name,
                           Price = x.Price,
-                          Currency = x.Currency,
-                          RewardType = x.RewardType,
-                          IntervalRewards = x.IntervalReward == null ? null : JsonConvert.DeserializeObject<List<IntervalRewardViewModel>>(x.IntervalReward)
+                          Currency = x.Currency
                       }));
                   })
                 .ForMember(dest => dest.BestInfluencerRewards, opt =>
@@ -90,9 +88,7 @@ namespace IMP.Application.Mappings
                     {
                         Name = x.Name,
                         Price = x.Price,
-                        Currency = x.Currency,
-                        RewardType = x.RewardType,
-                        IntervalRewards = x.IntervalReward == null ? null : JsonConvert.DeserializeObject<List<IntervalRewardViewModel>>(x.IntervalReward)
+                        Currency = x.Currency
                     }));
                 })
                  .ForMember(dest => dest.DefaultVoucherRewards, opt =>
@@ -415,7 +411,7 @@ namespace IMP.Application.Mappings
             CreateMap<ActivityComment, ActivityCommentViewModel>();
             #endregion
 
-
+        
 
             CreateMap<Notification, NotificationViewModel>();
         }

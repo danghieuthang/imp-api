@@ -1,5 +1,4 @@
-﻿using IMP.Application.Enums;
-using IMP.Application.Models.ViewModels;
+﻿using IMP.Application.Models.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -108,16 +107,7 @@ namespace IMP.Application.Models.Compaign
     {
         public string Name { get; set; }
         public decimal Price { get; set; }
-        public CampaignRewardType RewardType { get; set; }
-        public List<IntervalRewardRequest> IntervalRewards { get; set; }
     }
-
-    public class IntervalRewardRequest
-    {
-        public string Interval { get; set; }
-        public decimal Price { get; set; }
-    }
-
     public class CampaignBasicInfoViewModel
     {
         public string Title { get; set; }
