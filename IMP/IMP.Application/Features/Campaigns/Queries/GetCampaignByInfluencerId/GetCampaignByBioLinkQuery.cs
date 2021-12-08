@@ -40,7 +40,7 @@ namespace IMP.Application.Features.Campaigns.Queries.GetCampaignByInfluencerId
 
                 var page = await _campaignRepository.GetPagedList(
                    predicate: x =>
-                       (x.CampaignMembers.Any(cm => cm.InfluencerId == influencer.Id && cm.Status == (int)CampaignMemberStatus.Approved))
+                       (x.CampaignMembers.Any(cm => cm.InfluencerId == influencer.Id && (cm.Status == (int)CampaignMemberStatus.Approved || cm.Status == (int)CampaignMemberStatus.Completed)))
                        && x.Status >= (int)CampaignStatus.Advertising && x.Status <= (int)CampaignStatus.Closed,
                     include: x =>
                         x.Include(y => y.Brand)
