@@ -151,7 +151,7 @@ namespace IMP.Application.Features.VoucherCodes.Commands.RequestVoucherCode
                     //// Create a file path of qr code file
                     //string filePath = await CreateQRCode(dataEncrypt);
 
-                    var emailRequest = BuildEmailRequest(voucher, voucherCode, request.Email, filePath: filePath);
+                    var emailRequest = BuildEmailRequest(voucher, voucherCode, request.Email, filePath: "");
 
                     await _emailService.SendAsync(emailRequest);
 
