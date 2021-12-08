@@ -54,6 +54,12 @@ namespace IMP.Application.Features.MemberActivities.Commands.ChangeMemberActivit
                     throw new IMP.Application.Exceptions.ValidationException(new ValidationError("id", "Không có quyền."));
                 }
 
+                if (memberActivity.Status == (int)MemberActivityStatus.Completed)
+                {
+                    memberActivity.CampaignMember.Status = (int)CampaignMemberStatus.Completed;
+                    UnitOfWork.Repository<CampaignMember>().Update(memberActivity.CampaignMember);
+                }
+
                 memberActivity.Status = (int)request.Status;
                 _memberActivityRepository.Update(memberActivity);
                 await UnitOfWork.CommitAsync();
