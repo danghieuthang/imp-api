@@ -21,7 +21,8 @@ namespace IMP.Application.Features.VoucherTransactions.Queries.GetAllVoucherTran
     {
         [FromQuery(Name = "campaign_id")]
         public int CampaignId { get; set; }
-
+        [FromQuery(Name = "name")]
+        public string Search { get; set; }
         public class GetAllVoucherTransactionOfCampaignQueryValidator : PageRequestValidator<GetAllVoucherTransactionOfCampaignQuery, VoucherTransactionViewModel>
         {
 
@@ -45,11 +46,12 @@ namespace IMP.Application.Features.VoucherTransactions.Queries.GetAllVoucherTran
                 {
                     throw new ValidationException(new ValidationError("campaign_id", "Không có quyền."));
                 }
+                string name = request.Search?.ToLower() ?? "";
 
                 var voucherIds = campaign.Vouchers.Select(x => x.VoucherId).ToList();
-
                 var page = await UnitOfWork.Repository<VoucherTransaction>().GetPagedList(
-                        predicate: x => voucherIds.Contains(x.VoucherCode.VoucherId),
+                        predicate: x => voucherIds.Contains(x.VoucherCode.VoucherId)
+                            && (x.OrderCode.ToLower().Contains(name) || x.Order.Contains(name)),
                         orderBy: request.OrderField,
                         orderByDecensing: request.OrderBy == Enums.OrderBy.DESC,
                         pageIndex: request.PageIndex,
