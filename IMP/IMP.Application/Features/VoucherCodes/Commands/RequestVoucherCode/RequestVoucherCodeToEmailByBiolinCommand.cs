@@ -110,13 +110,11 @@ namespace IMP.Application.Features.VoucherCodes.Commands.RequestVoucherCode
                 if (voucher.Quantity == 1 && voucher.HoldTime.HasValue)
                 {
                     voucherCode.Expired = DateTime.UtcNow.Add(voucher.HoldTime.Value);
-                    UnitOfWork.Repository<VoucherCode>().Update(voucherCode);
                 }
 
                 if (voucherCode.CampaignMemberId == null)
                 {
                     voucherCode.CampaignMemberId = campaignMember.Id;
-                    UnitOfWork.Repository<VoucherCode>().Update(voucherCode);
 
                 }
 
@@ -139,6 +137,7 @@ namespace IMP.Application.Features.VoucherCodes.Commands.RequestVoucherCode
                     voucherInfluencer.QuantityGet++;
                 }
 
+                UnitOfWork.Repository<VoucherCode>().Update(voucherCode);
                 UnitOfWork.Repository<VoucherInfluencer>().Update(voucherInfluencer);
                 await UnitOfWork.CommitAsync();
 
