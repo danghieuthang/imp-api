@@ -8,9 +8,9 @@ namespace IMP.Application.Enums
 {
     public enum VoucherCommissionType
     {
-        // Theo % order
-        PercentOrder,
-        // Theo khoangr
-        Interval
+        // Theo order
+        Order,
+        // Theo san pham
+        Product
     }
 }

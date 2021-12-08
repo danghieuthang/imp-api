@@ -36,7 +36,7 @@ namespace IMP.Application.Features.Campaigns.Queries.GetCampaignByInfluencerId
         public List<int> TypeIds { get; set; }
         [FromQuery(Name = "name")]
         public string Name { get; set; }
-        [FromRoute()]
+        [FromRoute(Name ="id")]
         public int Id { get; set; }
 
         public class GetCampaignByInfluencerIdForBrandQueryValidator : PageRequestValidator<GetCampaignByInfluencerIdForBrandQuery, CampaignViewModel>
