@@ -57,7 +57,7 @@ namespace IMP.Application.Features.MemberActivities.Commands.CreateMemberActivit
                 var memberAcitity = new MemberActivity
                 {
                     CampaignActivityId = request.CampaignActivityId,
-                    CampaignMemberId = request.CampaignMemberId
+                    CampaignMemberId = request.CampaignMemberId,
                 };
                 _memberActivityRepository.Add(memberAcitity);
                 await UnitOfWork.CommitAsync();

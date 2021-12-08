@@ -129,7 +129,7 @@ namespace IMP.Application.Models.ViewModels
         public int TotalTransaction { get; set; }
         public decimal TotalOrderPrice { get; set; }
         public decimal TotalDiscount { get; set; }
-        public int TotalCode { get; set; }
+        public int TotalVoucherCode { get; set; }
         public int TotalOrderAmount { get; set; }
     }
 

@@ -40,7 +40,7 @@ namespace IMP.Application.Features.VoucherTransactions.Queries.GetTransactionRep
                     ).ToListAsync();
                 var report = new VoucherTransactionReportViewModel
                 {
-                    TotalCode = voucherTransactions.GroupBy(x => x.VoucherCodeId).Count(),
+                    TotalVoucherCode = voucherTransactions.GroupBy(x => x.VoucherCodeId).Count(),
                     TotalTransaction = voucherTransactions.Count(),
                     TotalOrderPrice = voucherTransactions.Sum(x => x.TotalPrice),
                     TotalDiscount = voucherTransactions.Sum((x) => x.TotalDiscount),

@@ -30,6 +30,7 @@ namespace IMP.Application.Features.CampaignMembers.Queries.Reports
                         predicate: x => x.Id == request.Id,
                         include: x => x.Include(y => y.VoucherCodes).ThenInclude(z => z.VoucherTransactions)
                             .Include(y => y.VoucherCodes).ThenInclude(y => y.Voucher));
+
                 if (campaignMember == null)
                 {
                     throw new KeyNotFoundException();
@@ -39,7 +40,11 @@ namespace IMP.Application.Features.CampaignMembers.Queries.Reports
                     QuantityVoucherGet = campaignMember.VoucherCodes.Sum(x => x.QuantityGet),
                     QuantityVoucherUsed = campaignMember.VoucherCodes.Sum(x => x.QuantityUsed),
                     Status = campaignMember.Status,
-                    MoneyEarn = campaignMember.Money
+                    MoneyEarn = campaignMember.Money,
+                    TotalOrderPrice = campaignMember.VoucherCodes.Sum(x => x.VoucherTransactions.Sum(y => y.TotalPrice)),
+                    TotalDiscount = campaignMember.VoucherCodes.Sum(x => x.VoucherTransactions.Sum(y => y.TotalDiscount)),
+                    TotalTransaction = campaignMember.VoucherCodes.Sum(x => x.VoucherTransactions.Count),
+                    TotalOrderAmount = campaignMember.VoucherCodes.Sum(x => x.VoucherTransactions.GroupBy(y => y.OrderCode).Count()),
                 };
                 return new Response<CampaignMemberReportViewModel>(report);
             }
