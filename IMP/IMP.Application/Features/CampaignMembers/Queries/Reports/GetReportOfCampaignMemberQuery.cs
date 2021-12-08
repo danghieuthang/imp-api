@@ -39,6 +39,7 @@ namespace IMP.Application.Features.CampaignMembers.Queries.Reports
                     QuantityVoucherGet = campaignMember.VoucherCodes.Sum(x => x.QuantityGet),
                     QuantityVoucherUsed = campaignMember.VoucherCodes.Sum(x => x.QuantityUsed),
                     Status = campaignMember.Status,
+                    MoneyEarn = campaignMember.Money
                 };
                 return new Response<CampaignMemberReportViewModel>(report);
             }
