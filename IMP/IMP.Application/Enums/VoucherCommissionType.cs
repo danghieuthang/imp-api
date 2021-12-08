@@ -11,6 +11,7 @@ namespace IMP.Application.Enums
         // Theo order
         Order,
         // Theo san pham
-        Product
+        Product,
+        None
     }
 }
