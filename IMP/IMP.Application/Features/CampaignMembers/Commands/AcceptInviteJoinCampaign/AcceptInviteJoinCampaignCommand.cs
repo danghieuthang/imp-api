@@ -58,7 +58,7 @@ namespace IMP.Application.Features.CampaignMembers.Commands.AcceptInviteJoinCamp
                         });
                     }
                 }
-
+                campaignMember.ApprovedDate = DateTime.UtcNow;
                 UnitOfWork.Repository<CampaignMember>().Update(campaignMember);
 
                 await UnitOfWork.CommitAsync();
