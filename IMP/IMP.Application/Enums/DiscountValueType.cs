@@ -10,6 +10,7 @@ namespace IMP.Application.Enums
     {
         Fixed,
         Percentage,
-        FreeShipping
+        FreeShipping,
+        PerOrder
     }
 }
