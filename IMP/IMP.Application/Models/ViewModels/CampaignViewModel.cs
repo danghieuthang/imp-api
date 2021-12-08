@@ -66,7 +66,8 @@ namespace IMP.Application.Models.Compaign
         #endregion
 
         #region Reward configuration
-
+        public int VoucherCommissionMode { get; set; }
+        public bool IsPercentVoucherCommission { get; set; }
         #endregion
         public int? ApprovedById { get; set; }
         public string Note { get; set; }
@@ -76,6 +77,7 @@ namespace IMP.Application.Models.Compaign
         public BrandViewModel Brand { get; set; }
         public InfluencerConfigurationViewModel InfluencerConfiguration { get; set; }
         public TargetConfigurationViewModel TargetConfiguration { get; set; }
+        public List<VoucherCommissionPrices> VoucherCommissionPrices { get; set; }
         public List<CampaignRewardViewModel> DefaultRewards { get; set; }
         public List<CampaignRewardViewModel> BestInfluencerRewards { get; set; }
         public List<CampaignActivityViewModel> CampaignActivities { get; set; }

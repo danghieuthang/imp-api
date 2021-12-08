@@ -56,10 +56,15 @@ namespace IMP.Application.Features.Campaigns.Commands.UpdateCampaign
         #endregion
 
         #region Reward configuration
+   
         public List<CampaignRewardRequest> DefaultRewards { get; set; }
         public List<CampaignRewardRequest> BestInfluencerRewards { get; set; }
         public List<CampaignVoucherRequest> DefaultVoucherRewards { get; set; }
         public List<CampaignVoucherRequest> BestInfluencerVoucherRewards { get; set; }
+
+        public VoucherCommissionType? VoucherCommissionMode { get; set; }
+        public bool? IsPercentVoucherCommission { get; set; }
+        public List<VoucherCommissionPrices> VoucherCommissionPrices { get; set; }
         #endregion
 
         [JsonProperty("influencer_configuration")]

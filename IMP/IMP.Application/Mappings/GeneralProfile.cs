@@ -102,7 +102,11 @@ namespace IMP.Application.Mappings
                  .ForMember(dest => dest.Vouchers, opt =>
                  {
                      opt.MapFrom(x => x.Vouchers.Where(c => c.IsDefaultReward == false && c.IsBestInfluencerReward == false));
-                 });
+                 })
+                 .ForMember(dest => dest.VoucherCommissionPrices, opt =>
+                   {
+                       opt.MapFrom(x => JsonConvert.DeserializeObject<List<VoucherCommissionPrices>>(x.VoucherCommissionPrices));
+                   });
 
             CreateMap<CampaignImage, CampaignImageViewModel>();
             CreateMap<CampaignImageRequest, CampaignImage>();
@@ -129,6 +133,11 @@ namespace IMP.Application.Mappings
                     opt.PreCondition(src => src.Keywords != null);
                     opt.MapFrom(x => x.Keywords == null ? "[]" : JsonConvert.SerializeObject(x.Keywords));
                 })
+                 .ForMember(dest => dest.VoucherCommissionPrices, opt =>
+                 {
+                     opt.PreCondition(src => src.VoucherCommissionPrices != null);
+                     opt.MapFrom(x => x.VoucherCommissionPrices == null ? "[]" : JsonConvert.SerializeObject(x.VoucherCommissionPrices));
+                 })
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             CreateMap<LocationRequest, InfluencerConfigurationLocation>();
@@ -411,7 +420,7 @@ namespace IMP.Application.Mappings
             CreateMap<ActivityComment, ActivityCommentViewModel>();
             #endregion
 
-        
+
 
             CreateMap<Notification, NotificationViewModel>();
         }

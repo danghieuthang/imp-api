@@ -83,7 +83,9 @@ namespace IMP.Domain.Entities
 
         #region Reward configuration
         public ICollection<CampaignReward> CampaignRewards { get; set; }
-        [StringLength(50)]
+        public int VoucherCommissionMode { get; set; }
+        public bool IsPercentVoucherCommission { get; set; }
+        public string VoucherCommissionPrices { get; set; }
         #endregion
 
         [ForeignKey("AppplicationUserId")]
