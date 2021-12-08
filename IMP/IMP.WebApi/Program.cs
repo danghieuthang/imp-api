@@ -21,7 +21,7 @@ namespace IMP.WebApi
     public class Program
     {
         public async static Task Main(string[] args)
-      {
+        {
             //Read Configuration from appSettings
             var config = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
