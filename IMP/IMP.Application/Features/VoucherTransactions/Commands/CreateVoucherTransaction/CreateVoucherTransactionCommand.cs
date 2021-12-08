@@ -61,14 +61,14 @@ namespace IMP.Application.Features.VoucherTransactions.Commands.CreateVoucherTra
                 voucherCodeRepository.Update(voucherCode);
 
                 #region update voucher influencer
-                var voucherInfluencer = await voucherInfluencerRepository.FindSingleAsync(x => x.VoucherId == campaignVoucher.VoucherId && x.InfluencerId == request.InfluencerId);
-                if (voucherInfluencer != null)
-                {
-                    voucherInfluencer.QuantityUsed++;
-                    voucherInfluencerRepository.Update(voucherInfluencer);
-                }
+                //var voucherInfluencer = await voucherInfluencerRepository.FindSingleAsync(x => x.VoucherId == campaignVoucher.VoucherId && x.InfluencerId == request.InfluencerId);
+                //if (voucherInfluencer != null)
+                //{
+                //    voucherInfluencer.QuantityUsed++;
+                //    voucherInfluencerRepository.Update(voucherInfluencer);
+                //}
 
-                var campaignMember = await UnitOfWork.Repository<CampaignMember>().FindSingleAsync(x => x.CampaignId == campaignVoucher.CampaignId && x.InfluencerId == request.InfluencerId);
+                var campaignMember = await UnitOfWork.Repository<CampaignMember>().FindSingleAsync(x => x.Id == voucherCode.CampaignMemberId);
                 if (campaignVoucher.Campaign.VoucherCommissionMode == (int)VoucherCommissionType.Order) // if earning per oder
                 {
                     List<VoucherCommissionPrices> prices = JsonConvert.DeserializeObject<List<VoucherCommissionPrices>>(campaignVoucher.Campaign.VoucherCommissionPrices);
