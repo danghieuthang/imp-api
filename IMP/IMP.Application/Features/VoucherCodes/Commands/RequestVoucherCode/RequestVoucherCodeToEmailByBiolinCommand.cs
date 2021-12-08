@@ -196,7 +196,7 @@ namespace IMP.Application.Features.VoucherCodes.Commands.RequestVoucherCode
                     To = email,
                     Body = content,
                     Subject = "Bạn vừa nhận được mã giảm giá từ IMP",
-                    AttactmentFile = filePath
+                    AttactmentFile = null
                 };
             }
 
