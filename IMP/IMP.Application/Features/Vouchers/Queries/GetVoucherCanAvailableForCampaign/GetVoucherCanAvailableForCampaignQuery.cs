@@ -67,7 +67,7 @@ namespace IMP.Application.Features.Vouchers.Queries.GetVoucherCanAvailableForCam
                     && (request.FromDate == null || (request.FromDate != null && x.FromDate >= request.FromDate.Value))
                     && (request.ToDate == null || (request.ToDate != null && x.FromDate >= request.ToDate.Value))
                     && (string.IsNullOrEmpty(name) || x.VoucherName.ToLower().Contains(name))
-                    && (product == null || (product != null && x.DiscountProducts.ToLower().Contains(product.Code.ToLower()))) // filter by product code
+                    && (campaign.VoucherCommissionMode!=(int)VoucherCommissionType.Product || product == null || (product != null && x.DiscountProducts.ToLower().Contains(product.Code.ToLower()))) // filter by product code
                     && (request.IncludeExisedInCampaign == true
                         || (request.IncludeExisedInCampaign == false && !x.CampaignVouchers.Any(y => y.CampaignId == request.CampaignId && y.IsBestInfluencerReward == false && y.IsDefaultReward == false))),
 
