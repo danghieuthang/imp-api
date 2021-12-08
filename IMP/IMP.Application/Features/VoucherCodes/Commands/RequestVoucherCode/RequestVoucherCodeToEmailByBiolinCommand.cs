@@ -33,7 +33,7 @@ namespace IMP.Application.Features.VoucherCodes.Commands.RequestVoucherCode
 
         public class RequetVoucherCodeByBioLinkAndCampaignCommand : CommandHandler<RequestVoucherCodeToEmailByBiolinkCommand, bool>
         {
-            private static string EmailTemplate = "send_voucher_qrcode_template.html";
+            private static string EmailTemplate = "send_voucher_code_template.html";
             private readonly IEmailService _emailService;
             private readonly IQRCodeService _qRCodeService;
             public RequetVoucherCodeByBioLinkAndCampaignCommand(IUnitOfWork unitOfWork, IMapper mapper, IEmailService emailService, IQRCodeService qRCodeService) : base(unitOfWork, mapper)
@@ -147,16 +147,16 @@ namespace IMP.Application.Features.VoucherCodes.Commands.RequestVoucherCode
                 #region send voucher to email
                 _ = Task.Run(async () =>
                 {
-                    string dataEncrypt = Utils.Utils.Encrypt($"{voucherCode.Code};{request.CampaignId};{user.Id};{voucher.Id}");
-                    // Create a file path of qr code file
-                    string filePath = await CreateQRCode(dataEncrypt);
+                    //string dataEncrypt = Utils.Utils.Encrypt($"{voucherCode.Code};{request.CampaignId};{user.Id};{voucher.Id}");
+                    //// Create a file path of qr code file
+                    //string filePath = await CreateQRCode(dataEncrypt);
 
                     var emailRequest = BuildEmailRequest(voucher, voucherCode, request.Email, filePath: filePath);
 
                     await _emailService.SendAsync(emailRequest);
 
                     // Delete image after send email
-                    File.Delete(filePath);
+                    //File.Delete(filePath);
                 });
                 #endregion
 
@@ -184,7 +184,8 @@ namespace IMP.Application.Features.VoucherCodes.Commands.RequestVoucherCode
                 }
 
                 emailContent.Replace("@IMAGE", voucher.Image);
-                emailContent.Replace("@QRCODE", "cid:{0}");
+                emailContent.Replace("@CODE", voucherCode.Code);
+                //emailContent.Replace("@QRCODE", "cid:{0}");
                 emailContent.Replace("@NAME", voucher.VoucherName);
                 emailContent.Replace("@DESCRIPTION", voucher.Description);
 
