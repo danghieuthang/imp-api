@@ -336,6 +336,7 @@ namespace IMP.Application.Mappings
             #endregion
 
             #region voucher
+            CreateMap<Voucher, BaseVoucherViewModel>();
             CreateMap<Voucher, VoucherViewModel>()
                 .ForMember(dest => dest.DiscountProducts, opt =>
                   {
@@ -383,6 +384,7 @@ namespace IMP.Application.Mappings
             CreateMap<CampaignVoucher, CampaignVoucherOnlyIdViewModel>();
             CreateMap<VoucherCode, VoucherCodeViewModel>();
             CreateMap<VoucherCode, UserVoucherCodeViewModel>();
+            CreateMap<VoucherCode, TransactionVoucherCodeViewModel>();
 
             CreateMap<VoucherTransaction, VoucherTransactionViewModel>()
                 .ForMember(dest => dest.Order, opt =>

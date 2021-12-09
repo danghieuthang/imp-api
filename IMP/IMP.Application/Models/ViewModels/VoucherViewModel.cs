@@ -4,6 +4,30 @@ using Newtonsoft.Json;
 
 namespace IMP.Application.Models.ViewModels
 {
+    public class BaseVoucherViewModel : BaseViewModel<int>
+    {
+        public int BrandId { get; set; }
+        public string VoucherName { get; set; }
+        public string Code { get; set; }
+        public bool OnlyforInfluencer { get; set; }
+        public bool OnlyforCustomer { get; set; }
+        public decimal DiscountValue { get; set; }
+        public int DiscountValueType { get; set; }
+        public int Quantity { get; set; }
+        public int QuantityUsed { get; set; }
+        public string Image { get; set; }
+        public string Thumnail { get; set; }
+        public DateTime? FromDate { get; set; }
+        public DateTime? ToDate { get; set; }
+        public TimeSpan? FromTime { get; set; }
+        public TimeSpan? ToTime { get; set; }
+        public string Description { get; set; }
+        public string Action { get; set; }
+        public string Condition { get; set; }
+        public string Target { get; set; }
+        public bool IsCanUse => QuantityUsed > Quantity;
+        public TimeSpan? HoldTime { get; set; }
+    }
     public class VoucherViewModel : BaseViewModel<int>
     {
         public int BrandId { get; set; }
@@ -45,6 +69,16 @@ namespace IMP.Application.Models.ViewModels
         public int Quantity { get; set; }
         public int QuantityUsed { get; set; }
         public int? CampaignMemberId { get; set; }
+    }
+
+    public class TransactionVoucherCodeViewModel : BaseViewModel<int>
+    {
+
+        public string Code { get; set; }
+        public int Quantity { get; set; }
+        public int QuantityUsed { get; set; }
+        public int? CampaignMemberId { get; set; }
+        public BaseVoucherViewModel Voucher { get; set; }
     }
 
     public class CheckVoucherCodeViewModel
@@ -119,7 +153,7 @@ namespace IMP.Application.Models.ViewModels
         public int ProductQuantity { get; set; }
         public Order Order { get; set; }
         public string Status { get; set; }
-        public VoucherCodeViewModel VoucherCode { get; set; }
+        public TransactionVoucherCodeViewModel VoucherCode { get; set; }
     }
 
     public class VoucherTransactionReportViewModel
