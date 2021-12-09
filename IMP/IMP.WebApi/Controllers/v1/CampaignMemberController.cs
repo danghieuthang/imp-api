@@ -6,6 +6,7 @@ using IMP.Application.Features.CampaignMembers.Queries.Reports;
 using IMP.Application.Features.Campaigns.Commands.ProcessCampaignMember;
 using IMP.Application.Features.MemberActivities.Queries.GetAllMemberActivitesOfUser;
 using IMP.Application.Features.Vouchers.Queries.GetAllVoucherOfCampaignMember;
+using IMP.Application.Features.VoucherTransactions.Queries.GetTransactionReportOfCampaignMember;
 using IMP.Application.Models.Compaign;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
@@ -147,6 +148,20 @@ namespace IMP.WebApi.Controllers.v1
         {
             return Ok(await Mediator.Send(new GetReportOfCampaignMemberQuery { Id = id }));
         }
+
+        /// <summary>
+        /// Get report about voucher transaction of campaign member
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [HttpGet("{id}/voucher-transaction-report")]
+        [ProducesResponseType(typeof(Response<IEnumerable<ReportVoucherTransactionOfMemberViewModel>>), 200)]
+        [Authorize(Roles = "Brand,Influencer")]
+        public async Task<IActionResult> ReportVoucherTransaction([FromQuery] TransactionReportOfCampaignMemberQuery query)
+        {
+            return Ok(await Mediator.Send(query));
+        }
+
 
 
     }
