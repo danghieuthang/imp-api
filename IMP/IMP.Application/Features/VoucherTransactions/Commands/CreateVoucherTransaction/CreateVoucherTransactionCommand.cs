@@ -31,13 +31,13 @@ namespace IMP.Application.Features.VoucherTransactions.Commands.CreateVoucherTra
                 var voucherCodeRepository = UnitOfWork.Repository<VoucherCode>();
                 var voucherInfluencerRepository = UnitOfWork.Repository<VoucherInfluencer>();
 
-                var campaignVoucher = await UnitOfWork.Repository<CampaignVoucher>().FindSingleAsync(x => x.CampaignId == request.CampaignId && x.Voucher.VoucherCodes.Any(y => y.Code.ToUpper() == request.Code.ToUpper()), x => x.Campaign);
+                var campaignVoucher = await UnitOfWork.Repository<CampaignVoucher>().FindSingleAsync(x => x.CampaignId == request.CampaignId && x.Voucher.VoucherCodes.Any(y => y.Code.ToUpper() == request.VoucherCode.ToUpper()), x => x.Campaign);
                 if (campaignVoucher == null)
                 {
                     throw new ValidationException(new ValidationError("campaign_id", "Voucher code không tồn tại."));
                 }
 
-                var voucherCode = await voucherCodeRepository.FindSingleAsync(x => x.Code.ToLower() == request.Code.ToLower() && x.VoucherId == campaignVoucher.VoucherId, x => x.Voucher);
+                var voucherCode = await voucherCodeRepository.FindSingleAsync(x => x.Code.ToLower() == request.VoucherCode.ToLower() && x.VoucherId == campaignVoucher.VoucherId, x => x.Voucher);
                 if (voucherCode == null)
                 {
                     throw new ValidationException(new ValidationError("code", "Voucher code không tồn tại."));
@@ -68,36 +68,36 @@ namespace IMP.Application.Features.VoucherTransactions.Commands.CreateVoucherTra
                 //    voucherInfluencerRepository.Update(voucherInfluencer);
                 //}
 
-                var campaignMember = await UnitOfWork.Repository<CampaignMember>().FindSingleAsync(x => x.Id == voucherCode.CampaignMemberId);
-                if (campaignVoucher.Campaign.VoucherCommissionMode == (int)VoucherCommissionType.Order) // if earning per oder
-                {
-                    List<VoucherCommissionPrices> prices = JsonConvert.DeserializeObject<List<VoucherCommissionPrices>>(campaignVoucher.Campaign.VoucherCommissionPrices);
-                    if (campaignVoucher.Campaign.IsPercentVoucherCommission) // if earn by percent of order
-                    {
-                        campaignMember.Money += prices.FirstOrDefault().Value * request.TotalPrice / (decimal)100.0;
-                    }
-                    else // earn by interval of order
-                    {
-                        foreach (var price in prices)
-                        {
-                            if (request.TotalPrice >= price.From && (request.TotalPrice <= price.To || price.To == null))
-                            {
-                                campaignMember.Money += price.Value;
-                                break;
-                            }
-                        }
-                    }
-                }
-                else if (campaignVoucher.Campaign.VoucherCommissionMode == (int)VoucherCommissionType.Product)// if earning by product
-                {
-                    List<VoucherCommissionPrices> prices = JsonConvert.DeserializeObject<List<VoucherCommissionPrices>>(campaignVoucher.Campaign.VoucherCommissionPrices);
-                    if (campaignVoucher.Campaign.IsPercentVoucherCommission) // if earn by percent
-                    {
-                        campaignMember.Money += prices.FirstOrDefault().Value * request.TotalDiscount / (decimal)100.0;
-                    }
-                }
+                //var campaignMember = await UnitOfWork.Repository<CampaignMember>().FindSingleAsync(x => x.Id == voucherCode.CampaignMemberId);
+                //if (campaignVoucher.Campaign.VoucherCommissionMode == (int)VoucherCommissionType.Order) // if earning per oder
+                //{
+                //    List<VoucherCommissionPrices> prices = JsonConvert.DeserializeObject<List<VoucherCommissionPrices>>(campaignVoucher.Campaign.VoucherCommissionPrices);
+                //    if (campaignVoucher.Campaign.IsPercentVoucherCommission) // if earn by percent of order
+                //    {
+                //        campaignMember.Money += prices.FirstOrDefault().Value * request.TotalProductAmount / (decimal)100.0;
+                //    }
+                //    else // earn by interval of order
+                //    {
+                //        foreach (var price in prices)
+                //        {
+                //            if (request.TotalPrice >= price.From && (request.TotalPrice <= price.To || price.To == null))
+                //            {
+                //                campaignMember.Money += price.Value;
+                //                break;
+                //            }
+                //        }
+                //    }
+                //}
+                //else if (campaignVoucher.Campaign.VoucherCommissionMode == (int)VoucherCommissionType.Product)// if earning by product
+                //{
+                //    List<VoucherCommissionPrices> prices = JsonConvert.DeserializeObject<List<VoucherCommissionPrices>>(campaignVoucher.Campaign.VoucherCommissionPrices);
+                //    if (campaignVoucher.Campaign.IsPercentVoucherCommission) // if earn by percent
+                //    {
+                //        campaignMember.Money += prices.FirstOrDefault().Value * request.TotalDiscount / (decimal)100.0;
+                //    }
+                //}
 
-                UnitOfWork.Repository<CampaignMember>().Update(campaignMember);
+                //UnitOfWork.Repository<CampaignMember>().Update(campaignMember);
                 #endregion
                 await UnitOfWork.CommitAsync();
 

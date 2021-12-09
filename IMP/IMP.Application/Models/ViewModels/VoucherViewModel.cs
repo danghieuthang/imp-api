@@ -156,14 +156,30 @@ namespace IMP.Application.Models.ViewModels
     public class VoucherTransactionRequest
     {
         public int CampaignId { get; set; }
-        public string Code { get; set; }
-        public decimal TotalPrice { get; set; }
-        /// <summary>
-        /// Tổng tiền được hưởng giảm giá
-        /// </summary>
+        public string VoucherCode { get; set; }
+        public decimal TotalProductAmount { get; set; }
+        public decimal TotalOrderAmount { get; set; }
         public decimal TotalDiscount { get; set; }
-        public string Order { get; set; }
-        public string OrderCode { get; set; }
-        public DateTime OrderCreated { get; set; }
+        public int ProductQuantity { get; set; }
+        public Order Order { get; set; }
+    }
+
+    public class Order
+    {
+        public DateTime Created { get; set; }
+        public string BrandName { get; set; }
+        public string StoreName { get; set; }
+        public List<OrderLine> Lines { get; set; }
+        public decimal TotalAmount { get; set; }
+        public decimal TotalDiscount { get; set; }
+        public decimal FinalTotalAmount { get; set; }
+    }
+
+    public class OrderLine
+    {
+        public string ProductCode { get; set; }
+        public string ProductName { get; set; }
+        public int Quantity { get; set; }
+        public decimal Amount { get; set; }
     }
 }

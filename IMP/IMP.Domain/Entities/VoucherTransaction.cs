@@ -11,15 +11,12 @@ namespace IMP.Domain.Entities
     {
         [ForeignKey("VoucherCode")]
         public int VoucherCodeId { get; set; }
-        public decimal TotalPrice { get; set; }
-        /// <summary>
-        /// Tổng tiền được hưởng giảm giá
-        /// </summary>
+        public int? CampaignId { get; set; }
+        public decimal TotalProductAmount { get; set; }
+        public decimal TotalOrderAmount { get; set; }
         public decimal TotalDiscount { get; set; }
+        public int ProductQuantity { get; set; }
         public string Order { get; set; }
-        [StringLength(256)]
-        public string OrderCode { get; set; }
-        public DateTime OrderCreated { get; set; }
         public VoucherCode VoucherCode { get; set; }
     }
 }

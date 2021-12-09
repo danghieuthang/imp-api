@@ -41,10 +41,10 @@ namespace IMP.Application.Features.CampaignMembers.Queries.Reports
                     QuantityVoucherUsed = campaignMember.VoucherCodes.Sum(x => x.QuantityUsed),
                     Status = campaignMember.Status,
                     MoneyEarn = campaignMember.Money,
-                    TotalOrderPrice = campaignMember.VoucherCodes.Sum(x => x.VoucherTransactions.Sum(y => y.TotalPrice)),
+                    TotalOrderPrice = campaignMember.VoucherCodes.Sum(x => x.VoucherTransactions.Sum(y => y.TotalOrderAmount)),
                     TotalDiscount = campaignMember.VoucherCodes.Sum(x => x.VoucherTransactions.Sum(y => y.TotalDiscount)),
                     TotalTransaction = campaignMember.VoucherCodes.Sum(x => x.VoucherTransactions.Count),
-                    TotalOrderAmount = campaignMember.VoucherCodes.Sum(x => x.VoucherTransactions.GroupBy(y => y.OrderCode).Count()),
+                    TotalOrderAmount = campaignMember.VoucherCodes.Sum(x => x.VoucherTransactions.GroupBy(y => y.Order).Count()),
                 };
                 return new Response<CampaignMemberReportViewModel>(report);
             }

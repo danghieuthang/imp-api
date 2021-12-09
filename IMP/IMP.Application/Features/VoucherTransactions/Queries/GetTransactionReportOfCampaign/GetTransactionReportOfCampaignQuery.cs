@@ -42,9 +42,9 @@ namespace IMP.Application.Features.VoucherTransactions.Queries.GetTransactionRep
                 {
                     TotalVoucherCode = voucherTransactions.GroupBy(x => x.VoucherCodeId).Count(),
                     TotalTransaction = voucherTransactions.Count(),
-                    TotalOrderPrice = voucherTransactions.Sum(x => x.TotalPrice),
-                    TotalDiscount = voucherTransactions.Sum((x) => x.TotalDiscount),
-                    TotalOrderAmount = voucherTransactions.GroupBy(x => x.OrderCode).Count()
+                    //TotalOrderPrice = voucherTransactions.Sum(x => x.TotalPrice),
+                    //TotalDiscount = voucherTransactions.Sum((x) => x.TotalDiscount),
+                    //TotalOrderAmount = voucherTransactions.GroupBy(x => x.OrderCode).Count()
                 };
                 return new Response<VoucherTransactionReportViewModel>(report);
             }

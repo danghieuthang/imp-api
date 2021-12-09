@@ -51,7 +51,7 @@ namespace IMP.Application.Features.VoucherTransactions.Queries.GetAllVoucherTran
                 var voucherIds = campaign.Vouchers.Select(x => x.VoucherId).ToList();
                 var page = await UnitOfWork.Repository<VoucherTransaction>().GetPagedList(
                         predicate: x => voucherIds.Contains(x.VoucherCode.VoucherId)
-                            && (x.OrderCode.ToLower().Contains(name) || x.Order.Contains(name) || x.VoucherCode.Code.ToLower().Contains(name)),
+                            && (x.Order.Contains(name) || x.VoucherCode.Code.ToLower().Contains(name)),
                         orderBy: request.OrderField,
                         orderByDecensing: request.OrderBy == Enums.OrderBy.DESC,
                         pageIndex: request.PageIndex,

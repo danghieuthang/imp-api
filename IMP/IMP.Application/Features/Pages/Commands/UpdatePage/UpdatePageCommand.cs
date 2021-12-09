@@ -40,6 +40,8 @@ namespace IMP.Application.Features.Pages.Commands.UpdatePage
         public string BioLink { get; set; }
         public string FontFamily { get; set; }
         public string TextColor { get; set; }
+        public double BackgroundBrightness { get; set; }
+
         public PageStatus Status { get; set; }
         //public List<UpdateBlockRequest> Blocks { get; set; }
         public object Clone()

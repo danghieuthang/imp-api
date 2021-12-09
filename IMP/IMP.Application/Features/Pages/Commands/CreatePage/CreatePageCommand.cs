@@ -25,6 +25,8 @@ namespace IMP.Application.Features.Pages.Commands.CreatePage
         public string BioLink { get; set; }
         public string FontFamily { get; set; }
         public string TextColor { get; set; }
+        public double BackgroundBrightness { get; set; }
+
 
         public class CreatePageCommandHandler : CommandHandler<CreatePageCommand, PageViewModel>
         {

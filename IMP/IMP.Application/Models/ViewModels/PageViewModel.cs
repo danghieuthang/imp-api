@@ -14,6 +14,7 @@ namespace IMP.Application.Models.ViewModels
         public string BioLink { get; set; }
         public string FontFamily { get; set; }
         public string TextColor { get; set; }
+        public double BackgroundBrightness { get; set; }
         public List<BlockViewModel> Blocks { get; set; }
         public int Status { get; set; }
         public UserBasicViewModel Influencer { get; set; }

@@ -25,6 +25,7 @@ namespace IMP.Domain.Entities
         public string FontFamily { get; set; }
         [StringLength(256)]
         public string TextColor { get; set; }
+        public double BackgroundBrightness { get; set; }
         public ICollection<Block> Blocks { get; set; }
         public int Status { get; set; }
     }

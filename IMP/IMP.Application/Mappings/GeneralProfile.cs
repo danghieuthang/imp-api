@@ -384,7 +384,12 @@ namespace IMP.Application.Mappings
             CreateMap<VoucherCode, VoucherCodeViewModel>();
             CreateMap<VoucherCode, UserVoucherCodeViewModel>();
 
-            CreateMap<VoucherTransaction, VoucherTransactionViewModel>();
+            CreateMap<VoucherTransaction, VoucherTransactionViewModel>()
+                .ForMember(dest => dest.Order, opt =>
+                  {
+                      opt.MapFrom(x => JsonConvert.DeserializeObject<Order>(x.Order));
+  
+                  });
             CreateMap<CreateVoucherTransactionCommand, VoucherTransaction>();
             #endregion
 
