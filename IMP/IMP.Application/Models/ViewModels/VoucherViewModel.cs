@@ -145,14 +145,14 @@ namespace IMP.Application.Models.ViewModels
     }
     public class VoucherTransactionViewModel : BaseViewModel<int>
     {
-
-        public int CampaignId { get; set; }
         public decimal TotalProductAmount { get; set; }
         public decimal TotalOrderAmount { get; set; }
         public decimal TotalDiscount { get; set; }
         public int ProductQuantity { get; set; }
         public Order Order { get; set; }
         public string Status { get; set; }
+        public string OrderCode { get; set; }
+        public DateTime OrderCreated { get; set; }
         public TransactionVoucherCodeViewModel VoucherCode { get; set; }
     }
 
@@ -195,13 +195,17 @@ namespace IMP.Application.Models.ViewModels
         public decimal TotalDiscount { get; set; }
         public int ProductQuantity { get; set; }
         public Order Order { get; set; }
+        public string OrderCode { get; set; }
+        public DateTime OrderCreated { get; set; }
     }
 
     public class Order
     {
+        public string OrderCode { get; set; }
         public DateTime Created { get; set; }
         public string BrandName { get; set; }
         public string StoreName { get; set; }
+        public string Address { get; set; }
         public List<OrderLine> Lines { get; set; }
         public decimal TotalAmount { get; set; }
         public decimal TotalDiscount { get; set; }

@@ -19,6 +19,9 @@ namespace IMP.Domain.Entities
         public string Order { get; set; }
         [StringLength(256)]
         public string Status { get; set; }
+        [StringLength(256)]
+        public string OrderCode { get; set; }
+        public DateTime OrderCreated { get; set; }
         public VoucherCode VoucherCode { get; set; }
     }
 }
