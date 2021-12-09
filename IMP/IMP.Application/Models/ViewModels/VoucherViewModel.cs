@@ -161,10 +161,10 @@ namespace IMP.Application.Models.ViewModels
     public class VoucherTransactionReportViewModel
     {
         public int TotalTransaction { get; set; }
-        public decimal TotalOrderPrice { get; set; }
-        public decimal TotalDiscount { get; set; }
+        public decimal TotalOrderAmount { get; set; }
+        public decimal TotalProductAmount { get; set; }
         public int TotalVoucherCode { get; set; }
-        public int TotalOrderAmount { get; set; }
+        public decimal TotalEarningAmount { get; set; }
     }
 
     public class DiscountProductViewModel
