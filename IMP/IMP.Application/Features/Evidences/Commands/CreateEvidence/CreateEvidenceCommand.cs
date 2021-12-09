@@ -65,14 +65,21 @@ namespace IMP.Application.Features.Evidences.Commands.CreateEvidence
                 if (evidence == null) // create new evidence if not exist
                 {
                     evidence = new Evidence();
+                    evidence.EvidenceTypeId = request.EvidenceTypeId;
+                    evidence.MemberActivityId = request.MemberActivityId;
+                    evidence.Url = request.Url;
+                    UnitOfWork.Repository<Evidence>().Add(evidence);
+                }
+                else
+                {
+                    evidence.EvidenceTypeId = request.EvidenceTypeId;
+                    evidence.MemberActivityId = request.MemberActivityId;
+                    evidence.Url = request.Url;
+                    UnitOfWork.Repository<Evidence>().Update(evidence);
                 }
 
-                evidence.EvidenceTypeId = request.EvidenceTypeId;
-                evidence.MemberActivityId = request.MemberActivityId;
-                evidence.Url = request.Url;
 
                 memberActivity.Status = (int)MemberActivityStatus.Waiting;
-                UnitOfWork.Repository<Evidence>().Add(evidence);
                 UnitOfWork.Repository<MemberActivity>().Update(memberActivity);
                 await UnitOfWork.CommitAsync();
 
