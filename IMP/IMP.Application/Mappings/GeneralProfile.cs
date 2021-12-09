@@ -278,6 +278,11 @@ namespace IMP.Application.Mappings
                   opt.MapFrom(brand => CreateListJobFromJobStr(brand.Job));
               });
 
+            CreateMap<Brand, BrandFullViewModel>().ForMember(dest => dest.JobB, opt =>
+            {
+                opt.MapFrom(brand => CreateListJobFromJobStr(brand.Job));
+            });
+
             CreateMap<UpdateBrandCommand, Brand>();
             #endregion brand
 

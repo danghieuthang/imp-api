@@ -23,7 +23,7 @@ namespace IMP.WebApi.Controllers.v1
         /// </summary>
         /// <returns></returns>
         [HttpGet("me")]
-        [ProducesResponseType(typeof(Response<BrandViewModel>), 200)]
+        [ProducesResponseType(typeof(Response<BrandFullViewModel>), 200)]
         [Authorize(Roles = "Brand")]
         public async Task<IActionResult> Get()
         {

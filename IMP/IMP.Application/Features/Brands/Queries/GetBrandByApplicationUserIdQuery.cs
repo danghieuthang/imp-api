@@ -13,9 +13,9 @@ using System.Threading.Tasks;
 
 namespace IMP.Application.Features.Brands.Queries
 {
-    public class GetBrandByApplicationUserIdQuery : IQuery<BrandViewModel>
+    public class GetBrandByApplicationUserIdQuery : IQuery<BrandFullViewModel>
     {
-        public class GetBrandByApplicationUserIdQueryHandler : QueryHandler<GetBrandByApplicationUserIdQuery, BrandViewModel>
+        public class GetBrandByApplicationUserIdQueryHandler : QueryHandler<GetBrandByApplicationUserIdQuery, BrandFullViewModel>
         {
             private readonly IAuthenticatedUserService _authenticatedUserService;
             public GetBrandByApplicationUserIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticatedUserService authenticatedUserService) : base(unitOfWork, mapper)
@@ -23,13 +23,13 @@ namespace IMP.Application.Features.Brands.Queries
                 _authenticatedUserService = authenticatedUserService;
             }
 
-            public override async Task<Response<BrandViewModel>> Handle(GetBrandByApplicationUserIdQuery request, CancellationToken cancellationToken)
+            public override async Task<Response<BrandFullViewModel>> Handle(GetBrandByApplicationUserIdQuery request, CancellationToken cancellationToken)
             {
                 var brand = await UnitOfWork.Repository<Brand>().FindSingleAsync(x => x.Id == _authenticatedUserService.BrandId);
                 if (brand != null)
                 {
-                    var brandView = Mapper.Map<BrandViewModel>(brand);
-                    return new Response<BrandViewModel>(brandView);
+                    var brandView = Mapper.Map<BrandFullViewModel>(brand);
+                    return new Response<BrandFullViewModel>(brandView);
                 }
                 throw new KeyNotFoundException(message: "Không tồn tại.");
             }
