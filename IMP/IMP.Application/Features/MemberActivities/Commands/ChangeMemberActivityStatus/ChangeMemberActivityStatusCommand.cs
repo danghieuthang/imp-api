@@ -8,6 +8,7 @@ using IMP.Application.Models;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
 using IMP.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,7 +57,11 @@ namespace IMP.Application.Features.MemberActivities.Commands.ChangeMemberActivit
 
                 if (memberActivity.Status == (int)MemberActivityStatus.Completed)
                 {
-                    memberActivity.CampaignMember.Status = (int)CampaignMemberStatus.Completed;
+                    memberActivity.CampaignMember.Status = (int)CampaignMemberStatus.Completed; // change status of campaign member
+                    // Update money earning after completed activity
+                    var campaignRewards = await UnitOfWork.Repository<CampaignReward>().GetAll(predicate: x => x.IsDefaultReward && x.CampaignId == memberActivity.CampaignMember.CampaignId).ToListAsync();
+                    memberActivity.CampaignMember.Money += campaignRewards.Sum(x => x.Price);
+
                     UnitOfWork.Repository<CampaignMember>().Update(memberActivity.CampaignMember);
                 }
 
