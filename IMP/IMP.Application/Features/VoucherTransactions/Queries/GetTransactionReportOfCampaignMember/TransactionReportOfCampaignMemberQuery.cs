@@ -30,11 +30,13 @@ namespace IMP.Application.Features.VoucherTransactions.Queries.GetTransactionRep
 
             public override async Task<Response<IEnumerable<ReportVoucherTransactionOfMemberViewModel>>> Handle(TransactionReportOfCampaignMemberQuery request, CancellationToken cancellationToken)
             {
+    
                 var transactions = await UnitOfWork.Repository<VoucherTransaction>().GetAll(
                     predicate: x => x.VoucherCode.CampaignMemberId == request.CampaignMemberId
-                        && (request.FromDate == null || (request.FromDate.HasValue && x.Created >= request.FromDate.Value))
-                        && (request.ToDate == null || (request.ToDate.HasValue && x.Created <= request.ToDate)))
+                        && (request.FromDate == null || (request.FromDate.HasValue && x.Created.Date.CompareTo(request.FromDate.Value) >= 0))
+                        && (request.ToDate == null || (request.ToDate.HasValue && x.Created.Date.CompareTo(request.ToDate.Value) <= 0)))
                         .ToListAsync();
+
                 var reports = transactions.GroupBy(x => x.Created.Date).Select(g => new ReportVoucherTransactionOfMemberViewModel
                 {
                     Date = g.Key,
