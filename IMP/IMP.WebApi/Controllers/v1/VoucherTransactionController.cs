@@ -22,7 +22,7 @@ namespace IMP.WebApi.Controllers.v1
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(typeof(Response<VoucherTransactionViewModel>), 201)]
-        [Authorize(Roles = "Brand")]
+        [AllowAnonymous]
         public async Task<IActionResult> Create([FromBody] CreateVoucherTransactionCommand command)
         {
             return StatusCode(201, await Mediator.Send(command));

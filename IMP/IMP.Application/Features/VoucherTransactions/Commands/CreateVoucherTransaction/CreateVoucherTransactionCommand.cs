@@ -18,6 +18,7 @@ namespace IMP.Application.Features.VoucherTransactions.Commands.CreateVoucherTra
 {
     public class CreateVoucherTransactionCommand : VoucherTransactionRequest, ICommand<VoucherTransactionViewModel>
     {
+        public string SecretKey { get; set; }
         public class CreateVoucherTranactionCommandHandler : CommandHandler<CreateVoucherTransactionCommand, VoucherTransactionViewModel>
         {
             private readonly IAuthenticatedUserService _authenticatedUserService;
@@ -37,15 +38,15 @@ namespace IMP.Application.Features.VoucherTransactions.Commands.CreateVoucherTra
                     throw new ValidationException(new ValidationError("campaign_id", "Voucher code không tồn tại."));
                 }
 
-                var voucherCode = await voucherCodeRepository.FindSingleAsync(x => x.Code.ToLower() == request.Code.ToLower() && x.VoucherId == campaignVoucher.VoucherId, x => x.Voucher);
+                var voucherCode = await voucherCodeRepository.FindSingleAsync(x => x.Code.ToLower() == request.Code.ToLower() && x.VoucherId == campaignVoucher.VoucherId, x => x.Voucher, x => x.Voucher.Brand);
                 if (voucherCode == null)
                 {
                     throw new ValidationException(new ValidationError("code", "Voucher code không tồn tại."));
                 }
 
-                if (voucherCode.Voucher.BrandId != _authenticatedUserService.BrandId)
+                if (voucherCode.Voucher.Brand.SecretKey != request.SecretKey)
                 {
-                    throw new ValidationException(new ValidationError("", "Không có quyền."));
+                    throw new ValidationException(new ValidationError("secret_key", "Mã bảo mật không hợp lệ."));
                 }
                 if (voucherCode.QuantityUsed >= voucherCode.Quantity)
                 {

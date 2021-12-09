@@ -40,6 +40,8 @@ namespace IMP.Domain.Entities
 
         [ForeignKey("Wallet")]
         public int? WalletId { get; set; }
+        [StringLength(256)]
+        public string SecretKey { get; set; }
         public Wallet Wallet { get; set; }
     }
 }

@@ -74,6 +74,9 @@
     <None Update="App_Datas\ExcelTemplates\import_voucher_template.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="App_Datas\Sqls\Trigger_Update_Member_When_Campaing_Closed.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="App_Datas\Sqls\Update_Platform_For_Influencer.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
