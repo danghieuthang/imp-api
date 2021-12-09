@@ -29,7 +29,13 @@ namespace IMP.Application.Features.Vouchers.Queries.GetVoucherById
                 Func<IQueryable<Voucher>, IIncludableQueryable<Voucher, object>> include;
                 if (request.IsGetCampaignInfo)
                 {
-                    include = vouchers => vouchers.Include(voucher => voucher.CampaignVouchers).ThenInclude(cv => cv.Campaign).ThenInclude(y => y.CampaignImages).Include(voucher => voucher.VoucherCodes);
+                    include = vouchers => vouchers
+                       .Include(voucher => voucher.CampaignVouchers).
+                           ThenInclude(cv => cv.Campaign)
+                               .ThenInclude(y => y.CampaignImages).Include(voucher => voucher.VoucherCodes)
+                       .Include(voucher => voucher.CampaignVouchers)
+                           .ThenInclude(cv => cv.Campaign)
+                               .ThenInclude(c => c.Brand);
                 }
                 else
                 {
