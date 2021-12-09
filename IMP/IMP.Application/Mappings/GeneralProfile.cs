@@ -387,10 +387,14 @@ namespace IMP.Application.Mappings
             CreateMap<VoucherTransaction, VoucherTransactionViewModel>()
                 .ForMember(dest => dest.Order, opt =>
                   {
+                      opt.PreCondition(x => x.Order != null);
                       opt.MapFrom(x => JsonConvert.DeserializeObject<Order>(x.Order));
-  
                   });
-            CreateMap<CreateVoucherTransactionCommand, VoucherTransaction>();
+            CreateMap<CreateVoucherTransactionCommand, VoucherTransaction>()
+                .ForMember(dest => dest.Order, opt =>
+                  {
+                      opt.MapFrom(x => JsonConvert.SerializeObject(x.Order));
+                  });
             #endregion
 
             #region wallet

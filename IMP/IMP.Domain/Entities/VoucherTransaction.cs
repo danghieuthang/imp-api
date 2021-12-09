@@ -17,6 +17,8 @@ namespace IMP.Domain.Entities
         public decimal TotalDiscount { get; set; }
         public int ProductQuantity { get; set; }
         public string Order { get; set; }
+        [StringLength(256)]
+        public string Status { get; set; }
         public VoucherCode VoucherCode { get; set; }
     }
 }

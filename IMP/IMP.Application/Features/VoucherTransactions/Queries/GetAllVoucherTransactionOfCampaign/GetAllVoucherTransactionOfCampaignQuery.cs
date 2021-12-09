@@ -57,7 +57,7 @@ namespace IMP.Application.Features.VoucherTransactions.Queries.GetAllVoucherTran
                         pageIndex: request.PageIndex,
                         pageSize: request.PageSize,
                         cancellationToken: cancellationToken,
-                        include: x => x.Include(y => y.VoucherCode)
+                        include: x => x.Include(y => y.VoucherCode).ThenInclude(z => z.Voucher)
 
                         );
 
