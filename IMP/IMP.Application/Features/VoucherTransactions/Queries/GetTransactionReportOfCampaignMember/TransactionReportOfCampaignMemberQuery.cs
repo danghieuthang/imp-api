@@ -30,7 +30,7 @@ namespace IMP.Application.Features.VoucherTransactions.Queries.GetTransactionRep
 
             public override async Task<Response<IEnumerable<ReportVoucherTransactionOfMemberViewModel>>> Handle(TransactionReportOfCampaignMemberQuery request, CancellationToken cancellationToken)
             {
-    
+
                 var transactions = await UnitOfWork.Repository<VoucherTransaction>().GetAll(
                     predicate: x => x.VoucherCode.CampaignMemberId == request.CampaignMemberId
                         && (request.FromDate == null || (request.FromDate.HasValue && x.Created.Date.CompareTo(request.FromDate.Value) >= 0))
@@ -44,8 +44,18 @@ namespace IMP.Application.Features.VoucherTransactions.Queries.GetTransactionRep
                     TotalVoucherTransaction = g.Count(),
                     TotalProductAmount = g.Sum(x => x.TotalProductAmount),
                     TotalProductQuantity = g.Sum(x => x.ProductQuantity)
-                });
-                return new Response<IEnumerable<ReportVoucherTransactionOfMemberViewModel>>(reports);
+                }).ToList();
+                if (request.FromDate != null && request.ToDate != null)
+                {
+                    for (var date = request.FromDate.Value; date <= request.ToDate.Value; date = date.AddDays(1))
+                    {
+                        if (!reports.Any(x => x.Date == date.Date))
+                        {
+                            reports.Add(new ReportVoucherTransactionOfMemberViewModel { Date = date });
+                        }
+                    }
+                }
+                return new Response<IEnumerable<ReportVoucherTransactionOfMemberViewModel>>(reports.OrderBy(x => x.Date));
 
             }
         }
