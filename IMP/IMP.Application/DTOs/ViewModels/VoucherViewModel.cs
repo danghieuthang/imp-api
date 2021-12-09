@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System;
 using Newtonsoft.Json;
+using IMP.Application.Models.Compaign;
 
 namespace IMP.Application.Models.ViewModels
 {
@@ -55,6 +56,7 @@ namespace IMP.Application.Models.ViewModels
         public List<VoucherCodeViewModel> VoucherCodes { get; set; }
         public List<CampaignVoucherOnlyIdViewModel> CampaignVouchers { get; set; }
         public List<DiscountProductViewModel> DiscountProducts { get; set; }
+        public BrandViewModel Brand { get; set; }
     }
 
     public class VoucherReportViewModel : VoucherViewModel

@@ -33,9 +33,7 @@ namespace IMP.Application.Features.Vouchers.Queries.GetVoucherById
                        .Include(voucher => voucher.CampaignVouchers).
                            ThenInclude(cv => cv.Campaign)
                                .ThenInclude(y => y.CampaignImages).Include(voucher => voucher.VoucherCodes)
-                       .Include(voucher => voucher.CampaignVouchers)
-                           .ThenInclude(cv => cv.Campaign)
-                               .ThenInclude(c => c.Brand);
+                       .Include(voucher => voucher.Brand);
                 }
                 else
                 {
