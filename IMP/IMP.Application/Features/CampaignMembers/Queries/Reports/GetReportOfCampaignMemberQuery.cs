@@ -40,12 +40,16 @@ namespace IMP.Application.Features.CampaignMembers.Queries.Reports
                     QuantityVoucherGet = campaignMember.VoucherCodes.Sum(x => x.QuantityGet),
                     QuantityVoucherUsed = campaignMember.VoucherCodes.Sum(x => x.QuantityUsed),
                     Status = campaignMember.Status,
-                    MoneyEarn = campaignMember.Money,
-                    TotalOrderPrice = campaignMember.VoucherCodes.Sum(x => x.VoucherTransactions.Sum(y => y.TotalOrderAmount)),
-                    TotalDiscount = campaignMember.VoucherCodes.Sum(x => x.VoucherTransactions.Sum(y => y.TotalDiscount)),
+                    TotalEarningAmount = campaignMember.Money,
+                    TotalVoucherCode = campaignMember.VoucherCodes.Count(),
                     TotalTransaction = campaignMember.VoucherCodes.Sum(x => x.VoucherTransactions.Count),
-                    TotalOrderAmount = campaignMember.VoucherCodes.Sum(x => x.VoucherTransactions.GroupBy(y => y.Order).Count()),
                 };
+
+                if (_authenticatedUserService.BrandId != null)
+                {
+                    report.TotalOrderAmount = campaignMember.VoucherCodes.Sum(x => x.VoucherTransactions.Sum(y => y.TotalOrderAmount));
+                    report.TotalProductAmount = campaignMember.VoucherCodes.Sum(x => x.VoucherTransactions.Sum(y => y.TotalProductAmount));
+                }
                 return new Response<CampaignMemberReportViewModel>(report);
             }
         }

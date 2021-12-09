@@ -65,7 +65,7 @@ namespace IMP.Application.Features.Campaigns.Queries.Reports
                     QuantityVoucherGet = x.QuantityVoucherGet,
                     QuantityVoucherUsed = x.QuantityVoucherUsed,
                     IsBestInfluencer = (x.Money == maxMoney) && maxMoney > 0,
-                    MoneyEarn = x.Money
+                    TotalEarningAmount = x.Money
                 }).ToList();
 
                 report.NumberOfInfluencer = influencers.Count;

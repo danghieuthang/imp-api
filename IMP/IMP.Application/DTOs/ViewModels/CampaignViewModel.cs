@@ -135,13 +135,15 @@ namespace IMP.Application.Models.Compaign
         public UserBasicViewModel Influencer { get; set; }
         public int QuantityVoucherGet { get; set; }
         public int QuantityVoucherUsed { get; set; }
+
         public int Status { get; set; }
         public bool IsBestInfluencer { get; set; }
-        public decimal MoneyEarn { get; set; }
-        public decimal TotalOrderPrice { get; set; }
-        public decimal TotalDiscount { get; set; }
+
         public int TotalTransaction { get; set; }
-        public int TotalOrderAmount { get; set; }
+        public decimal TotalOrderAmount { get; set; }
+        public decimal TotalProductAmount { get; set; }
+        public int TotalVoucherCode { get; set; }
+        public decimal TotalEarningAmount { get; set; }
 
     }
 }
