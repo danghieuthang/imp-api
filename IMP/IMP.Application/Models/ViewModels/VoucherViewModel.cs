@@ -155,6 +155,7 @@ namespace IMP.Application.Models.ViewModels
         public DateTime OrderCreated { get; set; }
         public decimal EarningMoney { get; set; }
         public TransactionVoucherCodeViewModel VoucherCode { get; set; }
+        public InfluencerViewModel Influencer { get; set; }
     }
 
     public class VoucherTransactionReportViewModel
@@ -217,6 +218,7 @@ namespace IMP.Application.Models.ViewModels
     {
         public string ProductCode { get; set; }
         public string ProductName { get; set; }
+        public decimal UnitPrice { get; set; }
         public int Quantity { get; set; }
         public decimal Amount { get; set; }
     }

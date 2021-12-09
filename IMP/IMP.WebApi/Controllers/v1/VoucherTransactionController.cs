@@ -1,5 +1,6 @@
 ﻿using IMP.Application.Features.VoucherTransactions.Commands.CreateVoucherTransaction;
 using IMP.Application.Features.VoucherTransactions.Queries.GetAllVoucherTransactionOfCampaign;
+using IMP.Application.Features.VoucherTransactions.Queries.GetTransactionById;
 using IMP.Application.Features.VoucherTransactions.Queries.GetTransactionReportOfCampaign;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
@@ -38,6 +39,18 @@ namespace IMP.WebApi.Controllers.v1
             return Ok(await Mediator.Send(query));
         }
 
+        /// <summary>
+        /// Get detail of voucher transaction
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(Response<VoucherTransactionViewModel>), 200)]
+        [Authorize(Roles = "Brand,Influencer")]
+        public async Task<IActionResult> Get([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new GetTransactionByIdQuery { Id = id }));
+        }
 
         [HttpGet("report")]
         [ProducesResponseType(typeof(Response<VoucherTransactionReportViewModel>), 200)]
