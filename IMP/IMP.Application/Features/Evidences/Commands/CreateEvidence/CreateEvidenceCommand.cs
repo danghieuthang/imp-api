@@ -59,16 +59,19 @@ namespace IMP.Application.Features.Evidences.Commands.CreateEvidence
                     throw new IMP.Application.Exceptions.ValidationException(new ValidationError("evidence_type_id", "Bằng chứng không giống hoạt động yêu cầu."));
                 }
 
-                var evidence = new Evidence
+                var evidence = await UnitOfWork.Repository<Evidence>().FindSingleAsync(
+                    predicate: x => x.MemberActivityId == request.MemberActivityId);
+
+                if (evidence == null) // create new evidence if not exist
                 {
-                    EvidenceTypeId = request.EvidenceTypeId,
-                    MemberActivityId = request.MemberActivityId,
-                    Url = request.Url,
-                    Description = request.Description
-                };
+                    evidence = new Evidence();
+                }
+
+                evidence.EvidenceTypeId = request.EvidenceTypeId;
+                evidence.MemberActivityId = request.MemberActivityId;
+                evidence.Url = request.Url;
 
                 memberActivity.Status = (int)MemberActivityStatus.Waiting;
-
                 UnitOfWork.Repository<Evidence>().Add(evidence);
                 UnitOfWork.Repository<MemberActivity>().Update(memberActivity);
                 await UnitOfWork.CommitAsync();
