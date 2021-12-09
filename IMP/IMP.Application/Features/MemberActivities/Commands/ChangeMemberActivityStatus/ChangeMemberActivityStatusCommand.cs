@@ -61,6 +61,7 @@ namespace IMP.Application.Features.MemberActivities.Commands.ChangeMemberActivit
                     // Update money earning after completed activity
                     var campaignRewards = await UnitOfWork.Repository<CampaignReward>().GetAll(predicate: x => x.IsDefaultReward && x.CampaignId == memberActivity.CampaignMember.CampaignId).ToListAsync();
                     memberActivity.CampaignMember.Money += campaignRewards.Sum(x => x.Price);
+                    memberActivity.CampaignMember.CompletedDate = DateTime.UtcNow;
 
                     UnitOfWork.Repository<CampaignMember>().Update(memberActivity.CampaignMember);
                 }
