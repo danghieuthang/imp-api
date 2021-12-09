@@ -1,4 +1,5 @@
-﻿using IMP.Application.Features.Brands.Commands.UpdateBrand;
+﻿using IMP.Application.Features.Brands.Commands.GenerateNewSercretKey;
+using IMP.Application.Features.Brands.Commands.UpdateBrand;
 using IMP.Application.Features.Brands.Queries;
 using IMP.Application.Interfaces;
 using IMP.Application.Models.ViewModels;
@@ -56,6 +57,19 @@ namespace IMP.WebApi.Controllers.v1
             {
                 return BadRequest();
             }
+            return Ok(await Mediator.Send(command));
+        }
+
+        /// <summary>
+        /// Generate new secret key
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<string>), 200)]
+        [Authorize(Roles = "Brand")]
+        [HttpPost("me/generate-secret-key")]
+        public async Task<IActionResult> GenerateScretKey([FromBody] GenerateNewSecretKeyCommand command)
+        {
             return Ok(await Mediator.Send(command));
         }
     }
