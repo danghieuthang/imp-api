@@ -113,7 +113,6 @@ namespace IMP.WebApi.Controllers.v1
         /// <summary>
         /// Create a campaign
         /// </summary>
-        /// <param name="command">The Create Campaign Command</param>
         /// <returns></returns>
         [ProducesResponseType(typeof(Response<CampaignViewModel>), 201)]
         [HttpPost]

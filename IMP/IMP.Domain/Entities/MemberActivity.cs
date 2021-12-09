@@ -18,6 +18,8 @@ namespace IMP.Domain.Entities
         public int CampaignMemberId { get; set; }
         public CampaignMember CampaignMember { get; set; }
 
+        public string SocialContent { get; set; }
+
         public int Status { get; set; }
 
         public ICollection<Evidence> Evidences { get; set; }

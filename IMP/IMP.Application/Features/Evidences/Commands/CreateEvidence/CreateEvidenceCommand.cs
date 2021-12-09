@@ -70,7 +70,7 @@ namespace IMP.Application.Features.Evidences.Commands.CreateEvidence
                     evidence.Url = request.Url;
                     UnitOfWork.Repository<Evidence>().Add(evidence);
                 }
-                else
+                else // update if evidence of member activity exist
                 {
                     evidence.EvidenceTypeId = request.EvidenceTypeId;
                     evidence.MemberActivityId = request.MemberActivityId;

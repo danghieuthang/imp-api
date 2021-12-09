@@ -358,7 +358,6 @@ namespace IMP.Infrastructure.Identity.Services
             if (account == null) return;
 
             var code = await _userManager.GeneratePasswordResetTokenAsync(account);
-            var route = "api/account/reset-password/";
 
             string domain = _httpContextAccessor.HttpContext.Request.Host.Value;
             if (string.IsNullOrEmpty(domain))

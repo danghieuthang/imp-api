@@ -36,6 +36,7 @@ namespace IMP.Infrastructure.Shared
             services.AddScoped<IVnPayService, VnPayService>();
             services.AddScoped<IZaloService, ZaloService>();
             services.AddScoped<IQRCodeService, QRCodeService>();
+            services.AddScoped<IFacebookAnalysisService, FacebookAnalysisService>();
 
             #region Register Caching service
             services.Configure<CacheSettings>(_config.GetSection("CacheSettings"));

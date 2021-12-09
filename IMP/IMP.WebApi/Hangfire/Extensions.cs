@@ -12,7 +12,8 @@ namespace IMP.WebApi.Hangfire
     public static class Extensions
     {
         private static readonly ICampaignService ICampaignService;
-        private static readonly BackgroundJobs jobSchedule = new(ICampaignService);
+        private static readonly IMemberActivityService IMemberActivityService;
+        private static readonly BackgroundJobs jobSchedule = new(ICampaignService, IMemberActivityService);
 
         public static void AddHangfireExtension(this IServiceCollection services, IConfiguration configuration)
         {
@@ -35,6 +36,7 @@ namespace IMP.WebApi.Hangfire
 
             var manager = new RecurringJobManager();
             manager.AddOrUpdate("Update campaign status: Runs Every Day", Job.FromExpression(() => jobSchedule.CampaignJobsAsync()), Cron.Hourly());
+            manager.AddOrUpdate("Analysic facebook post: Runs Every Hours", Job.FromExpression(() => jobSchedule.AnalysisFacebookPost()), Cron.Hourly());
 
         }
         public static void UseHangfireDashboardExtension(this IApplicationBuilder app, IConfiguration configuration)

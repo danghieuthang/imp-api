@@ -138,7 +138,7 @@ namespace IMP.WebApi.Controllers.v1
         /// Import voucher code for voucher
         /// </summary>
         /// <param name="id">The id of voucher</param>
-        /// <param name="file">The file voucher code</param>
+        /// <param name="command">The Import voucher code command</param>
         /// <returns></returns>
         [ProducesResponseType(typeof(Response<bool>), 200)]
         [HttpPost("{id}/import-codes")]
@@ -155,7 +155,6 @@ namespace IMP.WebApi.Controllers.v1
         /// <summary>
         /// Import vouchers
         /// </summary>
-        /// <param name="id"></param>
         /// <param name="command"></param>
         /// <returns></returns>
         [ProducesResponseType(typeof(Response<bool>), 200)]

@@ -432,7 +432,12 @@ namespace IMP.Application.Mappings
             #endregion
 
             #region member activity
-            CreateMap<MemberActivity, MemberActivityViewModel>();
+            CreateMap<MemberActivity, MemberActivityViewModel>()
+                    .ForMember(dest => dest.SocialContent, opt =>
+                      {
+                          opt.PreCondition(x => x.SocialContent != null);
+                          opt.MapFrom(x => JsonConvert.DeserializeObject<SocialContent>(x.SocialContent));
+                      });
             CreateMap<ActivityComment, ActivityCommentViewModel>();
             #endregion
 

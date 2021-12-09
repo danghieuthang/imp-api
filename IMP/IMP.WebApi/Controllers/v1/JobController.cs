@@ -13,11 +13,11 @@ namespace IMP.WebApi.Controllers.v1
     {
         [ProducesResponseType(typeof(Response<List<string>>), 200)]
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             var response = new Response<List<string>>
             {
-                Succeeded =true,
+                Succeeded = true,
                 Data = new List<string>
                 {
                     "Học Sinh",
