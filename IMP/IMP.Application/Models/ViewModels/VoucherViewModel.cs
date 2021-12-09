@@ -153,6 +153,7 @@ namespace IMP.Application.Models.ViewModels
         public string Status { get; set; }
         public string OrderCode { get; set; }
         public DateTime OrderCreated { get; set; }
+        public decimal EarningMoney { get; set; }
         public TransactionVoucherCodeViewModel VoucherCode { get; set; }
     }
 

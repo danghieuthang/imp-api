@@ -22,6 +22,7 @@ namespace IMP.Domain.Entities
         [StringLength(256)]
         public string OrderCode { get; set; }
         public DateTime OrderCreated { get; set; }
+        public decimal EarningMoney { get; set; }
         public VoucherCode VoucherCode { get; set; }
     }
 }

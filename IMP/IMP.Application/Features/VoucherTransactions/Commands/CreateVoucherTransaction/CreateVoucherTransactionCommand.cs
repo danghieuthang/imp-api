@@ -54,8 +54,12 @@ namespace IMP.Application.Features.VoucherTransactions.Commands.CreateVoucherTra
 
                 #region create voucher transaction
                 var voucherTransaction = Mapper.Map<VoucherTransaction>(request);
+
+                decimal earningMoney = TransactionUtils.CaculateMoneyEarnFromTransaction(campaignVoucher.Campaign, voucherTransaction);
+
                 voucherTransaction.VoucherCodeId = voucherCode.Id;
                 voucherTransaction.Status = "Thành công";
+                voucherTransaction.EarningMoney = earningMoney;
                 UnitOfWork.Repository<VoucherTransaction>().Add(voucherTransaction);
                 #endregion
 
@@ -65,14 +69,14 @@ namespace IMP.Application.Features.VoucherTransactions.Commands.CreateVoucherTra
                 #endregion
 
                 #region update money earning for campaign member
-
                 var campaignMember = await UnitOfWork.Repository<CampaignMember>().FindSingleAsync(x => x.Id == voucherCode.CampaignMemberId);
                 if (campaignMember != null)
                 {
-
-                    campaignMember.Money += TransactionUtils.CaculateMoneyEarnFromTransaction(campaignVoucher.Campaign, voucherTransaction);
+                    campaignMember.Money += earningMoney;
                     UnitOfWork.Repository<CampaignMember>().Update(campaignMember);
                 }
+
+
                 #endregion
 
                 await UnitOfWork.CommitAsync();
