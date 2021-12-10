@@ -421,5 +421,19 @@ namespace IMP.WebApi.Controllers.v1
         {
             return Ok(await Mediator.Send(new GetReportOfCampaignQuery { CampaignId = id }));
         }
+
+        /// <summary>
+        /// Get vouchers report of a campaign
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<IEnumerable<VoucherTransactionReportOfVoucherViewModel>>), 200)]
+        [HttpGet("{id}/report-voucher")]
+        [Authorize(Roles = "Brand")]
+        public async Task<IActionResult> ReportVoucher([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new GetReportVoucherOfCampaignQuery { CampaignId = id }));
+        }
+
     }
 }

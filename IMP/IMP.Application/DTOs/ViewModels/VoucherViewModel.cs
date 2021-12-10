@@ -171,6 +171,7 @@ namespace IMP.Application.Models.ViewModels
 
     public class VoucherTransactionReportOfVoucherViewModel : VoucherTransactionReportViewModel
     {
+        public int VoucherId { get; set; }
         public int QuantitiyGet { get; set; }
         public int QuantitiyUsed { get; set; }
         public int TotalVoucherCodeQuantity { get; set; }
