@@ -29,13 +29,25 @@ namespace IMP.WebApi.Controllers.v1
             return StatusCode(201, await Mediator.Send(command));
         }
         /// <summary>
-        /// Search transction of campaign
+        /// Search transaction of campaign
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
         [HttpGet("search-transaction-of-campaign")]
         [ProducesResponseType(typeof(Response<IPagedList<VoucherTransactionViewModel>>), 200)]
         public async Task<IActionResult> GetAllOfCampaign([FromQuery] GetAllVoucherTransactionOfCampaignQuery query)
+        {
+            return Ok(await Mediator.Send(query));
+        }
+
+        /// <summary>
+        /// Search transaction of a voucher by member id
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [HttpGet("search-transaction-of-voucher-by-member")]
+        [ProducesResponseType(typeof(Response<IPagedList<VoucherTransactionViewModel>>), 200)]
+        public async Task<IActionResult> SearchTransactionOfVoucherByMember([FromQuery] GetAllVoucherTransactionOfVoucherQuery query)
         {
             return Ok(await Mediator.Send(query));
         }
