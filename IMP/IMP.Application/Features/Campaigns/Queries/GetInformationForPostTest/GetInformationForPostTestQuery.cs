@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace IMP.Application.Features.Campaigns.Queries.GetInformationForPostTest
 {
@@ -38,12 +39,12 @@ namespace IMP.Application.Features.Campaigns.Queries.GetInformationForPostTest
 
                     InformationPostTestViewModel rs = new InformationPostTestViewModel
                     {
-                        Products = campaign.Products.ToList(),
                         Vouchers = vouchers.Select(x => new VoucherTestInformation
                         {
                             DiscountValue = x.DiscountValue,
                             DiscountValueType = x.DiscountValueType,
-                            Codes = x.VoucherCodes.Select(x => x.Code).ToList()
+                            Codes = x.VoucherCodes.Select(x => x.Code).ToList(),
+                            Products = JsonConvert.DeserializeObject<List<DiscountProductViewModel>>(x.DiscountProducts)
                         }).ToList()
                     };
                     return new Response<InformationPostTestViewModel>(rs);
@@ -59,12 +60,12 @@ namespace IMP.Application.Features.Campaigns.Queries.GetInformationForPostTest
 
     public class InformationPostTestViewModel
     {
-        public List<Product> Products { get; set; }
         public List<VoucherTestInformation> Vouchers { get; set; }
     }
 
     public class VoucherTestInformation
     {
+        public List<DiscountProductViewModel> Products { get; set; }
         public decimal DiscountValue { get; set; }
         public int DiscountValueType { get; set; }
         public List<string> Codes { get; set; }
