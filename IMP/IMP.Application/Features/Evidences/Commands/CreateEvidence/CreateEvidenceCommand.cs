@@ -7,6 +7,7 @@ using IMP.Application.Models;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
 using IMP.Domain.Entities;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,7 +43,7 @@ namespace IMP.Application.Features.Evidences.Commands.CreateEvidence
 
             public override async Task<Response<EvidenceViewModel>> Handle(CreateEvidenceCommand request, CancellationToken cancellationToken)
             {
-                var memberActivity = await UnitOfWork.Repository<MemberActivity>().FindSingleAsync(x => x.Id == request.MemberActivityId, x => x.CampaignMember, x => x.CampaignActivity);
+                var memberActivity = await UnitOfWork.Repository<MemberActivity>().FindSingleAsync(x => x.Id == request.MemberActivityId, x => x.CampaignMember, x => x.CampaignActivity, x => x.CampaignActivity.Campaign);
 
                 if (memberActivity?.CampaignMember == null)
                 {
@@ -78,8 +79,33 @@ namespace IMP.Application.Features.Evidences.Commands.CreateEvidence
                     UnitOfWork.Repository<Evidence>().Update(evidence);
                 }
 
+                #region update member activity after submit evidence
 
                 memberActivity.Status = (int)MemberActivityStatus.Waiting;
+
+                if (evidence.EvidenceTypeId == 4) // if evidence type is link a post
+                {
+                    // get hashtag of campaign
+                    string hashtags = memberActivity.CampaignActivity.Campaign.Hashtags ?? "[]";
+                    var campaignHashtags = JsonConvert.DeserializeObject<List<string>>(memberActivity.CampaignActivity.Campaign.Hashtags);
+                    campaignHashtags = campaignHashtags.Select(x => x.Replace("#", "").Replace(" ", "").ToLower()).ToList();
+
+                    var socialContent = new SocialContent
+                    {
+                        Comments = 0,
+                        Likes = 0,
+                        Shares = 0,
+                        Hashtags = campaignHashtags.Select(x => new HashtagChecker
+                        {
+                            Hashtag = x,
+                            // Check hashtag is valid
+                            IsValid = false
+                        }).ToList()
+                    };
+                    memberActivity.SocialContent = JsonConvert.SerializeObject(socialContent);
+                }
+                #endregion
+
                 UnitOfWork.Repository<MemberActivity>().Update(memberActivity);
                 await UnitOfWork.CommitAsync();
 
