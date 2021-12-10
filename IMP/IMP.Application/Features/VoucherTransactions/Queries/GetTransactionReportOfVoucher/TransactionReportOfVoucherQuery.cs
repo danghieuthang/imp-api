@@ -46,8 +46,8 @@ namespace IMP.Application.Features.VoucherTransactions.Queries.GetTransactionRep
 
                 var report = new VoucherTransactionReportOfVoucherViewModel
                 {
-                    QuantitiyGet = campaignMember.VoucherCodes.Sum(x => x.QuantityGet),
-                    QuantitiyUsed = campaignMember.VoucherCodes.Sum(x => x.QuantityUsed),
+                    QuantityGet = campaignMember.VoucherCodes.Sum(x => x.QuantityGet),
+                    QuantityUsed = campaignMember.VoucherCodes.Sum(x => x.QuantityUsed),
                     TotalTransaction = campaignMember.VoucherCodes.Sum(x => x.VoucherTransactions.Count),
                     TotalVoucherCode = campaignMember.VoucherCodes.Count(),
                     TotalProductAmount = campaignMember.VoucherCodes.Sum(x => x.VoucherTransactions.Sum(y => y.TotalProductAmount)),

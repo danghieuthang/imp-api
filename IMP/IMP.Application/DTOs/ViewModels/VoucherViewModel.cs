@@ -173,8 +173,8 @@ namespace IMP.Application.Models.ViewModels
     {
         public int VoucherId { get; set; }
         public string Name { get; set; }
-        public int QuantitiyGet { get; set; }
-        public int QuantitiyUsed { get; set; }
+        public int QuantityGet { get; set; }
+        public int QuantityUsed { get; set; }
         public int TotalVoucherCodeQuantity { get; set; }
     }
 
