@@ -2,6 +2,7 @@
 using IMP.Application.Features.VoucherTransactions.Queries.GetAllVoucherTransactionOfCampaign;
 using IMP.Application.Features.VoucherTransactions.Queries.GetTransactionById;
 using IMP.Application.Features.VoucherTransactions.Queries.GetTransactionReportOfCampaign;
+using IMP.Application.Features.VoucherTransactions.Queries.GetTransactionReportOfVoucher;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
 using Microsoft.AspNetCore.Authorization;
@@ -58,6 +59,19 @@ namespace IMP.WebApi.Controllers.v1
         public async Task<IActionResult> GetAllOfCampaign([FromQuery(Name = "campaign_id")] int campaignId)
         {
             return Ok(await Mediator.Send(new GetTransactionReportOfCampaignQuery { CampaignId = campaignId }));
+        }
+
+        /// <summary>
+        /// Get report of a voucher code by member id
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [HttpGet("report-of-voucher-by-member")]
+        [ProducesResponseType(typeof(Response<VoucherTransactionReportOfVoucherViewModel>), 200)]
+        [Authorize(Roles = "Brand,Influencer")]
+        public async Task<IActionResult> ReportOfVoucherbyMember([FromQuery] TransactionReportOfVoucherQuery query)
+        {
+            return Ok(await Mediator.Send(query));
         }
     }
 }
