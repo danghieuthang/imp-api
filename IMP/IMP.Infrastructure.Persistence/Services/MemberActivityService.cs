@@ -35,7 +35,7 @@ namespace IMP.Infrastructure.Persistence.Services
                         || x.CampaignActivity.Campaign.Status == (int)CampaignStatus.Advertising)
                     && x.CampaignActivity.EvidenceTypeId == 4 // Evidence type is Link post
                     && x.CampaignActivity.Campaign.InfluencerConfiguration.PlatformId == 1, // Platform is facebook
-                include: x => x.Include(y => y.Evidences.FirstOrDefault())
+                include: x => x.Include(y => y.Evidences)
                             .Include(y => y.CampaignActivity).ThenInclude(y => y.Campaign)
                      ).ToListAsync();
 
