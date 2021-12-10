@@ -135,6 +135,16 @@ namespace IMP.Application.Models.Compaign
         public List<CampaignMemberReportViewModel> CampaignMembers { get; set; }
     }
 
+    public class CampaignReportByDateViewModel
+    {
+        public DateTime Date { get; set; }
+        public int TotalNumberVoucherCodeUsed { get; set; }
+        public decimal TotalProductAmount { get; set; }
+        public decimal TotalOrderAmount { get; set; }
+        public int TotalTransaction { get; set; }
+        public decimal TotalEarningMoney { get; set; }
+    }
+
     public class CampaignMemberReportViewModel
     {
         public UserBasicViewModel Influencer { get; set; }

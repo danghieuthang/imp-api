@@ -178,6 +178,7 @@ namespace IMP.Application.Models.ViewModels
         public int TotalVoucherCodeQuantity { get; set; }
     }
 
+
     public class DiscountProductViewModel
     {
         public string Code { get; set; }

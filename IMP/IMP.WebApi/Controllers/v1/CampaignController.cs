@@ -435,5 +435,18 @@ namespace IMP.WebApi.Controllers.v1
             return Ok(await Mediator.Send(new GetReportVoucherOfCampaignQuery { CampaignId = id }));
         }
 
+        /// <summary>
+        /// Get report voucher of campaign by date
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<IEnumerable<CampaignReportByDateViewModel>>), 200)]
+        [HttpGet("{id}/report-voucher-by-date")]
+        [Authorize(Roles = "Brand")]
+        public async Task<IActionResult> ReportVoucher([FromQuery] ReportOfCampaignByDateQuery query)
+        {
+            return Ok(await Mediator.Send(query));
+        }
+
     }
 }
