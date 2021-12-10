@@ -42,6 +42,7 @@ namespace IMP.Application.Features.Campaigns.Queries.Reports
                 var report = vouchers.Select(x => new VoucherTransactionReportOfVoucherViewModel
                 {
                     VoucherId = x.Id,
+                    Name = x.VoucherName,
                     TotalTransaction = vouchers.Sum(x => x.VoucherCodes.Sum(y => y.VoucherTransactions.Count)),
                     TotalVoucherCode = vouchers.Sum(x => x.VoucherCodes.Count),
                     TotalOrderAmount = vouchers.Sum(x => x.VoucherCodes.Count),
