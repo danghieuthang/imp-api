@@ -128,6 +128,10 @@ namespace IMP.Application.Models.Compaign
         public int TotalNumberVoucherCodeUsed { get; set; }
         public int TotalNumberVoucherCodeGet { get; set; }
         public int TotalNumberVoucherCodeQuantity { get; set; }
+        public decimal TotalProductAmount { get; set; }
+        public decimal TotalOrderAmount { get; set; }
+        public int TotalTransaction { get; set; }
+        public decimal TotalEarningMoney { get; set; }
         public List<CampaignMemberReportViewModel> CampaignMembers { get; set; }
     }
 

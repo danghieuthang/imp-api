@@ -51,7 +51,10 @@ namespace IMP.Application.Features.VoucherTransactions.Queries.GetTransactionRep
                     {
                         if (!reports.Any(x => x.Date == date.Date))
                         {
-                            reports.Add(new ReportVoucherTransactionOfMemberViewModel { Date = date.ToUniversalTime() });
+                            reports.Add(new ReportVoucherTransactionOfMemberViewModel { 
+                                Date = date.ToUniversalTime(),
+                                
+                            });
                         }
                     }
                 }

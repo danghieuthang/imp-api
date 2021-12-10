@@ -41,22 +41,36 @@ namespace IMP.Application.Features.Campaigns.Queries.Reports
                         predicate: x => x.CampaignMember.CampaignId == request.CampaignId && voucherIds.Contains(x.VoucherId)
                         ).ToListAsync();
 
+                var transactions = await UnitOfWork.Repository<VoucherTransaction>().GetAll(
+                    predicate: x => voucherIds.Contains(x.VoucherCode.VoucherId),
+                    include: x => x.Include(y => y.VoucherCode)
+                    ).ToListAsync();
+
                 var campaignMembers = await UnitOfWork.Repository<CampaignMember>().GetAll(
                           predicate: x => x.CampaignId == request.CampaignId
                               && x.Status != (int)CampaignMemberStatus.Cancelled
                               && x.Status != (int)CampaignMemberStatus.RefuseInvitated,
-                          include: x => x.Include(y => y.Influencer).Include(y => y.VoucherCodes),
+                          include: x => x.Include(y => y.Influencer),
                           selector: x => new
                           {
+                              x.Id,
                               Influencer = x.Influencer,
                               Status = x.Status,
                               QuantityVoucherGet = x.VoucherCodes.Sum(y => y.QuantityGet),
                               QuantityVoucherUsed = x.VoucherCodes.Sum(y => y.QuantityUsed),
-                              Money = x.Money,
+                              //TotalTransaction = x.VoucherCodes.Sum(y => y.VoucherTransactions.Count),
+                              //TotalOrderAmount = x.VoucherCodes.Sum(y => y.VoucherTransactions.Sum(z => z.TotalOrderAmount)),
+                              //TotalProductAmount = x.VoucherCodes.Sum(y => y.VoucherTransactions.Sum(z => z.TotalProductAmount)),
+                              TotalVoucherCode = x.VoucherCodes.Count,
+                              //TotalEarningAmount = x.VoucherCodes.Sum(y => y.VoucherTransactions.Sum(z => z.EarningMoney)),
+                              TotalTransaction = 0,
+                              TotalOrderAmount = new decimal(0),
+                              TotalProductAmount = new decimal(0),
+                              TotalEarningAmount = new decimal(0)
                           })
                       .ToListAsync();
 
-                decimal maxMoney = campaignMembers.Count == 0 ? 0 : campaignMembers.Max(x => x.Money);
+                decimal maxTotalProductAmount = campaignMembers.Count == 0 ? 0 : campaignMembers.Max(x => x.TotalProductAmount);
 
                 report.CampaignMembers = campaignMembers.Select(x => new CampaignMemberReportViewModel
                 {
@@ -64,8 +78,13 @@ namespace IMP.Application.Features.Campaigns.Queries.Reports
                     Status = x.Status,
                     QuantityVoucherGet = x.QuantityVoucherGet,
                     QuantityVoucherUsed = x.QuantityVoucherUsed,
-                    IsBestInfluencer = (x.Money == maxMoney) && maxMoney > 0,
-                    TotalEarningAmount = x.Money
+                    IsBestInfluencer = (x.TotalProductAmount == maxTotalProductAmount) && maxTotalProductAmount > 0,
+                    TotalVoucherCode = x.TotalVoucherCode,
+
+                    TotalEarningAmount = transactions.Where(t => t.VoucherCode.CampaignMemberId == x.Id).Sum(t=>t.EarningMoney),
+                    TotalTransaction = transactions.Where(t => t.VoucherCode.CampaignMemberId == x.Id).Count(),
+                    TotalOrderAmount = transactions.Where(t => t.VoucherCode.CampaignMemberId == x.Id).Sum(t => t.TotalOrderAmount),
+                    TotalProductAmount = transactions.Where(t => t.VoucherCode.CampaignMemberId == x.Id).Sum(t => t.TotalProductAmount),
                 }).ToList();
 
                 report.NumberOfInfluencer = influencers.Count;
@@ -75,6 +94,11 @@ namespace IMP.Application.Features.Campaigns.Queries.Reports
                 report.TotalNumberVoucherCodeQuantity = voucherCodes.Sum(x => x.Quantity);
                 report.TotalNumberVoucherCodeUsed = voucherCodes.Sum(x => x.QuantityUsed);
                 report.TotalNumberVoucherCodeGet = campaignMembers.Sum(x => x.QuantityVoucherGet);
+
+                report.TotalOrderAmount = report.CampaignMembers.Sum(x => x.TotalOrderAmount);
+                report.TotalProductAmount = report.CampaignMembers.Sum(x => x.TotalProductAmount);
+                report.TotalEarningMoney = report.CampaignMembers.Sum(x => x.TotalEarningAmount);
+                report.TotalTransaction = report.CampaignMembers.Sum(x => x.TotalTransaction);
 
                 return new Response<CampaignReportViewModel>(report);
 
