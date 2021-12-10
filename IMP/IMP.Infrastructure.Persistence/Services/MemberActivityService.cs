@@ -32,6 +32,7 @@ namespace IMP.Infrastructure.Persistence.Services
             var memberActivities = await _memberActivityRepository.GetAll(
                 predicate: x => x.Status == (int)MemberActivityStatus.Waiting // Member Activity that waiting for approved
                     && (x.CampaignActivity.Campaign.Status == (int)CampaignStatus.Approved
+                        || x.CampaignActivity.Campaign.Status == (int)CampaignStatus.Applying
                         || x.CampaignActivity.Campaign.Status == (int)CampaignStatus.Advertising)
                     && x.CampaignActivity.EvidenceTypeId == 4 // Evidence type is Link post
                     && x.CampaignActivity.Campaign.InfluencerConfiguration.PlatformId == 1, // Platform is facebook
@@ -48,8 +49,12 @@ namespace IMP.Infrastructure.Persistence.Services
                         var socialContent = await _facebookAnalysisService.GetPost(memberActivity.Evidences.FirstOrDefault().Url);
                         if (socialContent != null)
                         {
+                            string hashtags = memberActivity.CampaignActivity.Campaign.Hashtags ?? "[]";
                             var campaignHashtags = JsonConvert.DeserializeObject<List<string>>(memberActivity.CampaignActivity.Campaign.Hashtags);
-                            var postHashtags = socialContent.Hashtags.Select(x => x.Hashtag.ToLower());
+
+                            campaignHashtags = campaignHashtags.Select(x => x.Replace("#", "").Replace(" ", "").ToLower()).ToList();
+
+                            var postHashtags = socialContent.Hashtags.Select(x => x.Hashtag.Replace("#", "").Replace("\n", "").Replace(" ", "").ToLower());
 
                             socialContent.Hashtags = campaignHashtags.Select(x => new HashtagChecker
                             {
