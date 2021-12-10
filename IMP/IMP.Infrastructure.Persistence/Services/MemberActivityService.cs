@@ -43,25 +43,29 @@ namespace IMP.Infrastructure.Persistence.Services
             {
                 if (memberActivity.Evidences.Count > 0)
                 {
-                    var socialContent = await _facebookAnalysisService.GetPost(memberActivity.Evidences.FirstOrDefault().Url);
-                    if (socialContent != null)
+                    if (memberActivity.Evidences.FirstOrDefault().Url.Contains("facebook"))
                     {
-                        var campaignHashtags = JsonConvert.DeserializeObject<List<string>>(memberActivity.CampaignActivity.Campaign.Hashtags);
-                        var postHashtags = socialContent.Hashtags.Select(x => x.Hashtag.ToLower());
-
-                        socialContent.Hashtags = campaignHashtags.Select(x => new HashtagChecker
+                        var socialContent = await _facebookAnalysisService.GetPost(memberActivity.Evidences.FirstOrDefault().Url);
+                        if (socialContent != null)
                         {
-                            Hashtag = x,
-                            // Check hashtag is valid
-                            IsValid = postHashtags.Contains(x.ToLower())
-                        }).ToList();
+                            var campaignHashtags = JsonConvert.DeserializeObject<List<string>>(memberActivity.CampaignActivity.Campaign.Hashtags);
+                            var postHashtags = socialContent.Hashtags.Select(x => x.Hashtag.ToLower());
 
-                        memberActivity.SocialContent = JsonConvert.SerializeObject(socialContent);
+                            socialContent.Hashtags = campaignHashtags.Select(x => new HashtagChecker
+                            {
+                                Hashtag = x,
+                                // Check hashtag is valid
+                                IsValid = postHashtags.Contains(x.ToLower())
+                            }).ToList();
 
-                        _memberActivityRepository.Update(memberActivity);
-                        await _unitOfWork.CommitAsync();
+                            memberActivity.SocialContent = JsonConvert.SerializeObject(socialContent);
+
+                            _memberActivityRepository.Update(memberActivity);
+                            await _unitOfWork.CommitAsync();
+                        }
+                        Thread.Sleep(1 * 60 * 1000);
                     }
-                    Thread.Sleep(1 * 60 * 1000);
+
                 }
             }
         }
