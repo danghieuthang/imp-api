@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace IMP.WebApi.Controllers.v1
 {
-    [Route("api/[controller]")]
+    [Route("test")]
     [ApiVersion("1.0")]
     public class TestController : BaseApiController
     {
