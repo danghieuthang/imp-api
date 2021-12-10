@@ -127,6 +127,7 @@ namespace IMP.Application.Models.Compaign
         public int NumberOfVoucherCode { get; set; }
         public int TotalNumberVoucherCodeUsed { get; set; }
         public int TotalNumberVoucherCodeGet { get; set; }
+        public int TotalNumberVoucherCodeQuantity { get; set; }
         public List<CampaignMemberReportViewModel> CampaignMembers { get; set; }
     }
 
