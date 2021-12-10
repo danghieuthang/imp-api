@@ -75,15 +75,7 @@ namespace IMP.Application.Features.CampaignMembers.Commands.SendRewardToInfluenc
                 decimal amount = campaignMember.Campaign.CampaignRewards.Where(x => x.IsDefaultReward).Sum(x => x.Price);
 
                 // Caculate earning from voucher code
-                foreach (var voucherCode in campaignMember.VoucherCodes)
-                {
-                    var campaignVoucher = campaignMember.Campaign.Vouchers.FirstOrDefault(x => x.VoucherId == voucherCode.VoucherId); //get voucher settings in campaign for a voucher code
-                    if (campaignVoucher != null)
-                    {
-                        var voucherTransactions = await _voucherCodeRepository.FindSingleAsync(x => x.Id == voucherCode.Id, x => x.Include(y => y.VoucherTransactions)); // get all transaction of a voucher code
-                        amount += campaignVoucher.PercentForInfluencer * voucherTransactions.VoucherTransactions.Sum(x => x.TotalDiscount) / (decimal)100.0;
-                    }
-                }
+                amount += campaignMember.Money;
 
                 // Check the balance of the brand
                 if (walletFrom.Balance < amount)
