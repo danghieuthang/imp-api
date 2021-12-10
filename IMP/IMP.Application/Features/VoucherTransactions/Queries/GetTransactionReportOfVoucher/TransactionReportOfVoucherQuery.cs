@@ -52,6 +52,7 @@ namespace IMP.Application.Features.VoucherTransactions.Queries.GetTransactionRep
                     TotalVoucherCode = campaignMember.VoucherCodes.Count(),
                     TotalProductAmount = campaignMember.VoucherCodes.Sum(x => x.VoucherTransactions.Sum(y => y.TotalProductAmount)),
                     TotalEarningAmount = campaignMember.VoucherCodes.Sum(x => x.VoucherTransactions.Sum(y => TransactionUtils.CaculateMoneyEarnFromTransaction(campaignMember.Campaign, y))),
+                    TotalVoucherCodeQuantity = campaignMember.VoucherCodes.Sum(x => x.Quantity),
                 };
                 return new Response<VoucherTransactionReportOfVoucherViewModel>(report);
 

@@ -169,10 +169,11 @@ namespace IMP.Application.Models.ViewModels
         public decimal TotalEarningAmount { get; set; }
     }
 
-    public class VoucherTransactionReportOfVoucherViewModel: VoucherTransactionReportViewModel
+    public class VoucherTransactionReportOfVoucherViewModel : VoucherTransactionReportViewModel
     {
         public int QuantitiyGet { get; set; }
         public int QuantitiyUsed { get; set; }
+        public int TotalVoucherCodeQuantity { get; set; }
     }
 
     public class DiscountProductViewModel
