@@ -1,4 +1,5 @@
-﻿using IMP.Application.Features.CampaignMembers.Queries.GetCampaignMemberOfCampaignByInfluencerId;
+﻿using IMP.Application.Features.CampaignMembers.Commands.SendRewardToInfluencer;
+using IMP.Application.Features.CampaignMembers.Queries.GetCampaignMemberOfCampaignByInfluencerId;
 using IMP.Application.Features.CampaignMembers.Queries.GetRewards;
 using IMP.Application.Features.Campaigns.Commands.ApplyToCampaign;
 using IMP.Application.Features.Campaigns.Commands.ApprovalCampaign;
@@ -462,7 +463,18 @@ namespace IMP.WebApi.Controllers.v1
             return Ok(await Mediator.Send(new GetListRewardQuery { CampaignId = id }));
         }
 
-
+        /// <summary>
+        /// キャンペーンの活動を完了した会員への支払い
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<bool>), 200)]
+        [HttpPost("{id}/payment-for-members")]
+        [Authorize(Roles = "Brand")]
+        public async Task<IActionResult> Payment([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new SendRewardForCampaignMemberOfCampaignCommand { CampaignId = id }));
+        }
 
     }
 }
