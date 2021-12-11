@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using IMP.Application.Enums;
 using IMP.Application.Interfaces;
 using IMP.Application.Interfaces.Services;
 using IMP.Application.Wrappers;
@@ -13,6 +14,11 @@ using System.Threading.Tasks;
 
 namespace IMP.Application.Features.CampaignMembers.Queries.GetRewards
 {
+    public class MemberRewardReport
+    {
+        public List<MemberRewardEarningViewModel> Members { get; set; }
+        public decimal Total { get; set; }
+    }
     public class MemberRewardEarningViewModel
     {
         public int CampaignMemberId { get; set; }
@@ -23,10 +29,10 @@ namespace IMP.Application.Features.CampaignMembers.Queries.GetRewards
         public decimal SubTotal { get; set; }
         public decimal Total { get; set; }
     }
-    public class GetListRewardQuery : IQuery<IEnumerable<MemberRewardEarningViewModel>>
+    public class GetListRewardQuery : IQuery<MemberRewardReport>
     {
         public int CampaignId { get; set; }
-        public class GetListRewardQueryHandler : QueryHandler<GetListRewardQuery, IEnumerable<MemberRewardEarningViewModel>>
+        public class GetListRewardQueryHandler : QueryHandler<GetListRewardQuery, MemberRewardReport>
         {
             private readonly ICampaignService _campaignService;
             public GetListRewardQueryHandler(IUnitOfWork unitOfWork, IMapper mapper, ICampaignService campaignService) : base(unitOfWork, mapper)
@@ -34,7 +40,7 @@ namespace IMP.Application.Features.CampaignMembers.Queries.GetRewards
                 _campaignService = campaignService;
             }
 
-            public override async Task<Response<IEnumerable<MemberRewardEarningViewModel>>> Handle(GetListRewardQuery request, CancellationToken cancellationToken)
+            public override async Task<Response<MemberRewardReport>> Handle(GetListRewardQuery request, CancellationToken cancellationToken)
             {
                 var campaign = await UnitOfWork.Repository<Campaign>().FindSingleAsync(x => x.Id == request.CampaignId, x => x.CampaignRewards, x => x.CampaignMembers);
                 if (campaign == null)
@@ -46,7 +52,7 @@ namespace IMP.Application.Features.CampaignMembers.Queries.GetRewards
                 decimal bestInfluencerReward = campaign.CampaignRewards.Where(x => x.IsDefaultReward == false).Sum(x => x.Price);
                 var bestInfluencerTotalProductAmount = await _campaignService.BestCampaignMemberTotalProductAmount(request.CampaignId);
 
-                var results = campaign.CampaignMembers.Select(x => new MemberRewardEarningViewModel
+                var results = campaign.CampaignMembers.Where(x => x.Status == (int)CampaignMemberStatus.Completed).Select(x => new MemberRewardEarningViewModel
                 {
                     DefaultReward = defaultReward,
                     EarningMoney = x.Money,
@@ -71,7 +77,12 @@ namespace IMP.Application.Features.CampaignMembers.Queries.GetRewards
                     x.Tax = 10 * x.SubTotal / (decimal)100.0;
                     x.Total = x.SubTotal + x.Tax;
                 });
-                return new Response<IEnumerable<MemberRewardEarningViewModel>>(results);
+
+                return new Response<MemberRewardReport>(new MemberRewardReport
+                {
+                    Members = results,
+                    Total = results.Sum(x => x.Total)
+                } );
 
             }
         }
