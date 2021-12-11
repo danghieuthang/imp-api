@@ -69,5 +69,6 @@ namespace IMP.Application.Features.Campaigns
 
             return errors;
         }
+
     }
 }

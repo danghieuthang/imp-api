@@ -13,5 +13,12 @@ namespace IMP.Application.Interfaces.Services
         /// </summary>
         /// <returns></returns>
         Task AutoUpdateCampaignStatus();
+        /// <summary>
+        /// Get max total product amount of a campaign
+        /// </summary>
+        /// <param name="campaignId"></param>
+        /// <returns></returns>
+        Task<decimal> BestCampaignMemberTotalProductAmount(int campaignId);
+
     }
 }

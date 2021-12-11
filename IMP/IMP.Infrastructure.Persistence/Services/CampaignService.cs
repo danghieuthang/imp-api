@@ -65,6 +65,18 @@ namespace IMP.Infrastructure.Persistence.Services
             await _unitOfWork.CommitAsync();
 
         }
+
+        public async Task<decimal> BestCampaignMemberTotalProductAmount(int campaignId)
+        {
+            decimal? value = _unitOfWork.Repository<VoucherCode>().GetAll(
+                      predicate: x => x.CampaignMember.CampaignId == campaignId
+                  ).Select(x => new
+                  {
+                      CampaignMemberId = x.CampaignMemberId,
+                      TotalProductAmount = x.VoucherTransactions.Sum(y => y.TotalProductAmount)
+                  }).OrderByDescending(x => x.TotalProductAmount).Select(x=>x.TotalProductAmount).FirstOrDefault();
+            return value ?? 0;
+        }
     }
 }
 

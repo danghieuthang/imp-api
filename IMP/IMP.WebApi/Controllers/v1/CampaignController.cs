@@ -1,4 +1,5 @@
 ﻿using IMP.Application.Features.CampaignMembers.Queries.GetCampaignMemberOfCampaignByInfluencerId;
+using IMP.Application.Features.CampaignMembers.Queries.GetRewards;
 using IMP.Application.Features.Campaigns.Commands.ApplyToCampaign;
 using IMP.Application.Features.Campaigns.Commands.ApprovalCampaign;
 using IMP.Application.Features.Campaigns.Commands.CancelCampaign;
@@ -447,6 +448,21 @@ namespace IMP.WebApi.Controllers.v1
         {
             return Ok(await Mediator.Send(query));
         }
+
+        /// <summary>
+        /// Get list member earning
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<IEnumerable<MemberRewardEarningViewModel>>), 200)]
+        [HttpGet("{id}/list-member-earning")]
+        [Authorize(Roles = "Brand")]
+        public async Task<IActionResult> MemberEanings([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new GetListRewardQuery { CampaignId = id }));
+        }
+
+
 
     }
 }
