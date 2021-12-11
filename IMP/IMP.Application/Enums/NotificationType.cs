@@ -42,6 +42,7 @@ namespace IMP.Application.Enums
         BrandCommentMemberActivity = 27,
         // Brand mời thăm gia campaign
         BrandInvitedToCampaign = 28,
+        ReceivedVoucherCode = 29,
         #endregion
     }
 }

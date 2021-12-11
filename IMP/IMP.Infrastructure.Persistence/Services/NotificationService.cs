@@ -102,6 +102,9 @@ namespace IMP.Infrastructure.Persistence.Services
                 case NotificationType.ReceivedMoney:
                     notification.Message = message ?? "Bạn vừa nhận tiền";
                     break;
+                case NotificationType.ReceivedVoucherCode:
+                    notification.Message = message ?? "Bạn vừa nhận voucher code";
+                    break;
                 default:
                     notification.Message = "";
                     break;

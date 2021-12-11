@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using IMP.Application.Interfaces;
+using IMP.Application.Interfaces.Services;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
 using IMP.Domain.Entities;
@@ -21,9 +22,11 @@ namespace IMP.Application.Features.VoucherCodes.Commands.RequestVoucherCode
         public class RequetVoucherCodeByBioLinkAndCampaignCommand : CommandHandler<RequestVoucherCodeByBiolinkAndCampaignCommand, bool>
         {
             private readonly IAuthenticatedUserService _authenticatedUserService;
-            public RequetVoucherCodeByBioLinkAndCampaignCommand(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticatedUserService authenticatedUserService) : base(unitOfWork, mapper)
+            private readonly INotificationService _notificationService;
+            public RequetVoucherCodeByBioLinkAndCampaignCommand(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticatedUserService authenticatedUserService, INotificationService notificationService) : base(unitOfWork, mapper)
             {
                 _authenticatedUserService = authenticatedUserService;
+                _notificationService = notificationService;
             }
 
             public override async Task<Response<bool>> Handle(RequestVoucherCodeByBiolinkAndCampaignCommand request, CancellationToken cancellationToken)
@@ -114,12 +117,14 @@ namespace IMP.Application.Features.VoucherCodes.Commands.RequestVoucherCode
                 VoucherCodeApplicationUser voucherCodeApplicationUser = new VoucherCodeApplicationUser
                 {
                     ApplicationUserId = _authenticatedUserService.ApplicationUserId,
-                    VoucherCodeId = voucher.Id,
+                    VoucherCodeId = voucherCode.Id,
                 };
 
                 UnitOfWork.Repository<VoucherCodeApplicationUser>().Add(voucherCodeApplicationUser);
 
                 await UnitOfWork.CommitAsync();
+
+                await _notificationService.PutNotication(applicationUserid: _authenticatedUserService.ApplicationUserId, redirectId: voucher.Id, notificationType: Enums.NotificationType.ReceivedVoucherCode, message: $"Bạn vừa nhận mã giảm giá - {voucherCode.Code}.");
                 return new Response<bool>(true);
             }
         }
