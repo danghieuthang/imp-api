@@ -52,7 +52,10 @@ namespace IMP.Application.Features.VoucherTransactions.Commands.CreateVoucherTra
                 {
                     throw new ValidationException(new ValidationError("code", "Voucher code đã sử dụng đủ."));
                 }
-
+                if (voucherCode.CampaignMemberId == null)
+                {
+                    throw new ValidationException(new ValidationError("code", "Chưa có influencer được assign cho code này."));
+                }
                 #region create voucher transaction
                 var voucherTransaction = Mapper.Map<VoucherTransaction>(request);
 
