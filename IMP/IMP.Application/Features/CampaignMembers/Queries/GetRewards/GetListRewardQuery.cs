@@ -69,7 +69,7 @@ namespace IMP.Application.Features.CampaignMembers.Queries.GetRewards
                     };
                     x.SubTotal = x.DefaultReward + x.BestInfluencerReward + x.EarningMoney;
                     x.Tax = 10 * x.SubTotal / (decimal)100.0;
-                    x.Total = x.SubTotal - x.Tax;
+                    x.Total = x.SubTotal + x.Tax;
                 });
                 return new Response<IEnumerable<MemberRewardEarningViewModel>>(results);
 
