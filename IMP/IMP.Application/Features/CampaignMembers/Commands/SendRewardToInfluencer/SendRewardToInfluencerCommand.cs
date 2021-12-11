@@ -64,7 +64,7 @@ namespace IMP.Application.Features.CampaignMembers.Commands.SendRewardToInfluenc
                 {
                     throw new ValidationException(new ValidationError("campaign_member_id", "Đã thanh toán cho thành viên này."));
                 }
-                if (!campaignMember.ActivityProgess) // check this member was completed all acvitity
+                if (campaignMember.Status != (int)CampaignMemberStatus.Completed) // check this member was completed all acvitity
                 {
                     throw new ValidationException(new ValidationError("campaign_member_id", "Các hoạt động của thành viên chưa được hoàn thành hết."));
                 }
@@ -80,6 +80,38 @@ namespace IMP.Application.Features.CampaignMembers.Commands.SendRewardToInfluenc
                 // Caculate earning from voucher code
                 amount += campaignMember.Money;
 
+                // check is best influencer
+                #region check best influencer
+                var vouchers = await UnitOfWork.Repository<CampaignVoucher>().GetAll(
+                     predicate: x => x.CampaignId == campaignMember.CampaignId,
+                     selector: x => x.Voucher).Distinct().ToListAsync();
+
+                List<int> voucherIds = vouchers.Select(x => x.Id).ToList();
+                var transactions = await UnitOfWork.Repository<VoucherTransaction>().GetAll(
+                            predicate: x => voucherIds.Contains(x.VoucherCode.VoucherId),
+                            include: x => x.Include(y => y.VoucherCode)
+                            ).ToListAsync();
+
+                var campaignMembers = await UnitOfWork.Repository<CampaignMember>().GetAll(
+                          predicate: x => x.CampaignId == campaignMember.CampaignId
+                              && x.Status != (int)CampaignMemberStatus.Cancelled
+                              && x.Status != (int)CampaignMemberStatus.RefuseInvitated,
+                          include: x => x.Include(y => y.Influencer),
+                          selector: x => new
+                          {
+                              x.Id,
+                              Influencer = x.Influencer,
+                              Status = x.Status,
+                              QuantityVoucherGet = x.VoucherCodes.Sum(y => y.QuantityGet),
+                              QuantityVoucherUsed = x.VoucherCodes.Sum(y => y.QuantityUsed),
+                              TotalVoucherCode = x.VoucherCodes.Count,
+                              TotalTransaction = 0,
+                              TotalOrderAmount = new decimal(0),
+                              TotalProductAmount = new decimal(0),
+                              TotalEarningAmount = new decimal(0)
+                          })
+                      .ToListAsync();
+                #endregion
                 // Check the balance of the brand
                 if (walletFrom.Balance < amount)
                 {
