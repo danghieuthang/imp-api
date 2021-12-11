@@ -131,7 +131,8 @@ namespace IMP.Application.Features.CampaignMembers.Commands.SendRewardToInfluenc
                     // Recaculate balance of sender and receiver wallet
                     walletFrom.Balance -= amountSend;
                     walletTo.Balance += amountReceive;
-
+                    _walletRepository.Update(walletFrom);
+                    _walletRepository.Update(walletTo);
 
                     // Update campaign member
                     campaignMember.IsPayReward = true;
