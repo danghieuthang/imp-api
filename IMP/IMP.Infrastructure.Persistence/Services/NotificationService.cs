@@ -96,6 +96,9 @@ namespace IMP.Infrastructure.Persistence.Services
                 case NotificationType.InfluencerAcceptedInvited:
                     notification.Message = message ?? "Influencer đồng ý tham gia chiến dịch.";
                     break;
+                case NotificationType.InfluencerSubmitMemberActivity:
+                    notification.Message = message ?? "Influencer vừa cập chiến hoạt động.";
+                    break;
                 default:
                     notification.Message = "";
                     break;

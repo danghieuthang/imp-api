@@ -3,6 +3,7 @@ using FluentValidation;
 using IMP.Application.Enums;
 using IMP.Application.Extensions;
 using IMP.Application.Interfaces;
+using IMP.Application.Interfaces.Services;
 using IMP.Application.Models;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
@@ -36,9 +37,11 @@ namespace IMP.Application.Features.Evidences.Commands.CreateEvidence
         public class CreateEvidenceCommandHandler : CommandHandler<CreateEvidenceCommand, EvidenceViewModel>
         {
             private readonly IAuthenticatedUserService _authenticatedUserService;
-            public CreateEvidenceCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticatedUserService authenticatedUserService) : base(unitOfWork, mapper)
+            private readonly INotificationService _notificationService;
+            public CreateEvidenceCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticatedUserService authenticatedUserService, INotificationService notificationService) : base(unitOfWork, mapper)
             {
                 _authenticatedUserService = authenticatedUserService;
+                _notificationService = notificationService;
             }
 
             public override async Task<Response<EvidenceViewModel>> Handle(CreateEvidenceCommand request, CancellationToken cancellationToken)
@@ -108,6 +111,8 @@ namespace IMP.Application.Features.Evidences.Commands.CreateEvidence
 
                 UnitOfWork.Repository<MemberActivity>().Update(memberActivity);
                 await UnitOfWork.CommitAsync();
+
+                await _notificationService.PutNotication(applicationUserid: memberActivity.CampaignActivity.Campaign.CreatedById, redirectId: memberActivity.Id, notificationType: NotificationType.InfluencerSubmitMemberActivity, $"Influencer vừa nộp bằng chứng hoạt động.");
 
                 var evidenceVIew = Mapper.Map<EvidenceViewModel>(evidence);
                 return new Response<EvidenceViewModel>(evidenceVIew);
