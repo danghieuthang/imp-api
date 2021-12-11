@@ -31,7 +31,7 @@ namespace IMP.Application.Features.VoucherCodes.Commands.RequestVoucherCode
 
             public override async Task<Response<bool>> Handle(RequestVoucherCodeByBiolinkAndCampaignCommand request, CancellationToken cancellationToken)
             {
-                var user = await UnitOfWork.Repository<ApplicationUser>().FindSingleAsync(x => x.Pages.Any(y => y.BioLink.ToLower() == request.Biolink.ToLower()));
+                var user = await UnitOfWork.Repository<ApplicationUser>().FindSingleAsync(x => x.Pages.Any(y => y.BioLink.ToLower() == request.Biolink.ToLower()), x => x.VoucherCodeApplicationUsers);
                 if (user == null)
                 {
                     return new Response<bool>(false);
