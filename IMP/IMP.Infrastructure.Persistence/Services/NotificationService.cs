@@ -99,6 +99,9 @@ namespace IMP.Infrastructure.Persistence.Services
                 case NotificationType.InfluencerSubmitMemberActivity:
                     notification.Message = message ?? "Influencer vừa cập chiến hoạt động.";
                     break;
+                case NotificationType.ReceivedMoney:
+                    notification.Message = message ?? "Bạn vừa nhận tiền";
+                    break;
                 default:
                     notification.Message = "";
                     break;

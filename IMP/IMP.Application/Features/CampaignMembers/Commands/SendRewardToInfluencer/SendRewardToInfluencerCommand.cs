@@ -2,6 +2,7 @@
 using IMP.Application.Enums;
 using IMP.Application.Exceptions;
 using IMP.Application.Interfaces;
+using IMP.Application.Interfaces.Services;
 using IMP.Application.Models;
 using IMP.Application.Wrappers;
 using IMP.Domain.Entities;
@@ -26,8 +27,9 @@ namespace IMP.Application.Features.CampaignMembers.Commands.SendRewardToInfluenc
             private readonly IGenericRepository<ApplicationUser> _applicatinUserRepository;
             private readonly IGenericRepository<Brand> _brandRepository;
             private readonly IGenericRepository<VoucherCode> _voucherCodeRepository;
+            private readonly INotificationService _notificationService;
 
-            public SendRewardToInfluencerCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticatedUserService authenticatedUserService) : base(unitOfWork, mapper)
+            public SendRewardToInfluencerCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticatedUserService authenticatedUserService, INotificationService notificationService) : base(unitOfWork, mapper)
             {
                 _authenticatedUserService = authenticatedUserService;
                 _campaignMemberRepository = unitOfWork.Repository<CampaignMember>();
@@ -35,6 +37,7 @@ namespace IMP.Application.Features.CampaignMembers.Commands.SendRewardToInfluenc
                 _applicatinUserRepository = unitOfWork.Repository<ApplicationUser>();
                 _brandRepository = unitOfWork.Repository<Brand>();
                 _voucherCodeRepository = unitOfWork.Repository<VoucherCode>();
+                _notificationService = notificationService;
             }
 
             public override async Task<Response<bool>> Handle(SendRewardToInfluencerCommand request, CancellationToken cancellationToken)
@@ -112,6 +115,8 @@ namespace IMP.Application.Features.CampaignMembers.Commands.SendRewardToInfluenc
 
                 // commit
                 await UnitOfWork.CommitAsync();
+
+                await _notificationService.PutNotication(applicationUserid: campaignMember.InfluencerId, redirectId: walletTransaction.Id, NotificationType.ReceivedMoney);
                 return new Response<bool>(data: true);
             }
 
