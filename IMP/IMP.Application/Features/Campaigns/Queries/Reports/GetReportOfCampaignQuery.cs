@@ -71,7 +71,7 @@ namespace IMP.Application.Features.Campaigns.Queries.Reports
                       .ToListAsync();
 
                 decimal maxTotalProductAmount = campaignMembers.Count == 0 ? 0 : campaignMembers.Max(x => x.TotalProductAmount);
-
+                int rank = 1;
                 report.CampaignMembers = campaignMembers.Select(x => new CampaignMemberReportViewModel
                 {
                     Influencer = Mapper.Map<UserBasicViewModel>(x.Influencer),
@@ -80,11 +80,14 @@ namespace IMP.Application.Features.Campaigns.Queries.Reports
                     QuantityVoucherUsed = x.QuantityVoucherUsed,
                     IsBestInfluencer = (x.TotalProductAmount == maxTotalProductAmount) && maxTotalProductAmount > 0,
                     TotalVoucherCode = x.TotalVoucherCode,
-
-                    TotalEarningAmount = transactions.Where(t => t.VoucherCode.CampaignMemberId == x.Id).Sum(t=>t.EarningMoney),
+                    TotalEarningAmount = transactions.Where(t => t.VoucherCode.CampaignMemberId == x.Id).Sum(t => t.EarningMoney),
                     TotalTransaction = transactions.Where(t => t.VoucherCode.CampaignMemberId == x.Id).Count(),
                     TotalOrderAmount = transactions.Where(t => t.VoucherCode.CampaignMemberId == x.Id).Sum(t => t.TotalOrderAmount),
                     TotalProductAmount = transactions.Where(t => t.VoucherCode.CampaignMemberId == x.Id).Sum(t => t.TotalProductAmount),
+                }).OrderByDescending(x => x.TotalProductAmount).Select(x =>
+                {
+                    x.Rank = rank++;
+                    return x;
                 }).ToList();
 
                 report.NumberOfInfluencer = influencers.Count;

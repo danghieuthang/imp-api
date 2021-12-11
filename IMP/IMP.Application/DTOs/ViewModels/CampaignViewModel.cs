@@ -153,6 +153,7 @@ namespace IMP.Application.Models.Compaign
 
         public int Status { get; set; }
         public bool IsBestInfluencer { get; set; }
+        public int Rank { get; set; }
 
         public int TotalTransaction { get; set; }
         public decimal TotalOrderAmount { get; set; }
