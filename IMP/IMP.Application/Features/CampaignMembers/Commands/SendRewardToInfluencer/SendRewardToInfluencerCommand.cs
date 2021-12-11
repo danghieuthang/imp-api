@@ -121,7 +121,7 @@ namespace IMP.Application.Features.CampaignMembers.Commands.SendRewardToInfluenc
                 UnitOfWork.Repository<WalletTransaction>().Add(walletTransaction);
 
                 // Recaculate balance of sender and receiver wallet
-                walletFrom.Balance -= amount;
+                walletFrom.Balance -= (amount + 10 * amount / (decimal)100.0);
                 walletTo.Balance += amount;
 
 
