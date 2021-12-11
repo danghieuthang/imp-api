@@ -34,6 +34,12 @@ namespace IMP.Application.Features.VoucherTransactions
                 {
                     foreach (var price in prices)
                     {
+                        if (price.From == null && (price.To.HasValue && transaction.TotalProductAmount <= price.To))
+                        {
+                            earingMoney = price.Value;
+                            break;
+                        }
+
                         if (transaction.TotalProductAmount >= price.From && (transaction.TotalProductAmount <= price.To || price.To == null))
                         {
                             earingMoney = price.Value;
