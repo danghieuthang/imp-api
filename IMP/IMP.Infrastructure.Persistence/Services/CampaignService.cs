@@ -58,12 +58,44 @@ namespace IMP.Infrastructure.Persistence.Services
                 else if (now >= campaign.ClosedDate)
                 {
                     campaign.Status = (int)CampaignStatus.Closed;
+                    await UpdateRankingOfMemberInCampaign(campaign.Id);
                 }
                 _campaignRepostory.Update(campaign);
 
             }
             await _unitOfWork.CommitAsync();
 
+        }
+
+        /// <summary>
+        /// Update influencer ranking score of a campaign who completed activity when closed a campaign
+        /// </summary>
+        /// <param name="campaignId"></param>
+        /// <returns></returns>
+        private async Task UpdateRankingOfMemberInCampaign(int campaignId)
+        {
+            var campaignMembers = await _unitOfWork.Repository<CampaignMember>().GetAll(
+                predicate: x => x.CampaignId == campaignId && x.Status == (int)CampaignMemberStatus.Completed,
+                include: x => x.Include(y => y.Influencer).ThenInclude(y => y.Ranking)).ToListAsync();
+
+            if (campaignMembers.Any())
+            {
+                var rankingRepository = _unitOfWork.Repository<Ranking>();
+                var rankLevels = await _unitOfWork.Repository<RankLevel>().GetAll().ToListAsync();
+                foreach (var member in campaignMembers)
+                {
+                    var ranking = member.Influencer.Ranking;
+                    ranking.Score += 50; // update score of influencer ranking
+
+                    var rankLevel = rankLevels.Where(x => x.Score <= ranking.Score).OrderByDescending(x => x.Score).FirstOrDefault();
+                    if (ranking.RankLevelId != rankLevel.Id)
+                    {
+                        ranking.RankLevelId = rankLevel.Id;
+                    }
+
+                    rankingRepository.Update(ranking);
+                }
+            }
         }
 
         public async Task<decimal> BestCampaignMemberTotalProductAmount(int campaignId)
@@ -74,7 +106,7 @@ namespace IMP.Infrastructure.Persistence.Services
                   {
                       CampaignMemberId = x.CampaignMemberId,
                       TotalProductAmount = x.VoucherTransactions.Sum(y => y.TotalProductAmount)
-                  }).OrderByDescending(x => x.TotalProductAmount).Select(x=>x.TotalProductAmount).FirstOrDefault();
+                  }).OrderByDescending(x => x.TotalProductAmount).Select(x => x.TotalProductAmount).FirstOrDefault();
             return value ?? 0;
         }
     }
