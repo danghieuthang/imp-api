@@ -37,7 +37,7 @@ namespace IMP.Application.Features.Campaigns.Commands.CompletedCreateCampaign
             {
                 var campaign = await _campaignRepository.FindSingleAsync(predicate: x => x.Id == request.Id);
 
-                if (campaign != null && campaign.Status == (int)CampaignStatus.Draft)
+                if (campaign != null && campaign.Status == (int)CampaignStatus.Draft && campaign.Status == (int)CampaignStatus.Cancelled)
                 {
                     campaign.Status = (int)CampaignStatus.Pending;
 
