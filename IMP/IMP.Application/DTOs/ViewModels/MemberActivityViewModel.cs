@@ -32,5 +32,6 @@ namespace IMP.Application.Models.ViewModels
     {
         public string Hashtag { get; set; }
         public bool IsValid { get; set; }
+        public bool IsUsedForAuthenticate { get; set; }
     }
 }

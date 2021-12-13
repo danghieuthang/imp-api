@@ -95,11 +95,6 @@ namespace IMP.Application.Features.Evidences.Commands.CreateEvidence
                     campaignHashtags = campaignHashtags.Select(x => x.Replace("#", "").Replace(" ", "").ToLower()).ToList();
 
 
-                    if (page != null)
-                    {
-                        campaignHashtags.Add(page.BioLink);
-                    }
-
                     var socialContent = new SocialContent
                     {
                         Comments = 0,
@@ -109,9 +104,20 @@ namespace IMP.Application.Features.Evidences.Commands.CreateEvidence
                         {
                             Hashtag = x,
                             // Check hashtag is valid
-                            IsValid = false
+                            IsValid = false,
+                            IsUsedForAuthenticate = false,
                         }).ToList()
                     };
+
+                    if (page != null)
+                    {
+                        socialContent.Hashtags.Add(new HashtagChecker
+                        {
+                            Hashtag = "imp_" + page.BioLink,
+                            IsUsedForAuthenticate = true,
+                            IsValid = false
+                        });
+                    }
                     memberActivity.SocialContent = JsonConvert.SerializeObject(socialContent);
                 }
                 #endregion
