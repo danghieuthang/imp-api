@@ -119,7 +119,7 @@ namespace IMP.Application.Features.Evidences.Commands.CreateEvidence
                 UnitOfWork.Repository<MemberActivity>().Update(memberActivity);
                 await UnitOfWork.CommitAsync();
 
-                await _notificationService.PutNotication(applicationUserid: memberActivity.CampaignActivity.Campaign.CreatedById, redirectId: memberActivity.Id, notificationType: NotificationType.InfluencerSubmitMemberActivity, $"Influencer vừa nộp bằng chứng hoạt động.");
+                await _notificationService.PutNotication(applicationUserid: memberActivity.CampaignActivity.Campaign.CreatedById, redirectId: memberActivity.CampaignMember.InfluencerId, notificationType: NotificationType.InfluencerSubmitMemberActivity, $"Influencer vừa nộp bằng chứng hoạt động.");
 
                 var evidenceVIew = Mapper.Map<EvidenceViewModel>(evidence);
                 return new Response<EvidenceViewModel>(evidenceVIew);
