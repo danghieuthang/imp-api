@@ -84,9 +84,9 @@ namespace IMP.Application.Features.Vouchers.Commands.ImportVoucherCodes
                     {
                         IRow row = sheet.GetRow(i);
                         if (row == null) continue;
-                        int quantity;
+                        //int quantity;
 
-                        int.TryParse(row.GetCell(row.FirstCellNum + 1).ToString(), out quantity);
+                        //int.TryParse(row.GetCell(row.FirstCellNum + 1).ToString(), out quantity);
                         codes.Add(new VoucherCode
                         {
                             Code = row.GetCell(row.FirstCellNum).ToString().ToUpper(),
