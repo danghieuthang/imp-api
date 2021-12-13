@@ -1,4 +1,5 @@
 ﻿using IMP.Application.Enums;
+using IMP.Application.Models.Compaign;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,7 @@ namespace IMP.Application.Models.ViewModels
     public class CampaignVoucherOnlyIdViewModel : BaseViewModel<int>
     {
         public int CampaignId { get; set; }
+        public CampaignBasicInfoViewModel Campaign { get; set; }
         public int Quantity { get; set; }
         public int QuantityUsed { get; set; }
         public int? QuantityForInfluencer { get; set; }
