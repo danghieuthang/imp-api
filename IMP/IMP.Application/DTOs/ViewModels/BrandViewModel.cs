@@ -43,5 +43,6 @@ namespace IMP.Application.Models.ViewModels
         public bool IsCompany { get; set; }
         public int? WalletId { get; set; }
         public string SecretKey { get; set; }
+        public int Status { get; set; }
     }
 }
