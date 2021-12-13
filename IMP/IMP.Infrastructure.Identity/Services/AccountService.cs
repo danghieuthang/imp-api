@@ -44,7 +44,7 @@ namespace IMP.Infrastructure.Identity.Services
         private readonly IZaloService _zaloService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUnitOfWork<IdentityContext> _unitOfWork;
-        private readonly string _endpoint = "https://influencermarketingplatform.nothleft.online";
+        private readonly string _endpoint = "https://manage.kolbio.net/auth";
         public AccountService(UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager,
             IOptions<JWTSettings> jwtSettings,
@@ -370,7 +370,7 @@ namespace IMP.Infrastructure.Identity.Services
             }
 
             //var _enpointUri = new Uri(string.Concat($"{domain}/", route));           
-            var _enpointUri = new Uri($"https://influencermarketingplatform.nothleft.online/account/change-password?token={code}&email={model.Email}");
+            var _enpointUri = new Uri($"https://manage.kolbio.net/auth/change-password?token={code}&email={model.Email}");
             var emailRequest = new EmailRequest()
             {
                 Body = $"To reset password, click <a href='{_enpointUri}'>here</a>",
