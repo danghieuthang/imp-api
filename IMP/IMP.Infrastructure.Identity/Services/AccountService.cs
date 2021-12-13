@@ -326,15 +326,15 @@ namespace IMP.Infrastructure.Identity.Services
             }
             else
             {
-                var roles = await _userManager.GetRolesAsync(user);
-                if (roles.Count > 0)
-                {
-                    result = await _userManager.RemoveFromRolesAsync(user, roles);
-                }
-                if (result.Succeeded)
-                {
-                    await _userManager.DeleteAsync(user);
-                }
+                //var roles = await _userManager.GetRolesAsync(user);
+                //if (roles.Count > 0)
+                //{
+                //    result = await _userManager.RemoveFromRolesAsync(user, roles);
+                //}
+                //if (result.Succeeded)
+                //{
+                //    await _userManager.DeleteAsync(user);
+                //}
                 return new Response<string>(new ValidationError("code", "Invalid code."));
             }
         }
