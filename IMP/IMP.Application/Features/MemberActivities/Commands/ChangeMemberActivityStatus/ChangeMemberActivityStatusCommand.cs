@@ -55,7 +55,7 @@ namespace IMP.Application.Features.MemberActivities.Commands.ChangeMemberActivit
                     throw new IMP.Application.Exceptions.ValidationException(new ValidationError("id", "Không có quyền."));
                 }
 
-                if (memberActivity.Status == (int)MemberActivityStatus.Completed)
+                if (request.Status == MemberActivityStatus.Completed)
                 {
                     memberActivity.CampaignMember.Status = (int)CampaignMemberStatus.Completed; // change status of campaign member
                     // Update money earning after completed activity
