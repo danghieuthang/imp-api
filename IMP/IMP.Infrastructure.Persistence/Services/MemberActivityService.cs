@@ -54,6 +54,8 @@ namespace IMP.Infrastructure.Persistence.Services
 
                             var postHashtags = postSocialContent.Hashtags.Select(x => x.Hashtag.Replace("#", "").Replace("\n", "").Replace(" ", "").ToLower());
 
+                            activitySocialContent.Likes = postSocialContent.Likes;
+                            activitySocialContent.Shares = postSocialContent.Shares;
                             activitySocialContent.Hashtags.ForEach(x =>
                             {
                                 x.IsValid = postHashtags.Contains(x.Hashtag);
