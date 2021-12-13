@@ -48,10 +48,7 @@ namespace IMP.Application.Features.Campaigns.Queries.Reports
 
                 var campaignMembers = await UnitOfWork.Repository<CampaignMember>().GetAll(
                           predicate: x => x.CampaignId == request.CampaignId
-                              && x.Status != (int)CampaignMemberStatus.Cancelled
-                              && x.Status != (int)CampaignMemberStatus.RefuseInvitated
-                              && x.Status != (int)CampaignMemberStatus.Pending
-                              && x.Status != (int)CampaignMemberStatus.Invited,
+                              && x.Status == (int)CampaignMemberStatus.Completed,
                           include: x => x.Include(y => y.Influencer),
                           selector: x => new
                           {
