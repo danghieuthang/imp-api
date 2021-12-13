@@ -43,7 +43,14 @@ namespace IMP.Application.Features.Campaigns.Commands.ApprovalCampaign
                     throw new ValidationException(new ValidationError("id", "Không thể duyệt chiến dịch này."));
                 }
 
-                campaign.Status = (int)CampaignStatus.Approved;
+                if (campaign.ApplyingDate >= DateTime.UtcNow)
+                {
+                    campaign.Status = (int)CampaignStatus.Applying;
+                }
+                else
+                {
+                    campaign.Status = (int)CampaignStatus.Approved;
+                }
                 campaign.ApprovedById = _authenticatedUserService.ApplicationUserId;
                 _campaignRepository.Update(campaign);
                 await UnitOfWork.CommitAsync();
