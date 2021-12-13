@@ -29,11 +29,6 @@ namespace IMP.Application.Features.Brands.Commands.ProcessBrand
 
             public override async Task<Response<bool>> Handle(DisableBrandCommand request, CancellationToken cancellationToken)
             {
-                if (_authenticatedUserService.IsAdmin.Value)
-                {
-                    throw new ValidationException(new ValidationError("", "Không có quyền"));
-
-                }
                 var brand = await _brandRepository.GetByIdAsync(request.Id);
                 if (brand != null)
                 {

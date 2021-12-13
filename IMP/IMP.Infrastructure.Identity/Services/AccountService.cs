@@ -303,7 +303,7 @@ namespace IMP.Infrastructure.Identity.Services
             //    domain = "https://" + domain;
             //}
             string domain = _endpoint;
-            var route = "/account/verify";
+            var route = "/verify-account";
             var _enpointUri = new Uri(string.Concat($"{domain}", route));
             var verificationUri = QueryHelpers.AddQueryString(_enpointUri.ToString(), "userId", user.Id);
             verificationUri = QueryHelpers.AddQueryString(verificationUri, "code", code);
