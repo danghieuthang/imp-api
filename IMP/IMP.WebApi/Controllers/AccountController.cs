@@ -66,7 +66,7 @@ namespace IMP.WebApi.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> RegisterAsync(RegisterRequest request)
         {
-            var origin = Request.Headers["origin"];
+            //var origin = Request.Headers["origin"];
             return StatusCode(201, await _accountService.RegisterAsync(request, String.Empty));
         }
 
