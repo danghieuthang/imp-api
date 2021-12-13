@@ -88,10 +88,17 @@ namespace IMP.Application.Features.Evidences.Commands.CreateEvidence
 
                 if (evidence.EvidenceTypeId == 4) // if evidence type is link a post
                 {
+                    var page = await UnitOfWork.Repository<Page>().FindSingleAsync(x => x.InfluencerId == _authenticatedUserService.ApplicationUserId);
                     // get hashtag of campaign
                     string hashtags = memberActivity.CampaignActivity.Campaign.Hashtags ?? "[]";
                     var campaignHashtags = JsonConvert.DeserializeObject<List<string>>(memberActivity.CampaignActivity.Campaign.Hashtags);
                     campaignHashtags = campaignHashtags.Select(x => x.Replace("#", "").Replace(" ", "").ToLower()).ToList();
+
+
+                    if (page != null)
+                    {
+                        campaignHashtags.Add(page.BioLink);
+                    }
 
                     var socialContent = new SocialContent
                     {
