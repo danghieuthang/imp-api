@@ -208,7 +208,7 @@ namespace IMP.Infrastructure.Identity.Services
                     await _userManager.UpdateAsync(user);
                 }
                 await _userManager.AddToRoleAsync(user, request.Role.ToString());
-                var verificationUri = await SendVerificationEmail(user, origin);
+                var verificationUri = await SendVerificationEmail(user);
                 _ = Task.Run(() =>
                 {
                     string path = Path.Combine(Directory.GetCurrentDirectory(), "App_Datas", "EmailTemplates", "verify_register_template.html");
@@ -289,19 +289,10 @@ namespace IMP.Infrastructure.Identity.Services
             return BitConverter.ToString(randomBytes).Replace("-", "");
         }
 
-        private async Task<string> SendVerificationEmail(User user, string origin)
+        private async Task<string> SendVerificationEmail(User user)
         {
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-            //string domain = _httpContextAccessor.HttpContext.Request.Host.Value;
-            //if (string.IsNullOrEmpty(domain))
-            //{
-            //    domain = "http://localhost";
-            //}
-            //else
-            //{
-            //    domain = "https://" + domain;
-            //}
             string domain = _endpoint;
             var route = "/verify-account";
             var _enpointUri = new Uri(string.Concat($"{domain}", route));
