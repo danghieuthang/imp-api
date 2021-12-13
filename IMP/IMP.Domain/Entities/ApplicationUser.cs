@@ -16,6 +16,7 @@ namespace IMP.Domain.Entities
             TransactionsReceived = new Collection<WalletTransaction>();
             TransactionsSent = new Collection<WalletTransaction>();
             VoucherInfluencers = new Collection<VoucherInfluencer>();
+            InfluencerPlatforms = new Collection<InfluencerPlatform>();
         }
         #region personal infomation
         [MaxLength(256)]

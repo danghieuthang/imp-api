@@ -42,6 +42,7 @@ namespace IMP.Domain.Entities
         public int? WalletId { get; set; }
         [StringLength(256)]
         public string SecretKey { get; set; }
+        public int Status { get; set; }
         public Wallet Wallet { get; set; }
     }
 }

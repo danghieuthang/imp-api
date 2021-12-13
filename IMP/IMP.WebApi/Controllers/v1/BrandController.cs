@@ -1,4 +1,5 @@
 ﻿using IMP.Application.Features.Brands.Commands.GenerateNewSercretKey;
+using IMP.Application.Features.Brands.Commands.ProcessBrand;
 using IMP.Application.Features.Brands.Commands.UpdateBrand;
 using IMP.Application.Features.Brands.Queries;
 using IMP.Application.Interfaces;
@@ -71,6 +72,32 @@ namespace IMP.WebApi.Controllers.v1
         public async Task<IActionResult> GenerateScretKey([FromBody] GenerateNewSecretKeyCommand command)
         {
             return Ok(await Mediator.Send(command));
+        }
+
+        /// <summary>
+        /// Enable brand
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPut("{id}/enable")]
+        [ProducesResponseType(typeof(Response<bool>), 200)]
+        [Authorize(Roles = "Admininstrator")]
+        public async Task<IActionResult> Enable([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new EnableBrandCommand { Id = id }));
+        }
+
+        /// <summary>
+        /// Disblae brand
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPut("{id}/disable")]
+        [ProducesResponseType(typeof(Response<bool>), 200)]
+        [Authorize(Roles = "Admininstrator")]
+        public async Task<IActionResult> Disable([FromRoute] int id)
+        {
+            return Ok(await Mediator.Send(new DisableBrandCommand { Id = id }));
         }
     }
 }

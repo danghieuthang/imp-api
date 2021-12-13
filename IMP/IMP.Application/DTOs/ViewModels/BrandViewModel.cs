@@ -23,6 +23,7 @@ namespace IMP.Application.Models.ViewModels
         public string Introduction { get; set; }
         public bool IsCompany { get; set; }
         public int? WalletId { get; set; }
+        public int Status { get; set; }
     }
 
     public class BrandFullViewModel : BaseViewModel<int>
