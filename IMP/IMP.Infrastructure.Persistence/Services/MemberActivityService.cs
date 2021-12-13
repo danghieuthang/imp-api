@@ -46,24 +46,20 @@ namespace IMP.Infrastructure.Persistence.Services
                 {
                     if (memberActivity.Evidences.FirstOrDefault().Url.Contains("facebook"))
                     {
-                        var socialContent = await _facebookAnalysisService.GetPost(memberActivity.Evidences.FirstOrDefault().Url);
-                        if (socialContent != null)
+                        var postSocialContent = await _facebookAnalysisService.GetPost(memberActivity.Evidences.FirstOrDefault().Url);
+                        if (postSocialContent != null)
                         {
                             string hashtags = memberActivity.CampaignActivity.Campaign.Hashtags ?? "[]";
-                            var campaignHashtags = JsonConvert.DeserializeObject<List<string>>(memberActivity.CampaignActivity.Campaign.Hashtags);
+                            var activitySocialContent = JsonConvert.DeserializeObject<SocialContent>(memberActivity.SocialContent);
 
-                            campaignHashtags = campaignHashtags.Select(x => x.Replace("#", "").Replace(" ", "").ToLower()).ToList();
+                            var postHashtags = postSocialContent.Hashtags.Select(x => x.Hashtag.Replace("#", "").Replace("\n", "").Replace(" ", "").ToLower());
 
-                            var postHashtags = socialContent.Hashtags.Select(x => x.Hashtag.Replace("#", "").Replace("\n", "").Replace(" ", "").ToLower());
-
-                            socialContent.Hashtags = campaignHashtags.Select(x => new HashtagChecker
+                            activitySocialContent.Hashtags.ForEach(x =>
                             {
-                                Hashtag = x,
-                                // Check hashtag is valid
-                                IsValid = postHashtags.Contains(x.ToLower())
-                            }).ToList();
+                                x.IsValid = postHashtags.Contains(x.Hashtag);
+                            });
 
-                            memberActivity.SocialContent = JsonConvert.SerializeObject(socialContent);
+                            memberActivity.SocialContent = JsonConvert.SerializeObject(activitySocialContent);
 
                             _memberActivityRepository.Update(memberActivity);
                             await _unitOfWork.CommitAsync();
