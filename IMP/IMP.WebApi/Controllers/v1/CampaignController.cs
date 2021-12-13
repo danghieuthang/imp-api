@@ -63,6 +63,18 @@ namespace IMP.WebApi.Controllers.v1
         }
 
         /// <summary>
+        /// Search all campaign that authenticated user not join
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(Response<IPagedList<CampaignViewModel>>), 200)]
+        [HttpGet("search-campaigns-not-join")]
+        public async Task<IActionResult> GetCampaignsUserNotAlreadyJoin([FromQuery] GetAllCampaignMobileQuery query)
+        {
+            return Ok(await Mediator.Send(query));
+        }
+
+        /// <summary>
         /// Query list campaign of influencer logged
         /// </summary>
         /// <param name="query"></param>
