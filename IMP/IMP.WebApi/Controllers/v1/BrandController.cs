@@ -81,7 +81,7 @@ namespace IMP.WebApi.Controllers.v1
         /// <returns></returns>
         [HttpPut("{id}/enable")]
         [ProducesResponseType(typeof(Response<bool>), 200)]
-        [Authorize(Roles = "Admininstrator")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Enable([FromRoute] int id)
         {
             return Ok(await Mediator.Send(new EnableBrandCommand { Id = id }));
@@ -94,7 +94,7 @@ namespace IMP.WebApi.Controllers.v1
         /// <returns></returns>
         [HttpPut("{id}/disable")]
         [ProducesResponseType(typeof(Response<bool>), 200)]
-        [Authorize(Roles = "Admininstrator")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Disable([FromRoute] int id)
         {
             return Ok(await Mediator.Send(new DisableBrandCommand { Id = id }));
