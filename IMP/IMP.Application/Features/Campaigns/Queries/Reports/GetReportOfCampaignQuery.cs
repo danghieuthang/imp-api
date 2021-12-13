@@ -38,7 +38,7 @@ namespace IMP.Application.Features.Campaigns.Queries.Reports
                 List<int> voucherIds = vouchers.Select(x => x.Id).ToList();
 
                 var voucherCodes = await UnitOfWork.Repository<VoucherCode>().GetAll(
-                        predicate: x => x.CampaignMember.CampaignId == request.CampaignId && voucherIds.Contains(x.VoucherId)
+                        predicate: x => voucherIds.Contains(x.VoucherId)
                         ).ToListAsync();
 
                 var transactions = await UnitOfWork.Repository<VoucherTransaction>().GetAll(
