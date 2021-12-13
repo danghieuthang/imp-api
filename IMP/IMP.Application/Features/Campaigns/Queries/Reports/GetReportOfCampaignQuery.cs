@@ -41,6 +41,10 @@ namespace IMP.Application.Features.Campaigns.Queries.Reports
                         predicate: x => voucherIds.Contains(x.VoucherId)
                         ).ToListAsync();
 
+                int totalVoucherCodeQuantity = voucherCodes.Sum(x => x.Quantity);
+                // get voucher codes of only this campaign
+                voucherCodes = voucherCodes.Where(x => x.CampaignMemberId.HasValue && influencers.Select(y => y.Id).Contains(x.CampaignMemberId.Value)).ToList();
+
                 var transactions = await UnitOfWork.Repository<VoucherTransaction>().GetAll(
                     predicate: x => voucherIds.Contains(x.VoucherCode.VoucherId),
                     include: x => x.Include(y => y.VoucherCode)
