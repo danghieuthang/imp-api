@@ -22,7 +22,7 @@ namespace IMP.Application.Features.Vouchers.Commands.CreateVoucher
             }).WithMessage("ToDate phải lớn hơn FromDate.");
             RuleFor(x => x.FromTime).MustValidTime();
             RuleFor(x => x.ToTime).MustValidTime();
-            RuleFor(x => x.Quantity).MustPositiveInteger().WithMessage("Số lượng phải lớn hơn 0.");
+            //RuleFor(x => x.Quantity).MustPositiveInteger().WithMessage("Số lượng phải lớn hơn 0.");
 
             RuleFor(x => x.DiscountValueType).IsInEnum().WithMessage("Không tồn tại loại giá trị này.");
         }
