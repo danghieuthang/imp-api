@@ -97,7 +97,7 @@ namespace IMP.Application.Features.Campaigns.Queries.Reports
                 report.NumberOfInfluencerCompleted = influencers.Where(x => x.Status == (int)CampaignMemberStatus.Completed).Count();
                 report.NumberOfVoucher = vouchers.Count;
                 report.NumberOfVoucherCode = voucherCodes.Count;
-                report.TotalNumberVoucherCodeQuantity = voucherCodes.Sum(x => x.Quantity);
+                report.TotalNumberVoucherCodeQuantity = totalVoucherCodeQuantity;
                 report.TotalNumberVoucherCodeUsed = voucherCodes.Sum(x => x.QuantityUsed);
                 report.TotalNumberVoucherCodeGet = campaignMembers.Sum(x => x.QuantityVoucherGet);
 
