@@ -4,8 +4,10 @@ using IMP.Application.Exceptions;
 using IMP.Application.Interfaces;
 using IMP.Application.Interfaces.Services;
 using IMP.Application.Models;
+using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
 using IMP.Domain.Entities;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,13 +66,39 @@ namespace IMP.Application.Features.Campaigns.Commands.ProcessCampaignMember
                     var memberActivityRepository = UnitOfWork.Repository<MemberActivity>();
                     if (!await UnitOfWork.Repository<MemberActivity>().IsExistAsync(x => x.CampaignMemberId == campaignMember.Id))
                     {
+                        string hashtags = campaignMember.Campaign.Hashtags ?? "[]";
+                        var campaignHashtags = JsonConvert.DeserializeObject<List<string>>(hashtags);
+
+                        SocialContent content = new SocialContent
+                        {
+                            Hashtags = campaignHashtags.Select(x => new HashtagChecker
+                            {
+                                Hashtag = x,
+                                // Check hashtag is valid
+                                IsValid = false,
+                                IsUsedForAuthenticate = false,
+                            }).ToList()
+                        };
+                        var page = await UnitOfWork.Repository<Page>().FindSingleAsync(x => x.InfluencerId == campaignMember.InfluencerId);
+                        if (page != null)
+                        {
+                            content.Hashtags.Add(new HashtagChecker
+                            {
+                                Hashtag = "imp_" + page.BioLink,
+                                IsUsedForAuthenticate = true,
+                                IsValid = false,
+                            });
+                        }
+
                         foreach (var campaignActivity in campaignActivities)
                         {
+
                             memberActivityRepository.Add(new MemberActivity
                             {
                                 CampaignActivityId = campaignActivity.Id,
                                 CampaignMemberId = campaignMember.Id,
                                 Status = (int)MemberActivityStatus.NotYet,
+                                SocialContent = JsonConvert.SerializeObject(content)
                             });
                         }
                     }
