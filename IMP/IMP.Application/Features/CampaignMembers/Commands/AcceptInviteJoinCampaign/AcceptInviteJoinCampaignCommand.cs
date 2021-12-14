@@ -29,7 +29,7 @@ namespace IMP.Application.Features.CampaignMembers.Commands.AcceptInviteJoinCamp
 
             public override async Task<Response<bool>> Handle(AcceptInviteJoinCampaignCommand request, CancellationToken cancellationToken)
             {
-                var campaignMember = await UnitOfWork.Repository<CampaignMember>().GetByIdAsync(request.Id);
+                var campaignMember = await UnitOfWork.Repository<CampaignMember>().FindSingleAsync(x => x.Id==request.Id, x=>x.Campaign) ;
                 if (campaignMember == null)
                 {
                     throw new ValidationException(new ValidationError("id", "Không tồn tại."));
