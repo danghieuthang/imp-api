@@ -2,6 +2,7 @@
 using IMP.Application.Features.ApplicationUsers.Queries.GetInfluencerById;
 using IMP.Application.Features.Campaigns.Queries.GetCampaignByInfluencerId;
 using IMP.Application.Features.Influencers.Commands;
+using IMP.Application.Features.Influencers.Queries;
 using IMP.Application.Models.Compaign;
 using IMP.Application.Models.ViewModels;
 using IMP.Application.Wrappers;
@@ -94,6 +95,17 @@ namespace IMP.WebApi.Controllers.v1
             return Ok(await Mediator.Send(query));
         }
 
+        /// <summary>
+        /// GEt status of authenticated influencer
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("me/status")]
+        [ProducesResponseType(typeof(Response<int>), 200)]
+        [Authorize(Roles = "Influencer")]
+        public async Task<IActionResult> GetStatusOfAuthenticatedUser()
+        {
+            return Ok(await Mediator.Send(new GetInfluencerStatusQuery()));
+        }
 
 
     }
