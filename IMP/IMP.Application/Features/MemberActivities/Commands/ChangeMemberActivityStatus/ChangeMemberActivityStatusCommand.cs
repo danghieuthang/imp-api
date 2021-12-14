@@ -59,10 +59,16 @@ namespace IMP.Application.Features.MemberActivities.Commands.ChangeMemberActivit
                 {
                     memberActivity.CampaignMember.Status = (int)CampaignMemberStatus.Completed; // change status of campaign member
                     // Update money earning after completed activity
-                    var campaignRewards = await UnitOfWork.Repository<CampaignReward>().GetAll(predicate: x => x.IsDefaultReward && x.CampaignId == memberActivity.CampaignMember.CampaignId).ToListAsync();
+                    //var campaignRewards = await UnitOfWork.Repository<CampaignReward>().GetAll(predicate: x => x.IsDefaultReward && x.CampaignId == memberActivity.CampaignMember.CampaignId).ToListAsync();
                     //memberActivity.CampaignMember.Money += campaignRewards.Sum(x => x.Price);
                     memberActivity.CampaignMember.CompletedDate = DateTime.UtcNow;
 
+                    UnitOfWork.Repository<CampaignMember>().Update(memberActivity.CampaignMember);
+                }
+                else // if reject activity, change status of campaign member to approved
+                {
+                    memberActivity.CampaignMember.Status = (int)CampaignMemberStatus.Approved; // change status of campaign member
+  
                     UnitOfWork.Repository<CampaignMember>().Update(memberActivity.CampaignMember);
                 }
 
