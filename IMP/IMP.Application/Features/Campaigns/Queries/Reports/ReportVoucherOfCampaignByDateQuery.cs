@@ -43,7 +43,7 @@ namespace IMP.Application.Features.Campaigns.Queries.Reports
 
             public override async Task<Response<IEnumerable<CampaignReportByDateViewModel>>> Handle(ReportOfCampaignByDateQuery request, CancellationToken cancellationToken)
             {
-                var campaign = await UnitOfWork.Repository<Campaign>().FindSingleAsync(x => x.Id == request.CampaignId, x => x.Vouchers);
+                var campaign = await UnitOfWork.Repository<Campaign>().FindSingleAsync(x => x.Id == request.CampaignId, x => x.Vouchers, x => x.CampaignMembers);
 
                 if (campaign == null)
                 {
@@ -55,10 +55,12 @@ namespace IMP.Application.Features.Campaigns.Queries.Reports
                     throw new IMP.Application.Exceptions.ValidationException(new ValidationError("campaign_id", "Không có quyền."));
                 }
 
+                var campaignMemberIds = campaign.CampaignMembers.Select(x => x.Id).ToList();
+
                 List<int> voucherIds = campaign.Vouchers.Select(x => x.VoucherId).ToList();
 
                 var query = UnitOfWork.Repository<VoucherCode>().GetAll(
-                        predicate: x => voucherIds.Contains(x.VoucherId),
+                        predicate: x => x.CampaignMemberId.HasValue && campaignMemberIds.Contains(x.CampaignMemberId.Value),
                         include: x => x.Include(y => y.VoucherTransactions.Where(x =>
                                 x.Created >= request.FromDate && x.Created <= request.ToDate)));
 
