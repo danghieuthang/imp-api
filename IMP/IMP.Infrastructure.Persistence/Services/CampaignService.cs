@@ -53,6 +53,7 @@ namespace IMP.Infrastructure.Persistence.Services
                 }
                 else if (now >= campaign.AnnouncingDate && now < campaign.ClosedDate)
                 {
+                    await UpdateMemberActivityAfterEvaluating(campaign.Id);
                     campaign.Status = (int)CampaignStatus.Announcing;
                 }
                 else if (now >= campaign.ClosedDate)
@@ -108,6 +109,19 @@ namespace IMP.Infrastructure.Persistence.Services
                       TotalProductAmount = x.VoucherTransactions.Sum(y => y.TotalProductAmount)
                   }).OrderByDescending(x => x.TotalProductAmount).Select(x => x.TotalProductAmount).FirstOrDefault();
             return value ?? 0;
+        }
+        private async Task UpdateMemberActivityAfterEvaluating(int campaignId)
+        {
+            // get member activities of campaign that has status is not yet
+            var memberActivties = await _unitOfWork.Repository<MemberActivity>().GetAll(
+                predicate: x => x.CampaignMember.CampaignId == campaignId && x.Status == (int)MemberActivityStatus.NotYet).ToListAsync();
+
+            foreach (var memberActivity in memberActivties)
+            {
+                memberActivity.Status = (int)MemberActivityStatus.UnComleted; // change campaign member to status unCompleted
+                _unitOfWork.Repository<MemberActivity>().Update(memberActivity);
+            }
+
         }
     }
 }
