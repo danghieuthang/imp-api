@@ -112,7 +112,7 @@ namespace IMP.Application.Features.CampaignMembers.Commands.SendRewardToInfluenc
 
                     var walletTransaction = new WalletTransaction
                     {
-                        Amount = memberRewardEarning.Total,
+                        Amount = memberRewardEarning.SubTotal,
                         SenderId = _authenticatedUserService.ApplicationUserId, // sender
                         ReceiverId = campaignMember.InfluencerId, // receiver
                         TransactionInfo = $"Thanh toán tiền thưởng thăm gia hoạt động",
@@ -145,7 +145,7 @@ namespace IMP.Application.Features.CampaignMembers.Commands.SendRewardToInfluenc
 
                     var walletTransactionToIMP = new WalletTransaction
                     {
-                        Amount = memberRewardEarning.Total,
+                        Amount = memberRewardEarning.Tax,
                         SenderId = _authenticatedUserService.ApplicationUserId, // sender
                         ReceiverId = 162, // receiver
                         TransactionInfo = $"Thanh toán tiền thưởng thăm gia hoạt động",
