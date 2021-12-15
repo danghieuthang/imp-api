@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace IMP.WebApi.Controllers.v1
@@ -23,7 +24,10 @@ namespace IMP.WebApi.Controllers.v1
                     "Học Sinh",
                     "Công nghệ thông tin",
                     "Nhiếp ảnh gia",
-                    "Giáo viên"
+                    "Giáo viên",
+                    "Bác sĩ",
+                    "Tiktoker",
+                    "Youtuber"
                 }
             };
             return Ok(response);
