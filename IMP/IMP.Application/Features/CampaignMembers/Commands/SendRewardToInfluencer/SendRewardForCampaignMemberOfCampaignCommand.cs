@@ -103,7 +103,7 @@ namespace IMP.Application.Features.CampaignMembers.Commands.SendRewardToInfluenc
 
                 foreach (var memberRewardEarning in memberRewardEarnings)
                 {
-                    decimal amountSend = memberRewardEarning.Total;
+                    decimal amountSend = memberRewardEarning.SubTotal;
                     decimal amountReceive = memberRewardEarning.SubTotal;
 
                     var campaignMember = campaignMembers.Where(x => x.Id == memberRewardEarning.CampaignMemberId).FirstOrDefault();
@@ -122,8 +122,10 @@ namespace IMP.Application.Features.CampaignMembers.Commands.SendRewardToInfluenc
                         WalletToId = walletTo.Id,
                         WalletFromId = walletFrom.Id,
                         SenderBalance = walletFrom.Balance - amountSend,
-                        ReceiverBalance = walletTo.Balance + amountReceive
+                        ReceiverBalance = walletTo.Balance + amountReceive,
                     };
+
+                  
 
                     // add transaction
                     UnitOfWork.Repository<WalletTransaction>().Add(walletTransaction);
@@ -137,6 +139,31 @@ namespace IMP.Application.Features.CampaignMembers.Commands.SendRewardToInfluenc
                     // Update campaign member
                     campaignMember.IsPayReward = true;
                     _campaignMemberRepository.Update(campaignMember);
+
+                    // transaction for IMP
+                    var walletToIMP = await _walletRepository.FindSingleAsync(x => x.ApplicationUserId == 162);
+
+                    var walletTransactionToIMP = new WalletTransaction
+                    {
+                        Amount = memberRewardEarning.Total,
+                        SenderId = _authenticatedUserService.ApplicationUserId, // sender
+                        ReceiverId = 162, // receiver
+                        TransactionInfo = $"Thanh toán tiền thưởng thăm gia hoạt động",
+                        TransactionType = (int)TransactionType.Transfer,
+                        TransactionStatus = (int)WalletTransactionStatus.Successful,
+                        PayDate = DateTime.UtcNow,
+                        WalletToId = walletToIMP.Id,
+                        WalletFromId = walletFrom.Id,
+                        SenderBalance = walletFrom.Balance - memberRewardEarning.Tax,
+                        ReceiverBalance = walletToIMP.Balance + memberRewardEarning.Tax,
+                    };
+
+                    UnitOfWork.Repository<WalletTransaction>().Add(walletTransactionToIMP);
+                    walletFrom.Balance -= memberRewardEarning.Tax;
+                    walletToIMP.Balance += memberRewardEarning.Tax;
+
+                    _walletRepository.Update(walletFrom);
+                    _walletRepository.Update(walletToIMP);
                 }
 
                 await UnitOfWork.CommitAsync();
