@@ -1,0 +1,8 @@
+CREATE FUNCTION GetToDate()
+RETURNS date
+AS
+BEGIN
+	DECLARE @date Date;
+	SET @date=CONVERT(date, GETDATE())
+	RETURN @date
+END

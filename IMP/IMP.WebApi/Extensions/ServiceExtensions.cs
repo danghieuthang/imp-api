@@ -25,7 +25,7 @@ namespace IMP.WebApi.Extensions
                     {
                         Name = "IMP Team",
                         Email = "dhthang1998@gmail.com",
-                        Url = new Uri("http://14.161.47.36:10201/swagger/index.html"),
+                        Url = new Uri("https://api.influencermarketingplatform.nothleft.online/swagger/index.html"),
                     }
                 });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
