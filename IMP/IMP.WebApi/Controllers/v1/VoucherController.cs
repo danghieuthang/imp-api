@@ -92,7 +92,7 @@ namespace IMP.WebApi.Controllers.v1
         /// <returns></returns>
         [ProducesResponseType(typeof(Response<VoucherViewModel>), 200)]
         [HttpGet("{id}")]
-        [Authorize(Roles = "Brand,Influencer")]
+        [Authorize(Roles = "Brand,Influencer,Administrator")]
         public async Task<IActionResult> Get([FromRoute] int id, [FromQuery(Name = "is_get_campaigninfo")] bool isGetCampaignInfo)
         {
             return Ok(await Mediator.Send(new GetVoucherByIdQuery { Id = id, IsGetCampaignInfo = isGetCampaignInfo }));
