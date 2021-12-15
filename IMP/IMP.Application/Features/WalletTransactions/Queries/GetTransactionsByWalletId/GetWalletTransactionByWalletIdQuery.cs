@@ -72,7 +72,7 @@ namespace IMP.Application.Features.WalletTransactions.Queries.GetTransactionsByW
 
                 var page = await _walletTransactionRepository.GetPagedList(
                     predicate: predicate,
-                    include: x => x.Include(t => t.Sender).Include(t => t.Receiver),
+                    include: x => x.Include(t => t.Sender).ThenInclude(s => s.Brand).Include(t => t.Receiver),
                         orderBy: request.OrderField,
                         orderByDecensing: request.OrderBy == OrderBy.DESC,
                         pageIndex: request.PageIndex,

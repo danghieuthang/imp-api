@@ -41,6 +41,7 @@ namespace IMP.Application.Models.ViewModels
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Description { get; set; }
+        public BrandViewModel Brand { get; set; }
     }
 
     public class TransactionEvidence
